@@ -1192,7 +1192,7 @@ cdef class MDict(object):
         self._key_block_offset = f.tell()
 
         # header text in utf-16 encoding ending with '\x00\x00'
-        cdef str header_text = header_bytes[:-2].decode('utf-16')
+        cdef str header_text = header_bytes[:-2].decode('utf-16', errors='replace')
         cdef dict header_tag = _parse_header(header_text)
         cdef str encoding
         if not self._encoding:

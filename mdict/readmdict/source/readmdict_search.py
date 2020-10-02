@@ -1076,7 +1076,7 @@ class MDict(object):
         self._key_block_offset = f.tell()
 
         # header text in utf-16 encoding ending with '\x00\x00'
-        header_text = header_bytes[:-2].decode('utf-16')
+        header_text = header_bytes[:-2].decode('utf-16', errors='replace')
         header_tag = self._parse_header(header_text)
         if not self._encoding:
             encoding = header_tag['Encoding']

@@ -211,7 +211,7 @@ class SearchObject:
                 break
 
         if mime_type is not None and 'css' in mime_type:
-            res_content = reg2p.sub(self.substitute_css_link, res_content.decode(self.mdx.get_encoding()))
+            res_content = reg2p.sub(self.substitute_css_link, res_content.decode(self.mdx.get_encoding(), errors='replace'))
 
         return res_content, mime_type
 

@@ -88,7 +88,7 @@ def request_body_serialze(request):
     # 对request.body做QuertDict编码转换处理
     # 如果不做数据处理：格式b'id=49&name=%E4%B8%AD&name_cn=&comment='
     # 页面中提交的中文“中”，变成%E4%B8%AD
-    querydict = QueryDict(request.body.decode("utf-8"), encoding="utf-8")
+    querydict = QueryDict(request.body.decode("utf-8", errors='replace'), encoding="utf-8")
     response_dict = {}
     try:
         for key, val in querydict.items():
