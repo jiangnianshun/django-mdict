@@ -1,0 +1,211 @@
+html,body,.container-fluid{
+	padding:0px;
+	margin:0px;
+}
+
+.col-lg-2,.col-lg-8,.row{
+    padding-left:0px;
+    padding-right:0px;
+    margin-left:0px;
+    margin-right:0px;
+}
+
+.navbar{
+	margin:0px;
+	padding:0px;
+}
+
+#query{
+	margin:0px !important;
+	padding:0px !important;
+	padding-left:5px !important;
+}
+
+#mdictquery{
+	margin:0px !important;
+
+}
+
+#result_num{
+	padding-left:10px;
+	padding-right:10px;
+	color:#888888;
+	width:95px;
+	font-size:14px;
+}
+
+#result_time{
+	padding-left:10px;
+	padding-right:10px;
+	color:#888888;
+	width:95px;
+	font-size:14px;
+}
+
+#sound-speaker img{
+    width:16px;
+    height:16px;
+}
+
+#modal-container-config label{
+    font-size:12px;
+}
+
+#dic-group-button{
+	width:100%;
+}
+
+.ui-autocomplete{
+    max-width:60%;
+    word-wrap:break-word;
+}
+
+.top-menu{
+    margin-right:5px;
+}
+
+.top-menu img{
+    width:28px;
+    height:28px;
+    margin:0px 5px 0px 5px;
+}
+
+#modal-container-history li{
+    cursor:pointer;
+}
+
+iframe {
+	overflow:hidden;
+	border-style: none;
+    margin: 0px;
+	width: 1px;
+	min-width: 100%;
+}
+
+span.badge{
+	max-width:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+
+img{
+	max-width:100%;
+}
+
+#modal-container-mdict span{
+	padding:0px 2px;
+}
+
+#modal-container-mdict .card-header a{
+	word-break:break-all;
+	/*使得词典列表中长标题能在任意位置换行*/
+}
+
+#card-container{
+	margin-bottom:50px;
+}
+
+#display_list{
+	padding:0;
+	margin:0;
+	list-style:none;
+}
+
+#result_num{
+	padding-left:10px;
+	padding-right:10px;
+	color:#888888;
+	width:95px;
+}
+
+#result_time{
+	padding-left:10px;
+	padding-right:10px;
+	color:#888888;
+	width:95px;
+}
+
+#dic-name{
+	color:#CC9900;
+}
+
+#scroll_list li{
+	border-left:1px solid #EEEEEE;
+	border-right:1px solid #EEEEEE;
+	border-bottom:1px solid #EEEEEE;
+	color:brown;
+}
+
+#scroll_list li:hover{
+	background-color:#EEEEEE;
+}
+
+#query{
+	margin-right:0px !important;
+}
+
+#mdictquery{
+	margin-left:5px;
+}
+
+.alert{
+	margin:0px;
+	padding:0.5rem 1rem;
+
+}
+
+.mymdict_entry{
+	width:100%;
+	color:grown;
+}
+
+.card-body{
+	padding:5px;
+}
+
+.olnum{
+	margin:0px;
+	margin-left:20px;
+	padding:0px;
+}
+
+.olnone{
+	margin:0px;
+	padding:0px;
+	list-style:none;
+}
+
+.mymdict_item{
+	width:100%;
+}
+
+.card-body{margin:0px;padding:0px;}
+
+.card-header{
+	padding:5px;
+}
+
+
+.dic-icon{
+	width:35px;
+	height:35px;
+	border-radius:3px;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+.item_content{background-color:#EEEEEE;}
+
+.ui-selectmenu-menu{position:absolute;z-index:9999 !important;}
+
+
+#bottom-button-group{margin:0px;padding:0px;position:fixed;bottom:10px;display:flex;justify-content:center;width:100%;pointer-events: none;}
+
+#bottom-button-group li{list-style: none;margin-top:2px;margin-bottom:2px;pointer-events: auto;}
+
+.float-a{float: left;width: 40px;height: 40px;background-color: #fff;box-shadow: 0 0 3px #bbb;position: relative;overflow: hidden;}
+.float-a img{-webkit-transition:all 0.5s;display: block;}
+.float-a:hover img{margin-top: -40px;}
+.float-a span{width: 40px;height: 40px;line-height: 16px;padding: 5px 0;background: #459bdc;color: #fff;text-align: center;float: left;font-size:0.8rem;}
+.btn.float-a{padding:0px;}

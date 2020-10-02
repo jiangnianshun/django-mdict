@@ -1,0 +1,5 @@
+pynput
+pywin32
+pytesseract
+pyscreenshot
+cefpython3

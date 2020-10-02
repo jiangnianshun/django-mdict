@@ -1,0 +1,59 @@
+{% extends "mdict/mdict-base.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+
+
+    <!--collapse navbar-collapse默认折叠，collapse navbar-collapse show默认展开。-->
+
+    <div class="form-inline" style="width:100%">
+        <!--form自动提交后刷新页面，因此onsubmit要返回false，阻止提交，在浏览器扩展中不能用onsubmit，导致不断刷新，或者有时候js错误，导致点击查询后，页面刷新，后面考虑去掉form，换成div。-->
+        {% include "mdict/mdict-searchbar.html" %}
+
+        <div>
+            <div id="result_num"></div>
+            <div id="result_time"></div>
+        </div>
+        <div class="ml-auto" id="sound-speaker">
+            <img src="/static/mdict/img/sound_icon_gray.jpg"/>
+            <audio style="display:none;"></audio>
+        </div>
+
+
+
+        <div class="ml-auto top-menu"><!--ml-auto是margin-left:auto，左自动，右对齐，mt-auto是margin-top:auto，上自动，下对齐。-->
+            <!--                        <a class="btn" data-toggle="modal" href="#modal-container-mdict" id="modal-mdict"-->
+            <!--                           role="button">词典管理</a>-->
+            <img class="menu-icon" data-toggle="modal" href="#modal-container-mdict" id="modal-mdict"
+                 src="/static/mdict/img/default.png">
+            <img class="menu-icon" data-toggle="modal" href="#modal-container-config" id="modal-config"
+                 src="/static/mdict/img/gear.png">
+        </div>
+        <!--当input获得焦点，按回车会提交表单并刷新页面，点击button也会提交表单并刷新页面。如果不想刷新页面，方法一是将button的type从submit改成button，这只对点击按钮有效，方法二是form添加onsubmit="return false;，这对点击和回车都有效。-->
+    </div>
+
+</nav>
+<div id="card-container">
+    <div class="card">
+        <div class="card-header">
+            <a class="card-link" data-parent="#card-container" data-toggle="collapse" href="#card-element-488454"> </a>
+        </div>
+        <div class="collapse show" id="card-element-488454">
+            <div class="card-body">
+                查询结果显示
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+        //外部js文件无法使用django模板
+        $("html").attr("data-dic-pk",-1);
+        $("html").attr("data-first-query","{{ query }}");
+
+</script>
+<script src="/static/mdict/js/init_index.js"></script>
+{% endblock %}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="never" name="referrer">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <link href='/static/mdict/img/default.png' rel='shortcut icon' type='image/x-icon'/>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <title>{% block title %}词典{% endblock %}</title>
+
+    <link href="/static/bootstrap-4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
+    <link href="/static/mdict/css/mdict.css" rel="stylesheet">
+    <style>
+<!--        @font-face {-->
+<!--        font-family: FSung-p;-->
+<!--        src: url(/media/font/全宋體/FSung-p.ttf);-->
+<!--        font-display:swap;-->
+<!--        }-->
+        @font-face {
+        font-family: FSung-m;
+        src: url(/media/font/全宋體/FSung-m.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-1;
+        src: url(/media/font/全宋體/FSung-1.ttf);
+        font-display:swap;
+        }
+<!--        @font-face {-->
+<!--        font-family: FSung-2;-->
+<!--        src: url(/media/font/全宋體/FSung-2.ttf);-->
+<!--        font-display:swap;-->
+<!--        }-->
+        @font-face {
+        font-family: FSung-2-1;
+        src: url(/media/font/全宋體/FSung-2-1.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-2-2;
+        src: url(/media/font/全宋體/FSung-2-2.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-3;
+        src: url(/media/font/全宋體/FSung-3.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-F;
+        src: url(/media/font/全宋體/FSung-F.ttf);
+        font-display:swap;
+        }
+<!--@font-face {-->
+<!--font-family: kaixinsong;-->
+<!--src: url(/media/font/kaixinsong.ttf);-->
+<!--font-display:swap;-->
+<!--}-->
+        #query,span.badge,.ui-autocomplete,#display-list li{font-family:Arial,kaixinsong,FSung-p,FSung-m,FSung-1,FSung-2-1,FSung-2-2,FSung-3,FSung-F;}
+
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-8">
+            {% block content %}{% endblock %}
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+</div>
+
+{% include "mdict/modal-container-mdict.html" %}
+
+{% include "mdict/modal-container-config.html" %}
+
+{% include "mdict/modal-container-history.html" %}
+
+{% include "mdict/mdict-bottom-button-group.html" %}
+
+{% block modal %}{% endblock %}
+
+<script src="/static/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="/static/bootstrap-4.4.1/js/bootstrap.min.js"></script>
+<script src="/static/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<script src="/static/mdict/iframe-resizer-master/js/iframeResizer.min.js"></script>
+<script src="/static/mdict/js/transform.js"></script>
+<script src="/static/mdict/js/base_func.js"></script>
+<script src="/static/mdict/js/mdict_base.js"></script>
+<script src="/static/mdict/js/mdict.js"></script>
+<script src="/static/mdict/js/bootstrap4-input-clearer.js"></script>
+
+{% block script %}{% endblock %}
+
+</body>
+</html>

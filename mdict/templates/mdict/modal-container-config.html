@@ -1,0 +1,32 @@
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modal-container-config"
+     role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalConfig">
+                    设置
+                </h5>
+                <button class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% include "mdict/mdict-group.html" %}
+
+                <div id="function-checkbox"></div>
+                <hr>
+                <div id="online-mdict-checkbox"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" id="save_as_default">
+                    保存为默认值
+                </button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                    关闭
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div>

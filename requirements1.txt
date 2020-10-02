@@ -1,0 +1,10 @@
+django
+djangorestframework
+django-oauth-toolkit
+django-ckeditor
+nltk
+opencc-python-reimplemented
+pyspellchecker
+cython
+pillow
+python-Levenshtein
