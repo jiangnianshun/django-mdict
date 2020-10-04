@@ -190,11 +190,14 @@ class search_mdx_record_object(inner_object):
 
 
 def search_mdx_record(request):
-    query = request.GET.get('entry')
+    query = request.GET.get('entry', '')
     dic_pk = int(request.GET.get('dic_pk', -1))
-    s = int(request.GET.get('start'))
-    e = int(request.GET.get('end'))
-    return_list = search_mdx_record_object({'query': query, 'target_pk': dic_pk, 'start': s, 'end': e})
+    s = int(request.GET.get('start', -1))
+    e = int(request.GET.get('end', -1))
+    if s == -1 or e == -1:
+        return_list = []
+    else:
+        return_list = search_mdx_record_object({'query': query, 'target_pk': dic_pk, 'start': s, 'end': e})
 
     return HttpResponse(json.dumps(return_list))
 
@@ -225,11 +228,13 @@ def get_mdict_list(requset):
 
 
 def search_audio(request):
-    key = request.GET.get('query')
+    key = request.GET.get('query', '')
+    res_content = ''
+    if key == '':
+        return HttpResponse(res_content)
     res_name = key.replace('%5C', '\\')
     f_name = res_name[res_name.rfind('\\') + 1:]
     mime_type = guess_mime(f_name)
-    res_content = ''
     audio_type_list = ['.spx', '.mp3', '.wav']
     # 这里应该在readmdict_search中处理，比较时去掉不比较点和扩展名
     bk = False
