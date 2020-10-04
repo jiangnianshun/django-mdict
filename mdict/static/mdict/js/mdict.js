@@ -450,7 +450,7 @@ function query_audio(ob,url,play,func){
 		var blob=null;
 		var mime=this.getResponseHeader('content-type');
 		var array=this.response;
-		if(mime=='audio/x-speex'||mime=='audio/ogg'){
+		if(mime=='audio/x-speex'){
 			var data = new Uint8Array( array );
 			$.when(//动态加载js
 				$.getScript("/static/mdict/js/bitstring.min.js"),
@@ -479,7 +479,7 @@ function query_audio(ob,url,play,func){
                     }
 				}
 			});
-		}else if(mime=='audio/wav'||mime=='audio/mp3'||mime=='audio/mpeg'){
+		}else if(mime=='audio/wav'||mime=='audio/mp3'||mime=='audio/mpeg'||mime=='audio/ogg'){
 			blob= new Blob([array],{type:mime});
             if(blob!=null&&blob!=""){
                 if(typeof(func)=='function'){

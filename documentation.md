@@ -88,7 +88,7 @@ pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 ### 格式支持
 
 音频：
-* mp3,spx 支持
+* mp3,spx,ogg 支持
 * wav chrome支持，firefox不支持
 
 图像：
