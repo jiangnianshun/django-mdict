@@ -439,6 +439,57 @@ function decodeSpeex(file) {
 }
 
 
+function play_speex(ob,array,play,mime,func){
+    var data = new Uint8Array( array );
+    $.when(//动态加载js
+        $.getScript("/static/mdict/js/bitstring.min.js"),
+        $.getScript("/static/mdict/js/pcmdata.min.js"),
+        $.getScript("/static/mdict/js/speex.min.js"),
+        $.Deferred(function( deferred ){
+            $( deferred.resolve );
+        })
+    ).done(function(){
+        blob = decodeSpeex(String.fromCharCode.apply(null, data));
+        if(blob!=null&&blob!=""){
+            if(typeof(func)=='function'){
+               func(true);
+            }
+            if(ob.children("audio").length==0){
+                ob.append('<audio style="display:none;"></audio>');
+            }
+            ob.children("audio")[0].src=URL.createObjectURL(blob);
+
+            if(play){
+                ob.children("audio")[0].play();
+            }
+        }else{
+            if(typeof(func)=='function'){
+                func(false);
+            }
+        }
+    });
+}
+
+function play_audio(ob,array,play,mime,func){
+    blob= new Blob([array],{type:mime});
+    if(blob!=null&&blob!=""){
+        if(typeof(func)=='function'){
+            func(true);
+        }
+        if(ob.children("audio").length==0){
+            ob.append('<audio style="display:none;"></audio>');
+        }
+        ob.children("audio")[0].src=URL.createObjectURL(blob);
+        if(play){
+            ob.children("audio")[0].play();
+        }
+    }else{
+        if(typeof(func)=='function'){
+            func(false);
+        }
+    }
+}
+
 function query_audio(ob,url,play,func){
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', url, true);
@@ -450,53 +501,11 @@ function query_audio(ob,url,play,func){
 		var blob=null;
 		var mime=this.getResponseHeader('content-type');
 		var array=this.response;
-		if(mime=='audio/x-speex'){
-			var data = new Uint8Array( array );
-			$.when(//动态加载js
-				$.getScript("/static/mdict/js/bitstring.min.js"),
-				$.getScript("/static/mdict/js/pcmdata.min.js"),
-				$.getScript("/static/mdict/js/speex.min.js"),
-				$.Deferred(function( deferred ){
-					$( deferred.resolve );
-				})
-			).done(function(){
-				blob = decodeSpeex(String.fromCharCode.apply(null, data));
-				if(blob!=null&&blob!=""){
-                    if(typeof(func)=='function'){
-                       func(true);
-                    }
-                    if(ob.children("audio").length==0){
-                        ob.append('<audio style="display:none;"></audio>');
-                    }
-                    ob.children("audio")[0].src=URL.createObjectURL(blob);
 
-                    if(play){
-                        ob.children("audio")[0].play();
-                    }
-				}else{
-				    if(typeof(func)=='function'){
-                        func(false);
-                    }
-				}
-			});
+		if(mime=='audio/speex'){
+			play_speex(ob,array,play,mime,func);
 		}else if(mime=='audio/wav'||mime=='audio/mp3'||mime=='audio/mpeg'||mime=='audio/ogg'){
-			blob= new Blob([array],{type:mime});
-            if(blob!=null&&blob!=""){
-                if(typeof(func)=='function'){
-                    func(true);
-                }
-                if(ob.children("audio").length==0){
-                    ob.append('<audio style="display:none;"></audio>');
-                }
-                ob.children("audio")[0].src=URL.createObjectURL(blob);
-                if(play){
-                    ob.children("audio")[0].play();
-                }
-            }else{
-                if(typeof(func)=='function'){
-                    func(false);
-                }
-            }
+			play_audio(ob,array,play,mime,func);
 		}else{
 		    if(typeof(func)=='function'){
                 func(false);

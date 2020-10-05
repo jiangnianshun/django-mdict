@@ -251,6 +251,8 @@ def search_audio(request):
                 break
         if bk:
             break
+    if res_name.endswith('.spx'):
+        mime_type = 'audio/speex'
     return HttpResponse(res_content, content_type=mime_type)
 
 
