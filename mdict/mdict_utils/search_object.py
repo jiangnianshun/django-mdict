@@ -21,7 +21,7 @@ from .mdict_func import replace_res_name, is_local, get_m_path
 from base.base_func import guess_mime
 
 # 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64
-reg = r'([ <])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!data:)(file://)*([^"\'>]+)(["\' >])'
+reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!data:)(file://)*([^"\'>]+)(["\' >])'
 regp = re.compile(reg, re.IGNORECASE)
 
 reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!data:)([^"\'\(\)]+)(["|\']*\))'

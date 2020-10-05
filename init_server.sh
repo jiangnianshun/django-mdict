@@ -8,11 +8,6 @@ cd mdict/readmdict/pyx
 echo "cython compiling..."
 source build.sh
 cd ../../../
-file="mdict_path.json"
-if [ ! -f $file ]; then
-echo "set mdict path and audio path..."
-python3 init_mdict_path.py
-fi
 file="db.sqlite3"
 if [ ! -f $file ]; then
 echo "initializing django..."

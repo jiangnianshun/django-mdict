@@ -1,6 +1,6 @@
 ## 说明文档
 
-### 在windows上运行
+### 在windows上运行测试服务器
 
 1. 安装python3。
 
@@ -12,26 +12,19 @@
 
 3. 下载解压，如果文件夹名不是django-mdict就改成django-mdict，然后命令行cd到django-mdict文件夹。
 
-4. 运行init_server进行初始化（安装依赖，cython编译）。
+4. 运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。
 
 Windows下运行（双击运行或使用cmd运行，不要用powershell）
 
 ```
-init_server.bat
-```
-
-windows下运行init_server.bat时会弹出文件夹选择框，第一次选择字典库路径，第二次选择发音库路径，路径记录在mdict_path.json文件中。
-
-选择完路径后要求设置django的用户名和密码。
-
-5. 运行run_server启动django服务器。
-
-Windows下运行
-```
 run_server.bat
 ```
 
-6. django服务器默认端口8000
+首先会弹出文件夹选择框，第一次选择字典库路径，第二次选择发音库路径，路径记录在mdict_path.json文件中。
+
+最后要求设置django的用户名和密码。
+
+5. django服务器默认端口8000
 <br />本地电脑访问http://127.0.0.1:8000/mdict/
 <br />其他设备访问http://本机ip:8000/mdict/
 <br />可能需要设置防火墙入站链接，开放8000端口。
@@ -284,6 +277,43 @@ card_show 同时展开多个词典
 2. 不建议使用树莓派，cpu性能低，只能部署少量词典。
 3. 不建议使用云服务器，学生机cpu性能和网络传输速度不满足要求。
 
+### 在wsl上运行测试服务器
+
+windows下django无法调用多进程，建议部署到wsl，建议使用wsl1。
+
+1. 安装wsl，系统ubuntu，建议使用18.04。
+
+[https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+
+2. 切换到root用户，django需要安装到root用户下。
+
+```
+su root
+```
+3. cd到django-mdict目录，运行下列命令，转换脚本格式。
+
+```
+apt-get update
+apt-get install dos2unix
+dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readmdict/pyx/build.sh
+```
+
+4. 运行run_server.sh，默认端口8000，该脚本仅适用于ubuntu，不适用于centos。
+
+```
+bash run_server.sh
+```
+
+第一次运行会进行初始化。
+
+首先要求从命令行输入词典库路径和发音库路径，没有就跳过。
+
+最后要求输入django用户名和密码。
+
+5. 本机访问http://127.0.0.1:8000/mdict
+
+已知问题：在ubuntu20.04下，由于多进程的原因，run_server.sh运行过程中，migrate等命令无法自动结束，需要手动ctrl+c结束，在ubuntu18.04下正常。
+
 ### 部署到wsl apache
 
 windows下django无法调用多进程，建议部署到wsl，建议使用wsl1。
@@ -298,10 +328,11 @@ windows下django无法调用多进程，建议部署到wsl，建议使用wsl1。
 su root
 ```
 3. cd到django-mdict目录，运行下列命令，转换脚本格式。
+
 ```
 apt-get update
 apt-get install dos2unix
-dos2unix init_wsl.sh init_server.sh run_server.sh mdict/readmdict/pyx/build.sh
+dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readmdict/pyx/build.sh
 ```
 
 4. 运行init_wsl.sh，默认端口80，该脚本仅适用于ubuntu，不适用于centos。
@@ -309,13 +340,14 @@ dos2unix init_wsl.sh init_server.sh run_server.sh mdict/readmdict/pyx/build.sh
 ```
 bash init_wsl.sh
 ```
-5. 打开mdict_path.json，在mdict_path中添加词典库路径，在audio_path中添加发音库路径，注意用双引号，然后启动apache。
-```
-service apache2 start
-```
-6. 本机访问http://127.0.0.1/mdict
 
-7. 设置wsl自启动脚本
+首先要求从命令行输入词典库路径和发音库路径，没有就跳过。
+
+最后要求输入django用户名和密码。
+
+5. 本机访问http://127.0.0.1/mdict
+
+6. 设置wsl自启动脚本
 
 windows下运行shell:startup，建立脚本文件ubuntu.vbs，内容为
 
@@ -352,6 +384,6 @@ touch /bin/sleep
 chmod +x /bin/sleep
 ```
 
-4. ubuntu20.04下apache重启失败
+4. apache在ubuntu20.04下restart和stop失败
 
-多进程的问题，多重启几次。
+多进程的问题，多重复几次。

@@ -1,5 +1,15 @@
 import json
 import os
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-m', '--mdict', default="", help='mdict path')
+parser.add_argument('-a', '--audio', default="", help='audio path')
+
+args = parser.parse_args()
+
+mdict_path = args.mdict
+audio_path = args.audio
 
 tk_exist = False
 try:
@@ -18,12 +28,17 @@ if tk_exist:
     root.withdraw()  # 隐藏主界面
 
     _path = askdirectory()
-    config = {'mdict_path': [_path]}
+    config.update({'mdict_path': [_path]})
     print('mdict_path', _path)
     _path = askdirectory()
     # 如果用户关闭了选择框，那么返回值是什么？
     config.update({'audio_path': [_path]})
     print('audio_path', _path)
+else:
+    if mdict_path != '':
+        config.update({'mdict_path': [mdict_path]})
+    if audio_path != '':
+        config.update({'audio_path': [audio_path]})
 
 
 def write_json_file(con, file, mode='w'):

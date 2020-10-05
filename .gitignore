@@ -9,6 +9,7 @@
 *.json
 *.dat
 *.log
+*.c
 .Windows.cache
 .Linux.cache
 migrations/
