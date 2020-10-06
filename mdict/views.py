@@ -214,7 +214,11 @@ class get_mdict_list_object(inner_object):
             if is_local:
                 dic_icon = os.path.join('/', m_path, file + '.' + icon)
             else:
-                dic_icon = '/mdict/exfile/?path=' + m_path + '/' + file + '.' + icon
+                if m_path == '':
+                    t_path = file
+                else:
+                    t_path = m_path + '/' + file
+                dic_icon = '/mdict/exfile/?path=' + t_path + '.' + icon
         item = {'dic_name': dic.mdict_name, 'dic_file': file, 'dic_icon': dic_icon, 'dic_pror': dic.mdict_priority,
                 'dic_pk': dic.pk, 'dic_enable': dic.mdict_enable}
         self.inner_odict.update({file: item})
