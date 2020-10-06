@@ -337,8 +337,23 @@ function init_common_config(){//这里后面改成从后台取数据
 
 }
 
+function init_other_config(){
+    $("#t-to-s").click(function(){
+        $("#card-container .card .show iframe").each(function(){
+            $(this)[0].contentWindow.transform_all_text(0);
+        });
+    })
+    $("#s-to-t").click(function(){
+        $("#card-container .card .show iframe").each(function(){
+            $(this)[0].contentWindow.transform_all_text(1);
+        });
+    })
+}
+
 function init_modal_config(){
     init_common_config();
+
+    init_other_config();
 
     init_online_dic_var();
 

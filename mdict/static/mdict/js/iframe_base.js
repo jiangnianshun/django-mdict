@@ -303,3 +303,8 @@ function init_iframe(){
 	fix_img_delay_bug();
 	forbid_contextmenu();
 }
+
+function transform_all_text(isFt){
+    var txt=document.body.innerHTML;
+    document.body.innerHTML=transformText(txt, isFt);
+}
