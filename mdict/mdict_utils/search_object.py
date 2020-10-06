@@ -340,8 +340,7 @@ class SearchObject:
                 return str(matched.group(1)) + '/mdict/exfile/?path=' + self.m_path + '/' + str(
                     res_name) + str(matched.group(3))
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
-        return str(matched.group(1)) + '/mdict/' + urllib.parse.quote(
-            str(self.dic_id) + '/' + str(res_name)) + str(matched.group(3))
+        return str(matched.group(1)) + '/mdict/' + str(self.dic_id) + '/' + urllib.parse.quote(str(res_name)) + str(matched.group(3))
 
     def substitute_hyper_link(self, matched):  # 处理html词条，获取图片和css
         # 需不需要返回www.开头但没有http和https前缀的匹配
@@ -382,7 +381,6 @@ class SearchObject:
                     res_name) + delimiter_r
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
 
-        return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + urllib.parse.quote(
-            str(self.dic_id) + '/' + str(res_name)) + delimiter_r
+        return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + str(self.dic_id) + '/' + urllib.parse.quote(str(res_name)) + delimiter_r
 
 
