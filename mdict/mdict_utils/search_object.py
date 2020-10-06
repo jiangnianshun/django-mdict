@@ -20,7 +20,7 @@ from .init_utils import init_vars
 from .mdict_func import replace_res_name, is_local, get_m_path
 from base.base_func import guess_mime
 
-# 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64
+# 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64，#开头可能是锚点，www.开头可能是网址，这两个当在mdd中查询不存在时不处理。
 reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!data:)(file://)*([^"\'>]+)(["\' >])'
 regp = re.compile(reg, re.IGNORECASE)
 
@@ -126,7 +126,7 @@ class SearchObject:
         if is_local:
             t_path = '/' + self.m_path + '/' + self.mdx.get_fname() + '.' + ext
         else:
-            t_path = '/mdict/exfile/?path=' + self.m_path + '/' + self.mdx.get_fname() + '.' + ext
+            t_path = '/mdict/exfile/?path=' + self.m_path + '/' + urllib.parse.quote(self.mdx.get_fname()) + '.' + ext
         return t_path
 
     def check_same_name_css(self, record):
@@ -213,7 +213,8 @@ class SearchObject:
             mime_type = 'audio/speex'
 
         if mime_type is not None and 'css' in mime_type:
-            res_content = reg2p.sub(self.substitute_css_link, res_content.decode(self.mdx.get_encoding(), errors='replace'))
+            res_content = reg2p.sub(self.substitute_css_link,
+                                    res_content.decode(self.mdx.get_encoding(), errors='replace'))
 
         return res_content, mime_type
 
@@ -258,7 +259,6 @@ class SearchObject:
                 elif self.mdx.process_str_keys(res_name) != self.mdx.process_str_keys(
                         record[8:].rstrip('\n').rstrip('\r')):
                     break
-
 
         if record.find('@@@LINK') == 0:
             record = self.substitute_mdx_link(record)
@@ -331,8 +331,7 @@ class SearchObject:
         if start == -1:
             if res_name[0] == '\\':
                 res_name = res_name[1:]
-
-            if res_name.startswith('www.'):
+            if res_name[0] == '#' or res_name.startswith('www.'):
                 return matched.group(0)
             if is_local:
                 return str(matched.group(1)) + '/' + self.m_path + '/' + str(res_name) + str(matched.group(3))
@@ -340,7 +339,8 @@ class SearchObject:
                 return str(matched.group(1)) + '/mdict/exfile/?path=' + self.m_path + '/' + str(
                     res_name) + str(matched.group(3))
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
-        return str(matched.group(1)) + '/mdict/' + str(self.dic_id) + '/' + urllib.parse.quote(str(res_name)) + str(matched.group(3))
+        return str(matched.group(1)) + '/mdict/' + str(self.dic_id) + '/' + urllib.parse.quote(str(res_name)) + str(
+            matched.group(3))
 
     def substitute_hyper_link(self, matched):  # 处理html词条，获取图片和css
         # 需不需要返回www.开头但没有http和https前缀的匹配
@@ -372,6 +372,8 @@ class SearchObject:
         if start == -1:
             if res_name[0] == '\\':
                 res_name = res_name[1:]
+            if res_name[0] == '#' or res_name.startswith('www.'):
+                return matched.group(0)
             if is_local:
                 return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + '/' + self.m_path + '/' + str(
                     res_name) + delimiter_r
@@ -381,6 +383,5 @@ class SearchObject:
                     res_name) + delimiter_r
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
 
-        return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + str(self.dic_id) + '/' + urllib.parse.quote(str(res_name)) + delimiter_r
-
-
+        return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + str(
+            self.dic_id) + '/' + urllib.parse.quote(str(res_name)) + delimiter_r
