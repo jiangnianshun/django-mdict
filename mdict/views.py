@@ -42,7 +42,7 @@ class MdictEntryViewSet(viewsets.ViewSet):
     permission_classes = []
 
     def retrieve(self, request, pk=None):
-        query = self.request.query_params.get('query')
+        query = self.request.query_params.get('query', '')
         force_refresh = False
         if self.request.query_params.get('force_refresh') == 'true':
             force_refresh = True
@@ -68,7 +68,7 @@ class MdictEntryViewSet(viewsets.ViewSet):
         if is_en_func(query):
             self.is_en = True
 
-        if query:
+        if query:  # 非空字符串为True
 
             record_list = search(query, self.is_en, group)
 
@@ -327,7 +327,7 @@ def mdict_dic(request):
     dic_pk = int(request.GET.get('dic_pk', -1))
     if dic_pk == -1:
         dics = MdictDic.objects.all().order_by('mdict_priority')
-        if len(dics)>0:
+        if len(dics) > 0:
             dic_pk = dics[0].pk
     dic_name = MdictDic.objects.get(pk=dic_pk).mdict_name
     query = request.GET.get('query', '')

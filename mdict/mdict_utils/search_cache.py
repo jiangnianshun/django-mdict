@@ -36,7 +36,7 @@ sug_cache = CacheControllor(_sug_cache, auto_clear=True)
 
 
 def get_key(query, group, dic_pk):
-    return str(group)+':'+str(dic_pk) + ':' + query
+    return str(group)+':'+str(dic_pk) + ':' + str(query)
 
 
 class MdictPage:
