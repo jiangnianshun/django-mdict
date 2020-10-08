@@ -14,8 +14,8 @@ if [ $audio_path ]; then
 python3 init_mdict_path.py -a $audio_path
 fi
 source init_server.sh
-sed -i '19a\define PRJTROOT '$(cd `dirname $0`; pwd) django-mdict.conf
 cp django-mdict.conf /etc/apache2/sites-available/django-mdict.conf
+sed -i '19a\define PRJTROOT '$(cd `dirname $0`; pwd) /etc/apache2/sites-available/django-mdict.conf
 sed -i '$a\\nexport LANG="en_US.UTF-8"' /etc/apache2/envvars
 sed -i '$a\\nexport LC_ALL="en_US.UTF-8"' /etc/apache2/envvars
 sed -i '$a\\nAcceptFilter http none' /etc/apache2/apache2.conf

@@ -20,8 +20,8 @@ from .init_utils import init_vars
 from .mdict_func import replace_res_name, is_local, get_m_path
 from base.base_func import guess_mime
 
-# 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64，mailto:开头是邮件，#开头可能是锚点，www.开头可能是网址，这两个当在mdd中查询不存在时不处理。
-reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!data:)(?!mailto:)(file://)*([^"\'>]+)(["\' >])'
+# 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64，mailto:开头是邮件,javascript:脚本，#开头可能是锚点，www.开头可能是网址，这两个当在mdd中查询不存在时不处理。
+reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'
 regp = re.compile(reg, re.IGNORECASE)
 
 reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!data:)([^"\'\(\)]+)(["|\']*\))'
@@ -372,6 +372,8 @@ class SearchObject:
         if start == -1:
             if res_name[0] == '\\':
                 res_name = res_name[1:]
+            if res_name == '':
+                return matched.group(0)
             if res_name[0] == '#' or res_name.startswith('www.'):
                 return matched.group(0)
             if is_local:
