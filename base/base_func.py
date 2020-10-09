@@ -1,19 +1,19 @@
+import inspect
+import json
 import mimetypes
-import os, re, inspect, json
-from enum import IntEnum
-from mysite.settings import BASE_DIR
-from django.http.request import QueryDict
+import os
+import re
 
-font_path = os.path.join(BASE_DIR, 'media', 'font')
+from django.http.request import QueryDict
 
 
 def get_log_header(mod_name, debug_level, start=-1, end=-1):
-    if debug_level == DebugLevel.error:
+    if debug_level == 2:
         dl = 'ERROR'
-    elif debug_level == DebugLevel.warning:
+    elif debug_level == 1:
         dl = 'WARNING'
 
-    if debug_level == DebugLevel.debug:
+    if debug_level == 0:
         header = '[' + mod_name.upper() + ']'
     else:
         header = '[' + mod_name.upper() + ' ' + dl + ']'
@@ -24,13 +24,7 @@ def get_log_header(mod_name, debug_level, start=-1, end=-1):
         return header
 
 
-class DebugLevel(IntEnum):
-    debug = 0
-    warning = 1
-    error = 2
-
-
-def print_log_info(log_content='', debug_level=DebugLevel.debug, start=-1, end=-1):
+def print_log_info(log_content='', debug_level=0, start=-1, end=-1):
     prev_frame = inspect.getframeinfo(inspect.currentframe().f_back)
     # currentframe()是当前函数，f_back是上一帧，即调用函数
     # prev_frame,0是文件路径，1是行数，2是函数名（如果不在函数里，显示<module>），3显示调用本函数的那一行代码，4索引

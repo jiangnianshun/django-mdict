@@ -1,6 +1,5 @@
 import pickle, time, collections
-from base.base_func import print_log_info, conatain_upper_characters, DebugLevel, font_path
-from base.base_func2 import rename_file
+from base.base_func import print_log_info, guess_mime
 from base.sys_utils import get_sys_name
 from .mdict_config import *
 
@@ -14,7 +13,7 @@ except ImportError as e:
     print(e)
     print_log_info(
         'loading readmdict_search lib failed! compile pyx files in mynav/mdict/readmdict/pyx/ with cython, this will speed up search.',
-        DebugLevel.warning)
+        1)
     from mdict.readmdict.source.readmdict_search import MDX, MDD
 
 from .mdict_func import mdict_root_path, audio_path
@@ -42,6 +41,9 @@ class MdictItem:
         self.file_size = file_size
 
 
+img_type = ['jpg', 'jpeg', 'png', 'webp', 'gif']
+
+
 def get_mdict_list():
     g_id = 0
 
@@ -56,21 +58,14 @@ def get_mdict_list():
             if file.lower().endswith('.mdx'):
                 f_name = file[:file.rfind('.')]
 
-                i = 1
-
                 mdx_path = os.path.join(root, file)
-                mdd_path = os.path.join(root, f_name + '.mdd')
-                mdd_extra_path = os.path.join(root, f_name + '.' + str(i) + '.mdd')
-
                 mdx_file_size = int(os.path.getsize(mdx_path) / 1000000)  # 转换成MB
 
                 mdd_list = []
-                if os.path.exists(mdd_path):
-                    mdd_list.append(MDD(mdd_path))
-                while os.path.exists(mdd_extra_path):
-                    mdd_list.append(MDD(mdd_extra_path))
-                    i += 1
-                    mdd_extra_path = os.path.join(root, f_name + '.' + str(i) + '.mdd')
+                for f in files:
+                    if f.lower().endswith('.mdd') and f.startswith(f_name):
+                        mdd_path = os.path.join(root, f)
+                        mdd_list.append(MDD(mdd_path))
 
                 if mdx_path.find('.part') != -1:
                     for item in m_list.values():
@@ -84,14 +79,10 @@ def get_mdict_list():
 
                 icon = 'none'
                 for f in files:
-                    t_name = f[:f.rfind('.')]
-                    t_type = f[f.rfind('.') + 1:]
-                    if t_name == f_name:
-                        if t_type.lower() == 'jpg':
-                            icon = t_type
-                            break
-                        elif t_type.lower() == 'png':
-                            icon = t_type
+                    if f.startswith(f_name):
+                        mime_type = guess_mime(f)
+                        if mime_type is not None and mime_type.startswith('image'):
+                            icon = f.split('.')[-1]
                             break
 
                 m_list.update({f_name: MdictItem(MDX(mdx_path), tuple(mdd_list), g_id, icon, mdx_file_size)})
@@ -182,7 +173,7 @@ def init_mdict_list(rewrite_cache):
     if not rewrite_cache and os.path.exists(pickle_file_path) and os.path.getsize(pickle_file_path) > 0:
         get_sound_list()
         load_cache()
-        print_log_info('reading from cache file', DebugLevel.debug, t1, time.perf_counter()),
+        print_log_info('reading from cache file', 0, t1, time.perf_counter()),
     else:
         sound_list.clear()
         get_sound_list()
@@ -191,9 +182,9 @@ def init_mdict_list(rewrite_cache):
         init_vars.mdict_odict = get_mdict_list()
         init_vars.mdict_odict = sort_mdict_list(init_vars.mdict_odict)
         t2 = time.perf_counter()
-        print_log_info('initializing mdict_list', DebugLevel.debug, t1, t2)
+        print_log_info('initializing mdict_list', 0, t1, t2)
         write_cache()
-        print_log_info('creating cache file', DebugLevel.debug, t2, time.perf_counter())
+        print_log_info('creating cache file', 0, t2, time.perf_counter())
         t3 = time.perf_counter()
 
-    print_log_info('total time', DebugLevel.debug, t1, time.perf_counter())
+    print_log_info('total time', 0, t1, time.perf_counter())

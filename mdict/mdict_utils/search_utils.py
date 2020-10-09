@@ -16,7 +16,7 @@ from nltk.data import path as nltk_path
 from nltk.stem import WordNetLemmatizer
 from spellchecker import SpellChecker
 
-from base.base_func import print_log_info, DebugLevel
+from base.base_func import print_log_info
 from base.base_constant import builtin_dic_prefix
 from base.sys_utils import check_system
 from mdict.models import MyMdictEntry, MyMdictItem
@@ -52,13 +52,13 @@ def search(query, is_en, group):
     try:
         record_list = search_mdx_dic(query, record_list, group)
     except FileNotFoundError:
-        print_log_info('mdx file not found, mdx search failed, need recache!', DebugLevel.error)
+        print_log_info('mdx file not found, mdx search failed, need recache!', 2)
         init_mdict_list(True)
         record_list = search_mdx_dic(query, record_list, group)
         # 重新生成cache文件的代码
     except OperationalError as e:
         print(e)
-        print_log_info('modify database failed!', DebugLevel.error)
+        print_log_info('modify database failed!', 2)
         if check_system() == 0:
             loop_create_model()
         elif check_system() == 1:

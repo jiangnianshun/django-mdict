@@ -1,4 +1,4 @@
-from base.base_func import print_log_info,DebugLevel
+from base.base_func import print_log_info
 from django.core.exceptions import AppRegistryNotReady
 try:
     from mdict.models import MdictDic
@@ -11,7 +11,7 @@ def get_or_create_dic(dict_file):
         dic = MdictDic.objects.get(mdict_file=dict_file)
     except MdictDic.DoesNotExist as e:
         print(e)
-        print_log_info('find new mdict, add MdicDic to database.'+dict_file,DebugLevel.error)
+        print_log_info('find new mdict, add MdicDic to database.'+dict_file,2)
         dic = MdictDic.objects.create(mdict_name=dict_file, mdict_file=dict_file)
     except Exception as e:
         print(e)
