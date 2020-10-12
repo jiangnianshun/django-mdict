@@ -199,9 +199,9 @@ function add_iframes(data,container,need_clear,is_list){
 							checkOrigin:false,
 							resizeFrom:'child',
 							//inPageLinks:true,
-							//heightCalculationMethod:'lowestElement',
+							heightCalculationMethod:'lowestElement',
 							//heightCalculationMethod:'max',
-							minHeight:60,
+							//minHeight:60,
 							warningTimeout:0,
 //							onInit: function(iframe_a){
 //							    console.log(iframe_a);

@@ -12,15 +12,17 @@ function isImgLoad(callback){
         }
     });
 
+    callback();//这里要调用一次，因为部署在云服务器上时，由于网络延迟，图片加载很慢。
+
     // 为true，没有发现为0的。加载完毕
     if(isLoad){
         clearTimeout(t_img); // 清除定时器
         // 回调函数
-        callback();
+        //callback();
     // 为false，因为找到了没有加载完成的图，将调用定时器递归
     }else{
         isLoad = true;
-        callback();//这里要调用一次，因为部署在云服务器上时，由于网络延迟，图片加载很慢。
+
         t_img = setTimeout(function(){
             isImgLoad(callback);
         },100); // 100毫秒扫描一次
