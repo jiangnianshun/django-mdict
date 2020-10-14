@@ -42,10 +42,8 @@ class MdictEntryViewSet(viewsets.ViewSet):
     permission_classes = []
 
     def retrieve(self, request, pk=None):
-        query = self.request.query_params.get('query', '')
-        force_refresh = False
-        if self.request.query_params.get('force_refresh') == 'true':
-            force_refresh = True
+        query = self.request.query_params.get('query', '').strip()
+        force_refresh = json.loads(self.request.query_params.get('force_refresh', False))
 
         group = int(self.request.query_params.get('dic_group', 0))
         page = int(self.request.query_params.get('page', 1))
@@ -351,15 +349,15 @@ def get_dic_group(request):
 
 
 def search_suggestion(request):
-    query = request.GET.get('query', '')
+    query = request.GET.get('query', '').strip()
     dic_pk = int(request.GET.get('dic_pk', -1))
 
     if query == '':  # jquery-ui的下拉框的请求是term
-        query = request.GET.get('term', '')
+        query = request.GET.get('term', '').strip()
     flag = request.GET.get('flag', 20)
     group = int(request.GET.get('dic_group', 0))
 
-    if sug_cache.get(query, group, dic_pk) is None:
+    if query and sug_cache.get(query, group, dic_pk) is None:
         sug = []
         if dic_pk == -1:  # index页面才需要内置词典的查询提示
             sug = search_bultin_dic_sug(query)
