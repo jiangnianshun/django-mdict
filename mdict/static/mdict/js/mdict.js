@@ -17,9 +17,10 @@ var style=`
 html,body{
 	padding:0;
 }
-*{
+img{
 	max-width:100% !important;
 }
+/*这里如果设置全部元素强制max-width:100%，slangit.com中smh词条的svg会特别大。*/
 .mdict-tooltip{
 	background-color:gray;
 	color:#EEEEEE;

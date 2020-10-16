@@ -110,7 +110,7 @@ class SearchObject:
 
         record = scriptregp.sub(self.add_async_to_script, record)
         # Theoi Greek Mythology, 2019词条中含有外链到google的script，导致加载等待，因此设置为async。
-        record = self.check_same_name_css(record)
+        record = self.check_same_name_css_js(record)
         record = self.check_same_name_font(record)
 
         return record
@@ -129,19 +129,24 @@ class SearchObject:
             t_path = '/mdict/exfile/?path=' + self.m_path + '/' + urllib.parse.quote(self.mdx.get_fname()) + '.' + ext
         return t_path
 
-    def check_same_name_css(self, record):
-        # 同名css文件，搜韵词典词条中没有包含css，但是有同名css文件，自动包含进来。
-        css_path = self.mdx.get_fpath()
-        css_path = css_path[:len(css_path) - 3] + 'css'
+    def check_same_name_css_js(self, record):  # 加载同名css和js
+        base_path = self.mdx.get_fpath()
+        js_path = base_path[:-3] + 'js'
+        css_path = base_path[:-3] + 'css'
+
+        if os.path.exists(js_path):
+            js_static = self.substitute_same_name_path('js')
+            js_link = '<script src="' + js_static + '"></script>'
+            record = js_link + record
 
         if os.path.exists(css_path):
-            if record.find(self.mdx.get_fname() + '.css') == -1:
-                css_static = self.substitute_same_name_path('css')
-                css_link = '<link href = "' + css_static + '" rel = "stylesheet" >'
-                record = css_link + record
+            # if record.find(self.mdx.get_fname() + '.css') == -1:
+            css_static = self.substitute_same_name_path('css')
+            css_link = '<link href = "' + css_static + '" rel = "stylesheet" >'
+            record = css_link + record
         return record
 
-    def check_same_name_font(self, record):
+    def check_same_name_font(self, record):  # 加载同名字体
         global css_prefix
         mdx_path = self.mdx.get_fpath()
         ttf_path = mdx_path[:len(mdx_path) - 3] + 'ttf'
