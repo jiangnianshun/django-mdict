@@ -26,7 +26,7 @@ class LifespanHandler():
 def search(query, root_url):
     global i
 
-    print('query:', query, i)
+    print('query:', query)
 
     url = root_url
     if url.find('?') > -1:
@@ -47,16 +47,15 @@ def search(query, root_url):
     browser.SetClientHandler(LifespanHandler())
     # browser.LoadUrl('http://www.baidu.com')
     cef.MessageLoop()
-
     cef.Shutdown()  # 清除所有资源
 
 
 def check_versions():
     ver = cef.GetVersion()
-    print("[hello_world.py] CEF Python {ver}".format(ver=ver["version"]))
-    print("[hello_world.py] Chromium {ver}".format(ver=ver["chrome_version"]))
-    print("[hello_world.py] CEF {ver}".format(ver=ver["cef_version"]))
-    print("[hello_world.py] Python {ver} {arch}".format(
+    print("[huaci.py] CEF Python {ver}".format(ver=ver["version"]))
+    print("[huaci.py] Chromium {ver}".format(ver=ver["chrome_version"]))
+    print("[huaci.py] CEF {ver}".format(ver=ver["cef_version"]))
+    print("[huaci.py] Python {ver} {arch}".format(
         ver=platform.python_version(),
         arch=platform.architecture()[0]))
     assert cef.__version__ >= "57.0", "CEF Python v57.0+ required to run this"
@@ -64,8 +63,8 @@ def check_versions():
 
 def create_window_info(class_name):
     window_proc = {
-        # win32con.WM_CLOSE: close_window,
-        # win32con.WM_DESTROY: exit_app,
+        win32con.WM_CLOSE: close_window,
+        # win32con.WM_DESTROY: exit_app,#生成多个窗口，关闭一个会关闭所有窗口
         win32con.WM_SIZE: WindowUtils.OnSize,
         win32con.WM_SETFOCUS: WindowUtils.OnSetFocus,
         win32con.WM_ERASEBKGND: WindowUtils.OnEraseBackground,

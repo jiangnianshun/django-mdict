@@ -10,21 +10,13 @@
 ](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
 )
 
-3. 下载解压，如果文件夹名不是django-mdict就改成django-mdict，然后命令行cd到django-mdict文件夹。
+3. 确保文件夹名是django-mdict，Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。
 
-4. 运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。
-
-Windows下运行（双击运行或使用cmd运行，不要用powershell）
-
-```
-run_server.bat
-```
-
-首先会弹出文件夹选择框，第一次选择字典库路径，第二次选择发音库路径，路径记录在mdict_path.json文件中。
+首先会弹出文件夹选择框，第一次选择字典库路径，第二次选择发音库路径（路径保存在mdict_path.json文件中）。
 
 最后要求设置django的用户名和密码。
 
-5. django服务器默认端口8000
+4. django服务器默认端口8000
 <br />本地电脑访问http://127.0.0.1:8000/mdict/
 <br />其他设备访问http://本机ip:8000/mdict/
 <br />可能需要设置防火墙入站链接，开放8000端口。
@@ -171,7 +163,7 @@ pdawiki部件检索和全宋体：[https://www.pdawiki.com/forum/forum.php?mod=v
 
 ### 划词
 
-划词工具使用tesseract和cefpython3，通过鼠标点击对屏幕截图并OCR进行查询。
+划词工具使用tesseract和cefpython3，通过鼠标点击对屏幕截图并进行OCR查询。
 
 1. 下载安装tesseract-OCR.exe，并将tesseract.exe的路径添加到系统的环境变量。
 
@@ -187,9 +179,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 4. 运行huaci.bat。
 
-5. 按s键开始划词，按q键结束划词。
-
-已知问题：会产生僵尸进程。
+5. 按ctrl+c+c开始划词。
 
 ### 修改词典库地址
 
@@ -199,7 +189,6 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 如果mdict_path.json为空，词典库地址设置为/django-mdict/media/mdict/doc/，发音库地址设置为/django-mdict/media/mdict/audio/。
 ```
-
 {
     "mdict_path": [
         "D:/media/mdict/doc",
