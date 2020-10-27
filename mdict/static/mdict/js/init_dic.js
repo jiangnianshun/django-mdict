@@ -79,6 +79,9 @@ var func = function(){
 		var dic_pk=$("html").attr("data-dic-pk");
 		var s=$(this).attr("data-start");
 		var e=$(this).attr("data-end");
+
+		rotate_item_list={};//清空页面旋转记录
+
 		query_record($("#card-container"),entry,dic_pk,s,e);
 
 	});

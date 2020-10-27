@@ -26,6 +26,34 @@ function scroll_display_list(){
     $("#scroll_list").scrollTop(distance);
 }
 
+rotate_item_list={}
+
+function rotate_content(item){
+    var rotate_id=$(item).attr('id');
+
+    if(rotate_id in rotate_item_list){
+        var rotate_angle=rotate_item_list[rotate_id];
+    }else{
+        var rotate_angle=0;
+        rotate_item_list[rotate_id]=rotate_angle;
+    }
+    rotate_angle+=90;
+    if(rotate_angle>360){
+        rotate_angle=90;
+    }
+
+    var card_rotate_angle='rotate('+rotate_angle+'deg)';
+
+    item.style.webkitTransform = card_rotate_angle;
+    item.style.mozTransform = card_rotate_angle;
+    item.style.msTransform = card_rotate_angle;
+    item.style.oTransform = card_rotate_angle;
+    item.style.transform = card_rotate_angle;
+    item.style.transform = card_rotate_angle;
+
+    rotate_item_list[rotate_id]=rotate_angle;
+}
+
 function init_btn_group(){
 	$('.go-left').click(function(){//展开上一词条
 	    if(is_index()){
@@ -60,6 +88,11 @@ function init_btn_group(){
             var c=$(li_id).next();
             c.trigger("click");
         }
+	});
+	$('.go-rotate').click(function(){
+	    $("#card-container .card .show").each(function(){
+            rotate_content(this);
+        });
 	});
 	$('.scaleup').click(function(){
 	    var c=$(".collapse.show");
@@ -185,6 +218,8 @@ function add_click_event(){
 		//在iframe外用data设置的值在iframe内取不到，在iframe内用data设置的值，在iframe外用data取不到。改用attr。
 
         check_speak(query);
+
+        rotate_item_list={};//清空页面旋转记录
 
 		if(dic_pk==-1){
 			//index.html调用query_mdict，dic.html调用query_key。

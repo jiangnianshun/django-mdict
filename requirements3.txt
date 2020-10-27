@@ -1,4 +1,5 @@
 pynput
+psutil
 pywin32
 pytesseract
 pyscreenshot

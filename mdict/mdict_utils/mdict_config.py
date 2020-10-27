@@ -55,10 +55,15 @@ def get_config_con(con_name):
     for section in con.sections():
         if con_name in con[section].keys():
             value = con[section][con_name]
-            if value.isdigit():
-                return int(value)
+            if isinstance(value, str):
+                if value.isdigit():
+                    return int(value)
+                else:
+                    return value
             else:
-                return value
+                for sec in default_config.keys():
+                    if con_name in default_config[sec].keys():
+                        return default_config[sec][con_name]
     # config不存在时的处理，应该返回默认值，后面再处理
     print(con_name)
     raise Exception('config not exists!')

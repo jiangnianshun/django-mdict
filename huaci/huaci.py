@@ -38,7 +38,7 @@ if os.path.exists(ini_path):
 
 def translate_picture(img):
     text = pytesseract.image_to_string(img, lang='chi_sim')
-    text = text.replace(' ', '').replace("\n", " ").strip()
+    text = text.replace('\n', '').replace('\t', '').strip()
     if len(text) == 0:
         print('text length is zero')
         return
