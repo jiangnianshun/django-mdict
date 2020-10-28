@@ -359,10 +359,12 @@ def search_suggestion(request):
 
     if query and sug_cache.get(query, group, dic_pk) is None:
         sug = []
-        if dic_pk == -1:  # index页面才需要内置词典的查询提示
-            sug = search_bultin_dic_sug(query)
+        t_list = []
 
         if query != '':
+            if dic_pk == -1:  # index页面才需要内置词典的查询提示
+                sug.extend(search_bultin_dic_sug(query))
+
             try:
                 sug.extend(search_mdx_sug(dic_pk, query, group, flag))
             except FileNotFoundError:
@@ -401,23 +403,29 @@ def search_suggestion(request):
 
             if q2b != query:
                 sug.extend(search_mdx_sug(dic_pk, q2b, group, flag))
-        return_sug = []
-        for s in sug:
-            if s.lower() not in return_sug:
-                return_sug.append(s.lower())
-        return_sug.sort()
-        f = -1
 
-        for i in range(0, len(return_sug)):
-            if return_sug[i].lower().find(query.lower()) == 0:
-                f = i
-                break
+            return_sug = []
 
-        # 比如查 性 排序后， 修 开头的词排在了前面，因此当性开头的词存在时，优先展示。
-        if f == -1:
-            t_list = return_sug[:flag]
-        else:
-            t_list = (return_sug[f:] + return_sug[:f])[:flag]
+            for s in sug:
+                if s.lower().strip() not in return_sug:
+                    return_sug.append(s.lower().strip())
+            return_sug.sort()
+            f = -1
+
+            for i in range(0, len(return_sug)):
+                temp_str = return_sug[i].lower()
+                # 对查询提示进行重排，将和query相等的词条设置位置第一
+                # 1相等，2半角转化后相等，3去掉全角和半角空格后相等
+                if temp_str.find(query.lower()) == 0 or temp_str.find(q2b.lower()) == 0 \
+                        or temp_str.find(query.lower().replace(' ', '').replace('　', '')) == 0:
+                    f = i
+                    break
+
+            if f == -1:
+                t_list = return_sug[:flag]
+            else:
+                t_list = (return_sug[f:] + return_sug[:f])[:flag]
+
         sug_cache.put(query, group, dic_pk, t_list)
 
     r_list = sug_cache.get(query, group, dic_pk)

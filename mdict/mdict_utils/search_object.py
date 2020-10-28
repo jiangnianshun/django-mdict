@@ -197,10 +197,11 @@ class SearchObject:
                     mdxentry(self.dic_name, rt[4], record, self.prior, self.dic.pk, self.f_pk, self.f_p1, self.f_p2))
 
         for i in range(len(r_list) - 1, -1, -1):
-            if r_list[i].mdx_record.find('@@@LINK') == 0 or r_list[i].mdx_record == '':
+            # if r_list[i].mdx_record.find('@@@LINK') == 0 or r_list[i].mdx_record == '':
+            if r_list[i].mdx_record == '':
                 del r_list[i]
         # 英文维基part3查back substitution结果是@@@LINK=Triangular matrixForward and back substitution，
-        # 但是指向的词条不存在，因此返回为空。
+        # LINK指向词条不存在时原样返回
 
         return r_list
 
