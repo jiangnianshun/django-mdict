@@ -49,6 +49,12 @@ def translate_picture(img):
     search_mdict(text)
 
 
+def translate_clipboard():
+    result = root.selection_get(selection="CLIPBOARD").strip()
+    if 0 < len(result) <= 30:
+        search_mdict(result)
+
+
 def on_click(x, y, button, pressed):  # button：鼠标键，pressed：是按下还是抬起
     global start_flag
     global flag
@@ -160,7 +166,10 @@ def on_press(key):
                 if newtime - timestamp2 < 0.5:
                     clear_timestamp()
                     start_flag = 1
-                    mouse_monitor()
+                    if huaci_mode == 1:
+                        translate_clipboard()
+                    elif huaci_mode == 2:
+                        mouse_monitor()
                     return
     except AttributeError as e:
         # 非字母的键没有char这个属性sq
@@ -223,16 +232,49 @@ def search_mdict(query):
         # p.join()
         # p.close()
     p = Process(target=search, args=(query, root_url))
-    # p.daemon = True
+    p.daemon = True
     p.start()
 
+thread_keyboard=None
 
 def run_huaci():
-    thread_keyboard = threading.Thread(target=thread_keyboard_fun)
-    thread_keyboard.start()
+    global thread_keyboard
+    if thread_keyboard is None:
+        thread_keyboard = threading.Thread(target=thread_keyboard_fun)
+        thread_keyboard.start()
+
+
+import tkinter as tk
+
+huaci_mode = 1
+
+
+def run():
+    global huaci_mode
+    print('url:', root_url)
+    if v.get() == 1:
+        huaci_mode = 1
+        print('复制查词模式')
+        print('选择文字后按ctrl+c+c复制查词')
+    elif v.get() == 2:
+        huaci_mode = 2
+        print('截图OCR查词模式')
+        print('按ctrl+c+c后点击截图查词')
+    run_huaci()
 
 
 if __name__ == "__main__":
-    print('url:', root_url)
-    print('按ctrl+c+c开始划词。')
-    run_huaci()
+    root = tk.Tk()
+    root.title('')
+    root.attributes("-toolwindow", True)  # toolwindow模式，只有关闭按钮，没有图标，最小化和最大化按钮
+    root.resizable(0, 0)  # 禁止缩放
+    v = tk.IntVar()
+    tk.Radiobutton(root, text='复制查词', value=1, variable=v).pack(fill='both', expand=True)
+    tk.Radiobutton(root, text='OCR查词', value=2, variable=v).pack(fill='both', expand=True)
+    tk.Button(root, text='运行', command=run).pack(fill='both', expand=True)
+    root.mainloop()
+
+# if __name__ == "__main__":
+#     print('url:', root_url)
+#     print('按ctrl+c+c开始划词。')
+#     run_huaci()

@@ -1,1 +1,2 @@
-python huaci/huaci.py
+start huaci/huaci.pyw
+exit

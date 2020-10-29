@@ -52,10 +52,10 @@ def search(query, root_url):
 
 def check_versions():
     ver = cef.GetVersion()
-    print("[huaci.py] CEF Python {ver}".format(ver=ver["version"]))
-    print("[huaci.py] Chromium {ver}".format(ver=ver["chrome_version"]))
-    print("[huaci.py] CEF {ver}".format(ver=ver["cef_version"]))
-    print("[huaci.py] Python {ver} {arch}".format(
+    print("[huaci.pyw] CEF Python {ver}".format(ver=ver["version"]))
+    print("[huaci.pyw] Chromium {ver}".format(ver=ver["chrome_version"]))
+    print("[huaci.pyw] CEF {ver}".format(ver=ver["cef_version"]))
+    print("[huaci.pyw] Python {ver} {arch}".format(
         ver=platform.python_version(),
         arch=platform.architecture()[0]))
     assert cef.__version__ >= "57.0", "CEF Python v57.0+ required to run this"
