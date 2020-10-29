@@ -254,16 +254,16 @@ class SearchObject:
         for i in range(len(result_list)):
             result = result_list[i]
             # LINK指向的词条有时不只一个，这里只取第一个，这样不一定正确，但查询link的词条时可以都显示出来，因此这里将link指向的所有重复词条都显示出来，意义不大
-            if result[0] not in self.cmp:# self.cmp记录start位置，如果start相同，说明是同一个词条。
+            if result[0] not in self.cmp:  # self.cmp记录start位置，如果start相同，说明是同一个词条。
                 record = result[5]
                 self.f_p1 = result[2]
                 self.f_p2 = result[3]
                 self.cmp.append(result[0])
 
-                if record.find('@@@LINK') != 0:# 如果不是LINK，说明是正文，中断。
+                if record.find('@@@LINK') != 0:  # 如果不是LINK，说明是正文，中断。
                     break
                 elif self.mdx.process_str_keys(res_name) != self.mdx.process_str_keys(
-                        record[8:].rstrip('\n').rstrip('\r')):# 如果是新LINK，中断。
+                        record[8:].rstrip('\n').rstrip('\r')):  # 如果是新LINK，中断。
                     break
 
         if record.find('@@@LINK') == 0:
@@ -294,23 +294,30 @@ class SearchObject:
             g_id = item.g_id
             if self.g_id == g_id and mdx.get_fpath() != self.mdx.get_fpath():
                 result_list = mdx.look_up(res_name)
-                temp_cmp=[]
+                temp_cmp = []
+                flag = False
                 for i in range(len(result_list)):
                     result = result_list[i]
                     if result[0] not in temp_cmp:
                         record = result[5]
                         temp_cmp.append(result[0])
-                        new_res_name = record[8:].rstrip('\n').rstrip('\r')
+
                         self.f_p1 = result[2]
                         self.f_p2 = result[3]
                         self.f_pk = MdictDic.objects.get(mdict_file=mdx.get_fname()).pk
                         if record.find('@@@LINK') != 0:  # 如果不是LINK，说明是正文，中断。
+                            flag = True
                             break
-                        elif mdx.process_str_keys(res_name) != mdx.process_str_keys(new_res_name):  # 如果是新LINK，中断。
-                            record = self.search_dic_group(new_res_name)
-                            if mdx.header['Compact'] == 'Yes' and mdx._stylesheet:
-                                record = mdx.substitute_stylesheet(record)
-                            break
+                        else:
+                            new_res_name = record[8:].rstrip('\n').rstrip('\r')
+                            if mdx.process_str_keys(res_name) != mdx.process_str_keys(new_res_name):  # 如果是新LINK，中断。
+                                record = self.search_dic_group(new_res_name)
+                                if mdx.header['Compact'] == 'Yes' and mdx._stylesheet:
+                                    record = mdx.substitute_stylesheet(record)
+                                flag = True
+                                break
+                if flag:
+                    break
         return record
 
     def substitute_css_link(self, matched):

@@ -170,6 +170,11 @@ cdef bytes get_key_block(f, cython.longlong compressed_size, cython.longlong dec
 
     return key_block
 
+
+cdef str reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
+regp = re.compile(reg)
+
+
 cdef class MDict(object):
     cdef public str _fpath
     cdef public str fname
@@ -324,10 +329,9 @@ cdef class MDict(object):
     
     cpdef str process_str_keys(self, str key):
         key = self.lower_str_keys(key)
-        cdef str reg = r'[ _=,.·;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
 
         if self._strip_key==1:
-            key = re.sub(reg, '', key)
+            key = regp.sub('', key)
         return key
 
     
@@ -796,7 +800,6 @@ cdef class MDict(object):
             result_list = self.process_symbol_search(key, key_list, key_list_length-1, -1)
         else:
             result_list = self.reduce_key_block(key_list, 0, key_list_length - 1, key)
-        # print('aaaaa',len(result_list))
         return result_list
 
     

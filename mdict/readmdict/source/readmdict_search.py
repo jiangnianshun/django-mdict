@@ -116,6 +116,12 @@ def _decrypt_regcode_by_email(reg_code, email):
     return encrypt_key
 
 
+# reg = r'[ _=,.·;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
+reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
+regp = re.compile(reg)
+# 搜韵诗词词条：八归·辛巳，CC-CEDICT词条威廉·莎士比亚，stripkey时不包含·
+
+
 class MDict(object):
 
     def __init__(self, fpath, encoding='', passcode=None):
@@ -250,10 +256,10 @@ class MDict(object):
         if type(key) == bytes:
             key = key.decode(self._encoding, errors='replace')
         key = self.lower_str_keys(key)
-        reg = r'[ _=,.·;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
 
         if self._strip_key == 1:
-            key = re.sub(reg, '', key)
+            # key = re.sub(reg, '', key)
+            key = regp.sub('', key)
         return key
 
     def _read_keys(self, f):
