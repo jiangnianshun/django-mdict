@@ -1,25 +1,12 @@
 ## 说明文档
 
-### 在windows上运行测试服务器
+### 适用情景
 
-1. 安装python3。
+局域网内，将django-mdict部署在一台电脑上，其他电脑、平板、手机可只保留少量词典，当离开局域网时，查询本地词典，当进入局域网时，可通过浏览器或划词工具对全部词典进行查词。
 
-2. 安装Microsoft C++ Build Tools，在安装nltk、python-Levenshtein等库以及进行cython编译时需要该工具，安装时勾选C++开发组件。
-
-[https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
-](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
-)
-
-3. 确保文件夹名是django-mdict，Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。
-
-首先会弹出文件夹选择框，第一次选择字典库路径，第二次选择发音库路径（路径保存在mdict_path.json文件中）。
-
-最后要求设置django的用户名和密码。
-
-4. django服务器默认端口8000
-<br />本地电脑访问http://127.0.0.1:8000/mdict/
-<br />其他设备访问http://本机ip:8000/mdict/
-<br />可能需要设置防火墙入站链接，开放8000端口。
+1. 不建议使用移动硬盘，移动硬盘会休眠，休眠唤醒耗时长。
+2. 不建议使用树莓派，cpu性能低，只能部署少量词典。
+3. 不建议使用云服务器，学生机cpu性能和网络传输速度不满足要求。
 
 ### admin操作
 
@@ -179,7 +166,9 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 4. 运行huaci.bat。
 
-5. 按ctrl+c+c开始划词。
+5. 默认是复制查词，选择文字后按ctrl+c+c，要切换ocr查词，在系统托盘图标上右键设置修改，然后按ctrl+c+c开始查词，鼠标两次点击之间的图像截图进行ocr查词。
+
+6. 关闭，系统托盘图标上右键退出。
 
 ### 修改词典库地址
 
@@ -260,11 +249,26 @@ force_font 强制使用全宋体
 
 card_show 同时展开多个词典
 
-### 性能
+### 在windows上运行测试服务器
 
-1. 不建议使用移动硬盘，休眠唤醒耗时长。
-2. 不建议使用树莓派，cpu性能低，只能部署少量词典。
-3. 不建议使用云服务器，学生机cpu性能和网络传输速度不满足要求。
+1. 安装python3。
+
+2. 安装Microsoft C++ Build Tools，在安装nltk、python-Levenshtein等库以及进行cython编译时需要该工具，安装时勾选C++开发组件。
+
+[https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
+](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
+)
+
+3. 确保文件夹名是django-mdict，Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。
+
+首先会弹出文件夹选择框，第一次选择字典库路径，第二次选择发音库路径（路径保存在mdict_path.json文件中）。
+
+最后要求设置django的用户名和密码。
+
+4. django服务器默认端口8000
+<br />本地电脑访问http://127.0.0.1:8000/mdict/
+<br />其他设备访问http://本机ip:8000/mdict/
+<br />可能需要设置防火墙入站链接，开放8000端口。
 
 ### 在wsl上运行测试服务器
 

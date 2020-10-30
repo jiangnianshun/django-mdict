@@ -1,9 +1,13 @@
-from cefpython3 import cefpython as cef
+import math
+import os
 import platform
-import sys, math, os
+import sys
+from ctypes import windll
+
 import win32api
-import win32gui
 import win32con
+import win32gui
+from cefpython3 import cefpython as cef
 
 WindowUtils = cef.WindowUtils()
 
@@ -34,7 +38,7 @@ def search(query, root_url):
     else:
         url += '?query=' + query
 
-    check_versions()
+    # check_versions()
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     cef.Initialize()
 
@@ -75,7 +79,7 @@ def create_window_info(class_name):
                                   width=500,
                                   height=800,
                                   window_proc=window_proc,
-                                  icon="resources/chromium.ico")
+                                  icon="default.ico")
     window_info = cef.WindowInfo()
     window_info.SetAsChild(window_handle)
 
@@ -93,6 +97,10 @@ def create_window(title, class_name, width, height, window_proc, icon):
     wndclass.lpfnWndProc = window_proc
     atom_class = win32gui.RegisterClass(wndclass)
     assert (atom_class != 0)
+
+    myappid = 'djangomdict.version'  # arbitrary string
+    windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    # 设置任务栏的图标为窗口的图标
 
     # Center window on screen.
     screenx = win32api.GetSystemMetrics(win32con.SM_CXSCREEN)
@@ -140,7 +148,6 @@ def create_window(title, class_name, width, height, window_proc, icon):
                              win32con.ICON_BIG, big_icon)
         win32api.SendMessage(window_handle, win32con.WM_SETICON,
                              win32con.ICON_SMALL, small_icon)
-
     return window_handle
 
 

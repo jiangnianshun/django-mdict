@@ -484,8 +484,10 @@ def retrieve_config(request):
     for k2, v2 in con['SEARCH'].items():
         if v2 == 'True' or v2 == 'False':
             r_config.update({k2: con['SEARCH'].getboolean(k2)})
-        elif v2.isdigit():
+        elif isinstance(v2, str) and v2.isdigit():
             r_config.update({k2: con['SEARCH'].getint(k2)})
+        else:
+            print('error configuration ', k2, v2, type(v2))
 
     return HttpResponse(json.dumps(r_config))
 

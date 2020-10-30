@@ -1,10 +1,10 @@
 import os
-import psutil
 import sys
 import threading
 import time
 from multiprocessing import Process
 
+import psutil
 import pyscreenshot as ImageGrab
 import pytesseract
 from pynput.keyboard import Key, Listener as KeyboardListener
@@ -12,6 +12,27 @@ from pynput.mouse import Button, Listener as MouseListener
 
 sys.path.append(os.path.abspath(__file__))
 from search import search
+
+import win32event
+import win32api
+from winerror import ERROR_ALREADY_EXISTS
+
+mutex = win32event.CreateMutex(None, False, 'name')
+last_error = win32api.GetLastError()
+
+import pystray
+from pystray import MenuItem as item
+import pyperclip
+import tkinter as tk
+from tkinter import ttk
+from PIL import Image
+from ctypes import windll
+
+GWL_EXSTYLE = -20
+WS_EX_APPWINDOW = 0x00040000
+# WS_EX_TOOLWINDOW=0x00000080
+
+huaci_mode = 'copy'
 
 # tesseract-OCR训练数据
 # https://tesseract-ocr.github.io/tessdoc/Data-Files.html
@@ -50,9 +71,14 @@ def translate_picture(img):
 
 
 def translate_clipboard():
-    result = root.selection_get(selection="CLIPBOARD").strip()
-    if 0 < len(result) <= 30:
-        search_mdict(result)
+    try:
+        # result = root.selection_get(selection="CLIPBOARD").strip()
+        # tkinter的剪切板读取必须在mainloop中，当root widthdraw后，就不能用了。
+        result = pyperclip.paste()
+        if 0 < len(result) <= 30:
+            search_mdict(result)
+    except Exception as e:
+        print(e)
 
 
 def on_click(x, y, button, pressed):  # button：鼠标键，pressed：是按下还是抬起
@@ -139,10 +165,9 @@ def clear_timestamp():
 
 
 def on_press(key):
-    global start_flag, timestamp, timestamp2
+    global start_flag, timestamp, timestamp2, huaci_mode
     try:
         if key == Key.ctrl or key == Key.ctrl_l or key == Key.ctrl_r:
-
             clear_timestamp()
             timestamp = time.perf_counter()
             return
@@ -159,16 +184,15 @@ def on_press(key):
                         clear_timestamp()
                         timestamp2 = newtime
                         return
-
         if timestamp2 > 0:
             if key.char == 'c' or key.char == '\x03':
                 newtime = time.perf_counter()
                 if newtime - timestamp2 < 0.5:
                     clear_timestamp()
                     start_flag = 1
-                    if huaci_mode == 1:
+                    if huaci_mode == 'copy':
                         translate_clipboard()
-                    elif huaci_mode == 2:
+                    elif huaci_mode == 'ocr':
                         mouse_monitor()
                     return
     except AttributeError as e:
@@ -235,7 +259,9 @@ def search_mdict(query):
     p.daemon = True
     p.start()
 
-thread_keyboard=None
+
+thread_keyboard = None
+
 
 def run_huaci():
     global thread_keyboard
@@ -244,35 +270,86 @@ def run_huaci():
         thread_keyboard.start()
 
 
-import tkinter as tk
-
-huaci_mode = 1
-
-
 def run():
     global huaci_mode
-    print('url:', root_url)
-    if v.get() == 1:
-        huaci_mode = 1
+    if radio_v.get() == 'copy':
+        huaci_mode = 'copy'
         print('复制查词模式')
         print('选择文字后按ctrl+c+c复制查词')
-    elif v.get() == 2:
-        huaci_mode = 2
+    elif radio_v.get() == 'ocr':
+        huaci_mode = 'ocr'
         print('截图OCR查词模式')
         print('按ctrl+c+c后点击截图查词')
     run_huaci()
 
 
+def set_appwindow(root):
+    # 用pythonw运行后，不显示cmd窗口，因此没有任务栏图标，这里加上任务栏图标
+    hwnd = windll.user32.GetParent(root.winfo_id())
+    style = windll.user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
+    # style = style & ~WS_EX_TOOLWINDOW
+    style = style | WS_EX_APPWINDOW
+    res = windll.user32.SetWindowLongW(hwnd, GWL_EXSTYLE, style)
+    # re-assert the new window style
+    myappid = 'djangomdict.version'  # arbitrary string
+    windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    #设置任务栏的图标为窗口的图标
+    root.wm_withdraw()
+    root.after(10, lambda: root.wm_deiconify())
+
+
+def quit_window(icon, item):
+    icon.stop()
+    root.destroy()
+
+
+def show_window(icon, item):
+    icon.stop()
+    root.after(0, root.deiconify)
+    root.after(10, lambda: set_appwindow(root))
+
+
+def withdraw_window():
+    # 关闭设置界面后
+    root.withdraw()
+    create_systray()
+
+
+def create_systray():
+    # 显示系统托盘
+    image = Image.open("default.ico")
+    menu = (item('设置', show_window), item('退出', quit_window))
+    icon = pystray.Icon("djangomdict", icon=image, title='django-mdict', menu=menu)
+    icon.run()
+
+
 if __name__ == "__main__":
-    root = tk.Tk()
-    root.title('')
-    root.attributes("-toolwindow", True)  # toolwindow模式，只有关闭按钮，没有图标，最小化和最大化按钮
-    root.resizable(0, 0)  # 禁止缩放
-    v = tk.IntVar()
-    tk.Radiobutton(root, text='复制查词', value=1, variable=v).pack(fill='both', expand=True)
-    tk.Radiobutton(root, text='OCR查词', value=2, variable=v).pack(fill='both', expand=True)
-    tk.Button(root, text='运行', command=run).pack(fill='both', expand=True)
-    root.mainloop()
+    if last_error == ERROR_ALREADY_EXISTS:
+        # 只运行一个实例
+        print('App instance already running')
+    else:
+        root = tk.Tk()
+        root.withdraw()
+        root.title('')
+
+        huaci_path=os.path.dirname(os.path.abspath(__file__))
+        ico_path=os.path.join(huaci_path,'default.ico')
+        if os.path.exists(ico_path):
+            root.iconbitmap(ico_path)
+
+        root.resizable(0, 0)  # 禁止缩放
+        root.attributes("-toolwindow", True)  # toolwindow模式，只有关闭按钮，不显示图标，最小化和最大化按钮
+        root.protocol('WM_DELETE_WINDOW', withdraw_window)
+
+        radio_v = tk.StringVar()
+        tr1 = ttk.Radiobutton(root, text='复制查词', value='copy', variable=radio_v, command=run)
+        tr1.invoke()
+        tr1.pack(fill='both', expand=True)
+        ttk.Radiobutton(root, text='OCR查词', value='ocr', variable=radio_v, command=run).pack(fill='both', expand=True)
+
+        create_systray()
+
+        root.mainloop()
 
 # if __name__ == "__main__":
 #     print('url:', root_url)
