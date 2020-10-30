@@ -267,6 +267,7 @@ def run_huaci():
     global thread_keyboard
     if thread_keyboard is None:
         thread_keyboard = threading.Thread(target=thread_keyboard_fun)
+        thread_keyboard.daemon = True
         thread_keyboard.start()
 
 
@@ -299,6 +300,10 @@ def set_appwindow(root):
 
 
 def quit_window(icon, item):
+    global p
+    if p is not None:
+        print('closing process ', p.pid)
+        killtree(p.pid)
     icon.stop()
     root.destroy()
 
