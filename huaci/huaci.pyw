@@ -1,12 +1,15 @@
 import os
+import re
 import sys
 import threading
 import time
 from multiprocessing import Process
 
 import psutil
-import pyscreenshot as ImageGrab
+import pyscreenshot
 import pytesseract
+import cv2
+import numpy as np
 from pynput.keyboard import Key, Listener as KeyboardListener
 from pynput.mouse import Button, Listener as MouseListener
 
@@ -56,10 +59,22 @@ if os.path.exists(ini_path):
     with open(ini_path, 'r', encoding='utf-8') as f:
         root_url = f.read().strip()
 
+reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t\n\r，。：；“”（）【】《》？!、·0123456789]'
+regp = re.compile(reg)
+
 
 def translate_picture(img):
-    text = pytesseract.image_to_string(img, lang='chi_sim')
-    text = text.replace('\n', '').replace('\t', '').strip()
+    global lang_con
+    # 图片二值化
+    gray = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2GRAY)
+    thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+    invert = 255 - thresh
+
+    text = pytesseract.image_to_string(invert, lang=lang_con, config='--psm 7 -c page_separator=""')
+    # psm设置布局，小段文本6或7比较好。
+    # tesseract会在末尾加form feed分页符，unicode码000c。
+    # -c page_separator=""设置分页符为空
+    text = regp.sub('', text)
     if len(text) == 0:
         print('text length is zero')
         return
@@ -100,12 +115,12 @@ def on_click(x, y, button, pressed):  # button：鼠标键，pressed：是按下
                 t1 = time.perf_counter()
                 start_x = x
                 start_y = y
-                print("start_x,start_y:", start_x, start_y)
+                # print("start_x,start_y:", start_x, start_y)
             else:
                 t2 = time.perf_counter()
                 end_x = x
                 end_y = y
-                print("end_x,end_y:", end_x, end_y)
+                # print("end_x,end_y:", end_x, end_y)
                 if abs(end_y - start_y) > 100:
                     # init_vars()
                     start_x = end_x
@@ -130,18 +145,18 @@ def on_click(x, y, button, pressed):  # button：鼠标键，pressed：是按下
 
                 if 0 < t2 - t1 <= 5:
                     if start_x < end_x and start_y < end_y:
-                        im = ImageGrab.grab(bbox=(start_x, start_y, end_x, end_y))
+                        im = pyscreenshot.grab(bbox=(start_x, start_y, end_x, end_y))
                         translate_picture(im)
                     elif start_x < end_x and start_y > end_y:
-                        im = ImageGrab.grab(bbox=(start_x, end_y, end_x, start_y))
+                        im = pyscreenshot.grab(bbox=(start_x, end_y, end_x, start_y))
                         translate_picture(im)
 
                     elif start_x > end_x and start_y < end_y:
-                        im = ImageGrab.grab(bbox=(end_x, start_y, start_x, end_y))
+                        im = pyscreenshot.grab(bbox=(end_x, start_y, start_x, end_y))
                         translate_picture(im)
 
                     elif start_x > end_x and start_y > end_y:
-                        im = ImageGrab.grab(bbox=(end_x, end_y, start_x, start_y))
+                        im = pyscreenshot.grab(bbox=(end_x, end_y, start_x, start_y))
                         translate_picture(im)
                 else:
                     init_vars()
@@ -211,6 +226,7 @@ thread_mouse = None
 def mouse_monitor():
     global thread_mouse
     thread_mouse = threading.Thread(target=thread_mouse_fun)
+    thread_mouse.daemon = True
     thread_mouse.start()
     print('thread_mouse has started')
 
@@ -294,7 +310,7 @@ def set_appwindow(root):
     # re-assert the new window style
     myappid = 'djangomdict.version'  # arbitrary string
     windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-    #设置任务栏的图标为窗口的图标
+    # 设置任务栏的图标为窗口的图标
     root.wm_withdraw()
     root.after(10, lambda: root.wm_deiconify())
 
@@ -328,17 +344,39 @@ def create_systray():
     icon.run()
 
 
+def check_version():
+    print('tesseract version:', pytesseract.get_tesseract_version)
+
+
+lang = {'chi_sim': '中文简体', 'chi_tra': '中文繁体', 'jpn': '日文'}
+lang_con = 'eng'
+
+
+def set_lang():
+    global lang_con, check_dict
+    lang_str = ''
+    for la in lang.keys():
+        if la in check_dict.keys() and check_dict[la].get() == 1:
+            lang_str = lang_str + '+' + la
+    lang_con = lang_str[1:]
+    if lang_con == '':
+        lang_con = 'eng'
+    print('已设置OCR语言为', lang_con)
+
+
 if __name__ == "__main__":
     if last_error == ERROR_ALREADY_EXISTS:
         # 只运行一个实例
         print('App instance already running')
     else:
+        check_version()
+
         root = tk.Tk()
         root.withdraw()
         root.title('')
 
-        huaci_path=os.path.dirname(os.path.abspath(__file__))
-        ico_path=os.path.join(huaci_path,'default.ico')
+        huaci_path = os.path.dirname(os.path.abspath(__file__))
+        ico_path = os.path.join(huaci_path, 'default.ico')
         if os.path.exists(ico_path):
             root.iconbitmap(ico_path)
 
@@ -351,6 +389,12 @@ if __name__ == "__main__":
         tr1.invoke()
         tr1.pack(fill='both', expand=True)
         ttk.Radiobutton(root, text='OCR查词', value='ocr', variable=radio_v, command=run).pack(fill='both', expand=True)
+        check_dict = {}
+        for la in lang.keys():
+            check_dict.update({la: tk.IntVar()})
+            cb = ttk.Checkbutton(root, text=lang[la], variable=check_dict[la], command=set_lang)
+            cb.invoke()
+            cb.pack(fill='both', expand=True)
 
         create_systray()
 
