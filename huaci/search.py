@@ -27,16 +27,8 @@ class LifespanHandler():
         return True
 
 
-def search(query, root_url):
+def search(url):
     global i
-
-    print('query:', query)
-
-    url = root_url
-    if url.find('?') > -1:
-        url += '&query=' + query
-    else:
-        url += '?query=' + query
 
     # check_versions()
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error

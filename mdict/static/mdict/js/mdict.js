@@ -1,5 +1,11 @@
 //模板字符串
 var script=`
+<script>
+navigator.__defineGetter__('userAgent', function(){
+    return 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0' // customized user agent
+});
+navigator.userAgent;
+</script>
 <script src="/static/jquery-3.4.1/jquery-3.4.1.min.js"><\/script>
 <script src='/static/mdict/iframe-resizer-master/js/iframeResizer.contentWindow.min.js'></script>
 <script src="/static/mdict/js/transform.js"></script>
@@ -142,10 +148,24 @@ function add_iframes(data,container,need_clear,is_list){
 		   
             var force_font=$('#config-force-font',parent.document).prop("checked");
 			if(force_font){
-			    var html=style+style_font+script+"<body data-pk="+mdx_pk+">"+mdx_record+"</body>";
+			    var header=style+style_font+script;
 			}else{
-			    var html=style+script+"<body data-pk="+mdx_pk+">"+mdx_record+"</body>";
+			    var header=style+script;
 			}
+			var html=`
+			<!DOCTYPE HTML>
+			<html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="referrer" content="never">
+                    ${header}
+                </head>
+                    <body data-pk="${mdx_pk}">
+                    ${mdx_record}
+                </body>
+			</html>
+			`;
+
 
 			//script加到最后，因为enwikipart1查gucci，最后有未完成的注释<!--，导致script被注释掉。
 
