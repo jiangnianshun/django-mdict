@@ -14,8 +14,8 @@
             <div id="result_num"></div>
             <div id="result_time"></div>
         </div>
-        <div class="ml-auto" id="sound-speaker">
-            <img src="/static/mdict/img/sound_icon_gray.jpg"/>
+        <div id="sound-speaker">
+            <img src="/static/mdict/img/sound_off.png"/>
             <audio style="display:none;"></audio>
         </div>
 
@@ -24,6 +24,8 @@
         <div class="ml-auto top-menu"><!--ml-auto是margin-left:auto，左自动，右对齐，mt-auto是margin-top:auto，上自动，下对齐。-->
             <!--                        <a class="btn" data-toggle="modal" href="#modal-container-mdict" id="modal-mdict"-->
             <!--                           role="button">词典管理</a>-->
+            <a href="/mdict/bujian" target="_blank" style="color:white;"><img class="menu-icon" id="modal-bujian"
+                                                                              src="/static/mdict/img/bujian.png"></a>
             <img class="menu-icon" data-toggle="modal" href="#modal-container-mdict" id="modal-mdict"
                  src="/static/mdict/img/default.png">
             <img class="menu-icon" data-toggle="modal" href="#modal-container-config" id="modal-config"
@@ -34,16 +36,13 @@
 
 </nav>
 <div id="card-container">
-    <div class="card">
-        <div class="card-header">
-            <a class="card-link" data-parent="#card-container" data-toggle="collapse" href="#card-element-488454"> </a>
-        </div>
-        <div class="collapse show" id="card-element-488454">
-            <div class="card-body">
-                查询结果显示
-            </div>
-        </div>
-    </div>
+<!--    <div class="card">-->
+<!--        <div class="card-header">-->
+<!--            <a class="card-link" data-parent="#card-container" data-toggle="collapse" href="#card-element-488454"> </a>-->
+<!--        </div>-->
+<!--        <div class="collapse show" id="card-element-488454">-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 
 {% endblock %}

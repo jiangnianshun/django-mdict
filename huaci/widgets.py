@@ -71,7 +71,10 @@ class TkWindow():
 
     def create_systray(self):
         # 显示系统托盘
-        image = Image.open("default.ico")
+        root_path = os.path.dirname(os.path.abspath(__file__))
+        ico_path = os.path.join(root_path, 'default.ico')
+        image = Image.open(ico_path)
+        # 这里如果用相对路径default.ico，那么用bat调用时报错。
         menu = pystray.Menu(item('设置', self.show_window, default=True), item('退出', self.quit_window))
         # 这里menu应该用pystray.Menu()，如果直接使用tuple，那么左键单击报错，其他功能正常。
         # 鼠标左键点击托盘图标运行default=True的Menuitem，如果default均为False，则无动作。

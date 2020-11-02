@@ -5,13 +5,15 @@
     <div class="form-inline" style="width:100%">
         {% include "mdict/mdict-searchbar.html" %}
 
-        <div class="ml-auto" id="sound-speaker">
-            <img src="/static/mdict/img/sound_icon_gray.jpg"/>
+        <div id="sound-speaker" style="margin-left:28px;">
+            <img src="/static/mdict/img/sound_off.png"/>
             <audio style="display:none;"></audio>
         </div>
         <div class="ml-auto top-menu">
             <a class="btn" data-toggle="modal" href="#modal-container-brief" id="modal-brief" role="button">
                 {{ name }}</a>
+            <a href="/mdict/bujian" target="_blank" style="color:white;"><img class="menu-icon" id="modal-bujian"
+                                                                              src="/static/mdict/img/bujian.png"></a>
             <img class="menu-icon" data-toggle="modal" href="#modal-container-mdict" id="modal-mdict"
                  src="/static/mdict/img/default.png">
             <img class="menu-icon" data-toggle="modal" href="#modal-container-config" id="modal-config"

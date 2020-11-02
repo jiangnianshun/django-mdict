@@ -125,8 +125,8 @@ function add_iframes(data,container,need_clear,is_list){
 			var s=`
 			<div class='card'>
 				<div class='card-header'>
-					<a class='card-link collapsed' href='#card-element-${s_id}' data-toggle='collapse' >
-					<span class='badge badge-pill badge-info'>${html_escape(mdx_entry)}</span>${html_escape(mdx_name)}</a>
+					<span class='badge badge-pill badge-light'>${html_escape(mdx_entry)}</span>
+					<a class='card-link collapsed' href='#card-element-${s_id}' data-toggle='collapse' >${html_escape(mdx_name)}</a>
 				</div>
 				<div class='collapse' id='card-element-${s_id}' data-parent='${s_parent}'>
 					<div class='card-body' id='card-body-${s_id}'>

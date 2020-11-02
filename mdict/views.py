@@ -211,7 +211,7 @@ class get_mdict_list_object(inner_object):
         m_path = get_m_path(mdx)
         dic = get_or_create_dic(file)
         if icon == 'none':
-            dic_icon = os.path.join('/', 'static', 'mdict', 'img', 'default.png')
+            dic_icon = os.path.join('/', 'static', 'mdict', 'img', 'book.png')
         else:
             if is_local:
                 dic_icon = os.path.join('/', m_path, file + '.' + icon)

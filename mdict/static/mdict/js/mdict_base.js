@@ -114,9 +114,9 @@ function init_btn_group(){
 function speaker_func(c_blue){
     var img=$("#sound-speaker").children('img')[0];
     if(c_blue){
-        img.src="/static/mdict/img/sound_icon_blue.jpg";
+        img.src="/static/mdict/img/sound_on.png";
     }else{
-        img.src="/static/mdict/img/sound_icon_gray.jpg";
+        img.src="/static/mdict/img/sound_off.png";
         $("#sound-speaker").children('audio')[0].src="";
     }
 };
