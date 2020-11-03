@@ -2,7 +2,7 @@
 
 ### 适用情景
 
-局域网内，将django-mdict部署在一台电脑上，其他电脑、平板、手机可只保留少量词典，当离开局域网时，查询本地词典，当进入局域网时，可通过浏览器或划词工具对全部词典进行查词。
+局域网内，将django-mdict部署在服务器上，其他电脑、平板、手机可只保留少量词典，当离开局域网时，查询本地词典，当进入局域网时，可通过浏览器或划词工具对全部词典进行查词。
 
 1. 不建议使用移动硬盘，移动硬盘会休眠，休眠唤醒耗时长。
 2. 不建议使用树莓派，cpu性能低，只能部署少量词典。
@@ -181,6 +181,9 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 第一个含有mdx的路径会被设置为词典库路径，第一个含有mdd的路径会被设置为发音库路径。
 
 如果mdict_path.json为空，词典库地址设置为/django-mdict/media/mdict/doc/，发音库地址设置为/django-mdict/media/mdict/audio/。
+
+注意输入规范的路径，用反斜杠或者双斜杠作为路径分隔符。
+
 ```
 {
     "mdict_path": [
@@ -357,11 +360,19 @@ ws.run "wsl -d ubuntu -u root /etc/init.d/apache2 start", vbhid
 
 ### 可能的问题
 
-1. 403错误
+1. 加入新的词典没有显示
+
+删除Windows.cache和Linux.cache然后重启服务
+
+2. 部署在wsl上，前端的js、css等无法更新。
+
+因为django-mdict.conf里设置了expires_module，使得浏览器长期缓存文件，手动删除浏览器的缓存文件（不需要清cookie）。
+
+3. 403错误
 
 权限问题，设置django-mdict文件夹及子文件的权限。
 
-2. Failed to enable APR_TCP_DEFER_ACCEPT
+4. Failed to enable APR_TCP_DEFER_ACCEPT
 
 ```
 sudo vim /etc/apache2/apache2.conf
@@ -373,7 +384,7 @@ sudo vim /etc/apache2/apache2.conf
 AcceptFilter http none
 ```
 
-3. sleep: cannot read realtime clock: Invalid argument
+5. sleep: cannot read realtime clock: Invalid argument
 
 ```
 sudo mv /bin/sleep /bin/sleep~
@@ -381,6 +392,7 @@ touch /bin/sleep
 chmod +x /bin/sleep
 ```
 
-4. apache在ubuntu20.04下restart和stop失败
+6. apache在ubuntu20.04下restart和stop失败
 
 多进程的问题，多重复几次。
+
