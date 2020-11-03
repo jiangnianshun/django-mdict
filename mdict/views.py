@@ -447,6 +447,8 @@ def search_suggestion(request):
 
 def get_external_file(request):
     path = request.GET.get('path', '')
+    if path[0] == '/':
+        path = path[1:]
     file_path = os.path.join(mdict_root_path, path)
     mime_type = mimetypes.guess_type(file_path)[0]
 
