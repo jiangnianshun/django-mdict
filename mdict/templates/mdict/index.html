@@ -2,8 +2,6 @@
 
 {% block content %}
 <nav class="navbar navbar-expand-md navbar-light bg-light">
-
-
     <!--collapse navbar-collapse默认折叠，collapse navbar-collapse show默认展开。-->
 
     <div class="form-inline" style="width:100%">
@@ -21,9 +19,7 @@
 
 
 
-        <div class="ml-auto top-menu"><!--ml-auto是margin-left:auto，左自动，右对齐，mt-auto是margin-top:auto，上自动，下对齐。-->
-            <!--                        <a class="btn" data-toggle="modal" href="#modal-container-mdict" id="modal-mdict"-->
-            <!--                           role="button">词典管理</a>-->
+        <div class="ml-auto top-menu">
             <a href="/mdict/bujian" target="_blank" style="color:white;"><img class="menu-icon" id="modal-bujian"
                                                                               src="/static/mdict/img/bujian.png"></a>
             <img class="menu-icon" data-toggle="modal" href="#modal-container-mdict" id="modal-mdict"
@@ -35,15 +31,7 @@
     </div>
 
 </nav>
-<div id="card-container">
-<!--    <div class="card">-->
-<!--        <div class="card-header">-->
-<!--            <a class="card-link" data-parent="#card-container" data-toggle="collapse" href="#card-element-488454"> </a>-->
-<!--        </div>-->
-<!--        <div class="collapse show" id="card-element-488454">-->
-<!--        </div>-->
-<!--    </div>-->
-</div>
+<div id="card-container"></div>
 
 {% endblock %}
 

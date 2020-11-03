@@ -119,6 +119,7 @@ function html_escape(text){
 	}
 }
 function forbid_contextmenu(){
+	//禁止手机浏览器的上下文菜单
 	if(!is_PC()){
         window.addEventListener("contextmenu", function(e) {
             e.preventDefault();
@@ -131,7 +132,7 @@ function is_PC() {
     var userAgentInfo = navigator.userAgent;
     var Agents = ["Android", "iPhone",
                 "SymbianOS", "Windows Phone",
-                "iPad", "iPod"];
+                "iPad", "iPod", "Mobile"];
     var flag = true;
     for (var v = 0; v < Agents.length; v++) {
         if (userAgentInfo.indexOf(Agents[v]) > 0) {

@@ -284,17 +284,17 @@ function add_click_event(){
 	});
 }
 
-function init_modal_mdict(){
-    var dic_pk=$("html").attr("data-dic-pk");
-    if(dic_pk!=-1){
-	var r_b=$('<a>',{
-        text:'返回主页',
+function init_home_button(){
+	var r_b1=$('<a>',{
         href:'/mdict/',
-        class:'btn',
-        style:'color:brown'
+        style:'color:white;',
     });
-    r_b.appendTo('#myModalMdict');
-	}
+    var r_b2=$('<img>',{
+        class:'menu-icon',
+        src:'/static/mdict/img/home.png'
+    });
+    r_b2.appendTo(r_b1);
+    $('.navbar .top-menu').append(r_b1);
 }
 
 var online_dic=[];
@@ -480,8 +480,6 @@ function init_common(){
 
 	add_click_event();
 
-    init_modal_mdict();
-
 	get_mdict_list($("#modal-container-mdict .modal-body"));
 
 	init_btn_group();
@@ -521,6 +519,8 @@ function init_single_dic(){
 	init_scroll_list();
 
 	init_common();
+
+	init_home_button();
 
 	first_query();//第一次查询会不会和初始化的0位置查询冲突？
 }
