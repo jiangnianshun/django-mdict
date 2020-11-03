@@ -5,11 +5,11 @@ from .data_utils import get_or_create_dic
 from .decorator import loop_mdict_list, inner_object
 from .init_utils import init_vars
 from .mdict_config import get_config_con
-from .multibase import multi_search_sug, multi_search_mdx
+from .multibase import multi_search_mdx
 
 
 def multiprocess_search_sug(n, query, group):
-    return multi_search_sug(n, query, group)
+    return multi_search_mdx(n, query, group, is_mdx=False)
 
 
 def multiprocess_search_mdx(n, query, group):

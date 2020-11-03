@@ -36,6 +36,8 @@ dotregp = re.compile(dotreg)
 scriptreg = r'<script.*?>'
 scriptregp = re.compile(scriptreg)
 
+values_list = init_vars.mdict_odict.values()
+
 
 class SearchObject:
     def __init__(self, mdx, mdd_list, dic, query, **extra):
@@ -196,10 +198,6 @@ class SearchObject:
                 r_list.append(
                     mdxentry(self.dic_name, rt[4], record, self.prior, self.dic.pk, self.f_pk, self.f_p1, self.f_p2))
 
-        for i in range(len(r_list) - 1, -1, -1):
-            # if r_list[i].mdx_record.find('@@@LINK') == 0 or r_list[i].mdx_record == '':
-            if r_list[i].mdx_record == '':
-                del r_list[i]
         # 英文维基part3查back substitution结果是@@@LINK=Triangular matrixForward and back substitution，
         # LINK指向词条不存在时原样返回
 
@@ -240,6 +238,15 @@ class SearchObject:
     def substitute_css_path_2(self, matched):
         return matched.group(1) + '/mdict/exfile/?path=' + self.m_path + '/' + matched.group(2)
 
+    # 处理LINK指向的词条内容还是LINK的情况
+    # 有两种情况：
+    # 1：LINK指向的词条在本mdx中
+    #   1.1：LINK指向的词条stripkey后和res_name stripkey后相同，即指向的词条在result_list中，此时查找result_list剩下的部分。
+    #        比如：英文维基part3，词条Corona virus，stripkey后为coronavirus，其link指向Coronavirus，stripkey后还是coronavirus，导致自身指向自身无穷递归。
+    #   1.2：LINK指向的词条stripkey后和res_name stripkey后不相同，此时调用substitute_mdx_link()重新对本mdx进行查找。
+    #        比如：大辞海军事卷的词条863计划，link到“863”计划，再link到dacihaiJS0100
+    # 2：LINK指向的词条在其他的mdx中
+    #    当在本mdx无法找到指向的词条时，查找同名词典的其他part。
     def substitute_mdx_link(self, record):  # 处理LINK连接
         t_record = record
         res_name = record[8:].rstrip('\n').rstrip('\r')
@@ -269,16 +276,6 @@ class SearchObject:
         if record.find('@@@LINK') == 0:
             record = self.substitute_mdx_link(record)
 
-        # 处理LINK指向的词条内容还是LINK的情况
-        # 有两种情况：
-        # 1：LINK指向的词条在本mdx中
-        #   1.1：LINK指向的词条stripkey后和res_name stripkey后相同，即指向的词条在result_list中，此时查找result_list剩下的部分。
-        #        比如：英文维基part3，词条Corona virus，stripkey后为coronavirus，其link指向Coronavirus，stripkey后还是coronavirus，导致自身指向自身无穷递归。
-        #   1.2：LINK指向的词条stripkey后和res_name stripkey后不相同，此时调用substitute_mdx_link()重新对本mdx进行查找。
-        #        比如：大辞海军事卷的词条863计划，link到“863”计划，再link到dacihaiJS0100
-        # 2：LINK指向的词条在其他的mdx中
-        #    当在本mdx无法找到指向的词条时，查找同名词典的其他part。
-
         if record == '':
             record = self.search_dic_group(res_name)
         if record == '':
@@ -289,7 +286,7 @@ class SearchObject:
     def search_dic_group(self, res_name):  # 同组词典查询
         # 比如英文维基词典分为多个part，某个part里的单词LINK指向的单词位于另一个part中，导致在本part中查询不到，此时查询其他part。
         record = ''
-        for item in init_vars.mdict_odict.values():
+        for item in values_list:
             mdx = item.mdx
             g_id = item.g_id
             if self.g_id == g_id and mdx.get_fpath() != self.mdx.get_fpath():

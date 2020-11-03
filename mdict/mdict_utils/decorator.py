@@ -1,9 +1,13 @@
-import functools,time,collections
+import collections
+import functools
+import time
 from abc import abstractmethod
 
+from mdict.models import MdictDic
 from .data_utils import get_or_create_dic
 from .init_utils import init_vars
-from mdict.models import MdictDic
+
+values_list = init_vars.mdict_odict.values()
 
 
 def loop_mdict_list(return_type=0, timer=False, digit=5):
@@ -32,7 +36,7 @@ def loop_mdict_list(return_type=0, timer=False, digit=5):
                 o.inner_search(mdx, mdd_list, g_id, icon, dic.mdict_file, dic)
 
             else:
-                for item in init_vars.mdict_odict.values():
+                for item in values_list:
                     mdx = item.mdx
                     mdd_list = item.mdd_list
                     g_id = item.g_id

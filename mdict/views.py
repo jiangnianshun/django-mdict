@@ -271,7 +271,7 @@ def search_mdd(request, *args):
     mime_type = ''
 
     dic_name = dic.mdict_file
-    if dic_name in init_vars.mdict_odict:
+    if dic_name in init_vars.mdict_odict.keys():
         item = init_vars.mdict_odict[dic_name]
         mdx = item.mdx
         mdd_list = item.mdd_list
