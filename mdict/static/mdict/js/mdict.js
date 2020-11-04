@@ -213,7 +213,6 @@ function add_iframes(data,container,need_clear,is_list){
 						iFrameResize({
 							log:false,
 							checkOrigin:false,
-							resizeFrom:'chid',
 							heightCalculationMethod:'documentElementOffset',
 							warningTimeout:0,
 							scrolling:true,
@@ -231,8 +230,12 @@ function add_iframes(data,container,need_clear,is_list){
 						bodyOffset和bodyScroll不计算margin，都偏小
 						max一是有闪烁问题，二是有的词条有很大一块空白
 						documentElementScroll会有大块空白
-						lowestElement准确度最高，会遍历各元素，问题一性能消耗高，二有的词条，比如朗文5++的comet，会导致每次点击iframe高度都增大。
-						resizeFrom:'child'设置当iframe变化时更新状态，默认是parent窗口变化时更新状态
+						documentElementOffset的白边较小，且点击后能恢复
+						lowestElement准确度最高，会遍历各元素，问题一性能消耗高，二有的词条，比如朗文5++的comet，
+						每次点击iframe高度都增大，原因是有元素设置了height="100%"，
+						或者设置了固定约束距底边的距离，position="fixed",bottom="45px"，导致高度获取出问题。
+						resizeFrom:'child'设置当iframe变化时更新状态，默认是parent窗口变化时更新状态。
+						在modal-mdict需要设置为child，否则不会显示。
 						warningTimeout:0,抑制iframeresizer的警告信息
 						第二个参数是iframe的dom对象，如果不设置，则对全部的iframe都生效。
 						tolerance设置iframe前后相差多少px时重绘
