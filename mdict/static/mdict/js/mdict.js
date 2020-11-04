@@ -16,6 +16,7 @@ var style=`
 <style>
 html,body{
 	padding:0;
+	overflow-y:hidden;
 }
 img{
 	max-width:100% !important;
@@ -212,20 +213,13 @@ function add_iframes(data,container,need_clear,is_list){
 						iFrameResize({
 							log:false,
 							checkOrigin:false,
-							resizeFrom:'child',
-							//inPageLinks:true,
-							heightCalculationMethod:'lowestElement',
-							//heightCalculationMethod:'max',
-							//minHeight:60,
+							resizeFrom:'chid',
+							heightCalculationMethod:'documentElementOffset',
 							warningTimeout:0,
+							scrolling:true,
 //							onInit: function(iframe_a){
-//							    console.log(iframe_a);
 //							},
 //							onResized: function(messageData) {
-//									//if(card.find('.defaultscale').val()==''){
-//									    //card.find('.defaultscale').trigger('click');
-//									    //iframe加载完后，点击一下defaultscale来获取body正确的fontstyle
-//									//}
 //							},
 						},iframe);
 						$(iframe).attr('data-content-fill','true');
@@ -233,13 +227,16 @@ function add_iframes(data,container,need_clear,is_list){
 						/*
 						log:false不显示debug信息
 						checkOrigin:false不对iframe的url进行检查
-						heightCalculationMethod设置为max会多次比较，导致在chrome上加载图片的iframe闪烁更严重。
-						默认iframe也是不包含margin的，使用lowestElement才是最正确的高度，但这会引起效率问题。
-						高度应该选默认，不能选max，选max会导致在手机上长iframe有明显卡顿
-						有一个模式好像会导致内置词典获取的高度不正确？？
-						resizeFrom:'child'设置当iframe变化时更新状态，默认是窗口变化时更新状态
+						heightCalculationMethod
+						bodyOffset和bodyScroll不计算margin，都偏小
+						max一是有闪烁问题，二是有的词条有很大一块空白
+						documentElementScroll会有大块空白
+						lowestElement准确度最高，会遍历各元素，问题一性能消耗高，二有的词条，比如朗文5++的comet，会导致每次点击iframe高度都增大。
+						resizeFrom:'child'设置当iframe变化时更新状态，默认是parent窗口变化时更新状态
 						warningTimeout:0,抑制iframeresizer的警告信息
-						第二个参数是iframe的dom对象，如果不设置，则对全部的iframe都生效。	
+						第二个参数是iframe的dom对象，如果不设置，则对全部的iframe都生效。
+						tolerance设置iframe前后相差多少px时重绘
+						scrolling:true显示滚动条，然后用overflow-y:hidden;抑制竖向，只显示横向。
 						*/
 					}
 				});
@@ -371,7 +368,7 @@ function online_search(query,container){//有道在线
             <div class='card' style='display:none;'>
                 <div class='card-header'>
                     <a class='card-link collapsed' href='#card-element-${s_id}' data-toggle='collapse' >
-                    <span class='badge badge-pill badge-info'>${html_escape(mdx_entry)}</span>${html_escape(mdx_name)}</a>
+                    <span class='badge badge-pill badge-light'>${html_escape(mdx_entry)}</span>${html_escape(mdx_name)}</a>
                 </div>
                 <div class='collapse' id='card-element-${s_id}' data-parent='#card-container'>
                     <div class='card-body' id='card-body-${s_id}'>
@@ -719,6 +716,9 @@ function get_header(container){
 					
 				}
 			}
+
+			description=description.replace('height="100%"','').replace("heigth='100%'",'');
+
 			
 			var style="<style>html,body{margin:0;padding:0;}img{max-width:100%;}</style>";
 			
@@ -734,7 +734,13 @@ function get_header(container){
 			iframe.contentWindow.document.open();
 			iframe.contentWindow.document.write(html);//这里用iframe是因为某些字典的description中含有body样式，导致样式污染。
 			iframe.contentWindow.document.close();
-			resize_iframe_height()
+            iFrameResize({
+                log:false,
+                checkOrigin:false,
+                resizeFrom:'child',
+                heightCalculationMethod:'lowestElement',
+                warningTimeout:0,
+            },iframe);
 			
 		},
 		error:function(jqXHR,textStatus,errorThrown){

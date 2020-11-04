@@ -55,40 +55,6 @@ function close_autocomplete(form){
 	return false;
 }
 
-function set_iframe_height(iframe) {
-    if (iframe) {
-		var iframeWin;
-		if(iframe.contentWindow){
-			iframeWin = iframe.contentWindow;
-			if (iframeWin.document.body) {
-				iframe.height = iframeWin.document.body.scrollHeight;
-			}
-		}else if(iframe.contentDocument){
-			iframeWin = iframe.contentDocument.parentWindow;
-			if (iframeWin.document.body) {
-				iframe.height = iframeWin.document.body.scrollHeight;
-			}
-		}
-
-    }
-}
-
-//在正文中已用插件代替
-//但是插件对.modal-content中的iframe不生效，因此还用这个调节高度。
-function resize_iframe_height(){
-	$("#modal-container-brief iframe").each(function (index) {//设置iframe高度为内容高度
-	//这个方法设置的SimpleWiki20140116的car词条也是多出一块空白
-		var that = $(this);
-
-		(function () {
-			setInterval(function () {
-				set_iframe_height(that[0])
-			}, 500)
-		})(that)
-	});
-
-}
-
 function thousands(num){
         var str = num.toString();
         var reg = str.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
