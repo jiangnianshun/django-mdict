@@ -28,3 +28,7 @@ django-mdict是django实现的mdict词典查询工具。
 ### 说明文档
 
 [说明文档](documentation.md)
+
+### 样式
+
+![样式](https://github.com/jiangnianshun/django-mdict/blob/master/img/2020110301.jpg)
