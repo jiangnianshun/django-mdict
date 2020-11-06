@@ -4,9 +4,6 @@ import sys
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
-    # get_sys_name(set_system='WindowsDjango')
-    # 在windows上使用内置服务器报错守护进程不能创建子进程
-    # 考虑换成threadpool
 
     try:
         from django.core.management import execute_from_command_line

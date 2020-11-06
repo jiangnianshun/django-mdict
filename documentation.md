@@ -8,6 +8,20 @@
 2. 不建议使用树莓派，cpu性能低，只能部署少量词典。
 3. 不建议使用云服务器，学生机cpu性能和网络传输速度不满足要求。
 
+### 格式支持
+
+音频：
+* mp3,spx,ogg 支持
+* wav chrome支持，firefox不支持
+
+图像：
+* png,jpg,svg,webp 支持
+* tiff 不支持
+
+字体：
+* chrome不支持大于30MB的字体
+
+
 ### admin操作
 
 进入后台admin界面
@@ -56,19 +70,6 @@ pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 3. requirements3.txt：划词工具的依赖
 
 划词工具仅用于windows，由于cefpython3暂不支持python3.8，建议安装python3.7。
-
-### 格式支持
-
-音频：
-* mp3,spx,ogg 支持
-* wav chrome支持，firefox不支持
-
-图像：
-* png,jpg,svg,webp 支持
-* tiff 不支持
-
-字体：
-* chrome不支持大于30MB的字体
 
 ### mdict解析
 
@@ -147,6 +148,10 @@ pdawiki部件检索和全宋体：[https://www.pdawiki.com/forum/forum.php?mod=v
 繁简转化用的是opencc-python-reimplemented
 
 部分pdf复制的字符是全角字符，查询时会全角查询一遍，转化为半角再查询一遍。
+
+### 同名加载
+
+mdx同名的js、css和字体文件会自动加载。
 
 ### 划词
 
@@ -260,15 +265,23 @@ card_show 同时展开多个词典
 
 1. 安装python3。
 
-2. 安装Microsoft C++ Build Tools，在安装nltk、python-Levenshtein等库以及进行cython编译时需要该工具，安装时勾选C++开发组件。
+2. 安装Microsoft C++ Build Tools
+
+在安装nltk、python-Levenshtein等库以及进行cython编译时需要该工具，安装时勾选C++开发组件。
 
 [https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
 ](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
 )
 
-3. 确保文件夹名是django-mdict，Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。
+3. 下载django-mdict
 
-首先会弹出文件夹选择框，第一次选择字典库路径，第二次选择发音库路径（路径保存在mdict_path.json文件中）。
+```
+git clone https://github.com/jiangnianshun/django-mdict.git
+```
+
+Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。
+
+初始化过程中首先会弹出文件夹选择框，第一次选择字典库路径，第二次选择发音库路径。（路径保存在mdict_path.json文件中）
 
 最后要求设置django的用户名和密码。
 
