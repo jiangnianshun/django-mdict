@@ -36,17 +36,26 @@ default_config = {
 }
 
 config = configparser.ConfigParser(interpolation=None)
-
-
 # ConfigParser()对字符串含有%会抛出异常，要设置interpolation=None。
 
+config_permission = True
+
+
 def get_config():
-    global config
+    global config, config_permission
+
+    if not config_permission:
+        return config
+
     if os.path.exists(user_config_path):
         config.read(user_config_path)
     else:
-        with open(user_config_path, 'w', encoding='utf-8') as f:
-            config.write(f)
+        try:
+            with open(user_config_path, 'w', encoding='utf-8') as f:
+                config.write(f)
+        except PermissionError as e:
+            print(e)
+            config_permission = False
     return config
 
 
@@ -80,23 +89,37 @@ def get_config_sec(sec):
 def create_config():
     for section in default_config:
         config[section] = default_config[section]
-    with open(user_config_path, 'w', encoding='utf-8') as f:
-        config.write(f)
+    try:
+        with open(user_config_path, 'w', encoding='utf-8') as f:
+            config.write(f)
+    except PermissionError as e:
+        print(e)
+        config_permission = False
 
 
 def add_or_edit_config_section(sec_name, sec):
     con = get_config()
     con[sec_name.upper()] = sec
-    with open(user_config_path, 'w', encoding='utf-8') as f:
-        con.write(f)
+    try:
+        with open(user_config_path, 'w', encoding='utf-8') as f:
+            con.write(f)
+    except PermissionError as e:
+        print(e)
+        config_permission = False
 
 
-def set_config(save_config):
+def set_config(sec, save_config):
+    global config, config_permission
     con = get_config()
     for con_name, con_value in save_config.items():
-        con['SEARCH'][con_name] = str(con_value)
-    with open(user_config_path, 'w', encoding='utf-8') as f:
-        con.write(f)
+        con[sec][con_name] = str(con_value)
+    config = con
+    try:
+        with open(user_config_path, 'w', encoding='utf-8') as f:
+            con.write(f)
+    except PermissionError as e:
+        print(e)
+        config_permission = False
 
 
 if not os.path.exists(user_config_path):

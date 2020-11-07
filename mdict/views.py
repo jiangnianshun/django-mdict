@@ -15,7 +15,7 @@ from base.base_func import print_log_info, is_en_func, strQ2B, request_body_seri
 from base.base_func3 import t2s, s2t
 
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
-from mdict.mdict_utils.data_utils import get_or_create_dic
+from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
 from mdict.mdict_utils.decorator import loop_mdict_list, inner_object
 from mdict.mdict_utils.init_utils import init_vars, sound_list, init_mdict_list
 from mdict.mdict_utils.mdict_config import *
@@ -32,8 +32,6 @@ elif check_system() == 1:
     from .mdict_utils.multithread_search import loop_create_thread_model
 
 from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
-
-from .mdict_utils.init_database import init_database
 
 init_database()
 
@@ -500,7 +498,7 @@ def save_config(request):
     for k, v in request.GET.lists():
         config_dict.update({k: json.loads(v[0])})
 
-    set_config(config_dict)
+    set_config('SEARCH', config_dict)
     return HttpResponse('success')
 
 

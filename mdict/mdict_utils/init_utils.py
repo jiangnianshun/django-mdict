@@ -1,4 +1,7 @@
-import pickle, time, collections
+import collections
+import pickle
+import time
+import psutil
 from base.base_func import print_log_info, guess_mime
 from base.sys_utils import get_sys_name
 from .mdict_config import *
@@ -12,7 +15,7 @@ try:
 except ImportError as e:
     print(e)
     print_log_info(
-        'loading readmdict_search lib failed! compile pyx files in mynav/mdict/readmdict/pyx/ with cython, this will speed up search.',
+        'loading readmdict_search lib failed! run /mdict/readmdict/pyx/build.sh or build.bat, this will speed up search.',
         1)
     from mdict.readmdict.source.readmdict_search import MDX, MDD
 
@@ -144,20 +147,30 @@ def write_cache():
 
 
 indicator = []
+real_num = psutil.cpu_count(False)
+#cpu的物理核心数
 
 
 def sort_mdict_list(t_list):
     sorted(t_list.items(), key=lambda k: k[1].file_size)
 
     cpunums = get_config_con('process_num')
-    for i in range(cpunums):
+    cpunum = int(len(t_list) / 40)
+
+    if cpunum > real_num:
+        cpunum = real_num
+
+    if cpunum != cpunums:
+        set_config('COMMON', {'process_num': cpunum})
+
+    for i in range(cpunum):
         indicator.append(list())
 
     n = 0
     for i in range(len(t_list) - 1, -1, -1):
         indicator[n].append(i)  # 改进成每列的file_size的和大概相等
         n += 1
-        if n >= cpunums:
+        if n >= cpunum:
             n = 0
 
     return t_list

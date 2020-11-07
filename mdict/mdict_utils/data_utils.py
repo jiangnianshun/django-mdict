@@ -1,5 +1,6 @@
 from base.base_func import print_log_info
 from django.core.exceptions import AppRegistryNotReady
+from mdict.mdict_utils.init_utils import init_vars
 
 try:
     from mdict.models import MdictDic
@@ -12,15 +13,24 @@ def get_all_dic():
 
 
 def get_or_create_dic(dict_file):
-    try:
-        dic = MdictDic.objects.get(mdict_file=dict_file)
-    except MdictDic.DoesNotExist as e:
-        print(e)
-        print_log_info('find new mdict, add MdicDic to database.' + dict_file, 2)
+    dics = MdictDic.objects.filter(mdict_file=dict_file)
+    if len(dics) == 0:
         dic = MdictDic.objects.create(mdict_name=dict_file, mdict_file=dict_file)
-    except Exception as e:
-        print(e)
-        dic = None
-    #     多线程同时添加很多词典，操作sqlite3时会出错，后面再处理
+    else:
+        dic = dics[0]
 
     return dic
+
+
+def init_database():
+    print('init database')
+    update_list = []
+    for k, v in init_vars.mdict_odict.items():
+        dics = MdictDic.objects.filter(mdict_file=k)
+        if len(dics) == 0:
+            print(k)
+            obj = MdictDic(mdict_name=k, mdict_file=k)
+            update_list.append(obj)
+    if update_list:
+        MdictDic.objects.bulk_create(update_list, batch_size=100)
+        print('add new dictionary', len(update_list))
