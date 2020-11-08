@@ -55,6 +55,8 @@ def get_mdict_list():
     # 词典结尾是mdx或MDX
     # ntfs下文件名不区分大小写，但ext4下区分大小写
 
+    print_log_info(mdict_root_path)
+
     # os.walk和os.scandir()
     for root, dirs, files in os.walk(mdict_root_path):
         for file in files:

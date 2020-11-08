@@ -8,6 +8,7 @@ from django.http.request import QueryDict
 
 
 def get_log_header(mod_name, debug_level, start=-1, end=-1):
+    dl = ''
     if debug_level == 2:
         dl = 'ERROR'
     elif debug_level == 1:

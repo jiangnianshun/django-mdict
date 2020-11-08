@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'rest_framework',
-    'oauth2_provider',
 ]
 
 MIDDLEWARE = [
@@ -70,26 +69,15 @@ TEMPLATES = [
     },
 ]
 
-OAUTH2_PROVIDER = {
-    # this is the list of available scopes
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'},
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 6 * 60 * 60,
-    'REFRESH_TOKEN_EXPIRE_SECONDS': 7 * 24 * 60 * 60,
-    'ROTATE_REFRESH_TOKEN': False,
-    'REFRESH_TOKEN_GRACE_PERIOD_SECONDS': 2 * 60,
-    'REQUEST_APPROVAL_PROMPT': 'auto',
-}
 
 REST_FRAMEWORK = {
 
     'DEFAULT_PERMISSION_CLASSES': (
-
         'rest_framework.permissions.IsAuthenticated',
 
     ),
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
 

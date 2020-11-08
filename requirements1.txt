@@ -1,6 +1,5 @@
 django
 djangorestframework
-django-oauth-toolkit
 django-ckeditor
 nltk
 opencc-python-reimplemented
