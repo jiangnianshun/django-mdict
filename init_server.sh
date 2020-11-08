@@ -17,3 +17,4 @@ python3 manage.py makemigrations mdict
 python3 manage.py migrate mdict
 python3 manage.py createsuperuser
 fi
+chmod 777 db.sqlite3

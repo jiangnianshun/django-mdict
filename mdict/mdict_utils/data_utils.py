@@ -1,5 +1,6 @@
-from base.base_func import print_log_info
 from django.core.exceptions import AppRegistryNotReady
+from django.db.utils import OperationalError as DjangoError
+from sqlite3 import OperationalError as Sqlite3Error
 from mdict.mdict_utils.init_utils import init_vars
 
 try:
@@ -23,14 +24,19 @@ def get_or_create_dic(dict_file):
 
 
 def init_database():
-    print('init database')
-    update_list = []
-    for k, v in init_vars.mdict_odict.items():
-        dics = MdictDic.objects.filter(mdict_file=k)
-        if len(dics) == 0:
-            print(k)
-            obj = MdictDic(mdict_name=k, mdict_file=k)
-            update_list.append(obj)
-    if update_list:
-        MdictDic.objects.bulk_create(update_list, batch_size=100)
-        print('add new dictionary', len(update_list))
+    try:
+        print('init database')
+        update_list = []
+        for k, v in init_vars.mdict_odict.items():
+            dics = MdictDic.objects.filter(mdict_file=k)
+            if len(dics) == 0:
+                print(k)
+                obj = MdictDic(mdict_name=k, mdict_file=k)
+                update_list.append(obj)
+        if update_list:
+            MdictDic.objects.bulk_create(update_list, batch_size=100)
+            print('add new dictionary', len(update_list))
+    except Sqlite3Error as e:
+        print(e)
+    except DjangoError as e:
+        print(e)

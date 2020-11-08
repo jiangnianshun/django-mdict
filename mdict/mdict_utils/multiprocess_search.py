@@ -26,7 +26,8 @@ def create_pool():
 
 def terminate_pool(pool):
     print_log_info('terminating multiprocessing pool.')
-    pool.terminate()
+    if pool is not None:
+        pool.terminate()
 
 
 def check_pool_recreate(pool):

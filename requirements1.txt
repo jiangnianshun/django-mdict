@@ -7,4 +7,5 @@ opencc-python-reimplemented
 pyspellchecker
 cython
 pillow
+psutil
 python-Levenshtein

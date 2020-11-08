@@ -148,7 +148,9 @@ def write_cache():
 
 indicator = []
 real_num = psutil.cpu_count(False)
-#cpu的物理核心数
+
+
+# cpu的物理核心数
 
 
 def sort_mdict_list(t_list):
@@ -157,8 +159,14 @@ def sort_mdict_list(t_list):
     cpunums = get_config_con('process_num')
     cpunum = int(len(t_list) / 40)
 
+    if cpunum < cpunums:
+        cpunum = cpunums
+
     if cpunum > real_num:
         cpunum = real_num
+
+    if cpunum < 1:
+        cpunum = 1
 
     if cpunum != cpunums:
         set_config('COMMON', {'process_num': cpunum})
