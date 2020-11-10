@@ -196,18 +196,20 @@ class SearchObject:
     def search_mdx_required(self):
         # 查询一组词
         result_dict = self.mdx.look_up_required(self.required)
+        self.f_pk = self.dic.pk
         r_list = []
+        t_list = []
         for key in result_dict.keys():
             self.query = key
             self.result_list = result_dict[key]
-
             for rt in self.result_list:
                 self.f_p1 = rt[2]
                 self.f_p2 = rt[3]
                 self.cmp.clear()
                 record = self.substitute_record(rt[5])
-                if record != '':
+                if record != '' and (self.f_p1,self.f_p2) not in t_list:
                     # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
+                    t_list.append((self.f_p1, self.f_p2))
                     r_list.append(
                         mdxentry(self.dic_name, rt[4], record, self.prior, self.dic.pk, self.f_pk, self.f_p1,
                                  self.f_p2))
