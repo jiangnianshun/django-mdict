@@ -98,6 +98,7 @@ function init_btn_group(){
 	    var c=$(".collapse.show");
 	    if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
 	        c.find('iframe').contents().find('*').animate({ fontSize: '+=2px' });
+	        //只放大字号对于设置height的行之间文字会重叠，同时放大行高，会导致总高度无法准确获取。
         }
 	});
 	$('.scaledown').click(function(){

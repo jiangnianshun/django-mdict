@@ -269,9 +269,7 @@ function init_tooltip(){
 
 function resize_iframe(){
     if ('parentIFrame' in window){
-        if(document.body.scrollHeight>60){
-            window.parentIFrame.size($('html').outerHeight());
-        }
+        window.parentIFrame.size($('html').outerHeight());
     }
 }
 
