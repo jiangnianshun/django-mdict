@@ -119,6 +119,8 @@ def _decrypt_regcode_by_email(reg_code, email):
 # reg = r'[ _=,.·;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
 reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
 regp = re.compile(reg)
+
+
 # 搜韵诗词词条：八归·辛巳，CC-CEDICT词条威廉·莎士比亚，stripkey时不包含·
 
 
@@ -561,7 +563,7 @@ class MDict(object):
         return compressed_size, decompressed_size, compressed_size_b, decompressed_size_b, compressed_size_a, \
                decompressed_size_a
 
-    def get_key_block_size_in_order(self, p):
+    def get_key_block_size_list(self, p):
         # compressed_size = -1  # 累计压缩大小
         # decompressed_size = -1  # 累计解压大小
         # compressed_size_b = -1  # 之前块的累计压缩大小
@@ -773,7 +775,7 @@ class MDict(object):
 
         return my_sug
 
-    def search_key_block_in_order(self, key_list, p, num, back):
+    def search_key_block_list(self, key_list, p, num, back):
         my_list = []
         length = len(key_list)
         start = 0
@@ -923,7 +925,7 @@ class MDict(object):
                     my_sug.extend(m_a)
         return my_sug
 
-    def _decode_key_block_in_order(self, f, p1, p2, num, direction):
+    def _decode_key_block_list(self, f, p1, p2, num, direction):
         # num_bytes = 0
         if self._version >= 2.0:
             num_bytes = 8 * 5
@@ -936,7 +938,7 @@ class MDict(object):
 
         compressed_size, decompressed_size, compressed_size_b, decompressed_size_b, compressed_size_a, \
         decompressed_size_a, compressed_size_b2, decompressed_size_b2 = \
-            self.get_key_block_size_in_order(p1)
+            self.get_key_block_size_list(p1)
 
         if compressed_size == -1:
             return '', -1, -1
@@ -957,12 +959,12 @@ class MDict(object):
         my_list = f_list = b_list = []
 
         if direction > 0:
-            my_list, r_e_p2 = self.search_key_block_in_order(key_list, p2, num, True)
+            my_list, r_e_p2 = self.search_key_block_list(key_list, p2, num, True)
         elif direction < 0:
-            my_list, r_s_p2 = self.search_key_block_in_order(key_list, p2, num, False)
+            my_list, r_s_p2 = self.search_key_block_list(key_list, p2, num, False)
         elif direction == 0:
-            f_list, r_s_p2 = self.search_key_block_in_order(key_list, p2, math.floor(num / 2), False)
-            b_list, r_e_p2 = self.search_key_block_in_order(key_list, p2, math.ceil(num / 2) + 1, True)
+            f_list, r_s_p2 = self.search_key_block_list(key_list, p2, math.floor(num / 2), False)
+            b_list, r_e_p2 = self.search_key_block_list(key_list, p2, math.ceil(num / 2) + 1, True)
             # 这里加1，总数才是num，后面处理是否少了个+1
             my_list.extend(f_list)
             my_list.extend(b_list[1:])
@@ -982,7 +984,7 @@ class MDict(object):
                     key_block = self.get_key_block(f, compressed_size_a, decompressed_size_a, compressed_size,
                                                    decompressed_size)
                     key_list = self._split_key_block(key_block)
-                    t_list, r_e_p2 = self.search_key_block_in_order(key_list, 0, num - my_list_len, True)
+                    t_list, r_e_p2 = self.search_key_block_list(key_list, 0, num - my_list_len, True)
                     my_list[my_list_len - 1][2] = t_list[0][2]
                     my_list.extend(t_list)
 
@@ -995,8 +997,8 @@ class MDict(object):
                     key_block = self.get_key_block(f, compressed_size_b, decompressed_size_b, compressed_size_b2,
                                                    decompressed_size_b2)
                     key_list = self._split_key_block(key_block)
-                    t_list, r_s_p2 = self.search_key_block_in_order(key_list, len(key_list) - 1, num - my_list_len,
-                                                                    False)
+                    t_list, r_s_p2 = self.search_key_block_list(key_list, len(key_list) - 1, num - my_list_len,
+                                                                False)
 
                     t_list[len(t_list) - 1][2] = my_list[0][2]
                     t_list.extend(my_list)
@@ -1011,9 +1013,9 @@ class MDict(object):
                         key_block = self.get_key_block(f, compressed_size_b, decompressed_size_b, compressed_size_b2,
                                                        decompressed_size_b2)
                         key_list = self._split_key_block(key_block)
-                        t_list, r_s_p2 = self.search_key_block_in_order(key_list, len(key_list) - 1,
-                                                                        math.floor(num / 2) - len(f_list),
-                                                                        False)
+                        t_list, r_s_p2 = self.search_key_block_list(key_list, len(key_list) - 1,
+                                                                    math.floor(num / 2) - len(f_list),
+                                                                    False)
                         t_list[len(t_list) - 1][2] = my_list[len(f_list)][2]
                         t_list.extend(my_list)
                         my_list = t_list
@@ -1023,8 +1025,8 @@ class MDict(object):
                         key_block = self.get_key_block(f, compressed_size_a, decompressed_size_a, compressed_size,
                                                        decompressed_size)
                         key_list = self._split_key_block(key_block)
-                        t_list, r_e_p2 = self.search_key_block_in_order(key_list, 0, math.ceil(num / 2) - len(b_list),
-                                                                        True)
+                        t_list, r_e_p2 = self.search_key_block_list(key_list, 0, math.ceil(num / 2) - len(b_list),
+                                                                    True)
                         my_list[my_list_len - 1][2] = t_list[0][2]
                         my_list.extend(t_list)
 
@@ -1318,6 +1320,26 @@ class MDX(MDict):
             # self._stylesheet为空时，清除r'`\d+`'
             return re.sub(r'`\d+`', '', txt)
 
+    def look_up_required(self, required):
+        f = open(self._fpath, 'rb')
+        rr_dict = {}
+        t_list = []
+        for key in required:
+            r_list = []
+            key = key.strip()
+            result_list = self.look_up_key(key, f)
+            if len(result_list) == 0:
+                continue
+            for r in result_list:
+                if r[0] not in t_list:
+                    t_list.append(r[0])
+                    record = self.look_up_record(r[0], r[1], f)
+                    r_list.append((r[0], r[1], r[2], r[3], r[4], record))
+            rr_dict.update({key: r_list})
+
+        f.close()
+        return rr_dict
+
     def look_up(self, key):
         """
         search a entry in the MDX file
@@ -1361,6 +1383,27 @@ class MDX(MDict):
 
         return record
 
+    def look_up_sug_required(self, required, num):
+        """
+        search the suggestion of key
+        @param key: entry to search
+        @param num: the number of suggestion to get
+        @return:
+        """
+        f = open(self._fpath, 'rb')
+        sug = []
+        for key in required:
+
+            self._sug_flag = -1
+            extra = self._decode_key_block_sug(key, f, num)
+
+            for e in extra:
+                if e != '' and e not in sug:
+                    sug.append(e)
+
+        f.close()
+        return sug
+
     def look_up_sug(self, key, num):
         """
         search the suggestion of key
@@ -1368,8 +1411,6 @@ class MDX(MDict):
         @param num: the number of suggestion to get
         @return:
         """
-        if not type(key) == str:
-            return []
 
         f = open(self._fpath, 'rb')
         self._sug_flag = -1
@@ -1383,7 +1424,7 @@ class MDX(MDict):
         f.close()
         return sug
 
-    def look_up_in_order(self, p1, p2, num, direction):
+    def look_up_list(self, p1, p2, num, direction):
         """
         to get a continuous list of entry in the dictionary
         @param p1: position of entry in the key_block_info_list
@@ -1395,6 +1436,6 @@ class MDX(MDict):
         """
         f = open(self._fpath, 'rb')
         self._sug_flag = -1
-        entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = self._decode_key_block_in_order(f, p1, p2, num, direction)
+        entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = self._decode_key_block_list(f, p1, p2, num, direction)
         f.close()
         return entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2

@@ -7,7 +7,7 @@ values_list = list(init_vars.mdict_odict.values())
 dics_list = get_all_dic()
 
 
-def multi_search_mdx(n, query, group, is_mdx=True):
+def multi_search_mdx(n, required, group, is_mdx=True):
     r_list = []
     for i in indicator[n]:
         temp_object = values_list[i]
@@ -25,15 +25,15 @@ def multi_search_mdx(n, query, group, is_mdx=True):
         if dic.mdict_enable:
             if group == 0:  # 默认查询全部词典
                 if is_mdx:
-                    r_list.extend(SearchObject(mdx, mdd_list, dic, query, g_id=g_id).search_mdx_entry())
+                    r_list.extend(SearchObject(mdx, mdd_list, dic, required, g_id=g_id).search_mdx_required())
                 else:
-                    r_list.extend(SearchObject(mdx, mdd_list, dic, query).search_sug_entry(3))
+                    r_list.extend(SearchObject(mdx, mdd_list, dic, required).search_sug_required(3))
             else:  # 查询某个词典分组下的词典
                 for pk, name in dic.mdict_group.values_list():
                     if pk == group:
                         if is_mdx:
-                            r_list.extend(SearchObject(mdx, mdd_list, dic, query, g_id=g_id).search_mdx_entry())
+                            r_list.extend(SearchObject(mdx, mdd_list, dic, required, g_id=g_id).search_mdx_required())
                         else:
-                            r_list.extend(SearchObject(mdx, mdd_list, dic, query).search_sug_entry(3))
+                            r_list.extend(SearchObject(mdx, mdd_list, dic, required).search_sug_required(3))
                         break
     return r_list

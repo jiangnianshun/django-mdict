@@ -40,13 +40,22 @@ values_list = init_vars.mdict_odict.values()
 
 
 class SearchObject:
-    def __init__(self, mdx, mdd_list, dic, query, **extra):
+    def __init__(self, mdx, mdd_list, dic, required, **extra):
         self.dic = dic
         self.dic_id = dic.pk
         self.dic_name = dic.mdict_name
         self.dic_file = dic.mdict_file
         self.prior = dic.mdict_priority
-        self.query = query
+
+        if isinstance(required,list):
+            self.required = required
+            self.query = required[0]
+        elif isinstance(required, str):
+            self.required = []
+            self.query = required
+        else:
+            raise Exception('error query type')
+
         self.mdx = mdx
         self.mdd = mdd_list
         self.mdd_exist = False
@@ -64,11 +73,14 @@ class SearchObject:
 
         self.m_path = get_m_path(self.mdx)
 
+    def search_sug_required(self, num):
+        return self.mdx.look_up_sug_required(self.required, num)
+
     def search_sug_entry(self, num):
         return self.mdx.look_up_sug(self.query, num)
 
-    def search_order_entry(self, p1, p2, num, direction):
-        return self.mdx.look_up_in_order(p1, p2, num, direction)
+    def search_list_entry(self, p1, p2, num, direction):
+        return self.mdx.look_up_list(p1, p2, num, direction)
 
     def get_len(self):
         return self.mdx.get_len()
@@ -181,7 +193,29 @@ class SearchObject:
 
         return record
 
+    def search_mdx_required(self):
+        # 查询一组词
+        result_dict = self.mdx.look_up_required(self.required)
+        r_list = []
+        for key in result_dict.keys():
+            self.query = key
+            self.result_list = result_dict[key]
+
+            for rt in self.result_list:
+                self.f_p1 = rt[2]
+                self.f_p2 = rt[3]
+                self.cmp.clear()
+                record = self.substitute_record(rt[5])
+                if record != '':
+                    # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
+                    r_list.append(
+                        mdxentry(self.dic_name, rt[4], record, self.prior, self.dic.pk, self.f_pk, self.f_p1,
+                                 self.f_p2))
+        return r_list
+
+
     def search_mdx_entry(self):
+        # 查询一个词
         result_list = self.mdx.look_up(self.query)
         self.result_list = result_list
         # result_list 0:start,1:end,2:r_p1,3:r_p2:4:entry,5:record

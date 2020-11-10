@@ -20,7 +20,8 @@ from mdict.mdict_utils.decorator import loop_mdict_list, inner_object
 from mdict.mdict_utils.init_utils import init_vars, sound_list, init_mdict_list
 from mdict.mdict_utils.mdict_config import *
 from mdict.mdict_utils.search_object import SearchObject
-from mdict.mdict_utils.search_utils import search, clear_duplication, search_bultin_dic_sug, search_mdx_sug
+from mdict.mdict_utils.search_utils import search, clear_duplication, search_bultin_dic_sug, search_mdx_sug, \
+    search_revise
 from base.sys_utils import check_system
 from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
@@ -68,59 +69,70 @@ class MdictEntryViewSet(viewsets.ViewSet):
         if is_en_func(query):
             self.is_en = True
 
-        if query:  # 非空字符串为True
+        required = get_query_list(query)
 
-            record_list = search(query, self.is_en, group)
-
-            if not is_en_func(query):  # 繁简转化
-
-                st_enable = get_config_con('st_enable')
-                chaizi_enable = get_config_con('chaizi_enable')
-
-                if chaizi_enable and len(query) > 1:  # 长度大于1时拆字反查
-                    record_list.extend(chaizi_search(query, group))
-
-                if st_enable:
-                    q_s = t2s.convert(query)
-                    q_t = s2t.convert(query)
-                    if q_t != query:
-                        record_list.extend(search(q_t, self.is_en, group))
-                        if chaizi_enable and len(q_t) > 1:
-                            record_list.extend(chaizi_search(q_t, group))
-                    elif q_s != query:
-                        record_list.extend(search(q_s, self.is_en, group))
-                        if chaizi_enable and len(q_s) > 1:
-                            record_list.extend(chaizi_search(q_s, group))
-
-            fh_char_enable = get_config_con('fh_char_enable')
-            if fh_char_enable:
-                q2b = strQ2B(query)
-
-                if q2b != query:  # 全角字符进行转换
-                    record_list.extend(search(q2b, self.is_en, group))
-
+        if required:
+            record_list = search(required, group)
+            for query in required:
+                record_list = search_revise(query, record_list, self.is_en)
             record_list = clear_duplication(record_list)
 
             if len(record_list) == 0 and query.find('.htm') != -1:
                 query = query[:query.find('.htm')]
                 record_list = search(query, self.is_en, group)
                 # 二十五史词典有些词条比如 史记_06但在超链接错误写成了史记_06.htm
+
             record_list.sort(key=lambda k: k.mdx_pror)
 
         return record_list
 
 
+def get_query_list(query):
+    required = []
+
+    query = query.strip()
+
+    if query:  # 非空字符串为True
+        required.append(query)
+        if not is_en_func(query):  # 繁简转化
+
+            st_enable = get_config_con('st_enable')
+            chaizi_enable = get_config_con('chaizi_enable')
+
+            if chaizi_enable and len(query) > 1:  # 长度大于1时拆字反查
+                # required.append(chaizi_search(query, group))
+                result = hc.reverse_query(query)
+                if result:
+                    for r in result:
+                        required.append(r)
+
+            if st_enable:
+                q_s = t2s.convert(query)
+                q_t = s2t.convert(query)
+                if q_t != query:
+                    required.append(q_t)
+                    if chaizi_enable and len(q_t) > 1:
+                        result = hc.reverse_query(q_t)
+                        if result:
+                            for r in result:
+                                required.append(r)
+                elif q_s != query:
+                    required.append(q_s)
+                    if chaizi_enable and len(q_s) > 1:
+                        result = hc.reverse_query(q_s)
+                        if result:
+                            for r in result:
+                                required.append(r)
+            fh_char_enable = get_config_con('fh_char_enable')
+            if fh_char_enable:
+                q2b = strQ2B(query)
+
+                if q2b != query:  # 全角字符进行转换
+                    required.append(q2b)
+    return required
+
+
 hc = HanziChaizi()
-
-
-def chaizi_search(query, group):
-    record_list = []
-    result = hc.reverse_query(query)
-    if result:
-        for r in result:
-            record_list.extend(search(r, False, group))
-
-    return record_list
 
 
 @loop_mdict_list(return_type=1)
@@ -283,7 +295,7 @@ class mdict_all_entrys_object(inner_object):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
             entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = SearchObject(mdx, mdd_list, dic, '') \
-                .search_order_entry(self.p1, self.p2, self.num, self.direction)
+                .search_list_entry(self.p1, self.p2, self.num, self.direction)
             self.inner_dict = {'entry_list': entry_list, 's_p1': r_s_p1, 's_p2': r_s_p2, 'e_p1': r_e_p1, 'e_p2': r_e_p2}
             self.break_tag = True
 
@@ -363,16 +375,18 @@ def search_suggestion(request):
         sug = []
         t_list = []
 
-        if query != '':
+        required = get_query_list(query)
+
+        if required:
             if dic_pk == -1:  # index页面才需要内置词典的查询提示
                 sug.extend(search_bultin_dic_sug(query))
 
             try:
-                sug.extend(search_mdx_sug(dic_pk, query, group, flag))
+                sug.extend(search_mdx_sug(dic_pk, required, group, flag))
             except FileNotFoundError:
                 print_log_info('mdx file not found, suggestion search failed, need recache!', 2)
                 init_mdict_list(True)
-                sug.extend(search_mdx_sug(dic_pk, query, group, flag))
+                sug.extend(search_mdx_sug(dic_pk, required, group, flag))
             except OperationalError as e:
                 print(e)
                 print_log_info('modify database failed!', 2)
@@ -382,29 +396,9 @@ def search_suggestion(request):
                     loop_create_model()
                 elif check_system() == 1:
                     loop_create_thread_model()
-                sug.extend(search_mdx_sug(dic_pk, query, group, flag))
+                sug.extend(search_mdx_sug(dic_pk, required, group, flag))
 
-            if not is_en_func(query):  # 繁简转化
-                q_s = t2s.convert(query)
-                q_t = s2t.convert(query)
-                if q_s != query:
-                    sug.extend(search_mdx_sug(dic_pk, q_s, group, flag))
-                    if len(q_s) > 1:  # 拆字反查的查询提示
-                        result = hc.reverse_query(q_s)
-                        if result:
-                            for r in result:
-                                sug.extend(search_mdx_sug(dic_pk, r, group, flag))
-                else:
-                    sug.extend(search_mdx_sug(dic_pk, q_t, group, flag))
-                    if len(q_t) > 1:  # 拆字反查的查询提示
-                        result = hc.reverse_query(q_t)
-                        if result:
-                            for r in result:
-                                sug.extend(search_mdx_sug(dic_pk, r, group, flag))
             q2b = strQ2B(query)
-
-            if q2b != query:
-                sug.extend(search_mdx_sug(dic_pk, q2b, group, flag))
 
             return_sug = []
 

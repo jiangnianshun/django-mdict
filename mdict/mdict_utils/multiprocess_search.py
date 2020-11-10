@@ -8,12 +8,12 @@ from .mdict_config import get_config_con
 from .multibase import multi_search_mdx
 
 
-def multiprocess_search_sug(n, query, group):
-    return multi_search_mdx(n, query, group, is_mdx=False)
+def multiprocess_search_sug(n, required, group):
+    return multi_search_mdx(n, required, group, is_mdx=False)
 
 
-def multiprocess_search_mdx(n, query, group):
-    return multi_search_mdx(n, query, group)
+def multiprocess_search_mdx(n, required, group):
+    return multi_search_mdx(n, required, group)
 
 
 cpunums = get_config_con('process_num')

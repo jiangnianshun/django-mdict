@@ -45,16 +45,15 @@ spell = SpellChecker(distance=1)
 builtin_dic_name = '内置词典'
 
 
-def search(query, is_en, group):
+def search(required, group):
     record_list = []
-    query = query.strip()
-    t2 = time.perf_counter()
+
     try:
-        record_list = search_mdx_dic(query, record_list, group)
+        record_list = search_mdx_dic(required, record_list, group)
     except FileNotFoundError:
         print_log_info('mdx file not found, mdx search failed, need recache!', 2)
         init_mdict_list(True)
-        record_list = search_mdx_dic(query, record_list, group)
+        record_list = search_mdx_dic(required, record_list, group)
         # 重新生成cache文件的代码
     except OperationalError as e:
         print(e)
@@ -63,20 +62,23 @@ def search(query, is_en, group):
             loop_create_model()
         elif check_system() == 1:
             loop_create_thread_model()
-        record_list = search_mdx_dic(query, record_list, group)
+        record_list = search_mdx_dic(required, record_list, group)
 
     merge_entry_enable = get_config_con('merge_entry_enable')
     builtin_dic_enable = get_config_con('builtin_dic_enable')
-    spell_check = get_config_con('spell_check')
-    lemmatize = get_config_con('lemmatize')
 
-    t3 = time.perf_counter()
     if merge_entry_enable:
-        record_list = merge_record(query, record_list)
-    t4 = time.perf_counter()
+        record_list = merge_record(required, record_list)
 
     if builtin_dic_enable:
-        record_list = search_bultin_dic(query, record_list, is_en)
+        record_list = search_bultin_dic(required, record_list)
+
+    return record_list
+
+
+def search_revise(query, record_list, is_en):
+    spell_check = get_config_con('spell_check')
+    lemmatize = get_config_con('lemmatize')
 
     if lemmatize == 1:
         record_list = lemmatize_func(query, record_list, is_en)
@@ -89,9 +91,6 @@ def search(query, is_en, group):
     elif spell_check == 2:
         if len(record_list) == 0:
             record_list = key_spellcheck(query, record_list, is_en)
-    t5 = time.perf_counter()
-    # print(round(t3 - t2, 4), round(t4 - t3, 4), round(t5 - t4, 4))
-    # print(query, round(t5 - t2, 4))
     return record_list
 
 
@@ -145,7 +144,7 @@ def sug_callback(request, result):
     sug_temp_list.extend(result)
 
 
-def search_mdx_sug(dic_pk, query, group, flag):
+def search_mdx_sug(dic_pk, required, group, flag):
     global pool, thpool
     sug = []
     if check_system() == 0 and dic_pk == -1:
@@ -153,7 +152,7 @@ def search_mdx_sug(dic_pk, query, group, flag):
 
         pool = check_pool_recreate(pool)
 
-        q_list = ((i, query, group) for i in range(cpunums))
+        q_list = ((i, required, group) for i in range(cpunums))
         record_list = pool.starmap(multiprocess_search_sug, q_list)
         for r in record_list:
             sug.extend(r)
@@ -164,12 +163,12 @@ def search_mdx_sug(dic_pk, query, group, flag):
 
         thpool = check_threadpool_recreate(thpool)
 
-        q_list = ((i, query, group) for i in range(cpunums))
+        q_list = ((i, required, group) for i in range(cpunums))
         record_list = thpool.starmap(multithread_search_sug, q_list)
         for r in record_list:
             sug.extend(r)
     else:  # 单个词典的查询提示
-        sug.extend(loop_search_sug(dic_pk, query, flag, group))
+        sug.extend(loop_search_sug(dic_pk, required, flag, group))
 
     return sug
 
@@ -285,12 +284,13 @@ def search_builtin(query):
     return r_list
 
 
-def search_bultin_dic(query, record_list, is_en):
-    r_list = search_builtin(query)
+def search_bultin_dic(required, record_list):
+    for query in required:
+        r_list = search_builtin(query)
 
-    m_entry = extract_bultin_dic_all(r_list)
-    if m_entry is not None:
-        record_list.append(m_entry)
+        m_entry = extract_bultin_dic_all(r_list)
+        if m_entry is not None:
+            record_list.append(m_entry)
     return record_list
 
 
@@ -303,13 +303,13 @@ def mdx_callback(request, result):
     mdx_temp_list.extend(result)
 
 
-def search_mdx_dic(query, record_list, group):
+def search_mdx_dic(required, record_list, group):
     global pool, thpool
     # 查询mdx词典
     if check_system() == 0:
         pool = check_pool_recreate(pool)
         cpunums = get_config_con('process_num')
-        q_list = ((i, query, group) for i in range(cpunums))
+        q_list = ((i, required, group) for i in range(cpunums))
         a_list = pool.starmap(multiprocess_search_mdx, q_list)
         for a in a_list:
             record_list.extend(a)
@@ -319,7 +319,7 @@ def search_mdx_dic(query, record_list, group):
 
         thpool = check_threadpool_recreate(thpool)
         cpunums = get_config_con('process_num')
-        q_list = ((i, query, group) for i in range(cpunums))
+        q_list = ((i, required, group) for i in range(cpunums))
         a_list = thpool.starmap(multithread_search_mdx, q_list)
         for a in a_list:
             record_list.extend(a)
