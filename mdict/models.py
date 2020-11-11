@@ -1,12 +1,6 @@
-# from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
-
-
-# RichTextField只能插入网络图片，如果要本地上传图片，需要用RichTextUploadingField
-
-
-# Create your models here.
+from base.base_constant import regp
 
 class MdictOnline(models.Model):
     mdict_name = models.CharField('词典名', max_length=20)
@@ -94,6 +88,7 @@ class MyMdictEntryType(models.Model):
 
 class MyMdictEntry(models.Model):
     mdict_entry = models.CharField('词条', max_length=100, db_index=True, unique=True)
+    mdict_entry_strip = models.CharField('STRIP词条', max_length=100, blank=True, null=True)
 
     class Meta:
         verbose_name = '内置词条'
@@ -104,15 +99,18 @@ class MyMdictEntry(models.Model):
 
     def save(self, *args, **kwargs):
         self.mdict_entry = self.mdict_entry.strip()
+        self.mdict_entry_strip = regp.sub('', self.mdict_entry)
         super(MyMdictEntry, self).save()
 
 
 class MyMdictItem(models.Model):
     item_mdict = models.ForeignKey('MyMdictEntry', verbose_name='词条', null=True, blank=True, on_delete=models.SET_NULL)
     item_entry = models.CharField('义项', max_length=100, blank=True, null=True)
+    item_entry_strip = models.CharField('STRIP义项', max_length=100, blank=True, null=True)
     item_type = models.ForeignKey('MyMdictEntryType', verbose_name='义项类别', null=True, blank=True,
                                   on_delete=models.SET_NULL)
     item_content = RichTextUploadingField(null=True, blank=True)
+    # RichTextField只能插入网络图片，如果要本地上传图片，需要用RichTextUploadingField
 
     class Meta:
         verbose_name = '义项'
@@ -121,4 +119,5 @@ class MyMdictItem(models.Model):
     def save(self, *args, **kwargs):
         if self.item_entry is not None:
             self.item_entry = self.item_entry.strip()
+            self.item_entry_strip = regp.sub('', self.item_entry)
         super(MyMdictItem, self).save()

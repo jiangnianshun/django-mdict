@@ -171,7 +171,7 @@ cdef bytes get_key_block(f, cython.longlong compressed_size, cython.longlong dec
     return key_block
 
 
-cdef str reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
+cdef str reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|]'
 regp = re.compile(reg)
 
 

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import re
-import time
-from itertools import chain
 
 is_leven = False
 try:
@@ -12,12 +10,13 @@ try:
 except ImportError as e:
     print('Levenshtein not support')
 from django.db.utils import OperationalError
+from django.db.models.functions import Length
 from nltk.data import path as nltk_path
 from nltk.stem import WordNetLemmatizer
 from spellchecker import SpellChecker
 
 from base.base_func import print_log_info
-from base.base_constant import builtin_dic_prefix
+from base.base_constant import builtin_dic_prefix, regp
 from base.sys_utils import check_system
 from mdict.models import MyMdictEntry, MyMdictItem
 from mdict.serializers import mdxentry
@@ -242,33 +241,26 @@ def extract_bultin_dic_all(r_list):
 
 def search_builtin(query):
     # 查询内置词典
-    query = query.replace('《', '').replace('》', '').replace('(', '').replace(')', '').lower()
+    query = regp.sub('', query).lower()
+    max_query_len = len(query) * 1.5
 
-    q_list = query.split(' ')
-    if len(q_list) == 1:
-        q_list = query.split('-')
-
-    r_list = MyMdictEntry.objects.none()
-    entry_list = MyMdictItem.objects.none()
-    reg = r'^(.){1,' + str(len(query) * 2) + r'}$'
-    for q in q_list:
-        if q != '':
-            r_list = chain(r_list,
-                           MyMdictEntry.objects.all().filter(mdict_entry__icontains=q).filter(mdict_entry__iregex=reg))
-            entry_list = chain(entry_list,
-                               MyMdictItem.objects.all().filter(item_entry__icontains=query).filter(
-                                   item_entry__iregex=reg))
-    entry_list = list(entry_list)
-    r_list = list(r_list)
+    r_list = list(MyMdictEntry.objects.all()
+                  .filter(mdict_entry_strip__icontains=query)
+                  .annotate(text_len=Length('mdict_entry_strip'))
+                  .filter(text_len__lte=max_query_len))
+    entry_list = list(MyMdictItem.objects.all()
+                      .filter(item_entry_strip__icontains=query)
+                      .annotate(text_len=Length('item_entry_strip'))
+                      .filter(text_len__lte=max_query_len))
 
     if is_leven:
         for i in range(len(r_list) - 1, -1, -1):
             # Levenshtein包含大小写，因此要将两字符串都取小写再计算
-            if Levenshtein.ratio(query, r_list[i].mdict_entry.lower()) < 0.85:
+            if Levenshtein.ratio(query, r_list[i].mdict_entry.lower()) < 0.7:
                 del r_list[i]
         for e in entry_list:
             if e.item_mdict is not None:
-                if Levenshtein.ratio(query, e.item_entry.lower()) >= 0.85:
+                if Levenshtein.ratio(query, e.item_entry.lower()) >= 0.7:
                     r_list.append(e.item_mdict)
     else:
         for e in entry_list:

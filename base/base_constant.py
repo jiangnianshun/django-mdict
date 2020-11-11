@@ -1,3 +1,8 @@
+import re
+
+reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|《》（）？！，。“”‘’：；]'
+regp = re.compile(reg)
+
 builtin_dic_prefix = '''
 <link rel='stylesheet' href='/static/bootstrap-4.4.1/css/bootstrap.min.css'>
 <link rel='stylesheet' href='/static/mdict/css/mdict.css'>

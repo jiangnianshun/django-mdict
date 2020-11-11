@@ -36,8 +36,8 @@ class MyMdictItemAdmin(admin.TabularInline):
 class MyMdictEntryAdmin(admin.ModelAdmin):
     inlines = [MyMdictItemAdmin]
     list_display = ('id', 'mdict_entry')
-    # list_filter = ['mdict_group']
     search_fields = ['mdict_entry']
+    list_editable = ['mdict_entry']
 
 
 class MdictOnlineAdmin(admin.ModelAdmin):

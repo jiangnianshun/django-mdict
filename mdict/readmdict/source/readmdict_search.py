@@ -116,11 +116,8 @@ def _decrypt_regcode_by_email(reg_code, email):
     return encrypt_key
 
 
-# reg = r'[ _=,.·;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
-reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
+reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|]'
 regp = re.compile(reg)
-
-
 # 搜韵诗词词条：八归·辛巳，CC-CEDICT词条威廉·莎士比亚，stripkey时不包含·
 
 

@@ -47,7 +47,7 @@ class SearchObject:
         self.dic_file = dic.mdict_file
         self.prior = dic.mdict_priority
 
-        if isinstance(required,list):
+        if isinstance(required, list):
             self.required = required
             self.query = required[0]
         elif isinstance(required, str):
@@ -207,14 +207,13 @@ class SearchObject:
                 self.f_p2 = rt[3]
                 self.cmp.clear()
                 record = self.substitute_record(rt[5])
-                if record != '' and (self.f_p1,self.f_p2) not in t_list:
+                if record != '' and (self.f_p1, self.f_p2) not in t_list:
                     # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
                     t_list.append((self.f_p1, self.f_p2))
                     r_list.append(
                         mdxentry(self.dic_name, rt[4], record, self.prior, self.dic.pk, self.f_pk, self.f_p1,
                                  self.f_p2))
         return r_list
-
 
     def search_mdx_entry(self):
         # 查询一个词

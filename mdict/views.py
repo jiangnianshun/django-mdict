@@ -51,7 +51,7 @@ class MdictEntryViewSet(viewsets.ViewSet):
         group = int(self.request.query_params.get('dic_group', 0))
         page = int(self.request.query_params.get('page', 1))
 
-        if force_refresh or key_paginator.get(query, group) is None:
+        if (force_refresh and page == 1) or key_paginator.get(query, group) is None:
             record_list = self.get_results(query, group)
             serializer = MdictEntrySerializer(record_list, many=True)
             p = MdictPage(query, group, serializer.data)
