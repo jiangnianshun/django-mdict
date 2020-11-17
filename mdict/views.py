@@ -1,6 +1,7 @@
 import json
 import mimetypes
 import re
+import urllib.parse
 
 from django.db.utils import OperationalError
 from django.http import HttpResponse
@@ -220,6 +221,7 @@ class get_mdict_list_object(inner_object):
         file = mdx.get_fname()
         m_path = get_m_path(mdx)
         dic = get_or_create_dic(file)
+        file = urllib.parse.quote(file)
         if icon == 'none':
             dic_icon = os.path.join('/', 'static', 'mdict', 'img', 'book.png')
         else:

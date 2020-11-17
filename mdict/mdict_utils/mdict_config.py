@@ -30,7 +30,7 @@ default_config = {
         'fh_char_enable': True,  # 全角转换
         'force_refresh': False,  # 强制刷新
         'select_btn_enable': True,  # 是否启用选择文字弹出框
-        'suggestion_number': 15,  # 查询提示显示的数目
+        'suggestion_num': 15,  # 查询提示显示的数目
         'link_new_label': False,
         'force_font': False,  # 强制使用全宋体
         'card_show': False,  # 允许一次展开多个词典

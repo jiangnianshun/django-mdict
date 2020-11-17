@@ -148,8 +148,6 @@ def write_cache():
 
 indicator = []
 real_num = psutil.cpu_count(False)
-
-
 # cpu的物理核心数
 
 
@@ -157,7 +155,17 @@ def sort_mdict_list(t_list):
     sorted(t_list.items(), key=lambda k: k[1].num)
 
     cpunums = get_config_con('process_num')
-    cpunum = int(len(t_list) / 40)
+
+    t_list_len = len(t_list)
+
+    if t_list_len < 5:
+        cpunum = 1
+    elif t_list_len < 20:
+        cpunum = 2
+    elif t_list_len < 60:
+        cpunum = round(t_list_len / 20)
+    else:
+        cpunum = round(t_list_len / 40)
 
     if cpunum < cpunums:
         cpunum = cpunums
