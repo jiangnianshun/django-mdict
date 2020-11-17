@@ -36,7 +36,15 @@ def print_log_info(log_content='', debug_level=0, start=-1, end=-1):
     else:
         mod_name = prev_file + '.' + prev_func
 
-    print(get_log_header(mod_name, debug_level, start, end), log_content)
+    log_text = ''
+    if isinstance(log_content, str):
+        log_text = log_content
+    elif isinstance(log_content, list):
+        for content in log_content:
+            log_text = log_text + ' ' + str(content)
+        log_text = log_text[1:]
+
+    print(get_log_header(mod_name, debug_level, start, end), log_text)
 
 
 def get_running_time(start, end):

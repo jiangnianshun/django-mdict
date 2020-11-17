@@ -20,7 +20,7 @@ cpunums = get_config_con('process_num')
 
 
 def create_pool():
-    print_log_info('creating multiprocessing pool. process number is ' + str(cpunums) + '.')
+    print_log_info(['creating multiprocessing pool. process number is ', cpunums, '.'])
     return multiprocessing.Pool(processes=cpunums)
 
 

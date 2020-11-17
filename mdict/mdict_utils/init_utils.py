@@ -6,7 +6,7 @@ from base.base_func import print_log_info, guess_mime
 from base.sys_utils import get_sys_name
 from .mdict_config import *
 
-print_log_info('system is ' + get_sys_name() + '.')
+print_log_info(['system is', get_sys_name(), '.'])
 
 try:
     from mdict.readmdict.lib.readmdict_search import MDX, MDD
@@ -21,7 +21,8 @@ except ImportError as e:
 
 from .mdict_func import mdict_root_path, audio_path
 
-pickle_file_path = BASE_DIR + os.sep + '.' + get_sys_name() + '.cache'
+pickle_file_path = os.path.join(BASE_DIR, '.' + get_sys_name() + '.cache')
+change_file_path = os.path.join(BASE_DIR, '.' + get_sys_name() + '.dat')
 
 
 # 这里使用init_vars包裹mdit_list是因为，当其他模块引入mdict_list后，再修改mdict_list，其他模块引入的mdict_list没有改变，因此需要用类包裹。
@@ -36,12 +37,12 @@ sound_list = []
 
 
 class MdictItem:
-    def __init__(self, mdx, mdd_list, g_id, icon, file_size):
+    def __init__(self, mdx, mdd_list, g_id, icon, num):
         self.mdx = mdx
         self.mdd_list = mdd_list
         self.g_id = g_id
         self.icon = icon
-        self.file_size = file_size
+        self.num = num
 
 
 img_type = ['jpg', 'jpeg', 'png', 'webp', 'gif']
@@ -55,8 +56,6 @@ def get_mdict_list():
     # 词典结尾是mdx或MDX
     # ntfs下文件名不区分大小写，但ext4下区分大小写
 
-    print_log_info(mdict_root_path)
-
     # os.walk和os.scandir()
     for root, dirs, files in os.walk(mdict_root_path):
         for file in files:
@@ -64,7 +63,6 @@ def get_mdict_list():
                 f_name = file[:file.rfind('.')]
 
                 mdx_path = os.path.join(root, file)
-                mdx_file_size = int(os.path.getsize(mdx_path) / 1000000)  # 转换成MB
 
                 mdd_list = []
                 for f in files:
@@ -89,8 +87,8 @@ def get_mdict_list():
                         if mime_type is not None and mime_type.startswith('image'):
                             icon = f.split('.')[-1]
                             break
-
-                m_list.update({f_name: MdictItem(MDX(mdx_path), tuple(mdd_list), g_id, icon, mdx_file_size)})
+                mdx = MDX(mdx_path)
+                m_list.update({f_name: MdictItem(mdx, tuple(mdd_list), g_id, icon, mdx.get_len())})
 
                 g_id += 1
 
@@ -156,7 +154,7 @@ real_num = psutil.cpu_count(False)
 
 
 def sort_mdict_list(t_list):
-    sorted(t_list.items(), key=lambda k: k[1].file_size)
+    sorted(t_list.items(), key=lambda k: k[1].num)
 
     cpunums = get_config_con('process_num')
     cpunum = int(len(t_list) / 40)
@@ -178,7 +176,7 @@ def sort_mdict_list(t_list):
 
     n = 0
     for i in range(len(t_list) - 1, -1, -1):
-        indicator[n].append(i)  # 改进成每列的file_size的和大概相等
+        indicator[n].append(i)
         n += 1
         if n >= cpunum:
             n = 0
@@ -186,18 +184,65 @@ def sort_mdict_list(t_list):
     return t_list
 
 
+def read_change():
+    try:
+        with open(change_file_path, 'rb') as f:
+            data = pickle.load(f)
+        return data
+    except Exception:
+        return None
+
+
+def write_change(data):
+    with open(change_file_path, 'wb') as f:
+        pickle.dump(data, f)
+    os.chmod(change_file_path, 0o777)
+
+
+def check_dir_change():
+    old_dir = read_change()
+
+    if old_dir is None:
+        print_log_info('change.dat not exists.')
+        return True
+
+    for root, dirs, files in os.walk(mdict_root_path):
+        for file in files:
+            if file.lower().endswith('.mdx'):
+                mdx_path = os.path.join(root, file)
+                mtime = os.path.getmtime(mdx_path)
+                if mdx_path not in old_dir.keys():
+                    print_log_info('dir change founded.')
+                    return True
+                if old_dir[mdx_path] < mtime:
+                    print_log_info('dir change founded.')
+                    return True
+    print_log_info('no dir change founded.')
+    return False
+
+
+def write_dir_change():
+    new_dir = {}
+    for root, dirs, files in os.walk(mdict_root_path):
+        for file in files:
+            if file.lower().endswith('.mdx'):
+                mdx_path = os.path.join(root, file)
+                mtime = os.path.getmtime(mdx_path)
+                new_dir.update({mdx_path: mtime})
+    write_change(new_dir)
+
+
 def init_mdict_list(rewrite_cache):
-    global config
     t1 = time.perf_counter()
+    print_log_info(['media root path:', mdict_root_path])
 
     if rewrite_cache:
         init_vars.need_recreate = True
 
-    if not rewrite_cache and os.path.exists(pickle_file_path) and os.path.getsize(pickle_file_path) > 0:
-        get_sound_list()
-        load_cache()
-        print_log_info('reading from cache file', 0, t1, time.perf_counter()),
-    else:
+    if not os.path.exists(pickle_file_path) or os.path.getsize(pickle_file_path) == 0:
+        rewrite_cache = True
+
+    if rewrite_cache or check_dir_change():
         sound_list.clear()
         get_sound_list()
 
@@ -207,7 +252,11 @@ def init_mdict_list(rewrite_cache):
         t2 = time.perf_counter()
         print_log_info('initializing mdict_list', 0, t1, t2)
         write_cache()
+        write_dir_change()
         print_log_info('creating cache file', 0, t2, time.perf_counter())
-        t3 = time.perf_counter()
+    else:
+        get_sound_list()
+        load_cache()
+        print_log_info('reading from cache file', 0, t1, time.perf_counter())
 
     print_log_info('total time', 0, t1, time.perf_counter())

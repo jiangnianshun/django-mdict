@@ -19,7 +19,7 @@ cpunums = get_config_con('process_num')
 
 
 def create_threadpool():
-    print_log_info('creating multithreading pool. thread number is ' + str(cpunums) + '.')
+    print_log_info(['creating multithreading pool. thread number is ', cpunums, '.'])
     return ThreadPool(cpunums)
 
 

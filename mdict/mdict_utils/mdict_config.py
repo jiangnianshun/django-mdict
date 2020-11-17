@@ -4,11 +4,13 @@ import os
 from mysite.settings import BASE_DIR
 from base.sys_utils import check_system
 
-# 分两个config，因为windows下创建的config，在wsl下报permissionerror。
-if check_system() == 0:
-    user_config_path = os.path.join(BASE_DIR, 'config_lin.ini')
-else:
-    user_config_path = os.path.join(BASE_DIR, 'config_win.ini')
+user_config_path = os.path.join(BASE_DIR, 'config.ini')
+
+# # 分两个config，因为windows下创建的config，在wsl下报permissionerror。
+# if check_system() == 0:
+#     user_config_path = os.path.join(BASE_DIR, 'config_lin.ini')
+# else:
+#     user_config_path = os.path.join(BASE_DIR, 'config_win.ini')
 
 default_config = {
     'COMMON': {
@@ -53,6 +55,7 @@ def get_config():
         try:
             with open(user_config_path, 'w', encoding='utf-8') as f:
                 config.write(f)
+            os.chmod(user_config_path, 0o777)
         except PermissionError as e:
             print(e)
             config_permission = False
@@ -92,6 +95,7 @@ def create_config():
     try:
         with open(user_config_path, 'w', encoding='utf-8') as f:
             config.write(f)
+        os.chmod(user_config_path, 0o777)
     except PermissionError as e:
         print(e)
         config_permission = False
@@ -103,6 +107,7 @@ def add_or_edit_config_section(sec_name, sec):
     try:
         with open(user_config_path, 'w', encoding='utf-8') as f:
             con.write(f)
+        os.chmod(user_config_path, 0o777)
     except PermissionError as e:
         print(e)
         config_permission = False
@@ -117,6 +122,7 @@ def set_config(sec, save_config):
     try:
         with open(user_config_path, 'w', encoding='utf-8') as f:
             con.write(f)
+        os.chmod(user_config_path, 0o777)
     except PermissionError as e:
         print(e)
         config_permission = False
