@@ -1,7 +1,7 @@
 import json
 import mimetypes
 import re
-import urllib.parse
+from urllib.parse import quote, unquote
 
 from django.db.utils import OperationalError
 from django.http import HttpResponse
@@ -221,7 +221,7 @@ class get_mdict_list_object(inner_object):
         file = mdx.get_fname()
         m_path = get_m_path(mdx)
         dic = get_or_create_dic(file)
-        file = urllib.parse.quote(file)
+        file = quote(file)
         if icon == 'none':
             dic_icon = os.path.join('/', 'static', 'mdict', 'img', 'book.png')
         else:
@@ -250,7 +250,7 @@ def search_audio(request):
     res_content = ''
     if key == '':
         return HttpResponse(res_content)
-    res_name = key.replace('%5C', '\\')
+    res_name = unquote(key)
     f_name = res_name[res_name.rfind('\\') + 1:]
     mime_type = guess_mime(f_name)
     audio_type_list = ['.spx', '.mp3', '.wav']
@@ -277,7 +277,7 @@ def search_audio(request):
 def search_mdd(request, *args):
     dic_id = args[0]
     dic = MdictDic.objects.get(pk=dic_id)
-    res_name = args[1].replace('%5C', '\\')
+    res_name = unquote(args[1]).replace('/', '\\')
 
     res_content = ''
     mime_type = ''

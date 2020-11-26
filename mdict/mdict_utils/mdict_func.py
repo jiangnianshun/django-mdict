@@ -1,6 +1,6 @@
 import json
 import os
-import urllib.parse
+from urllib.parse import quote
 
 from base.sys_utils import split_os_path, find_os_path
 from mysite.settings import BASE_DIR
@@ -114,4 +114,4 @@ def get_m_path(mdx):
     if s > -1:
         t_path = mdx_path[e:-1]
         m_path = '/'.join(t_path)
-    return urllib.parse.quote(m_path)
+    return quote(m_path)

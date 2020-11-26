@@ -61,21 +61,18 @@ function thousands(num){
         return str.replace(reg,"$1,");
 }
 
-function space_escape(text){//img的src里的空格必须转义
+function html_escape(text,all){
+	//后端用urllib.parse.quote转义，汉字和符号都会被转义。
+	//标题只需要转义影响html元素的符号。
 	if(text==null){
 		return "";
+	}else if(all){
+        return encodeURIComponent(text).replace(/[!'()*]/g, escape);
 	}else{
-		return text.replace(/[ ]/g, "%20");
-	}
-}
-
-function html_escape(text){
-	if(text==null){
-		return "";
-	}else{
-		return text.replace(/[<>'"&]/g, function(match, pos, originalText){
+        //返回字符实体
+        return text.replace(/[<>'"&]/g, function(match, pos, originalText){
 		switch(match){
-			case "'":return "&#39;";
+			case "'":return "&apos;";
 			case "<":return "&lt;";
 			case ">":return "&gt;";
 			case "&":return "&amp;";
@@ -84,6 +81,15 @@ function html_escape(text){
 		});
 	}
 }
+
+function html_unescape(text){
+    if(text==null){
+		return "";
+	}else{
+        return decodeURIComponent(text);
+	}
+}
+
 function forbid_contextmenu(){
 	//禁止手机浏览器的上下文菜单
 	if(!is_PC()){

@@ -6,7 +6,7 @@ Created on Tue Jul 16 11:41:22 2019
 """
 import os
 import re
-import urllib.parse
+from urllib.parse import quote
 
 from django.core.exceptions import AppRegistryNotReady
 
@@ -140,7 +140,7 @@ class SearchObject:
         if is_local:
             t_path = '/' + self.m_path + '/' + self.mdx.get_fname() + '.' + ext
         else:
-            t_path = '/mdict/exfile/?path=' + self.m_path + '/' + urllib.parse.quote(self.mdx.get_fname()) + '.' + ext
+            t_path = '/mdict/exfile/?path=' + self.m_path + '/' + quote(self.mdx.get_fname()) + '.' + ext
         return t_path
 
     def check_same_name_css_js(self, record):  # 加载同名css和js
@@ -376,11 +376,11 @@ class SearchObject:
             if is_local:
                 return str(matched.group(1)) + '/' + self.m_path + '/' + str(res_name) + str(matched.group(3))
             else:
-                return str(matched.group(1)) + '/mdict/exfile/?path=' + self.m_path + '/' + str(
-                    res_name) + str(matched.group(3))
+                return str(matched.group(1)) + '/mdict/exfile/?path=' + self.m_path + '/' + \
+                       str(res_name) + str(matched.group(3))
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
-        return str(matched.group(1)) + '/mdict/' + str(self.dic_id) + '/' + urllib.parse.quote(str(res_name)) + str(
-            matched.group(3))
+        return str(matched.group(1)) + '/mdict/' + str(self.dic_id) + '/' + quote(str(res_name)) + \
+               str(matched.group(3))
 
     def substitute_hyper_link(self, matched):  # 处理html词条，获取图片和css
         # 需不需要返回www.开头但没有http和https前缀的匹配
@@ -417,13 +417,12 @@ class SearchObject:
             if res_name[0] == '#' or res_name.startswith('www.'):
                 return matched.group(0)
             if is_local:
-                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + '/' + self.m_path + '/' + str(
-                    res_name) + delimiter_r
+                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + '/' + self.m_path + '/' + \
+                       str(res_name) + delimiter_r
             else:
-                return str(matched.group(1)) + str(
-                    matched.group(2)) + delimiter_l + '/mdict/exfile/?path=' + self.m_path + '/' + str(
-                    res_name) + delimiter_r
+                return str(matched.group(1)) + str(matched.group(2)) + \
+                       delimiter_l + '/mdict/exfile/?path=' + self.m_path + '/' + str(res_name) + delimiter_r
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
 
-        return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + str(
-            self.dic_id) + '/' + urllib.parse.quote(str(res_name)) + delimiter_r
+        return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
+               str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r

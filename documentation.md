@@ -72,7 +72,7 @@
 
 1. requirements1.txt：必需依赖
 
-django版本3.0，将模板中的{% load static %}都改为{% load staticfiles %}，就能运行在django2.0上。
+django版本需要不小于3.0
 
 2. requirements2.txt：python-lzo在windows下需要手动安装
 
@@ -243,9 +243,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ### 配置文件
 
-/django-mdict/config_win.ini
-
-/django-mdict/config_lin.ini
+/django-mdict/config.ini
 
 process_num 进程池的进程数
 

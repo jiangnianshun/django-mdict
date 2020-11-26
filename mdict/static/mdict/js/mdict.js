@@ -120,8 +120,8 @@ function add_iframes(data,container,need_clear,is_list){
 			var s=`
 			<div class='card'>
 				<div class='card-header'>
-					<span class='badge badge-pill badge-light'>${html_escape(mdx_entry)}</span>
-					<a class='card-link collapsed' href='#card-element-${s_id}' data-toggle='collapse' >${html_escape(mdx_name)}</a>
+					<span class='badge badge-pill badge-light'>${html_escape(mdx_entry,false)}</span>
+					<a class='card-link collapsed' href='#card-element-${s_id}' data-toggle='collapse' >${html_escape(mdx_name,false)}</a>
 				</div>
 				<div class='collapse' id='card-element-${s_id}' data-parent='${s_parent}'>
 					<div class='card-body' id='card-body-${s_id}'>
@@ -371,7 +371,7 @@ function online_search(query,container){//有道在线
             <div class='card' style='display:none;'>
                 <div class='card-header'>
                     <a class='card-link collapsed' href='#card-element-${s_id}' data-toggle='collapse' >
-                    <span class='badge badge-pill badge-light'>${html_escape(mdx_entry)}</span>${html_escape(mdx_name)}</a>
+                    <span class='badge badge-pill badge-light'>${html_escape(mdx_entry,false)}</span>${html_escape(mdx_name,false)}</a>
                 </div>
                 <div class='collapse' id='card-element-${s_id}' data-parent='#card-container'>
                     <div class='card-body' id='card-body-${s_id}'>
@@ -677,7 +677,7 @@ function get_mdict_list(container){//载入词典列表
                                 <label class="custom-control-label" for="customControlInline${i}" style="display:inline;vertical-align:middle;"></label>
                             </div>
                             `
-				var s="<div class='card-header'>"+checkbox_html+"<img class='dic-icon' src="+space_escape(dic_icon)+"></img><span class='badge badge-pill badge-light'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
+				var s="<div class='card-header'>"+checkbox_html+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
 
 				container.append(s);
 			}

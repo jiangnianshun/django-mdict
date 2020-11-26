@@ -58,7 +58,7 @@ var func = function(){
 	$.each(
 		t_scroll ,
 		function(i,v) {
-			$("#display_list").append("<li id='li-"+i+"'>" + html_escape(v[0]) + "</li>") ;
+			$("#display_list").append("<li id='li-"+i+"'>" + html_escape(v[0],false) + "</li>") ;
 			$("#li-"+i).attr("data-start",v[1]);
 			$("#li-"+i).attr("data-end",v[2]);
 		}

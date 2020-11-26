@@ -106,7 +106,7 @@ function init_hyper_links(){
 
                         window.open(url);
                     }else{
-                        $('#query',parent.document).val(entry.replace(/%20/g,' '));
+                        $('#query',parent.document).val(html_unescape(entry));
                         $("#card-container",parent.document).attr("in-page-jump",inPageJump);
                         $('#mdictquery',parent.document).trigger("click");
                     }
@@ -120,8 +120,7 @@ function init_hyper_links(){
                 if(audio[0]!='/'&&audio[0]!='\\'){
                     audio='/'+audio;
                 }
-
-                audio=audio.replace(/\//g,'%5C');
+                audio=html_escape(audio,true);
 
                 var url=$('body').attr('data-pk')+'/'+audio;
 
