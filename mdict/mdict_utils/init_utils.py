@@ -148,36 +148,44 @@ def write_cache():
 
 indicator = []
 real_num = psutil.cpu_count(False)
+
+
 # cpu的物理核心数
+
+def get_cpunum(t_list_len):
+    process_num = get_config_con('process_num')
+
+    if process_num <= 0:
+        if t_list_len < 5:
+            cpunum = 1
+        elif t_list_len < 20:
+            cpunum = 2
+        elif t_list_len < 60:
+            cpunum = round(t_list_len / 20)
+        else:
+            cpunum = round(t_list_len / 40)
+
+        if cpunum < process_num:
+            cpunum = process_num
+
+        if cpunum > real_num:
+            cpunum = real_num
+
+        if cpunum < 1:
+            cpunum = 1
+
+        if cpunum != process_num:
+            set_config('COMMON', {'process_num': cpunum})
+    else:
+        cpunum = process_num
+
+    return cpunum
 
 
 def sort_mdict_list(t_list):
     sorted(t_list.items(), key=lambda k: k[1].num)
 
-    cpunums = get_config_con('process_num')
-
-    t_list_len = len(t_list)
-
-    if t_list_len < 5:
-        cpunum = 1
-    elif t_list_len < 20:
-        cpunum = 2
-    elif t_list_len < 60:
-        cpunum = round(t_list_len / 20)
-    else:
-        cpunum = round(t_list_len / 40)
-
-    if cpunum < cpunums:
-        cpunum = cpunums
-
-    if cpunum > real_num:
-        cpunum = real_num
-
-    if cpunum < 1:
-        cpunum = 1
-
-    if cpunum != cpunums:
-        set_config('COMMON', {'process_num': cpunum})
+    cpunum = get_cpunum(len(t_list))
 
     for i in range(cpunum):
         indicator.append(list())

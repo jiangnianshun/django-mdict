@@ -15,8 +15,19 @@ html,body,.container-fluid{
 	padding:0px;
 }
 
+.menu-icon{
+    max-width:36px;
+    max-height:36px;
+}
+
 .menu-icon:hover{
     cursor:pointer
+}
+
+#modal-container-config .menu-icon{
+    margin-right: 5px;
+    border-radius: 4px;
+    box-shadow: 2px 4px 6px #000;
 }
 
 #query{

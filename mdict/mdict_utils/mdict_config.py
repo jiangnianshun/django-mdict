@@ -2,19 +2,12 @@ import configparser
 import os
 
 from mysite.settings import BASE_DIR
-from base.sys_utils import check_system
 
 user_config_path = os.path.join(BASE_DIR, 'config.ini')
 
-# # 分两个config，因为windows下创建的config，在wsl下报permissionerror。
-# if check_system() == 0:
-#     user_config_path = os.path.join(BASE_DIR, 'config_lin.ini')
-# else:
-#     user_config_path = os.path.join(BASE_DIR, 'config_win.ini')
-
 default_config = {
     'COMMON': {
-        'process_num': 4,  # 默认进程数
+        'process_num': -1,  # 默认进程数
         'cache_num': 30,  # 查询提示缓存的个数
         'search_cache_num': 20,  # 查询（分页）缓存的个数
         'builtin_dic_enable': True,  # 启用内置词典
@@ -90,6 +83,7 @@ def get_config_sec(sec):
 
 
 def create_config():
+    global config_permission
     for section in default_config:
         config[section] = default_config[section]
     try:
@@ -102,6 +96,7 @@ def create_config():
 
 
 def add_or_edit_config_section(sec_name, sec):
+    global config_permission
     con = get_config()
     con[sec_name.upper()] = sec
     try:
