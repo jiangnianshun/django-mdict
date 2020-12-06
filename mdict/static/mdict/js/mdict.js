@@ -40,6 +40,7 @@ img{
 	font-style:normal;
 }
 </style>
+<link href="/static/mdict/css/night.css" rel="stylesheet">
 `
 var style_font=`
 <style>
@@ -180,6 +181,12 @@ function add_iframes(data,container,need_clear,is_list){
 				container.append(s);
 			}
 			$(card_body_id).append(iframe);
+
+			if($("#night-mode").attr('data-value')=='yes'){
+                container.addClass('dm-night');
+                container.find('*').addClass('dm-night');
+                container.find('.card-header').addClass('dm-night-border');
+            }
 			
 			(function(iframe,html){//通过闭包来避免for循环事件绑定中的赋值问题
 				var card_link=$(iframe).parents(".card").find(".card-link");
@@ -200,6 +207,12 @@ function add_iframes(data,container,need_clear,is_list){
 						iframe.contentWindow.document.open();
 						iframe.contentWindow.document.write(html);
 						iframe.contentWindow.document.close();
+
+						if($("#night-mode").attr('data-value')=='yes'){
+						    var eles=$(iframe).contents().find('*');
+						    eles.not('img').addClass('dm-night');
+						    eles.find('img').addClass('dm-night-img');
+						}
 
 						$(iframe).contents().find('span[src]').each(function(){
 						    //朗文现代5查jarring,jarringly,结果是span,span的src是base64图片，浏览器中不显示，这里重新生成img标签。
@@ -241,6 +254,12 @@ function add_iframes(data,container,need_clear,is_list){
 						tolerance设置iframe前后相差多少px时重绘
 						scrolling:true显示滚动条，然后用overflow-y:hidden;抑制竖向，只显示横向。
 						*/
+					}else{
+					    if($("#night-mode").attr('data-value')=='yes'){
+						    $(iframe).contents().find('*').not('img').addClass('dm-night');
+						}else{
+						    $(iframe).contents().find('*').removeClass('dm-night').removeClass('dm-night-img');;
+						}
 					}
 				});
 			

@@ -292,6 +292,14 @@ function fix_img_delay_bug(){
     },1500);
 }
 
+function init_night_mode(){
+    //第一次加载时，从主页面节点获取不到，加载样式失败，需要在iframe内加载。
+    if($("#night-mode",parent.document).attr('data-value')=='yes'){
+        $('*').not('img').addClass('dm-night');
+        $('img').addClass('dm-night-img');
+    }
+}
+
 
 function init_iframe(){
 	init_hyper_links();
@@ -301,6 +309,7 @@ function init_iframe(){
 	fix_chrome_bug();
 	fix_img_delay_bug();
 	forbid_contextmenu();
+	init_night_mode();
 }
 
 function transform_all_text(isFt){

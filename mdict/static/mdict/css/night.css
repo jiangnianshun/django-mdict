@@ -1,0 +1,17 @@
+.dm-night{
+    background:black !important;
+    color:gray !important;
+}
+
+.dm-night-img{
+    -webkit-filter: brightness(0.5);
+    filter: brightness(0.5);
+}
+
+.dm-night-img-background{
+    background:gray !important;
+}
+
+.dm-night-border{
+    border:1px solid gray !important;
+}
