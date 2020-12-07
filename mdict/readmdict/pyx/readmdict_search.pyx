@@ -850,9 +850,13 @@ cdef class MDict(object):
             start = p - num + 1
         if p + num < end:
             end = p + num
-        if back:
+
+        if start == end:
+            r_p2 = start
+            my_list.append([key_list[start][1].decode(self._encoding, errors='replace'), start, start])
+        elif back:
             r_p2 = end - 1
-            for i in range(p, end):
+            for i in range(p, end + 1):
                 s = key_list[i][0]
                 if i + 1 < length:
                     e = key_list[i + 1][0]

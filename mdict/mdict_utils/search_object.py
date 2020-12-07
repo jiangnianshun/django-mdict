@@ -6,6 +6,7 @@ Created on Tue Jul 16 11:41:22 2019
 """
 import os
 import re
+import imghdr
 from urllib.parse import quote
 
 from django.core.exceptions import AppRegistryNotReady
@@ -254,6 +255,10 @@ class SearchObject:
         if mime_type is not None and 'css' in mime_type:
             res_content = reg2p.sub(self.substitute_css_link,
                                     res_content.decode(self.mdx.get_encoding(), errors='replace'))
+
+        if mime_type.startswith('image/'):
+            # 判断图片真实类型
+            mime_type = 'image/' + imghdr.what(None, res_content)
 
         return res_content, mime_type
 

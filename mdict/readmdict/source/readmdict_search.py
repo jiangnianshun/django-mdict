@@ -118,6 +118,8 @@ def _decrypt_regcode_by_email(reg_code, email):
 
 reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|]'
 regp = re.compile(reg)
+
+
 # 搜韵诗词词条：八归·辛巳，CC-CEDICT词条威廉·莎士比亚，stripkey时不包含·
 
 
@@ -782,15 +784,18 @@ class MDict(object):
             start = p - num + 1
         if p + num < end:
             end = p + num
-        if back:
+
+        if start == end:
+            r_p2 = start
+            my_list.append([key_list[start][1].decode(self._encoding, errors='replace'), start, start])
+        elif back:
             r_p2 = end - 1
-            for i in range(p, end):
+            for i in range(p, end + 1):
                 s = key_list[i][0]
                 if i + 1 < length:
                     e = key_list[i + 1][0]
                 else:
                     e = -1
-
                 my_list.append([key_list[i][1].decode(self._encoding, errors='replace'), s, e])
         else:
             r_p2 = start

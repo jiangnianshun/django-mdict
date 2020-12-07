@@ -1,6 +1,8 @@
 import json
 import mimetypes
 import re
+from PIL import Image
+from io import BytesIO
 from urllib.parse import quote, unquote
 
 from django.db.utils import OperationalError
@@ -207,7 +209,7 @@ def search_mdx_record(request):
     dic_pk = int(request.GET.get('dic_pk', -1))
     s = int(request.GET.get('start', -1))
     e = int(request.GET.get('end', -1))
-    if s == -1 or e == -1:
+    if s == -1:
         return_list = []
     else:
         return_list = search_mdx_record_object({'query': query, 'target_pk': dic_pk, 'start': s, 'end': e})
@@ -288,6 +290,12 @@ def search_mdd(request, *args):
         mdx = item.mdx
         mdd_list = item.mdd_list
         res_content, mime_type = SearchObject(mdx, mdd_list, dic, res_name).search_mdd()
+
+    if mime_type == 'image/tiff':
+        im = Image.open(BytesIO(res_content))
+        temp = BytesIO()
+        im.save(temp, format="png")
+        res_content = temp.getvalue()
 
     return HttpResponse(res_content, content_type=mime_type)
 

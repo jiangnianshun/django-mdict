@@ -31,13 +31,14 @@
 
 ### 格式支持
 
+仅测试最新版chrome、firefox、edge浏览器。
+
 音频：
 * mp3,spx,ogg 支持
 * wav chrome支持，firefox不支持
 
 图像：
-* png,jpg,svg,webp 支持
-* tiff 不支持
+* png,jpg,svg,webp,tiff 支持
 
 字体：
 * chrome不支持大于30MB的字体
@@ -225,11 +226,11 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 ### 设置
 
-* 键盘的enter键绑定查询按钮，上下键绑定上一词条和下一词条按钮。
+* 键盘的enter键绑定查询按钮，上下方向键绑定展开上一词条和展开下一词条按钮。
 
 * 强制刷新：后台会缓存最近查询过的内容，调试时为了显示查询结果的变化，需要开启强制刷新。
 
-* entry链接打开新标签页：默认点击entry://连接会在当前页面查询，开启本功能后，会打开新标签页进行查询，下一次查询生效。
+* entry链接打开新标签页：默认点击entry://连接会在当前页面查询，勾选本项后，会打开新标签页进行查询，下一次查询生效。
 
 * 强制使用全宋体：强制将所有iframe的字体改为全宋体，下一次查询生效。
 
@@ -240,6 +241,10 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 * 在线词典：在线词典在后台admin添加，将url中查询的词改为%WORD%，有两种模式，在iframe中打开或在新标签页中打开（某些网站不支持在iframe中显示）。
 
 * 保存为默认值：如果没有保存为默认值，则页面刷新后，设置恢复默认。
+
+* 文字转简体和文字转繁体按钮，将当前展开的词条内容进行繁简转化。已知问题：由于使用直接替换转化，结果不准确且有未转化的字。
+
+* 夜间模式和日间模式按钮，切换夜间样式和原本样式。已知问题：M-W Visual Dictionary词典折叠展开操作在夜间模式下无效，因为其对class进行全匹配判断。
 
 ### 配置文件
 
@@ -401,11 +406,27 @@ ws.run "wsl -d ubuntu -u root /etc/init.d/apache2 start", vbhid
 
 因为django-mdict.conf里设置了expires_module，使得浏览器长期缓存文件，手动删除浏览器的缓存文件（不需要清cookie）。
 
-3. 403错误
+3. 显示\[INIT_UTILS WARNING\] loading readmdict_search lib failed! run /mdict/readmdict/pyx/build.sh or build.bat, this will speed up search.
+
+出现该提示说明没有进行cython编译。
+
+windows下运行/django-mdict/mdict/readmdict/pyx/build.bat，linux下运行/django-mdict/mdict/readmdict/pyx/build.sh。
+
+这将对readmdict_search.py进行编译，编译后的pyd或so运行库在/django-mdict/mdict/readmdict/lib/下，编译后相比于没有编译，速度提升约1/3。
+
+4. 如何更新django-mdict
+
+先clone项目
+
+4.1 如果在内置词典中添加了词条或者想保留mdict词典的排序，那么将旧项目的db.sqlite3和mdict_path.json复制到新项目下，然后手动运行build.bat或build.sh进行cython编译
+
+4.2 如果没有使用内置词典且不想保留mdict词典的排序，直接运行run_server.bat或run_server.sh。
+
+5. 403错误
 
 权限问题，设置django-mdict文件夹及子文件的权限。
 
-4. Failed to enable APR_TCP_DEFER_ACCEPT
+6. Failed to enable APR_TCP_DEFER_ACCEPT
 
 ```
 sudo vim /etc/apache2/apache2.conf
@@ -417,7 +438,7 @@ sudo vim /etc/apache2/apache2.conf
 AcceptFilter http none
 ```
 
-5. sleep: cannot read realtime clock: Invalid argument
+7. sleep: cannot read realtime clock: Invalid argument
 
 ```
 sudo mv /bin/sleep /bin/sleep~
@@ -425,7 +446,7 @@ touch /bin/sleep
 chmod +x /bin/sleep
 ```
 
-6. apache在ubuntu20.04下restart和stop失败
+8. apache在ubuntu20.04下restart和stop失败
 
 多进程的问题，多重复几次。
 
