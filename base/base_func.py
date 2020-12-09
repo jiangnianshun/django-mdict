@@ -107,3 +107,19 @@ def guess_mime(f_name):
         if f_name.endswith('.spx'):
             mime_type = 'audio/x-speex'
     return mime_type
+
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+
+    try:
+        import unicodedata
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+
+    return False

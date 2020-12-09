@@ -18,6 +18,7 @@ urlpatterns = [
     path('header/', views.get_dic_info),
     path('dicgroup/', views.get_dic_group),
     path('exfile/', views.get_external_file),
+    url('exfile/(.+)', views.get_external_file),
     path('mdictenable/', views.set_mdict_enable),
     path('retrieveconfig/', views.retrieve_config),
     path('saveconfig/', views.save_config),

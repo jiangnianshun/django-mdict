@@ -1,6 +1,7 @@
 import configparser
 import os
 
+from base.base_func import is_number
 from mysite.settings import BASE_DIR
 
 user_config_path = os.path.join(BASE_DIR, 'config.ini')
@@ -61,7 +62,7 @@ def get_config_con(con_name):
         if con_name in con[section].keys():
             value = con[section][con_name]
             if isinstance(value, str):
-                if value.isdigit():
+                if is_number(value.split('.')[0]):
                     return int(value)
                 else:
                     return value

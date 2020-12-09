@@ -1,8 +1,6 @@
 import json
 import mimetypes
 import re
-from PIL import Image
-from io import BytesIO
 from urllib.parse import quote, unquote
 
 from django.db.utils import OperationalError
@@ -291,12 +289,6 @@ def search_mdd(request, *args):
         mdd_list = item.mdd_list
         res_content, mime_type = SearchObject(mdx, mdd_list, dic, res_name).search_mdd()
 
-    if mime_type == 'image/tiff':
-        im = Image.open(BytesIO(res_content))
-        temp = BytesIO()
-        im.save(temp, format="png")
-        res_content = temp.getvalue()
-
     return HttpResponse(res_content, content_type=mime_type)
 
 
@@ -447,8 +439,12 @@ def search_suggestion(request):
     return HttpResponse(json.dumps(r_list))
 
 
-def get_external_file(request):
+def get_external_file(request, *args):
     path = request.GET.get('path', '')
+    if path == '' and len(args) > 0:
+        # 处理外置css中的url
+        path = '/'.join(args)
+
     if path[0] == '/':
         path = path[1:]
     file_path = os.path.join(mdict_root_path, path)

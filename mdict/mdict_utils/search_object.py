@@ -7,6 +7,8 @@ Created on Tue Jul 16 11:41:22 2019
 import os
 import re
 import imghdr
+from PIL import Image
+from io import BytesIO
 from urllib.parse import quote
 
 from django.core.exceptions import AppRegistryNotReady
@@ -259,6 +261,12 @@ class SearchObject:
         if mime_type.startswith('image/'):
             # 判断图片真实类型
             mime_type = 'image/' + imghdr.what(None, res_content)
+
+        if mime_type == 'image/tiff':
+            im = Image.open(BytesIO(res_content))
+            temp = BytesIO()
+            im.save(temp, format="png")
+            res_content = temp.getvalue()
 
         return res_content, mime_type
 
