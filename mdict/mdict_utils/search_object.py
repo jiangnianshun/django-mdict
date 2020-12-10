@@ -260,7 +260,9 @@ class SearchObject:
 
         if mime_type.startswith('image/'):
             # 判断图片真实类型
-            mime_type = 'image/' + imghdr.what(None, res_content)
+            img_type = imghdr.what(None, res_content)
+            if img_type is not None:
+                mime_type = 'image/' + img_type
 
         if mime_type == 'image/tiff':
             im = Image.open(BytesIO(res_content))
