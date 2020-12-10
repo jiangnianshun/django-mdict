@@ -250,8 +250,6 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 /django-mdict/config.ini
 
-process_num 进程池的进程数
-
 cache_num 查询提示缓存数目
 
 search_cache_num 查询缓存数目

@@ -4,7 +4,7 @@ from base.base_func import print_log_info
 from .data_utils import get_or_create_dic
 from .decorator import loop_mdict_list, inner_object
 from .init_utils import init_vars
-from .mdict_config import get_config_con
+from .mdict_config import cpu_num
 from .multibase import multi_search_mdx
 
 
@@ -16,12 +16,9 @@ def multiprocess_search_mdx(n, required, group):
     return multi_search_mdx(n, required, group)
 
 
-cpunums = get_config_con('process_num')
-
-
 def create_pool():
-    print_log_info(['creating multiprocessing pool. process number is ', cpunums, '.'])
-    return multiprocessing.Pool(processes=cpunums)
+    print_log_info(['creating multiprocessing pool. process number is ', cpu_num, '.'])
+    return multiprocessing.Pool(processes=cpu_num)
 
 
 def terminate_pool(pool):

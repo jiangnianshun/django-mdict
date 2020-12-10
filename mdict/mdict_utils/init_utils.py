@@ -1,10 +1,12 @@
 import collections
 import pickle
 import time
-import psutil
+import os
+
+from mysite.settings import BASE_DIR
 from base.base_func import print_log_info, guess_mime
 from base.sys_utils import get_sys_name
-from .mdict_config import *
+from .mdict_config import cpu_num,set_cpunum
 
 print_log_info(['system is', get_sys_name(), '.'])
 
@@ -147,54 +149,20 @@ def write_cache():
 
 
 indicator = []
-real_num = psutil.cpu_count(False)
-
-
-# cpu的物理核心数
-
-def get_cpunum(t_list_len):
-    process_num = get_config_con('process_num')
-
-    if process_num <= 0:
-        if t_list_len < 5:
-            cpunum = 1
-        elif t_list_len < 20:
-            cpunum = 2
-        elif t_list_len < 60:
-            cpunum = round(t_list_len / 20)
-        else:
-            cpunum = round(t_list_len / 40)
-
-        if cpunum < process_num:
-            cpunum = process_num
-
-        if cpunum > real_num:
-            cpunum = real_num
-
-        if cpunum < 1:
-            cpunum = 1
-
-        if cpunum != process_num:
-            set_config('COMMON', {'process_num': cpunum})
-    else:
-        cpunum = process_num
-
-    return cpunum
 
 
 def sort_mdict_list(t_list):
     sorted(t_list.items(), key=lambda k: k[1].num)
+    set_cpunum(len(t_list))
 
-    cpunum = get_cpunum(len(t_list))
-
-    for i in range(cpunum):
+    for i in range(cpu_num):
         indicator.append(list())
 
     n = 0
     for i in range(len(t_list) - 1, -1, -1):
         indicator[n].append(i)
         n += 1
-        if n >= cpunum:
+        if n >= cpu_num:
             n = 0
 
     return t_list

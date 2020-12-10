@@ -23,7 +23,7 @@ from mdict.serializers import mdxentry
 from mysite.settings import BASE_DIR
 from .init_utils import init_mdict_list
 from .loop_search import loop_search_sug
-from .mdict_config import get_config_con
+from .mdict_config import get_config_con, cpu_num
 
 if check_system() == 0:
     from .multiprocess_search import pool, multiprocess_search_mdx, multiprocess_search_sug, check_pool_recreate, \
@@ -144,25 +144,21 @@ def sug_callback(request, result):
 
 
 def search_mdx_sug(dic_pk, required, group, flag):
-    global pool, thpool
+    global pool, thpool, cpu_num
     sug = []
     if check_system() == 0 and dic_pk == -1:
-        cpunums = get_config_con('process_num')
-
         pool = check_pool_recreate(pool)
 
-        q_list = ((i, required, group) for i in range(cpunums))
+        q_list = ((i, required, group) for i in range(cpu_num))
         record_list = pool.starmap(multiprocess_search_sug, q_list)
         for r in record_list:
             sug.extend(r)
     elif check_system() == 1 and dic_pk == -1:
         # sug.extend(loop_search_sug(dic_pk, query, flag, group))#for循环查询
 
-        cpunums = get_config_con('process_num')
-
         thpool = check_threadpool_recreate(thpool)
 
-        q_list = ((i, required, group) for i in range(cpunums))
+        q_list = ((i, required, group) for i in range(cpu_num))
         record_list = thpool.starmap(multithread_search_sug, q_list)
         for r in record_list:
             sug.extend(r)
@@ -300,8 +296,7 @@ def search_mdx_dic(required, record_list, group):
     # 查询mdx词典
     if check_system() == 0:
         pool = check_pool_recreate(pool)
-        cpunums = get_config_con('process_num')
-        q_list = ((i, required, group) for i in range(cpunums))
+        q_list = ((i, required, group) for i in range(cpu_num))
         a_list = pool.starmap(multiprocess_search_mdx, q_list)
         for a in a_list:
             record_list.extend(a)
@@ -310,8 +305,7 @@ def search_mdx_dic(required, record_list, group):
         # record_list = loop_search_mdx(record_list, query, group)#for循环查询
 
         thpool = check_threadpool_recreate(thpool)
-        cpunums = get_config_con('process_num')
-        q_list = ((i, required, group) for i in range(cpunums))
+        q_list = ((i, required, group) for i in range(cpu_num))
         a_list = thpool.starmap(multithread_search_mdx, q_list)
         for a in a_list:
             record_list.extend(a)

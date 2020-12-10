@@ -1,14 +1,27 @@
 import configparser
 import os
+import psutil
 
 from base.base_func import is_number
 from mysite.settings import BASE_DIR
+
+cpu_num = psutil.cpu_count(False)
+# cpu的物理核心数
+
+def set_cpunum(t_list_len):
+    global cpu_num
+    cnum = round(t_list_len / 10)
+
+    if cnum < cpu_num:
+        cpu_num = cnum
+
+    if cnum < 1:
+        cpu_num = 1
 
 user_config_path = os.path.join(BASE_DIR, 'config.ini')
 
 default_config = {
     'COMMON': {
-        'process_num': -1,  # 默认进程数
         'cache_num': 30,  # 查询提示缓存的个数
         'search_cache_num': 20,  # 查询（分页）缓存的个数
         'builtin_dic_enable': True,  # 启用内置词典
