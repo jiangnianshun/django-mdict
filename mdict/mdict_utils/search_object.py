@@ -399,6 +399,10 @@ class SearchObject:
 
     def substitute_hyper_link(self, matched):  # 处理html词条，获取图片和css
         # 需不需要返回www.开头但没有http和https前缀的匹配
+        if matched.group(0).find('.') == -1:
+            return matched.group(0)
+        # 对于没有扩展名的不作处理，vocabulary2020查artefact有800多隐藏的连接，全部替换耗时6秒。
+
         res_name = replace_res_name(matched.group(8))
 
         start, end = -1, -1

@@ -519,10 +519,8 @@ cdef class MDict(object):
                 return key_block_info_list[half][2], key_block_info_list[half][3], 0, 0
         elif self.compare_keys(key, key_block_info_list[half][0]) < 0:
             return self.reduce_key_info(s, half, key)
-        elif self.compare_keys(key, key_block_info_list[half][1]) > 0:
-            return self.reduce_key_info(half+1, e, key)
         else:
-            return -1, -1, -1, -1, -1, -1, -1
+            return self.reduce_key_info(half+1, e, key)
 
     
     
@@ -535,10 +533,8 @@ cdef class MDict(object):
             return self.process_symbol_search(key, key_list, half, 0)
         elif self.compare_keys(key, key_list[half][1]) < 0:
             return self.reduce_key_block(key_list, s, half, key)
-        elif self.compare_keys(key, key_list[half][1]) > 0:
-            return self.reduce_key_block(key_list, half+1, e, key)
         else:
-            return []
+            return self.reduce_key_block(key_list, half+1, e, key)
 
     
     
@@ -589,7 +585,8 @@ cdef class MDict(object):
         cdef tuple key_block_info_list = self._key_list
         cdef int length = len(key_block_info_list)
 
-        if self.compare_keys(key, key_block_info_list[length - 1][1]) > 0:
+        if self.compare_keys(key, key_block_info_list[0][0]) < 0 or \
+                self.compare_keys(key, key_block_info_list[length - 1][1]) > 0:
             return -1, -1, -1, -1, -1, -1
 
         if length == 1:  # collins词典mdd的第一个key_block长度1，只有css文件。
@@ -792,7 +789,7 @@ cdef class MDict(object):
         result_list=[]
 
         if self.compare_keys(key, key_list[0][1]) < 0 or self.compare_keys(key, key_list[key_list_length - 1][1]) > 0:
-            pass
+            return []
         elif self.compare_keys(key, key_list[0][1]) == 0:
             result_list=self.process_symbol_search(key,key_list,0,1)
 
@@ -1297,10 +1294,8 @@ cdef class MDict(object):
                    record_block_info_list[half][0], record_block_info_list[half][1]
         elif start < record_block_info_list[half - 1][1]:
             return self.reduce_record_block(s, half, start)
-        elif start >= record_block_info_list[half][1]:
-            return self.reduce_record_block(half+1, e, start)
         else:
-            return -1, -1, -1, -1
+            return self.reduce_record_block(half+1, e, start)
 
     
     

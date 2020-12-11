@@ -434,10 +434,8 @@ class MDict(object):
                 return key_block_info_list[half][2], key_block_info_list[half][3], 0, 0
         elif self.compare_keys(key, key_block_info_list[half][0]) < 0:
             return self.reduce_key_info(s, half, key)
-        elif self.compare_keys(key, key_block_info_list[half][1]) > 0:
-            return self.reduce_key_info(half + 1, e, key)
         else:
-            return -1, -1, -1, -1, -1, -1, -1
+            return self.reduce_key_info(half + 1, e, key)
 
     def reduce_key_block(self, key_list, s, e, key):
         if e <= s:
@@ -448,10 +446,8 @@ class MDict(object):
             return self.process_symbol_search(key, key_list, half, 0)
         elif self.compare_keys(key, key_list[half][1]) < 0:
             return self.reduce_key_block(key_list, s, half, key)
-        elif self.compare_keys(key, key_list[half][1]) > 0:
-            return self.reduce_key_block(key_list, half + 1, e, key)
         else:
-            return []
+            return self.reduce_key_block(key_list, half + 1, e, key)
 
     def reduce_key_block_sug(self, key_list, s, e, key, num):
         if e <= s:
@@ -531,7 +527,8 @@ class MDict(object):
         # <0时应当返回第一个词条
         # if self.compare_keys(key, key_block_info_list[0][0]) < 0:
         #     return -1, -1, -1, -1, -1, -1
-        if self.compare_keys(key, key_block_info_list[length - 1][1]) > 0:
+        if self.compare_keys(key, key_block_info_list[0][0]) < 0 or \
+                self.compare_keys(key, key_block_info_list[length - 1][1]) > 0:
             return -1, -1, -1, -1, -1, -1
 
         if length == 1:  # collins词典mdd的第一个key_block长度1，只有css文件。
@@ -730,7 +727,7 @@ class MDict(object):
         result_list = []
 
         if self.compare_keys(key, key_list[0][1]) < 0 or self.compare_keys(key, key_list[key_list_length - 1][1]) > 0:
-            pass
+            return []
 
         elif self.compare_keys(key, key_list[0][1]) == 0:
             result_list = self.process_symbol_search(key, key_list, 0, 1)
@@ -1177,10 +1174,8 @@ class MDict(object):
                    record_block_info_list[half][0], record_block_info_list[half][1]
         elif start < record_block_info_list[half - 1][1]:
             return self.reduce_record_block(s, half, start)
-        elif start >= record_block_info_list[half][1]:
-            return self.reduce_record_block(half + 1, e, start)
         else:
-            return -1, -1, -1, -1
+            return self.reduce_record_block(half + 1, e, start)
 
     def _decode_record_block(self, start, end, f):
         if self._version >= 2.0:
