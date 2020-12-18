@@ -254,21 +254,23 @@ class SearchObject:
         if self.query.endswith('.spx'):
             mime_type = 'audio/speex'
 
-        if mime_type is not None and 'css' in mime_type:
-            res_content = reg2p.sub(self.substitute_css_link,
-                                    res_content.decode(self.mdx.get_encoding(), errors='replace'))
+        if mime_type is not None:
+            if 'css' in mime_type:
+                res_content = reg2p.sub(self.substitute_css_link,
+                                        res_content.decode(self.mdx.get_encoding(), errors='replace'))
 
-        if mime_type.startswith('image/'):
-            # 判断图片真实类型
-            img_type = imghdr.what(None, res_content)
-            if img_type is not None:
-                mime_type = 'image/' + img_type
+            if mime_type.startswith('image/'):
+                # 判断图片真实类型
+                img_type = imghdr.what(None, res_content)
+                if img_type is not None:
+                    mime_type = 'image/' + img_type
 
-        if mime_type == 'image/tiff':
-            im = Image.open(BytesIO(res_content))
-            temp = BytesIO()
-            im.save(temp, format="png")
-            res_content = temp.getvalue()
+            if mime_type == 'image/tiff':
+                # tiff转png
+                im = Image.open(BytesIO(res_content))
+                temp = BytesIO()
+                im.save(temp, format="png")
+                res_content = temp.getvalue()
 
         return res_content, mime_type
 
@@ -399,8 +401,9 @@ class SearchObject:
 
     def substitute_hyper_link(self, matched):  # 处理html词条，获取图片和css
         # 需不需要返回www.开头但没有http和https前缀的匹配
-        if matched.group(0).find('.') == -1:
-            return matched.group(0)
+        matched_text = matched.group(0)
+        if matched_text.find('.') == -1:
+            return matched_text
         # 对于没有扩展名的不作处理，vocabulary2020查artefact有800多隐藏的连接，全部替换耗时6秒。
 
         res_name = replace_res_name(matched.group(8))
@@ -432,9 +435,9 @@ class SearchObject:
             if res_name[0] == '\\':
                 res_name = res_name[1:]
             if res_name == '':
-                return matched.group(0)
+                return matched_text
             if res_name[0] == '#' or res_name.startswith('www.'):
-                return matched.group(0)
+                return matched_text
             if is_local:
                 return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + '/' + self.m_path + '/' + \
                        str(res_name) + delimiter_r

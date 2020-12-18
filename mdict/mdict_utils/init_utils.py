@@ -6,7 +6,7 @@ import os
 from mysite.settings import BASE_DIR
 from base.base_func import print_log_info, guess_mime
 from base.sys_utils import get_sys_name
-from .mdict_config import cpu_num,set_cpunum
+from .mdict_config import cpu_num, set_cpunum
 
 print_log_info(['system is', get_sys_name(), '.'])
 
@@ -190,6 +190,14 @@ def check_dir_change():
         print_log_info('change.dat not exists.')
         return True
 
+    if old_dir['root_dir'] != mdict_root_path:
+        print_log_info('mdict_root_path has changed.')
+        return True
+
+    if not os.path.exists(mdict_root_path):
+        print_log_info('mdict_root_path not exists.')
+        return True
+
     for root, dirs, files in os.walk(mdict_root_path):
         for file in files:
             if file.lower().endswith('.mdx'):
@@ -207,6 +215,7 @@ def check_dir_change():
 
 def write_dir_change():
     new_dir = {}
+    new_dir.update({'root_dir': mdict_root_path})
     for root, dirs, files in os.walk(mdict_root_path):
         for file in files:
             if file.lower().endswith('.mdx'):
@@ -243,4 +252,5 @@ def init_mdict_list(rewrite_cache):
         load_cache()
         print_log_info('reading from cache file', 0, t1, time.perf_counter())
 
-    print_log_info('total time', 0, t1, time.perf_counter())
+    print_log_info(['dictionary total num', len(init_vars.mdict_odict)])
+    print_log_info('initializing time', 0, t1, time.perf_counter())

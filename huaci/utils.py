@@ -70,6 +70,8 @@ class Huaci:
 
         self.thread_keyboard = None
 
+        self.max_text_length = 40
+
     def translate_picture(self, img):
         # 图片二值化
         gray = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2GRAY)
@@ -81,10 +83,7 @@ class Huaci:
         # tesseract会在末尾加form feed分页符，unicode码000c。
         # -c page_separator=""设置分页符为空
         text = regp.sub('', text)
-        if len(text) == 0:
-            print('text length is zero')
-            return
-        if len(text) > 30:
+        if len(text) == 0 or len(text) > self.max_text_length:
             print('text length exceed limit of length', len(text))
             return
 
@@ -95,7 +94,7 @@ class Huaci:
             # result = root.selection_get(selection="CLIPBOARD").strip()
             # tkinter的剪切板读取必须在mainloop中，当root widthdraw后，就不能用了。
             result = pyperclip.paste()
-            if 0 < len(result) <= 30:
+            if 0 < len(result) <= self.max_text_length:
                 self.search_mdict(result)
         except Exception as e:
             print(e)

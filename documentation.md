@@ -69,6 +69,8 @@
 * MDICT/词典分组
 <br />创建词典分组，创建分组后去MDICT/Mdict词典中将词典加入某个分组。
 
+* 启用/停用所有词典
+<br />Mdict词典页面，勾选ID前的复选框，选择第一页所有的词典，点击执行按钮右边的选中所有的XXX个Mdict词典，选择动作下拉框中的EnableAllDics/DisableAllDics，最后点击执行按钮。
 ### 依赖
 
 1. requirements1.txt：必需依赖
@@ -210,7 +212,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 如果mdict_path.json为空，词典库地址设置为/django-mdict/media/mdict/doc/，发音库地址设置为/django-mdict/media/mdict/audio/。
 
-注意输入规范的路径，用反斜杠或者双斜杠作为路径分隔符。
+注意输入规范的路径，用双引号并且用反斜杠或者双斜杠作为路径分隔符。
 
 ```
 {

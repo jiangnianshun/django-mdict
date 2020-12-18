@@ -370,7 +370,9 @@ def search_suggestion(request):
 
     if query == '':  # jquery-ui的下拉框的请求是term
         query = request.GET.get('term', '').strip()
-    flag = request.GET.get('flag', 20)
+    sug_num = request.GET.get('sug_num', 0)
+    if sug_num == 0:
+        sug_num = get_config_con('suggestion_num')
     group = int(request.GET.get('dic_group', 0))
 
     if query and sug_cache.get(query, group, dic_pk) is None:
@@ -384,11 +386,11 @@ def search_suggestion(request):
                 sug.extend(search_bultin_dic_sug(query))
 
             try:
-                sug.extend(search_mdx_sug(dic_pk, required, group, flag))
+                sug.extend(search_mdx_sug(dic_pk, required, group, sug_num))
             except FileNotFoundError:
                 print_log_info('mdx file not found, suggestion search failed, need recache!', 2)
                 init_mdict_list(True)
-                sug.extend(search_mdx_sug(dic_pk, required, group, flag))
+                sug.extend(search_mdx_sug(dic_pk, required, group, sug_num))
             except OperationalError as e:
                 print(e)
                 print_log_info('modify database failed!', 2)
@@ -398,7 +400,7 @@ def search_suggestion(request):
                     loop_create_model()
                 elif check_system() == 1:
                     loop_create_thread_model()
-                sug.extend(search_mdx_sug(dic_pk, required, group, flag))
+                sug.extend(search_mdx_sug(dic_pk, required, group, sug_num))
 
             q2b = strQ2B(query)
 
@@ -428,9 +430,9 @@ def search_suggestion(request):
                         break
 
             if f == -1:
-                t_list = return_sug[:flag]
+                t_list = return_sug[:sug_num]
             else:
-                t_list = (return_sug[f:] + return_sug[:f])[:flag]
+                t_list = (return_sug[f:] + return_sug[:f])[:sug_num]
 
         sug_cache.put(query, group, dic_pk, t_list)
 
