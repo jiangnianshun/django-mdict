@@ -63,11 +63,7 @@ def search(required, group):
             loop_create_thread_model()
         record_list = search_mdx_dic(required, record_list, group)
 
-    merge_entry_enable = get_config_con('merge_entry_enable')
     builtin_dic_enable = get_config_con('builtin_dic_enable')
-
-    if merge_entry_enable:
-        record_list = merge_record(required, record_list)
 
     if builtin_dic_enable:
         record_list = search_bultin_dic(required, record_list)
@@ -413,41 +409,3 @@ def spellcheck(query):  # 使用SpellChecker()来实现拼写检查
             c_list.insert(0, co)
 
     return c_list
-
-
-def merge_record(query, record_list):
-    # 多于4个的词条进行合并，主要是处理国家教育研究院双语词汇双向词典，该词典查variation有27个词条。
-    # 长度小于500才合并，原因是英和中词典的a词条都合并起来，特别特别长，iframe展开时，台式机要卡住好长时间才能显示
-    merge_entry_num = get_config_con('merge_entry_num')
-    merge_entry_max_length = get_config_con('merge_entry_max_length')
-
-    dic_dict = {}
-    for i in range(len(record_list)):
-        mdx_name = record_list[i].mdx_name
-        mdx_record = record_list[i].mdx_record
-        if len(mdx_record) < merge_entry_max_length:  # 这里暂时性的判断
-            if mdx_name in dic_dict:
-                dic_dict[mdx_name] += 1
-            else:
-                dic_dict[mdx_name] = 1
-
-    dic_list = []
-
-    for k, v in dic_dict.items():
-        if v >= merge_entry_num:
-            dic_list.append(k)
-
-    t_list = []
-    for dic in dic_list:
-        record = ''
-        pror = 1
-        for i in range(len(record_list) - 1, -1, -1):
-            mdx = record_list[i]
-            if mdx.mdx_name == dic:
-                record = mdx.mdx_record + record
-                pror = mdx.mdx_pror
-                del record_list[i]
-        t_list.append(mdxentry(dic, query, record, pror, -1, -1, -1, -1))
-
-    record_list.extend(t_list)
-    return record_list

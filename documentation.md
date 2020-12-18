@@ -262,11 +262,7 @@ spell_check 拼写检查，0:关闭，1:开启，2:无结果时开启。
 
 lemmatize 原形推测，0:关闭，1:开启，2:无结果时开启。
 
-merge_entry_enable 启用同一词典查询结果合并
-
-merge_entry_num 同一词典查询结果数目，超过该数目后才会合并。
-
-merge_entry_max_length 查询结果长度，同一词典每个查询结果长度都小于该长度时才会合并。
+merge_entry_max_length 查询结果长度，同一词典查询结果长度都小于该长度时才会合并。
 
 st_enable 启用繁简转化
 

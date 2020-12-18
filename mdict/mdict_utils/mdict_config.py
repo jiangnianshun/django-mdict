@@ -29,9 +29,7 @@ default_config = {
     'SEARCH': {
         'spell_check': 2,
         'lemmatize': 2,
-        'merge_entry_enable': True,
-        'merge_entry_num': 5,  # 全局设置，同一个词典一个词条的条数多于等于5个时，将合并为1个。
-        'merge_entry_max_length': 500,
+        'merge_entry_max_length': 1000,
         'st_enable': True,  # 繁简和简繁转化
         'chaizi_enable': True,  # 拆字反查
         'fh_char_enable': True,  # 全角转换
