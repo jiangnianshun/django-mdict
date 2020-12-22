@@ -211,22 +211,24 @@ def extract_bultin_dic_all(r_list):
     r_list_len = len(r_list)
     mdict.append(builtin_dic_prefix)
 
-    i = 1
-
-    for r in r_list:
-        mdx_entry.append(r.mdict_entry + '/')  # 将显示的词条名用斜杠分隔开
+    for i in range(0, r_list_len):
+        r = r_list[i]
+        if i < r_list_len - 1:
+            mdx_entry.append(r.mdict_entry + '｜')
+        else:
+            mdx_entry.append(r.mdict_entry)
 
         mdict_content = get_mdict_content(r)
 
-        if 1 <= i < r_list_len:
+        if i < r_list_len - 1:
             mdict_content.append('<hr />')
-        i += 1
-
         mdict.append(''.join(mdict_content))
+
+    if r_list_len > 1:
+        mdx_entry.append('【' + str(len(r_list)) + '】')
+
     if r_list_len > 0:
-        entry_t = ''.join(mdx_entry)
-        entry_t = entry_t[:len(entry_t) - 1]  # 去掉entry后面的最后一个斜杠
-        return mdxentry(builtin_dic_name, entry_t, ''.join(mdict), 0, -1, -1, -1, -1)
+        return mdxentry(builtin_dic_name, ''.join(mdx_entry), ''.join(mdict), 0, -1, -1, -1, -1)
     else:
         return None
 

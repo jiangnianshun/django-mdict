@@ -109,7 +109,7 @@ class MyMdictItem(models.Model):
     item_entry_strip = models.CharField('STRIP义项', max_length=100, blank=True, null=True)
     item_type = models.ForeignKey('MyMdictEntryType', verbose_name='义项类别', null=True, blank=True,
                                   on_delete=models.SET_NULL)
-    item_content = RichTextUploadingField(null=True, blank=True)
+    item_content = RichTextUploadingField('义项内容', null=True, blank=True)
     # RichTextField只能插入网络图片，如果要本地上传图片，需要用RichTextUploadingField
 
     class Meta:

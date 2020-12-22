@@ -111,7 +111,8 @@ CKEDITOR_UPLOAD_PATH = "uploads/"#ckeditor上传图片的存放位置是media/up
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'Custom'
+        'toolbar': 'Custom',
+        'width': '100%',
     }
 }
 

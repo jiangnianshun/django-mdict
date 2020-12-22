@@ -28,7 +28,7 @@ class MdictDicAdmin(admin.ModelAdmin):
     # 默认的MangToMany的样式是在一个方框内按住ctrl键选择多个对象，filter_horizontal设置水平两个方框，将对象左右移动。
 
 
-class MyMdictItemAdmin(admin.TabularInline):
+class MyMdictItemAdmin(admin.StackedInline):
     model = MyMdictItem
     extra = 1
 
