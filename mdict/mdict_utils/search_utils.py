@@ -9,19 +9,17 @@ try:
     is_leven = True
 except ImportError as e:
     print('Levenshtein not support')
-from django.db.utils import OperationalError
+
 from django.db.models.functions import Length
 from nltk.data import path as nltk_path
 from nltk.stem import WordNetLemmatizer
 from spellchecker import SpellChecker
 
-from base.base_func import print_log_info
 from base.base_constant import builtin_dic_prefix, regp
 from base.sys_utils import check_system
 from mdict.models import MyMdictEntry, MyMdictItem
 from mdict.serializers import mdxentry
 from mysite.settings import BASE_DIR
-from .init_utils import init_mdict_list
 from .loop_search import loop_search_sug
 from .mdict_config import get_config_con, cpu_num
 
@@ -47,21 +45,7 @@ builtin_dic_name = '内置词典'
 def search(required, group):
     record_list = []
 
-    try:
-        record_list = search_mdx_dic(required, record_list, group)
-    except FileNotFoundError:
-        print_log_info('mdx file not found, mdx search failed, need recache!', 2)
-        init_mdict_list(True)
-        record_list = search_mdx_dic(required, record_list, group)
-        # 重新生成cache文件的代码
-    except OperationalError as e:
-        print(e)
-        print_log_info('modify database failed!', 2)
-        if check_system() == 0:
-            loop_create_model()
-        elif check_system() == 1:
-            loop_create_thread_model()
-        record_list = search_mdx_dic(required, record_list, group)
+    record_list = search_mdx_dic(required, record_list, group)
 
     builtin_dic_enable = get_config_con('builtin_dic_enable')
 
@@ -72,20 +56,9 @@ def search(required, group):
 
 
 def search_revise(query, record_list, is_en):
-    spell_check = get_config_con('spell_check')
-    lemmatize = get_config_con('lemmatize')
-
-    if lemmatize == 1:
+    if len(record_list) == 0:
         record_list = lemmatize_func(query, record_list, is_en)
-    elif lemmatize == 2:
-        if len(record_list) == 0:
-            record_list = lemmatize_func(query, record_list, is_en)
-
-    if spell_check == 1:
         record_list = key_spellcheck(query, record_list, is_en)
-    elif spell_check == 2:
-        if len(record_list) == 0:
-            record_list = key_spellcheck(query, record_list, is_en)
     return record_list
 
 

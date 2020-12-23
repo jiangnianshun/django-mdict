@@ -258,10 +258,6 @@ search_cache_num 查询缓存数目
 
 builtin_dic_enable 启用内置词典
 
-spell_check 拼写检查，0:关闭，1:开启，2:无结果时开启。
-
-lemmatize 原形推测，0:关闭，1:开启，2:无结果时开启。
-
 merge_entry_max_length 查询结果长度，同一词典查询结果长度都小于该长度时才会合并。
 
 st_enable 启用繁简转化

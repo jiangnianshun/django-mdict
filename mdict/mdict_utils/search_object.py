@@ -21,6 +21,7 @@ except AppRegistryNotReady:
 
 from .init_utils import init_vars
 from .mdict_func import replace_res_name, is_local, get_m_path
+from .decorator import search_exception
 from base.base_func import guess_mime
 
 # 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64，mailto:开头是邮件,javascript:脚本，#开头可能是锚点，www.开头可能是网址，这两个当在mdd中查询不存在时不处理。
@@ -76,18 +77,22 @@ class SearchObject:
 
         self.m_path = get_m_path(self.mdx)
 
+    @search_exception
     def search_sug_required(self, num):
         return self.mdx.look_up_sug_required(self.required, num)
 
+    @search_exception
     def search_sug_entry(self, num):
         return self.mdx.look_up_sug(self.query, num)
 
+    @search_exception
     def search_list_entry(self, p1, p2, num, direction):
         return self.mdx.look_up_list(p1, p2, num, direction)
 
     def get_len(self):
         return self.mdx.get_len()
 
+    @search_exception
     def search_key(self, entry):
         f = open(self.mdx.get_fpath(), 'rb')
         result_list = self.mdx.look_up_key(entry, f)
@@ -95,6 +100,7 @@ class SearchObject:
             f.close()
         return result_list
 
+    @search_exception
     def get_header(self):
         header = self.mdx.header
         if 'Description' in header.keys():
@@ -105,6 +111,7 @@ class SearchObject:
             r_h.update({k: header[k]})
         return r_h
 
+    @search_exception
     def search_record(self, s, e):
         f = open(self.mdx.get_fpath(), 'rb')
         record = self.mdx.look_up_record(s, e, f)
@@ -196,6 +203,7 @@ class SearchObject:
 
         return record
 
+    @search_exception
     def search_mdx_required(self):
         # 查询一组词
         result_dict = self.mdx.look_up_required(self.required)
@@ -218,6 +226,7 @@ class SearchObject:
                                  self.f_p2))
         return r_list
 
+    @search_exception
     def search_mdx_entry(self):
         # 查询一个词
         result_list = self.mdx.look_up(self.query)
@@ -241,6 +250,7 @@ class SearchObject:
 
         return r_list
 
+    @search_exception
     def search_mdd(self):
         res_content = ''
         mime_type = ''

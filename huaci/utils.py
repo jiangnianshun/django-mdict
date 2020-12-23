@@ -116,20 +116,20 @@ class Huaci:
                     self.end_x = x
                     self.end_y = y
                     # print("end_x,end_y:", end_x, end_y)
-                    if abs(self.end_y - self.start_y) > 100:
-                        self.start_x = self.end_x
-                        self.start_y = self.end_y
-                        self.end_x = 0
-                        self.end_y = 0
-                        print('exceed limit of height', abs(self.end_y - self.start_y))
-                        return
-                    if abs(self.end_x - self.start_x) > 500:
-                        self.start_x = self.end_x
-                        self.start_y = self.end_y
-                        self.end_x = 0
-                        self.end_y = 0
-                        print('exceed limit of width', abs(self.end_x - self.start_x))
-                        return
+                    # if abs(self.end_y - self.start_y) > 100:
+                    #     self.start_x = self.end_x
+                    #     self.start_y = self.end_y
+                    #     self.end_x = 0
+                    #     self.end_y = 0
+                    #     print('exceed limit of height', abs(self.end_y - self.start_y))
+                    #     return
+                    # if abs(self.end_x - self.start_x) > 500:
+                    #     self.start_x = self.end_x
+                    #     self.start_y = self.end_y
+                    #     self.end_x = 0
+                    #     self.end_y = 0
+                    #     print('exceed limit of width', abs(self.end_x - self.start_x))
+                    #     return
 
                     if self.end_x == self.start_x or self.end_y == self.start_y:
                         self.flag -= 1

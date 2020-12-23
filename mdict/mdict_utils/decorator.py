@@ -2,12 +2,29 @@ import collections
 import functools
 import time
 from abc import abstractmethod
+from django.db.utils import OperationalError
 
 from mdict.models import MdictDic
 from .data_utils import get_or_create_dic
 from .init_utils import init_vars
 
 values_list = init_vars.mdict_odict.values()
+
+
+def search_exception(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        r_list = []
+        try:
+            r_list = func(*args, **kwargs)
+        except FileNotFoundError as e:
+            print(e)
+        except OperationalError as e:
+            print(e)
+
+        return r_list
+
+    return wrapper
 
 
 def loop_mdict_list(return_type=0, timer=False, digit=5):

@@ -27,8 +27,6 @@ default_config = {
         'builtin_dic_enable': True,  # 启用内置词典
     },
     'SEARCH': {
-        'spell_check': 2,
-        'lemmatize': 2,
         'merge_entry_max_length': 1000,
         'st_enable': True,  # 繁简和简繁转化
         'chaizi_enable': True,  # 拆字反查

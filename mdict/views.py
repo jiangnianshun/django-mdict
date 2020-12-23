@@ -3,7 +3,6 @@ import mimetypes
 import re
 from urllib.parse import quote, unquote
 
-from django.db.utils import OperationalError
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -385,22 +384,7 @@ def search_suggestion(request):
             if dic_pk == -1:  # index页面才需要内置词典的查询提示
                 sug.extend(search_bultin_dic_sug(query))
 
-            try:
-                sug.extend(search_mdx_sug(dic_pk, required, group, sug_num))
-            except FileNotFoundError:
-                print_log_info('mdx file not found, suggestion search failed, need recache!', 2)
-                init_mdict_list(True)
-                sug.extend(search_mdx_sug(dic_pk, required, group, sug_num))
-            except OperationalError as e:
-                print(e)
-                print_log_info('modify database failed!', 2)
-                # 多进程对sqlite的读写失败，使用for循环来创建数据库
-                # 当添加了多个新词典时，有时会报错django.db.utils.OperationalError: disk I/O error，原因可能是sqlite在nfs文件系统上的lock不可靠。
-                if check_system() == 0:
-                    loop_create_model()
-                elif check_system() == 1:
-                    loop_create_thread_model()
-                sug.extend(search_mdx_sug(dic_pk, required, group, sug_num))
+            sug.extend(search_mdx_sug(dic_pk, required, group, sug_num))
 
             q2b = strQ2B(query)
 
