@@ -14,15 +14,12 @@ values_list = init_vars.mdict_odict.values()
 def search_exception(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        r_list = []
         try:
-            r_list = func(*args, **kwargs)
+            return func(*args, **kwargs)
         except FileNotFoundError as e:
             print(e)
         except OperationalError as e:
             print(e)
-
-        return r_list
 
     return wrapper
 

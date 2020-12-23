@@ -286,7 +286,9 @@ def search_mdd(request, *args):
         item = init_vars.mdict_odict[dic_name]
         mdx = item.mdx
         mdd_list = item.mdd_list
-        res_content, mime_type = SearchObject(mdx, mdd_list, dic, res_name).search_mdd()
+        r_value = SearchObject(mdx, mdd_list, dic, res_name).search_mdd()
+        if r_value is not None:
+            res_content, mime_type = r_value
 
     return HttpResponse(res_content, content_type=mime_type)
 
