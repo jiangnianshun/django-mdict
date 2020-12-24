@@ -226,7 +226,7 @@ def search_builtin(query):
             if Levenshtein.ratio(query, r_list[i].mdict_entry.lower()) < 0.7:
                 del r_list[i]
         for e in entry_list:
-            if e.item_mdict is not None:
+            if e.item_mdict is not None and e.item_entry is not None:
                 if Levenshtein.ratio(query, e.item_entry.lower()) >= 0.7:
                     r_list.append(e.item_mdict)
     else:
