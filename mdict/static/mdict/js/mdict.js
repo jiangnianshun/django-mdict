@@ -136,7 +136,6 @@ function add_iframes(data,container,need_clear,is_list){
 			href='#card-element-"+i+"'操作目标是#card-element-"+i+"
 			collapse默认折叠
 			collapse show默认展开
-			如果默认折叠，那么iframe的高度不正确，展开后只显示一条缝。因此先默认展开再循环折叠。
 			
 			data-parent='#card-container'
 			在card-container的子元素的所有可折叠元素，同一时间只能有一个展开。
@@ -169,7 +168,7 @@ function add_iframes(data,container,need_clear,is_list){
 			//iframe.width="100%";
 			//iframe.height="auto";
 			iframe.id="iframe-"+s_id;
-			//iframe.setAttribute("data-pk",mdx_pk);
+			iframe.setAttribute("data-name", mdx_name);
 			//iframe.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
 			//html中的#号会被截断，导致iframe读取不完整，因此要编码，而encodeURIComponent()会编码#号，但是encodeURI()不会编码，问题是使用encodeURIComponent()载入的子页面，css无法载入。
 			
@@ -201,8 +200,11 @@ function add_iframes(data,container,need_clear,is_list){
 			
 				card.on('show.bs.collapse',function(){//当card展开时才加载iframe内容，避免手机上的卡顿。
 					if($(iframe).attr('data-content-fill')!='true'){
-					    html=html.replace(/\\n/g,'<br />');
-					    //懶虫簡明英漢漢英詞典错误的使用\n换行，很少词典有这个问题，因此放在前端处理
+					    if(iframe.getAttribute("data-name")!="内置词典"){
+					        html=html.replace(/\\n/g,'<br />');
+					        //懶虫簡明英漢漢英詞典错误的使用\n换行，很少词典有这个问题，因此放在前端处理
+					        //内置词典的\n不能被替换，会导致mathjax的\nu,\neq等命令无效
+					    }
 
 						iframe.contentWindow.document.open();
 						iframe.contentWindow.document.write(html);
