@@ -68,73 +68,77 @@ function in_page_jump(ob,entry){//页内跳转
 	$("#card-container",parent.document).attr("in-page-jump","");
 }
 
-function init_hyper_links(){
-	$("a").click(function(e){
-		var ob=$(this);
-		query=ob.attr("href")||null;
-		//href存储是要跳转的词条或要获取的图片和音频名，这里不能用this.href获取href的值，在firefox中正常，但在edge浏览器中，获取的href后会被自动加一个斜杠，导致最后查询失败。
-		e.preventDefault();
-        if(query!=null){
+function ihyperlink(e){
+    var ob=$(this);
+    query=ob.attr("href")||null;
+    //href存储是要跳转的词条或要获取的图片和音频名，这里不能用this.href获取href的值，在firefox中正常，但在edge浏览器中，获取的href后会被自动加一个斜杠，导致最后查询失败。
+    e.preventDefault();
+    if(query!=null){
 //		    e.preventDefault();
-            if(query.indexOf("entry")==0){//处理entry超链接
+        if(query.indexOf("entry")==0){//处理entry超链接
 
-                var entry=query.substring(8);
-                if(entry[0]=="#"){
-                    //#锚点
-                    //页面内跳转到锚点
-                    in_page_jump(ob,entry.substring("1"));
+            var entry=query.substring(8);
+            if(entry[0]=="#"){
+                //#锚点
+                //页面内跳转到锚点
+                in_page_jump(ob,entry.substring("1"));
 
+            }else{
+                //entry#锚点
+                //跳转到entry词条的锚点位置
+                var sharp=entry.indexOf("#");
+                var inPageJump="";
+                if(sharp!=-1){
+                    inPageJump=entry.substring(sharp+1);
+                    entry=entry.substring(0,sharp);
+                }
+                //自动查询超链接的entry
+                var backslash=entry.indexOf("/");
+                if(backslash==entry.length-1){
+                    entry=entry.substring(0,backslash);
+                }
+
+                var new_label=$('#config-link-new-label',parent.document).prop("checked");
+                if(new_label){
+                    //通过url参数设置新页面的in-page-jump参数
+                    var url=create_new_url(entry);
+
+                    window.open(url);
                 }else{
-                    //entry#锚点
-                    //跳转到entry词条的锚点位置
-                    var sharp=entry.indexOf("#");
-                    var inPageJump="";
-                    if(sharp!=-1){
-                        inPageJump=entry.substring(sharp+1);
-                        entry=entry.substring(0,sharp);
-                    }
-                    //自动查询超链接的entry
-                    var backslash=entry.indexOf("/");
-                    if(backslash==entry.length-1){
-                        entry=entry.substring(0,backslash);
-                    }
-
-                    var new_label=$('#config-link-new-label',parent.document).prop("checked");
-                    if(new_label){
-                        //通过url参数设置新页面的in-page-jump参数
-                        var url=create_new_url(entry);
-
-                        window.open(url);
-                    }else{
-                        $('#query',parent.document).val(html_unescape(entry));
-                        $("#card-container",parent.document).attr("in-page-jump",inPageJump);
-                        $('#mdictquery',parent.document).trigger("click");
-                    }
-
-
+                    $('#query',parent.document).val(html_unescape(entry));
+                    $("#card-container",parent.document).attr("in-page-jump",inPageJump);
+                    $('#mdictquery',parent.document).trigger("click");
                 }
-            }else if(query.indexOf("http")==0){
-                window.open(query);
-            }else if(query.indexOf("sound")==0){//处理sound超链接，常见spx，mp3,wav格式
-                var audio=query.substring(8);
-                if(audio[0]!='/'&&audio[0]!='\\'){
-                    audio='/'+audio;
-                }
-                audio=html_escape(audio,true);
 
-                var url=$('body').attr('data-pk')+'/'+audio;
 
-                if(ob.children("audio").length==0){
-                    query_audio(ob,url,true,null);
-                }else{
-                    ob.children("audio")[0].play();
-                }
-            }else if(query.indexOf("#")==0){
-                in_page_jump(ob,query.substring("1"));
             }
-        }
+        }else if(query.indexOf("http")==0){
+            window.open(query);
+        }else if(query.indexOf("sound")==0){//处理sound超链接，常见spx，mp3,wav格式
+            var audio=query.substring(8);
+            if(audio[0]!='/'&&audio[0]!='\\'){
+                audio='/'+audio;
+            }
+            audio=html_escape(audio,true);
 
-	});
+            var url=$('body').attr('data-pk')+'/'+audio;
+
+            if(ob.children("audio").length==0){
+                query_audio(ob,url,true,null);
+            }else{
+                ob.children("audio")[0].play();
+            }
+        }else if(query.indexOf("#")==0){
+            in_page_jump(ob,query.substring("1"));
+        }
+    }
+
+}
+
+function init_hyperlink(){
+	$("a").click(ihyperlink);
+	$("body").on("click", "a", ihyperlink);
+	//给动态增加的a添加click
 
 	var inPageJump=$("#card-container",parent.document).attr("in-page-jump");
 	if(inPageJump!=""){
@@ -302,7 +306,7 @@ function init_night_mode(){
 
 
 function init_iframe(){
-	init_hyper_links();
+	init_hyperlink();
 	if($('#config-select-btn-enable',parent.document).prop("checked")){
 	    init_tooltip();
 	}
