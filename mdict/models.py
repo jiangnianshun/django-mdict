@@ -2,6 +2,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from base.base_constant import regp
 
+
 class MdictOnline(models.Model):
     mdict_name = models.CharField('词典名', max_length=20)
     mdict_url = models.URLField('网址')
@@ -103,13 +104,22 @@ class MyMdictEntry(models.Model):
         super(MyMdictEntry, self).save()
 
 
+ckeditor_ext_plugins = [
+    ('mlink', '/static/mdict/ckeditor/plugins/mlink/', 'plugin.js',),
+    ('mwrap', '/static/mdict/ckeditor/plugins/mwrap/', 'plugin.js',),
+    ('mathjax', '/static/mdict/ckeditor/plugins/mathjax/', 'plugin.js',),
+]
+
+
 class MyMdictItem(models.Model):
     item_mdict = models.ForeignKey('MyMdictEntry', verbose_name='词条', null=True, blank=True, on_delete=models.SET_NULL)
     item_entry = models.CharField('义项', max_length=100, blank=True, null=True)
     item_entry_strip = models.CharField('STRIP义项', max_length=100, blank=True, null=True)
     item_type = models.ForeignKey('MyMdictEntryType', verbose_name='义项类别', null=True, blank=True,
                                   on_delete=models.SET_NULL)
-    item_content = RichTextUploadingField('义项内容', null=True, blank=True)
+    item_content = RichTextUploadingField('义项内容', null=True, blank=True,
+                                          external_plugin_resources=ckeditor_ext_plugins, )
+
     # RichTextField只能插入网络图片，如果要本地上传图片，需要用RichTextUploadingField
 
     class Meta:

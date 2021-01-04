@@ -1,6 +1,6 @@
 //模板字符串
 var script=`
-<script src="/static/jquery-3.4.1/jquery-3.4.1.min.js"><\/script>
+<script src="/static/jquery/jquery.min.js"><\/script>
 <script src='/static/mdict/iframe-resizer-master/js/iframeResizer.contentWindow.min.js'></script>
 <script src="/static/mdict/js/transform.js"></script>
 <script src="/static/mdict/js/base_func.js"></script>

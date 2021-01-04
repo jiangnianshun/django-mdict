@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import sys
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
@@ -69,7 +68,6 @@ TEMPLATES = [
     },
 ]
 
-
 REST_FRAMEWORK = {
 
     'DEFAULT_PERMISSION_CLASSES': (
@@ -107,12 +105,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-CKEDITOR_UPLOAD_PATH = "uploads/"#ckeditor上传图片的存放位置是media/uploads/
+CKEDITOR_UPLOAD_PATH = "uploads/"  # ckeditor上传图片的存放位置是media/uploads/
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'Custom',
         'width': '100%',
+        'mathJaxLib': '/static/mdict/mathjax/2.7.9/MathJax.js?config=TeX-AMS_HTML',
+        'extraPlugins': ','.join([
+            'mathjax',
+            'mlink',
+            'mwrap',
+        ]),
+
     }
 }
 
@@ -142,7 +147,6 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'collect_static')
 
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
@@ -150,4 +154,4 @@ STATICFILES_DIRS = (
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_URL='/admin/login/'
+LOGIN_URL = '/admin/login/'

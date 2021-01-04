@@ -10,7 +10,7 @@ from mdict.mdict_utils.search_utils import get_mdict_content
 from mdict.models import MyMdictEntry
 
 builtin_dic_prefix = '''
-<link rel='stylesheet' href='/static/bootstrap-4.4.1/css/bootstrap.min.css'>
+<link rel='stylesheet' href='/static/bootstrap/css/bootstrap.min.css'>
 <link rel='stylesheet' href='/static/mdict/css/mdict.css'>
 <script>
     function elementDisplay(objname){
@@ -26,7 +26,7 @@ builtin_dic_prefix = '''
 </script>
 '''
 
-static_list=[r'static\bootstrap-4.4.1\css\bootstrap.min.css',r'mdict\static\mdict\css\mdict.css']
+static_list=[r'static\bootstrap\css\bootstrap.min.css',r'mdict\static\mdict\css\mdict.css']
 # r'mdict\static\mdict\MathJax-master'
 
 export_txt_root_path=os.path.join(BASE_DIR,'export')
