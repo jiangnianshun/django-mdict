@@ -89,7 +89,7 @@ class MyMdictEntryType(models.Model):
 
 class MyMdictEntry(models.Model):
     mdict_entry = models.CharField('词条', max_length=100, db_index=True, unique=True)
-    mdict_entry_strip = models.CharField('STRIP词条', max_length=100, blank=True, null=True)
+    mdict_entry_strip = models.CharField('STRIP词条', max_length=100, blank=True, null=True, editable=False)
 
     class Meta:
         verbose_name = '内置词条'
@@ -114,7 +114,7 @@ ckeditor_ext_plugins = [
 class MyMdictItem(models.Model):
     item_mdict = models.ForeignKey('MyMdictEntry', verbose_name='词条', null=True, blank=True, on_delete=models.SET_NULL)
     item_entry = models.CharField('义项', max_length=100, blank=True, null=True)
-    item_entry_strip = models.CharField('STRIP义项', max_length=100, blank=True, null=True)
+    item_entry_strip = models.CharField('STRIP义项', max_length=100, blank=True, null=True, editable=False)
     item_type = models.ForeignKey('MyMdictEntryType', verbose_name='义项类别', null=True, blank=True,
                                   on_delete=models.SET_NULL)
     item_content = RichTextUploadingField('义项内容', null=True, blank=True,
