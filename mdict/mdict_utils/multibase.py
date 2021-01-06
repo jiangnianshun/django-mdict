@@ -17,6 +17,9 @@ def merge_record(record_list):
     # 长度小于500才合并，原因是英和中词典的a词条都合并起来，特别特别长，iframe展开时，台式机要卡住好长时间才能显示
     merge_entry_max_length = get_config_con('merge_entry_max_length')
 
+    if merge_entry_max_length == 0:
+        return record_list
+
     # dic_dict = {}
     t_list = []
     name = ''
