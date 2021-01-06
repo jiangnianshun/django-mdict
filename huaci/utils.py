@@ -59,6 +59,7 @@ class Huaci:
         else:
             with open(self.ini_path, 'w', encoding='utf-8') as f:
                 json.dump(self.url_dict, f, indent=4, ensure_ascii=False)
+            os.chmod(self.ini_path, 0o777)
 
         self.lang_con = 'eng'
         self.huaci_mode = 'copy'

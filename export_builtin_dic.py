@@ -3,6 +3,7 @@ import shutil
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 import django
+
 django.setup()
 
 from mysite.settings import BASE_DIR
@@ -26,27 +27,27 @@ builtin_dic_prefix = '''
 </script>
 '''
 
-static_list=[r'static\bootstrap\css\bootstrap.min.css',r'mdict\static\mdict\css\mdict.css']
+static_list = [r'static\bootstrap\css\bootstrap.min.css', r'mdict\static\mdict\css\mdict.css']
 # r'mdict\static\mdict\MathJax-master'
 
-export_txt_root_path=os.path.join(BASE_DIR,'export')
-export_txt_path=os.path.join(BASE_DIR,'export','export.txt')
+export_txt_root_path = os.path.join(BASE_DIR, 'export')
+export_txt_path = os.path.join(BASE_DIR, 'export', 'export.txt')
 
-export_data_root_path=os.path.join(export_txt_root_path,'data')
+export_data_root_path = os.path.join(export_txt_root_path, 'data')
 
-uploads_path=os.path.join(BASE_DIR,'media','uploads')
-export_uploads_path=os.path.join(export_data_root_path,'media','uploads')
+uploads_path = os.path.join(BASE_DIR, 'media', 'uploads')
+export_uploads_path = os.path.join(export_data_root_path, 'media', 'uploads')
 
 
 def export_to_txt():
     entry_list = MyMdictEntry.objects.all()
-    i=1
-    mdict_list=[]
+    i = 1
+    mdict_list = []
     for entry in entry_list:
-        mdict_entry=entry.mdict_entry
-        mdict_content=''.join(get_mdict_content(entry)).replace('\r','').replace('\n','')
-        mdict=mdict_entry+builtin_dic_prefix+mdict_content+'\n</>'
-        #mdict_static_file前后自动带\n
+        mdict_entry = entry.mdict_entry
+        mdict_content = ''.join(get_mdict_content(entry)).replace('\r', '').replace('\n', '')
+        mdict = mdict_entry + builtin_dic_prefix + mdict_content + '\n</>'
+        # mdict_static_file前后自动带\n
 
         i += 1
         mdict_list.append(mdict)
@@ -58,26 +59,26 @@ def export_to_txt():
     if os.path.exists(export_uploads_path):
         shutil.rmtree(export_uploads_path)
 
-
-    with open(export_txt_path,'w',encoding='utf-8') as f:
+    with open(export_txt_path, 'w', encoding='utf-8') as f:
         f.write('\n'.join(mdict_list))
-
+    os.chmod(export_txt_path, 0o777)
 
     for s in static_list:
-        data_path=os.path.join(BASE_DIR,s)
+        data_path = os.path.join(BASE_DIR, s)
         if os.path.isfile(data_path):
-            s_name=os.path.basename(data_path)
-            target_path=os.path.join(export_data_root_path,s_name)
+            s_name = os.path.basename(data_path)
+            target_path = os.path.join(export_data_root_path, s_name)
             print(target_path)
-            shutil.copy(data_path,target_path)
+            shutil.copy(data_path, target_path)
         else:
-            a=s[s.find('static'):]
-            target_path=os.path.join(export_data_root_path,a)
+            a = s[s.find('static'):]
+            target_path = os.path.join(export_data_root_path, a)
             print(target_path)
-            shutil.copytree(data_path,target_path)
+            shutil.copytree(data_path, target_path)
     print(uploads_path)
-    shutil.copytree(uploads_path,export_uploads_path)
+    shutil.copytree(uploads_path, export_uploads_path)
 
     print('已导出到mynav/export，导出完成。')
+
 
 export_to_txt()

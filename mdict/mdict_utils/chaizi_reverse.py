@@ -76,6 +76,7 @@ class HanziChaizi(object):
 
         with open(data_original_file, 'wb') as fd:
             pickle.dump(data_original, fd)
+        os.chmod(data_original_file, 0o777)
 
     def convert_original(self):
         data_original_file = pkg_resources.resource_filename(__name__, "data/data_original.pkl")
@@ -157,6 +158,7 @@ class HanziChaizi(object):
 
         with open(data_file, 'wb') as fd:
             pickle.dump(data_original, fd)
+        os.chmod(data_file, 0o777)
 
     def convert_reverse(self):  # 将data.pkl转化为reverse_data.pkl
         reverse_dict = {}
@@ -186,6 +188,7 @@ class HanziChaizi(object):
         reverse_data_file = pkg_resources.resource_filename(__name__, "data/reverse_data.pkl")
         with open(reverse_data_file, 'wb') as fd:
             pickle.dump(reverse_dict, fd)
+        os.chmod(reverse_data_file, 0o777)
 
     def insert_hanzi(self, reverse_dict, zi_dict):
         for zk in zi_dict.keys():

@@ -44,6 +44,7 @@ else:
 def write_json_file(con, file, mode='w'):
     with open(file, mode, encoding='utf-8') as f:
         json.dump(con, f, indent=4)
+    os.chmod(file, 0o777)
 
 
 def process_list(path_list):

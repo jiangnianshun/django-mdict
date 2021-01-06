@@ -27,6 +27,7 @@ else:
     con = {'mdict_path': [], 'audio_path': []}
     with open(mdict_path_json, 'w', encoding='utf-8') as f:
         json.dump(con, f, indent=4)
+    os.chmod(mdict_path_json, 0o777)
 
 mdict_path_list.append(mdict_root_path)
 

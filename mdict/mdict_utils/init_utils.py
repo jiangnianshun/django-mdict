@@ -120,6 +120,7 @@ def read_pickle_file(path):
 def write_pickle_file(path):
     with open(path, 'wb') as f:
         pickle.dump(init_vars.mdict_odict, f)
+    os.chmod(path, 0o777)
 
 
 def load_cache():
