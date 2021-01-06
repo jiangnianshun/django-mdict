@@ -3,7 +3,7 @@ from base.base_func import print_log_info
 from .data_utils import get_or_create_dic
 from .decorator import loop_mdict_list, inner_object
 from .init_utils import init_vars
-from .mdict_config import cpu_num
+from .mdict_config import get_cpunum
 from .multibase import multi_search_mdx
 
 
@@ -16,8 +16,9 @@ def multithread_search_mdx(n, query, group):
 
 
 def create_threadpool():
-    print_log_info(['creating multithreading pool. thread number is ', cpu_num, '.'])
-    return ThreadPool(cpu_num)
+    cnum = get_cpunum()
+    print_log_info(['creating multithreading pool. thread number is ', cnum, '.'])
+    return ThreadPool(cnum)
 
 
 def terminate_threadpool(threadpool):

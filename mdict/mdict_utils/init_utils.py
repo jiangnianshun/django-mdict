@@ -6,7 +6,7 @@ import os
 from mysite.settings import BASE_DIR
 from base.base_func import print_log_info, guess_mime
 from base.sys_utils import get_sys_name
-from .mdict_config import cpu_num, set_cpunum
+from .mdict_config import set_cpunum, get_cpunum
 
 print_log_info(['system is', get_sys_name(), '.'])
 
@@ -155,15 +155,16 @@ indicator = []
 def sort_mdict_list(t_list):
     sorted(t_list.items(), key=lambda k: k[1].num)
     set_cpunum(len(t_list))
+    cnum = get_cpunum()
 
-    for i in range(cpu_num):
+    for i in range(cnum):
         indicator.append(list())
 
     n = 0
     for i in range(len(t_list) - 1, -1, -1):
         indicator[n].append(i)
         n += 1
-        if n >= cpu_num:
+        if n >= cnum:
             n = 0
 
     return t_list

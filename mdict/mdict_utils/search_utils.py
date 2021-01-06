@@ -21,7 +21,7 @@ from mdict.models import MyMdictEntry, MyMdictItem
 from mdict.serializers import mdxentry
 from mysite.settings import BASE_DIR
 from .loop_search import loop_search_sug
-from .mdict_config import get_config_con, cpu_num
+from .mdict_config import get_config_con, get_cpunum
 
 if check_system() == 0:
     from .multiprocess_search import pool, multiprocess_search_mdx, multiprocess_search_sug, check_pool_recreate, \
@@ -113,12 +113,13 @@ def sug_callback(request, result):
 
 
 def search_mdx_sug(dic_pk, required, group, flag):
-    global pool, thpool, cpu_num
+    global pool, thpool
+    cnum = get_cpunum()
     sug = []
     if check_system() == 0 and dic_pk == -1:
         pool = check_pool_recreate(pool)
 
-        q_list = ((i, required, group) for i in range(cpu_num))
+        q_list = ((i, required, group) for i in range(cnum))
         record_list = pool.starmap(multiprocess_search_sug, q_list)
         for r in record_list:
             sug.extend(r)
@@ -127,7 +128,7 @@ def search_mdx_sug(dic_pk, required, group, flag):
 
         thpool = check_threadpool_recreate(thpool)
 
-        q_list = ((i, required, group) for i in range(cpu_num))
+        q_list = ((i, required, group) for i in range(cnum))
         record_list = thpool.starmap(multithread_search_sug, q_list)
         for r in record_list:
             sug.extend(r)
@@ -265,9 +266,10 @@ def mdx_callback(request, result):
 def search_mdx_dic(required, record_list, group):
     global pool, thpool
     # 查询mdx词典
+    cnum = get_cpunum()
     if check_system() == 0:
         pool = check_pool_recreate(pool)
-        q_list = ((i, required, group) for i in range(cpu_num))
+        q_list = ((i, required, group) for i in range(cnum))
         a_list = pool.starmap(multiprocess_search_mdx, q_list)
         for a in a_list:
             record_list.extend(a)
@@ -276,7 +278,7 @@ def search_mdx_dic(required, record_list, group):
         # record_list = loop_search_mdx(record_list, query, group)#for循环查询
 
         thpool = check_threadpool_recreate(thpool)
-        q_list = ((i, required, group) for i in range(cpu_num))
+        q_list = ((i, required, group) for i in range(cnum))
         a_list = thpool.starmap(multithread_search_mdx, q_list)
         for a in a_list:
             record_list.extend(a)

@@ -8,6 +8,7 @@ from mysite.settings import BASE_DIR
 cpu_num = psutil.cpu_count(False)
 # cpu的物理核心数
 
+
 def set_cpunum(t_list_len):
     global cpu_num
     cnum = round(t_list_len / 10)
@@ -17,6 +18,12 @@ def set_cpunum(t_list_len):
 
     if cnum < 1:
         cpu_num = 1
+
+
+def get_cpunum():
+    global cpu_num
+    return cpu_num
+
 
 user_config_path = os.path.join(BASE_DIR, 'config.ini')
 
