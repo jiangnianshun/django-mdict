@@ -36,6 +36,7 @@ def merge_record(record_list):
         mdx_entry = item.mdx_entry
         mdx_record = item.mdx_record
         mdx_pror = item.mdx_pror
+        mdx_pk = item.pk
 
         if name == '':
             name = mdx_name
@@ -51,7 +52,7 @@ def merge_record(record_list):
         else:
             if counter > 1:
                 entry = entry[1:] + '【' + str(counter) + '】'
-                t_list.append(mdxentry(name, entry, record, pror, -1, -1, -1, -1))
+                t_list.append(mdxentry(name, entry, record, pror, mdx_pk, -1, -1, -1))
                 del_list.append(deepcopy(del_item))
 
             name = mdx_name
@@ -66,7 +67,7 @@ def merge_record(record_list):
         if i == 0:
             if counter > 1:
                 entry = entry[1:] + '【' + str(counter) + '】'
-                t_list.append(mdxentry(name, entry, record, pror, -1, -1, -1, -1))
+                t_list.append(mdxentry(name, entry, record, pror, mdx_pk, -1, -1, -1))
                 del_list.append(deepcopy(del_item))
 
     for item in del_list:
