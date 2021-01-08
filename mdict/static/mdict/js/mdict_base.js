@@ -355,23 +355,30 @@ function init_common_config(){//这里后面改成从后台取数据
         `
         c_parent.append(s);
     }
-    $.ajax({
-            url:"/mdict/retrieveconfig",
-            contentType:'json',
-            type:'GET',
-            success:function(data){
-                var config=$.parseJSON(data);
-                $('#config-force-refresh').prop("checked",config['force_refresh']);
-                $('#config-link-new-label').prop("checked",config['link_new_label']);
-                $('#config-force-font').prop("checked",config['force_font']);
-                $('#config-card-show').prop("checked",config['card_show']);
-                $('#config-select-btn-enable').prop("checked",config['select_btn_enable']);
-            },
-            error:function(jqXHR,textStatus,errorThrown){
-                alert(jqXHR.responseText);
-		    },
-	    });
 
+    retrieveconfig(function(config){
+        $('#config-force-refresh').prop("checked",config['force_refresh']);
+        $('#config-link-new-label').prop("checked",config['link_new_label']);
+        $('#config-force-font').prop("checked",config['force_font']);
+        $('#config-card-show').prop("checked",config['card_show']);
+        $('#config-select-btn-enable').prop("checked",config['select_btn_enable']);
+    })
+
+}
+
+function retrieveconfig(func){
+    $.ajax({
+        url:"/mdict/retrieveconfig",
+        contentType:'json',
+        type:'GET',
+        success:function(data){
+            var config=$.parseJSON(data);
+            func(config);
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function init_other_config(){
@@ -439,8 +446,10 @@ function update_config(){
     var force_font=$('#config-force-font').prop("checked");
     var card_show=$('#config-card-show').prop("checked");
     var select_btn_enable=$('#config-select-btn-enable').prop("checked");
+    var group_name=$('#dic-group').val();
+    var default_group=$('#dic-group').find('option:contains('+group_name+')').attr('data-pk');
     var data={"force_refresh":force_refresh,"link_new_label":link_new_label,
-    "force_font":force_font,"card_show":card_show,"select_btn_enable":select_btn_enable};
+    "force_font":force_font,"card_show":card_show,"select_btn_enable":select_btn_enable,"default_group":default_group};
     $.ajax({
             url:"/mdict/saveconfig",
             contentType:'json',
@@ -478,13 +487,13 @@ function update_online_dic(){
 }
 
 function init_dic_group(){
-	get_dic_group();
-
 	$( "#dic-group" ).selectmenu({
 	change: function( event, data ) {
 		init_autocomplete();//每次切换分组后，都要重置一下autocomplete()
 		}
 	});
+
+	get_dic_group();
 }
 
 function get_dic_group(container){//载入词典列表
@@ -498,6 +507,11 @@ function get_dic_group(container){//载入词典列表
 			var ele='<option data-pk='+dic_group[i][0]+'>'+dic_group[i][1]+'</option>'
 			$('#dic-group').append($(ele));
 		}
+		retrieveconfig(function(config){
+            var group_id=config['default_group'];
+            var opt=$("#dic-group").find("option[data-pk="+group_id+"]");
+            $('#dic-group').val(opt.text()).selectmenu("refresh");
+        })
 		},
 		error:function(jqXHR,textStatus,errorThrown){
 			alert(jqXHR.responseText);

@@ -46,6 +46,7 @@ default_config = {
         'link_new_label': False,
         'force_font': False,  # 强制使用全宋体
         'card_show': False,  # 允许一次展开多个词典
+        'default_group': 0,
     }
 }
 
