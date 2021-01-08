@@ -35,7 +35,7 @@ class MdictDicSerializer(serializers.ModelSerializer):
 class MdictOnlineSerializer(serializers.ModelSerializer):
     class Meta:
         model = MdictOnline
-        fields = ('mdict_name', 'mdict_url', 'mdict_enable', 'mdict_isiframe')
+        fields = ('mdict_name', 'mdict_url', 'mdict_enable', 'mdict_priority', 'mdict_isiframe')
 
 
 class mdxentry():

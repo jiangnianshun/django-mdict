@@ -514,7 +514,7 @@ class MdictOnlineViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def filter_queryset(self, request):
-        queryset = self.queryset.order_by('pk')
+        queryset = self.queryset.order_by('mdict_priority')
         # query = self.request.query_params.get('query')
         return queryset
 

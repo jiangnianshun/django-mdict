@@ -7,6 +7,7 @@ class MdictOnline(models.Model):
     mdict_name = models.CharField('词典名', max_length=20)
     mdict_url = models.URLField('网址')
     mdict_enable = models.BooleanField('启用', default=False)
+    mdict_priority = models.PositiveIntegerField('词典排序', default=1)  # 优先级显示，validator设置范围
     mdict_isiframe = models.BooleanField('在iframe中打开', default=True)
 
     class Meta:
@@ -16,13 +17,18 @@ class MdictOnline(models.Model):
     def __str__(self):
         return self.mdict_name
 
+    def save(self, *args, **kwargs):
+        mdict_order(self, MdictOnline)
+
+        super(MdictOnline, self).save()
+
 
 class MdictDic(models.Model):
     mdict_name = models.CharField('词典名', max_length=100, unique=True)
     mdict_file = models.CharField('文件名', max_length=100, unique=True)
     mdict_enable = models.BooleanField('启用', default=True)
     mdict_priority = models.PositiveIntegerField('词典排序', default=1)  # 优先级显示，validator设置范围
-    mdict_group = models.ManyToManyField('MdictDicGroup', verbose_name='词典分组', blank=True)
+    # mdict_group = models.ManyToManyField('MdictDicGroup', verbose_name='词典分组', blank=True)
 
     class Meta:
         verbose_name = 'Mdict词典'
@@ -32,41 +38,46 @@ class MdictDic(models.Model):
         return self.mdict_name
 
     def save(self, *args, **kwargs):
-        if self.mdict_priority == 0:
-            self.mdict_priority = 1
-
-        mdict_dic = MdictDic.objects.all().order_by('mdict_priority')
-
-        mdict_dic_len = len(mdict_dic)
-
-        if self.mdict_priority > mdict_dic_len:
-            self.mdict_priority = mdict_dic_len
-
-        for i in range(mdict_dic_len):
-            if i + 1 != mdict_dic[i].mdict_priority:
-                mdict_dic.filter(pk=mdict_dic[i].pk).update(mdict_priority=i + 1)
-
-        mdict_dic = MdictDic.objects.all().order_by('mdict_priority')
-        w1 = mdict_dic.filter(pk=self.pk)
-        if len(w1) > 0:  # 新添加的词典还不存在
-            real_order = w1[0].mdict_priority
-
-            if self.mdict_priority > real_order:  # 向后移动，后面的都向前补一位
-                w2 = mdict_dic.filter(mdict_priority__gt=real_order, mdict_priority__lte=self.mdict_priority)
-                for w in w2:
-                    w2.filter(mdict_priority=w.mdict_priority).update(mdict_priority=w.mdict_priority - 1)
-
-            elif self.mdict_priority < real_order:
-                w2 = mdict_dic.filter(mdict_priority__lt=real_order, mdict_priority__gte=self.mdict_priority).order_by(
-                    '-mdict_priority')
-                for w in w2:
-                    w2.filter(mdict_priority=w.mdict_priority).update(mdict_priority=w.mdict_priority + 1)
+        mdict_order(self, MdictDic)
 
         super(MdictDic, self).save()
 
 
+def mdict_order(obj, mdl):
+    if obj.mdict_priority == 0:
+        obj.mdict_priority = 1
+
+    mdict_dic = mdl.objects.all().order_by('mdict_priority')
+
+    mdict_dic_len = len(mdict_dic)
+
+    if obj.mdict_priority > mdict_dic_len:
+        obj.mdict_priority = mdict_dic_len
+
+    for i in range(mdict_dic_len):
+        if i + 1 != mdict_dic[i].mdict_priority:
+            mdict_dic.filter(pk=mdict_dic[i].pk).update(mdict_priority=i + 1)
+
+    mdict_dic = mdl.objects.all().order_by('mdict_priority')
+    w1 = mdict_dic.filter(pk=obj.pk)
+    if len(w1) > 0:  # 新添加的词典还不存在
+        real_order = w1[0].mdict_priority
+
+        if obj.mdict_priority > real_order:  # 向后移动，后面的都向前补一位
+            w2 = mdict_dic.filter(mdict_priority__gt=real_order, mdict_priority__lte=obj.mdict_priority)
+            for w in w2:
+                w2.filter(mdict_priority=w.mdict_priority).update(mdict_priority=w.mdict_priority - 1)
+
+        elif obj.mdict_priority < real_order:
+            w2 = mdict_dic.filter(mdict_priority__lt=real_order, mdict_priority__gte=obj.mdict_priority).order_by(
+                '-mdict_priority')
+            for w in w2:
+                w2.filter(mdict_priority=w.mdict_priority).update(mdict_priority=w.mdict_priority + 1)
+
+
 class MdictDicGroup(models.Model):
-    dic_group_name = models.CharField('词典分组', max_length=100, unique=True)
+    dic_group_name = models.CharField('分组名', max_length=100, unique=True)
+    mdict_group = models.ManyToManyField('MdictDic', verbose_name='词典', blank=True)
 
     class Meta:
         verbose_name = '词典分组'

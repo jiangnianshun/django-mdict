@@ -404,7 +404,7 @@ function online_search(query,container){//有道在线
             var iframe = document.createElement('iframe');
             iframe.src=item.attr("data-url").replace('%WORD%',query);
             iframe.id="iframe-"+s_id;
-            iframe.height='600px';
+            iframe.height='1000px';
 
             var card_body_id="#card-body-"+s_id;
             var card_mdict_i=$(card_body_id);

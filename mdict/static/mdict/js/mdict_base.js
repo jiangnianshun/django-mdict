@@ -315,6 +315,7 @@ function init_online_dic_var(){
                 var o_name=online_dic[i]["mdict_name"];
                 var o_enable=online_dic[i]["mdict_enable"];
                 var o_url=online_dic[i]["mdict_url"];
+                var o_pror=online_dic[i]["mdict_priority"];
                 var o_isiframe=online_dic[i]['mdict_isiframe'];
                 var checked="";
                 if(o_enable){
@@ -323,7 +324,7 @@ function init_online_dic_var(){
                 online_ele=`
                 <div class="custom-control custom-checkbox" style="display:inline;">
                     <input type="checkbox" class="custom-control-input" id="${o_id}" ${checked} value="${o_name}" data-url="${o_url}" data-isiframe="${o_isiframe}">
-                    <label class="custom-control-label" for="${o_id}" style="display:inline;vertical-align:middle;">${o_name}</label>
+                    <label class="custom-control-label" for="${o_id}" style="display:inline;vertical-align:middle;"><span class='badge badge-pill badge-light'>${o_pror}</span>${o_name}</label>
                 </div><br />
                 `
 
@@ -477,14 +478,13 @@ function update_online_dic(){
 }
 
 function init_dic_group(){
-	var a=$('option');
 	get_dic_group();
+
 	$( "#dic-group" ).selectmenu({
 	change: function( event, data ) {
 		init_autocomplete();//每次切换分组后，都要重置一下autocomplete()
 		}
 	});
-
 }
 
 function get_dic_group(container){//载入词典列表
