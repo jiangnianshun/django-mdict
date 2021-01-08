@@ -7,7 +7,7 @@ var script=`
 <script src="/static/mdict/js/mdict_base.js"></script>
 <script src="/static/mdict/js/iframe_base.js"></script>
 <script src="/static/mdict/js/mdict.js"></script>
-<script src="/static/mdict/js/init_iframe.js"></script>
+<script src="/static/mdict/js/init_iframe.js" defer></script>
 `;
 
 var search_history=new Array();

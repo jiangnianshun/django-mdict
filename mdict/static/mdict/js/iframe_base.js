@@ -136,9 +136,7 @@ function ihyperlink(e){
 }
 
 function init_hyperlink(){
-	$("a").click(ihyperlink);
-	$("body").on("click", "a", ihyperlink);
-	//给动态增加的a添加click
+    init_hyperlink_click();
 
 	var inPageJump=$("#card-container",parent.document).attr("in-page-jump");
 	if(inPageJump!=""){
@@ -148,6 +146,17 @@ function init_hyperlink(){
 
 		in_page_jump(ob,inPageJump);
 	}
+}
+
+function init_hyperlink_click(){
+    $("a").click(ihyperlink);
+	$("body").on("click", "a", ihyperlink);
+	//给动态增加的a添加click
+
+    $("a").click(function(event) {
+      event.stopImmediatePropagation();
+    });
+    //LDOCE5++ V 2-15的js中有在线发音，导致在桌面chrome中重复发音，需要禁止a的点击事件。
 }
 
 var select_words='';
