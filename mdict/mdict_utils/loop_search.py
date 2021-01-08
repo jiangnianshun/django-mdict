@@ -1,5 +1,6 @@
 from .decorator import loop_mdict_list, inner_object
 from .search_object import SearchObject
+from mdict.models import MdictDicGroup
 
 
 @loop_mdict_list()
@@ -14,10 +15,11 @@ class loop_search_mdx_object(inner_object):
                 if dic.mdict_priority <= 15:  # 词典排序
                     entry_list = SearchObject(mdx, mdd_list, dic, self.query, g_id=g_id).search_mdx_entry()
             else:  # 查询某个词典分组下的词典
-                for pk, name in dic.mdict_group.values_list():
-                    if pk == self.group:
+                group_list = MdictDicGroup.objects.filter(pk=self.group)
+                if len(group_list) > 0:
+                    temp = group_list[0].mdict_group.filter(pk=dic.pk)
+                    if len(temp) > 0:
                         entry_list = SearchObject(mdx, mdd_list, dic, self.query, g_id=g_id).search_mdx_entry()
-                        break
             self.inner_list.extend(entry_list)
 
 
@@ -40,10 +42,11 @@ class loop_search_sug_object(inner_object):
                     if dic.mdict_priority <= 15:
                         self.inner_list.extend(SearchObject(mdx, mdd_list, dic, self.query).search_sug_entry(3))
                 else:  # 查询某个词典分组下的词典
-                    for pk, name in dic.mdict_group.values_list():
-                        if pk == self.group:
+                    group_list = MdictDicGroup.objects.filter(pk=self.group)
+                    if len(group_list) > 0:
+                        temp = group_list[0].mdict_group.filter(pk=dic.pk)
+                        if len(temp) > 0:
                             self.inner_list.extend(SearchObject(mdx, mdd_list, dic, self.query).search_sug_entry(3))
-                            break
 
 
 def loop_search_sug(target_pk, query, flag, group):

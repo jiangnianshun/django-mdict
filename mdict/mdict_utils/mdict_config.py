@@ -6,6 +6,8 @@ from base.base_func import is_number
 from mysite.settings import BASE_DIR
 
 cpu_num = psutil.cpu_count(False)
+
+
 # cpu的物理核心数
 
 
@@ -60,7 +62,7 @@ def get_config():
         return config
 
     if os.path.exists(user_config_path):
-        config.read(user_config_path)
+        config.read(user_config_path, encoding='utf-8')
     else:
         try:
             with open(user_config_path, 'w', encoding='utf-8') as f:

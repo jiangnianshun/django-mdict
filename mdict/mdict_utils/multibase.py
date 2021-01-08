@@ -6,6 +6,7 @@ from .init_utils import init_vars, indicator
 from .search_object import SearchObject
 
 from mdict.serializers import mdxentry
+from mdict.models import MdictDicGroup
 
 values_list = list(init_vars.mdict_odict.values())
 
@@ -100,13 +101,15 @@ def multi_search_mdx(n, required, group, is_mdx=True):
                 else:
                     r_list.extend(SearchObject(mdx, mdd_list, dic, required).search_sug_required(3))
             else:  # 查询某个词典分组下的词典
-                for pk, name in dic.mdict_group.values_list():
-                    if pk == group:
+                group_list = MdictDicGroup.objects.filter(pk=group)
+                if len(group_list) > 0:
+                    temp = group_list[0].mdict_group.filter(pk=dic.pk)
+                    if len(temp) > 0:
                         if is_mdx:
                             r_list.extend(SearchObject(mdx, mdd_list, dic, required, g_id=g_id).search_mdx_required())
                         else:
                             r_list.extend(SearchObject(mdx, mdd_list, dic, required).search_sug_required(3))
-                        break
+
     if is_mdx and group == 0:
         r_list = merge_record(r_list)
     return r_list
