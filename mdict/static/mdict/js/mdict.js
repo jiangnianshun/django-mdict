@@ -420,7 +420,6 @@ function online_search(query,container){//有道在线
                 var card=$(iframe).parents(".card");
                 iframe.onload=function(){
                     card.css('display','block');//未加载完是隐藏的，加载完后显示
-                    show_first_card();
 
                     //var script = document.getElementById(iframe.id).contentWindow.document.createElement('script');
                     //script.src='/static/mdict/iframe-resizer-master/js/iframeResizer.contentWindow.min.js';
@@ -432,6 +431,7 @@ function online_search(query,container){//有道在线
             window.open(url,"_blank")
         }
     });
+    show_first_card();
 
 }
 
