@@ -48,7 +48,11 @@
 
 ### 不支持
 
-只抽取了info list，不支持模糊查找和全文查找。
+1. 不支持模糊查找和全文查找。
+
+2. 不支持词头未排序的词典。
+
+3. 不支持mdxbuilder4.0制作的词典。
 
 ### admin操作
 
@@ -64,7 +68,7 @@
 
 * latex公式插入：
 <br />方法1.单击latex公式按钮(求和符号的按钮)插入公式；
-<br />方法2.手动插入，将公式用$或\\(\\)符号包裹。
+<br />方法2.手动输入，将公式用$包裹。
 
 * 自定义命令：
 <br />[link]要跳转的词条名[/link]
@@ -271,7 +275,7 @@ search_cache_num 查询缓存数目
 
 builtin_dic_enable 启用内置词典
 
-merge_entry_max_length 查询结果长度，同一词典查询结果长度都小于该长度时才会合并。
+merge_entry_max_length 默认值1000，同名词条合并，同一词典有多个查询结果时，长度小于1000的词条会被合并。如果完全不合并，设置为0。
 
 st_enable 启用繁简转化
 
@@ -426,6 +430,8 @@ windows下运行/django-mdict/mdict/readmdict/pyx/build.bat，linux下运行/dja
 4.1 如果在内置词典中添加了词条或者想保留mdict词典的排序，那么将旧项目的db.sqlite3和mdict_path.json复制到新项目下，然后手动运行build.bat或build.sh进行cython编译
 
 4.2 如果没有使用内置词典且不想保留mdict词典的排序，直接运行run_server.bat或run_server.sh。
+
+如果有js和css的修改，可能需要清理浏览器的缓存才会生效（不需要清cookie）。
 
 5. 403错误
 
