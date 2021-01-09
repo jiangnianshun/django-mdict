@@ -110,6 +110,6 @@ def multi_search_mdx(n, required, group, is_mdx=True):
                         else:
                             r_list.extend(SearchObject(mdx, mdd_list, dic, required).search_sug_required(3))
 
-    if is_mdx and group == 0:
+    if is_mdx:
         r_list = merge_record(r_list)
     return r_list
