@@ -1,4 +1,4 @@
-function create_new_url(entry){
+function create_new_url(entry,group){
     var url = window.location.href;
     var qn=url.indexOf('?query')
     if(qn>-1){
@@ -15,10 +15,7 @@ function create_new_url(entry){
         url=url+'?query='+entry;
     }
 
-    var group_name=$('#dic-group').val();
-    var default_group=$('#dic-group').find('option:contains('+group_name+')').attr('data-pk');
-
-    url=url+'&group='+default_group;
+    url=url+'&group='+group;
 
     return url;
 }
@@ -40,9 +37,14 @@ function get_url_param(name){//待处理
 
 function change_title_and_url(query){
     document.title=query;//修改标题
-    var url=create_new_url(query);
-    window.history.pushState({},query,url);
-    //修改url，但不刷新页面，第二个参数是在url历史中显示的名称。
+    var group_name=$('#dic-group').val();
+    var default_group=$('#dic-group').find('option:contains('+group_name+')').attr('data-pk');
+    var url=create_new_url(query,default_group);
+
+    var title=query+':'+default_group;
+    window.history.pushState({'query':query,'group':default_group},title,url);
+    //window.history.replaceState({'title':title},title,url);
+    //修改url，但不刷新页面，第一个参数可以传空数组，第二个参数可以传空字符串。
 }
 
 function show_first_card(){

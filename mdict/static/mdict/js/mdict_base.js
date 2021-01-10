@@ -234,8 +234,10 @@ function add_click_event(){
 			var container=$("#card-container");
 			query_key(container,query);
 		}
-
-		change_title_and_url(query);
+        if($('html').data('data-pushstate')){
+		    change_title_and_url(query);
+		}
+		$('html').data('data-pushstate',true)
 	})
 
 	$("#sound-speaker").click(function(){
@@ -523,6 +525,8 @@ function get_dic_group(container){//载入词典列表
 
 
 function init_common(){
+	$('html').data('data-pushstate',true);
+
 	init_modal_config();
 
 	init_autocomplete();
@@ -534,6 +538,23 @@ function init_common(){
 	init_btn_group();
 
 	init_dic_group();
+
+	$(window).bind('popstate', function(e){
+        //对pushstate的back和forward进行处理
+        var state=window.history.state;
+        if(state){
+            var query=state['query'];
+            var group=state['group']
+
+            var opt=$("#dic-group").find("option[data-pk="+group+"]");
+            $('#dic-group').val(opt.text()).selectmenu("refresh");
+
+            $('html').data('data-pushstate',false);
+
+            $("#query").val(query);
+            $("#mdictquery").trigger("click");
+        }
+    });
 }
 
 function first_query(){
