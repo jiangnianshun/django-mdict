@@ -356,7 +356,7 @@ function init_common_config(){//这里后面改成从后台取数据
         c_parent.append(s);
     }
 
-    retrieveconfig(function(config){
+    retrieveconfig(true,function(config){
         $('#config-force-refresh').prop("checked",config['force_refresh']);
         $('#config-link-new-label').prop("checked",config['link_new_label']);
         $('#config-force-font').prop("checked",config['force_font']);
@@ -366,11 +366,12 @@ function init_common_config(){//这里后面改成从后台取数据
 
 }
 
-function retrieveconfig(func){
+function retrieveconfig(async,func){
     $.ajax({
         url:"/mdict/retrieveconfig",
         contentType:'json',
         type:'GET',
+        async:async,
         success:function(data){
             var config=$.parseJSON(data);
             func(config);
@@ -501,13 +502,14 @@ function get_dic_group(container){//载入词典列表
 		url:"/mdict/dicgroup/",
 		contentType:'json',
 		type:'GET',
+		async:false,
 		success:function(data){
 		var dic_group=$.parseJSON(data);
 		for(var i=0;i<dic_group.length;i++){
 			var ele='<option data-pk='+dic_group[i][0]+'>'+dic_group[i][1]+'</option>'
 			$('#dic-group').append($(ele));
 		}
-		retrieveconfig(function(config){
+		retrieveconfig(false,function(config){
             var group_id=config['default_group'];
             var opt=$("#dic-group").find("option[data-pk="+group_id+"]");
             $('#dic-group').val(opt.text()).selectmenu("refresh");

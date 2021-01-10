@@ -14,6 +14,12 @@ function create_new_url(entry){
     }else{
         url=url+'?query='+entry;
     }
+
+    var group_name=$('#dic-group').val();
+    var default_group=$('#dic-group').find('option:contains('+group_name+')').attr('data-pk');
+
+    url=url+'&group='+default_group;
+
     return url;
 }
 
@@ -35,7 +41,8 @@ function get_url_param(name){//待处理
 function change_title_and_url(query){
     document.title=query;//修改标题
     var url=create_new_url(query);
-    window.history.pushState({},'',url);//修改url，但不刷新页面。
+    window.history.pushState({},query,url);
+    //修改url，但不刷新页面，第二个参数是在url历史中显示的名称。
 }
 
 function show_first_card(){
