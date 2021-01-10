@@ -152,9 +152,9 @@ function init_hyperlink_click(){
     $("a").click(ihyperlink);
 	$("body").on("click", "a", ihyperlink);
 	//给动态增加的a添加click
-
-    $("a").click(function(event) {
-      event.stopImmediatePropagation();
+    $("a[href$='.mp3'],a[href$='.spx'],a[href$='.wav'],a[href$='.ogg']").click(function(event) {
+        //LDOCE5++ V 2-15会删掉sound://，必须从结尾匹配。
+        event.stopImmediatePropagation();
     });
     //LDOCE5++ V 2-15的js中有在线发音，导致在桌面chrome中重复发音，需要禁止a的点击事件。
 }
