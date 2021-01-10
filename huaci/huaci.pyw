@@ -1,14 +1,13 @@
 import os
 import sys
 import win32event
-import win32api
 from winerror import ERROR_ALREADY_EXISTS
 
 sys.path.append(os.path.abspath(__file__))
 try:
-    from huaci.widgets import *
+    from huaci.utils.tkmain import *
 except Exception:
-    from widgets import *
+    from utils.tkmain import *
 
 if __name__ == "__main__":
     mutex = win32event.CreateMutex(None, False, 'django-mdict')
@@ -19,4 +18,4 @@ if __name__ == "__main__":
         # 只运行一个实例
         print('App instance already running')
     else:
-        TkWindow()
+        MainWindow()

@@ -1,47 +1,34 @@
 import os
 import sys
-import pystray
-from pystray import MenuItem as item
 import tkinter as tk
 from tkinter import ttk
-from PIL import Image
-from ctypes import windll
 
 GWL_EXSTYLE = -20
 WS_EX_APPWINDOW = 0x00040000
 # WS_EX_TOOLWINDOW=0x00000080
 
 sys.path.append(os.path.abspath(__file__))
+
 try:
-    from huaci.utils import *
+    from .tkbase import *
 except Exception:
-    from utils import *
+    from tkbase import *
 
 
-class TkWindow():
-    def __init__(self):
-        check_version()
+class ConfigWindow():
+    def __init__(self, huaci):
+        self.root = tk.Toplevel()
+        self.root.title('设置')
+        self.root.attributes('-topmost', True)
 
-        self.root = tk.Tk()
-        self.root.withdraw()
-        self.root.title('')
+        self.huaci = huaci
 
-        self.huaci = Huaci()
-
-        huaci_path = os.path.dirname(os.path.abspath(__file__))
-        ico_path = os.path.join(huaci_path, 'default.ico')
-        if os.path.exists(ico_path):
-            self.root.iconbitmap(ico_path)
+        set_icon(self.root)
 
         self.root.resizable(0, 0)  # 禁止缩放
         self.root.attributes("-toolwindow", True)  # toolwindow模式，只有关闭按钮，不显示图标，最小化和最大化按钮
-        self.root.protocol('WM_DELETE_WINDOW', self.withdraw_window)
 
         Widget1(self.root, self.huaci)
-
-        self.create_systray()
-
-        self.root.mainloop()
 
     def quit_window(self, icon, item):
         if self.huaci.p is not None:
@@ -49,42 +36,6 @@ class TkWindow():
             self.huaci.killtree(self.huaci.p.pid)
         icon.stop()
         self.root.destroy()
-
-    def set_appwindow(self):
-        # 用pythonw运行后，不显示cmd窗口，因此没有任务栏图标，这里加上任务栏图标
-        hwnd = windll.user32.GetParent(self.root.winfo_id())
-        style = windll.user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
-        # style = style & ~WS_EX_TOOLWINDOW
-        style = style | WS_EX_APPWINDOW
-        res = windll.user32.SetWindowLongW(hwnd, GWL_EXSTYLE, style)
-        # re-assert the new window style
-        myappid = 'djangomdict.version'  # arbitrary string
-        windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-        # 设置任务栏的图标为窗口的图标
-        self.root.wm_withdraw()
-        self.root.after(10, lambda: self.root.wm_deiconify())
-
-    def show_window(self, icon, item):
-        icon.stop()
-        self.root.after(0, self.root.deiconify)
-        self.root.after(10, self.set_appwindow)
-
-    def create_systray(self):
-        # 显示系统托盘
-        root_path = os.path.dirname(os.path.abspath(__file__))
-        ico_path = os.path.join(root_path, 'default.ico')
-        image = Image.open(ico_path)
-        # 这里如果用相对路径default.ico，那么用bat调用时报错。
-        menu = pystray.Menu(item('设置', self.show_window, default=True), item('退出', self.quit_window))
-        # 这里menu应该用pystray.Menu()，如果直接使用tuple，那么左键单击报错，其他功能正常。
-        # 鼠标左键点击托盘图标运行default=True的Menuitem，如果default均为False，则无动作。
-        icon = pystray.Icon("djangomdict", icon=image, title='django-mdict', menu=menu)
-        icon.run()
-
-    def withdraw_window(self):
-        # 关闭设置界面后
-        self.root.withdraw()
-        self.create_systray()
 
 
 # 划词设置窗口
@@ -120,7 +71,7 @@ class Widget1:
             tr.pack(fill='both', expand=True)
 
     def set_root_url(self):
-        self.huaci.root_url = self.url_dict[self.radio_v2.get()]
+        # self.huaci.root_url = self.url_dict[self.radio_v2.get()]
         print('root url:', self.huaci.root_url)
 
     def set_lang(self):
@@ -149,7 +100,3 @@ class Widget1:
             print('选择文字后按ctrl+c+c复制查词')
 
         self.huaci.run_huaci(hm)
-
-
-def check_version():
-    print('tesseract version:', pytesseract.get_tesseract_version())

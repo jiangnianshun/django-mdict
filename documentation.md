@@ -197,29 +197,38 @@ mdx同名的js、css和字体文件会自动加载。
 
 ### 划词
 
-划词工具使用tesseract和cefpython3，通过鼠标点击对屏幕截图并进行OCR查询，仅用于windows。
+划词工具仅适用于windows，使用cefpython3，python版本最高支持为3.7。
 
-1. 下载安装tesseract-OCR.exe，并将tesseract.exe的路径添加到系统的环境变量Path中。
-
-tesseract训练数据：[https://tesseract-ocr.github.io/tessdoc/Data-Files.html](https://tesseract-ocr.github.io/tessdoc/Data-Files.html)
-
-2. 安装依赖。
+1. 安装依赖。
 
 ```
 pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
-3. 双击运行huaci.bat，右下角系统托盘会出现django-mdict的图标。
+2. 将/django-mdict/huaci/huaci.pyw发送到桌面快捷方式。
 
-4. 默认是复制查词模式，选择文字后按ctrl+c+c进行查词。
+3. 双击运行，右下角出现托盘图标。
 
-要切换ocr查词，单击系统托盘图标，选择ocr切换到ocr查词模式，然后按ctrl+c+c开始划词，对鼠标两次点击之间的图像截图进行查词。
+4. 默认url是http://127.0.0.1:8000/mdict/?query=%WORD%，在huaci/utils/huaci.ini中修改url。
 
-默认url是http://127.0.0.1:8000/mdict/?query=%WORD%，在huaci/huaci.ini中修改url。
+如果查词结果是空白，查看ip和端口是否正确。
 
 也可以添加其他在线词典，将url中要查询的词的部分用%WORD%代替。
 
-5. 关闭划词工具，系统托盘图标上右键退出。
+5. 选择文字，按ctrl+c+c快捷键开始查询。
+
+6. 在托盘图标上右键退出，关闭划词工具。
+
+如果需要用OCR查词，需要安装tesseract。
+
+1. 下载安装tesseract-OCR.exe，并将tesseract.exe的路径添加到系统的环境变量Path中。
+
+2. 添加tesseract训练数据
+
+[https://tesseract-ocr.github.io/tessdoc/Data-Files.html](https://tesseract-ocr.github.io/tessdoc/Data-Files.html)
+
+3. 打开划词工具的设置界面，选择OCR查词。按ctrl+c+c，鼠标点击两次，框选OCR的范围。
+
 
 ### 修改词典库地址
 

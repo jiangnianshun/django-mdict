@@ -4,7 +4,6 @@ import json
 import threading
 import time
 import collections
-from multiprocessing import Process
 
 import psutil
 import pyscreenshot
@@ -15,11 +14,6 @@ from pynput.keyboard import Key, Listener as KeyboardListener
 from pynput.mouse import Button, Listener as MouseListener
 
 import pyperclip
-
-try:
-    from huaci.search import search
-except Exception:
-    from search import search
 
 # tesseract-OCR训练数据
 # https://tesseract-ocr.github.io/tessdoc/Data-Files.html
@@ -38,13 +32,14 @@ class Huaci:
         self.end_x = 0
         self.end_y = 0
 
+        # self.root =root
+        self.master = None
+
         self.t1 = 0
         self.t2 = 0
 
         self.url_dict = collections.OrderedDict()
         self.url_dict['django-mdict'] = 'http://127.0.0.1:8000/mdict/?query=%WORD%'
-
-        self.root_url = list(self.url_dict.values())[0]  # 这里换有序词典
 
         self.p = None
 
@@ -60,6 +55,9 @@ class Huaci:
             with open(self.ini_path, 'w', encoding='utf-8') as f:
                 json.dump(self.url_dict, f, indent=4, ensure_ascii=False)
             os.chmod(self.ini_path, 0o777)
+
+        self.root_url = list(self.url_dict.values())[0]  # 这里换有序词典
+        print('root url', self.root_url)
 
         self.lang_con = 'eng'
         self.huaci_mode = 'copy'
@@ -232,21 +230,20 @@ class Huaci:
         except psutil.NoSuchProcess as e:
             print(e)
 
+    def set_master(self, master):
+        self.master = master
+
     def search_mdict(self, query):
         self.start_flag = 0
         self.init_vars()
 
-        if self.p is not None:
-            print('closing process ', self.p.pid)
-            self.killtree(self.p.pid)
-            # p.terminate()
-            # p.join()
-            # p.close()
-
         url = self.root_url.replace('%WORD%', query)
-        self.p = Process(target=search, args=(url,))
-        self.p.daemon = True
-        self.p.start()
+
+        browser = self.master.get_browser()
+
+        self.master.main.show_main(url)
+        if browser is not None:
+            browser.LoadUrl(url)
 
     def run_huaci(self, hm):
         self.huaci_mode = hm
