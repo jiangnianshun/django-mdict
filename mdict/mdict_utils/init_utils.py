@@ -69,6 +69,7 @@ def get_mdict_list():
                 mdd_list = []
                 for f in files:
                     if f.lower().endswith('.mdd') and f.startswith(f_name):
+                        # 这里可能会引入其他词典的mdd
                         mdd_path = os.path.join(root, f)
                         mdd_list.append(MDD(mdd_path))
 
@@ -87,8 +88,9 @@ def get_mdict_list():
                     if f.startswith(f_name):
                         mime_type = guess_mime(f)
                         if mime_type is not None and mime_type.startswith('image'):
-                            icon = f.split('.')[-1]
-                            break
+                            if f.split('.')[0] == f_name:
+                                icon = f.split('.')[-1]
+                                break
                 mdx = MDX(mdx_path)
                 m_list.update({f_name: MdictItem(mdx, tuple(mdd_list), g_id, icon, mdx.get_len())})
 

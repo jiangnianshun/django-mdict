@@ -332,7 +332,7 @@ cdef class MDict(object):
 
         if self._strip_key==1:
             key = regp.sub('', key)
-        return key
+        return key.strip()
 
     
     
