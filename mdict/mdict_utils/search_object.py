@@ -31,7 +31,8 @@ regp = re.compile(reg, re.IGNORECASE)
 reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!data:)([^"\'\(\)]+)(["|\']*\))'
 reg2p = re.compile(reg2)
 
-excssreg = r'(href=")([\w\s-]+\.css")'
+# excssreg = r'(href=")([\w\s-]+\.css")'
+excssreg = r'(href=")([^"\'>]+css")'
 excssregp = re.compile(excssreg)
 
 dotreg = r'^\.+'
