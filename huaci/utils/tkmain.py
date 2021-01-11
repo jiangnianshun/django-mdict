@@ -46,7 +46,7 @@ sys.path.append(os.path.abspath(__file__))
 
 count = 0
 
-myappid = 'djangomdict.version'  # arbitrary string
+myappid = 'django-mdict'  # arbitrary string
 windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 
@@ -73,7 +73,8 @@ class MainWindow:
         pos = str(tkwidth) + "x" + str(tkheigtht) + "+" + str(xpos) + "+" + str(ypos)
         self.root.geometry(pos)
         # 宽度x高度+左端距离+上端距离
-        cef.Initialize()
+        settings = {'cache_path': 'huaci.cache'}
+        cef.Initialize(settings=settings)
         self.create_systray()
         self.root.withdraw()
         self.app.mainloop()
