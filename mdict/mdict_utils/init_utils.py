@@ -69,7 +69,10 @@ def get_mdict_list():
                 mdd_list = []
                 for f in files:
                     if f.lower().endswith('.mdd') and f.startswith(f_name):
-                        # 这里可能会引入其他词典的mdd
+                        f2_name = f[:f.rfind('.')]
+                        if f2_name != f_name:
+                            if f2_name + '.mdx' in files:
+                                continue
                         mdd_path = os.path.join(root, f)
                         mdd_list.append(MDD(mdd_path))
 
