@@ -941,7 +941,7 @@ class MDict(object):
             self.get_key_block_size_list(p1)
 
         if compressed_size == -1:
-            return '', -1, -1
+            return [], -1, -1, -1, -1
         p += compressed_size_b
         f.seek(p)
 
