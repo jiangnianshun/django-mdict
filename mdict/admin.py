@@ -14,9 +14,9 @@ def DisableAllDics(modeladmin, request, queryset):
 
 
 class MdictDicAdmin(admin.ModelAdmin):
-    list_display = ('id', 'mdict_file', 'mdict_name', 'mdict_enable', 'mdict_priority')
+    list_display = ('id', 'mdict_file', 'mdict_name', 'get_mdict_groups', 'mdict_enable', 'mdict_priority')
     # list_display不能是manytomanyfield
-    list_filter = ['mdict_priority']
+    list_filter = ['mdictdicgroup', 'mdict_enable']
     search_fields = ['mdict_name', 'mdict_file']
     list_display_links = ['mdict_file']
     actions = [EnableAllDics, DisableAllDics]
@@ -26,6 +26,11 @@ class MdictDicAdmin(admin.ModelAdmin):
     # filter_horizontal = ('mdict_group',)
     list_editable = ['mdict_priority', 'mdict_enable', 'mdict_name']
     # 默认的MangToMany的样式是在一个方框内按住ctrl键选择多个对象，filter_horizontal设置水平两个方框，将对象左右移动。
+
+    @staticmethod
+    def get_mdict_groups(obj):
+        return "|".join([g.dic_group_name for g in obj.mdictdicgroup_set.all()])
+
 
 
 class MyMdictItemAdmin(admin.StackedInline):
