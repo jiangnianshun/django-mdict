@@ -428,7 +428,8 @@ function online_search(query,container){//有道在线
             })(iframe)
         }else{
             var url=item.attr("data-url").replace('%WORD%',query);
-            window.open(url,"_blank")
+            //window.open(url,"_blank")
+            window.open(url, "Newwindow", "height=1000, width=1000, top=100, left=100, scrollbars=yes, resizable=yes");
         }
     });
     show_first_card();
