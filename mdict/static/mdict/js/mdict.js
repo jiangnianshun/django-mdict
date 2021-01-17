@@ -427,9 +427,24 @@ function online_search(query,container){//有道在线
                 }
             })(iframe)
         }else{
-            var url=item.attr("data-url").replace('%WORD%',query);
-            //window.open(url,"_blank")
-            window.open(url, "Newwindow", "height=1000, width=1000, top=100, left=100, scrollbars=yes, resizable=yes");
+            var s=`
+            <div class='card'>
+                <div class='card-header'>
+                    <a class='card-link collapsed' id='card-new-${s_id}' href='javascript:void(0);'>
+                    <span class='badge badge-pill badge-light'>${html_escape(mdx_entry,false)}</span>${html_escape(mdx_name,false)}</a>
+                </div>
+            </div>
+            `;
+
+            container.append(s);
+
+            var card_new_id="#card-new-"+s_id;
+
+            $(card_new_id).click(function(){
+                var url=item.attr("data-url").replace('%WORD%',query);
+                //window.open(url,"_blank")
+                window.open(url, "Newwindow", "height=1000, width=1000, top=100, left=100, scrollbars=yes, resizable=yes");
+            });
         }
     });
     show_first_card();
