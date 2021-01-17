@@ -1301,7 +1301,6 @@ class MDD(MDict):
         """
         result_list = self.look_up_key(key, f)
         if len(result_list) == 0:
-            f.close()
             return []
         r_list = []
         for r in result_list:
@@ -1384,7 +1383,6 @@ class MDX(MDict):
         result_list = self.look_up_key(key, f)
 
         if len(result_list) == 0:
-            f.close()
             return []
         r_list = []
         for r in result_list:

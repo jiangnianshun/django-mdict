@@ -1427,7 +1427,6 @@ cdef class MDD(MDict):
         """
         cdef list result_list = self.look_up_key(key, f)
         if len(result_list)==0:
-            f.close()
             return []
         cdef list r_list=[]
         cdef bytes record
@@ -1524,7 +1523,6 @@ cdef class MDX(MDict):
         key = key.strip()
         cdef list result_list = self.look_up_key(key, f)
         if len(result_list)==0:
-            f.close()
             return []
         cdef list r_list=[]
         cdef str record
