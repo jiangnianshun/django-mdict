@@ -787,7 +787,7 @@ class MDict(object):
             r_p2 = start
             my_list.append([key_list[start][1].decode(self._encoding, errors='replace'), start, start])
         elif back:
-            r_p2 = end - 1
+            r_p2 = end
             for i in range(p, end + 1):
                 s = key_list[i][0]
                 if i + 1 < length:
@@ -956,7 +956,47 @@ class MDict(object):
         r_s_p2 = p2
         r_e_p1 = p1
         r_e_p2 = p2
+
         my_list = f_list = b_list = []
+        myt_list = []
+
+        total_len = len(key_list)
+        total_num = num
+
+        if r_s_p2 > total_len-1:
+            return [], -1, -1, -1, -1
+
+        while total_num + 1 > total_len:
+            myt2_list, r_e_p2 = self.search_key_block_list(key_list, p2, len(key_list), True)
+            myt_list.extend(myt2_list)
+
+            num = num - len(key_list)
+
+            p = self._key_block_offset + num_bytes + self.key_block_info_size
+            if self._version >= 2.0:
+                p += 4
+            compressed_size, decompressed_size, compressed_size_b, decompressed_size_b, compressed_size_a, \
+            decompressed_size_a, compressed_size_b2, decompressed_size_b2 = \
+                self.get_key_block_size_list(r_e_p1 + 1)
+
+            if compressed_size == -1:
+                return myt_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2
+
+            p += compressed_size_b
+            f.seek(p)
+
+            key_block = self.get_key_block(f, compressed_size, decompressed_size, compressed_size_b,
+                                           decompressed_size_b)
+            if key_block == b'':
+                return myt_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2
+
+            key_list = self._split_key_block(key_block)
+
+            r_e_p1 += 1
+            r_e_p2 = 0
+
+            total_len += len(key_list)
+            p2 = 0
 
         if direction > 0:
             my_list, r_e_p2 = self.search_key_block_list(key_list, p2, num, True)
@@ -1029,8 +1069,9 @@ class MDict(object):
                                                                     True)
                         my_list[my_list_len - 1][2] = t_list[0][2]
                         my_list.extend(t_list)
+        myt_list.extend(my_list)
 
-        return my_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2
+        return myt_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2
 
     def look_up_key(self, key, f):
         if self._strip_key == 2:
