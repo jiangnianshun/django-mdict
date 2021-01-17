@@ -9,17 +9,17 @@ class loop_search_mdx_object(inner_object):
         if dic.mdict_enable:  # 词典启用的情况下才会查询
             entry_list = []
             if self.group == 0:  # 默认查询全部词典
-                entry_list = SearchObject(mdx, mdd_list, dic, self.query, g_id=g_id).search_mdx_entry()
+                entry_list = SearchObject(mdx, mdd_list, dic, self.query, g_id=g_id).search_entry()
 
             elif self.group == -1:
                 if dic.mdict_priority <= 15:  # 词典排序
-                    entry_list = SearchObject(mdx, mdd_list, dic, self.query, g_id=g_id).search_mdx_entry()
+                    entry_list = SearchObject(mdx, mdd_list, dic, self.query, g_id=g_id).search_entry()
             else:  # 查询某个词典分组下的词典
                 group_list = MdictDicGroup.objects.filter(pk=self.group)
                 if len(group_list) > 0:
                     temp = group_list[0].mdict_group.filter(pk=dic.pk)
                     if len(temp) > 0:
-                        entry_list = SearchObject(mdx, mdd_list, dic, self.query, g_id=g_id).search_mdx_entry()
+                        entry_list = SearchObject(mdx, mdd_list, dic, self.query, g_id=g_id).search_entry()
             self.inner_list.extend(entry_list)
 
 
@@ -32,21 +32,21 @@ class loop_search_sug_object(inner_object):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if self.target_pk != -1:  # 只查询一个词典
             if dic.pk == self.target_pk:
-                self.inner_list.extend(SearchObject(mdx, mdd_list, dic, self.query).search_sug_entry(self.flag))
+                self.inner_list.extend(SearchObject(mdx, mdd_list, dic, self.query).search_sug(self.flag))
                 self.break_tag = True
         else:  # 全部查询
             if dic.mdict_enable:
                 if self.group == 0:
-                    self.inner_list.extend(SearchObject(mdx, mdd_list, dic, self.query).search_sug_entry(3))
+                    self.inner_list.extend(SearchObject(mdx, mdd_list, dic, self.query).search_sug(3))
                 elif self.group == -1:
                     if dic.mdict_priority <= 15:
-                        self.inner_list.extend(SearchObject(mdx, mdd_list, dic, self.query).search_sug_entry(3))
+                        self.inner_list.extend(SearchObject(mdx, mdd_list, dic, self.query).search_sug(3))
                 else:  # 查询某个词典分组下的词典
                     group_list = MdictDicGroup.objects.filter(pk=self.group)
                     if len(group_list) > 0:
                         temp = group_list[0].mdict_group.filter(pk=dic.pk)
                         if len(temp) > 0:
-                            self.inner_list.extend(SearchObject(mdx, mdd_list, dic, self.query).search_sug_entry(3))
+                            self.inner_list.extend(SearchObject(mdx, mdd_list, dic, self.query).search_sug(3))
 
 
 def loop_search_sug(target_pk, query, flag, group):

@@ -296,7 +296,7 @@ class mdict_all_entrys_object(inner_object):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
             entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = SearchObject(mdx, mdd_list, dic, '') \
-                .search_list_entry(self.p1, self.p2, self.num, self.direction)
+                .search_key_list(self.p1, self.p2, self.num, self.direction)
             self.inner_dict = {'entry_list': entry_list, 's_p1': r_s_p1, 's_p2': r_s_p2, 'e_p1': r_e_p1, 'e_p2': r_e_p2}
             self.break_tag = True
 

@@ -97,18 +97,18 @@ def multi_search_mdx(n, required, group, is_mdx=True):
         if dic.mdict_enable:
             if group == 0:  # 默认查询全部词典
                 if is_mdx:
-                    r_list.extend(SearchObject(mdx, mdd_list, dic, required, g_id=g_id).search_mdx_required())
+                    r_list.extend(SearchObject(mdx, mdd_list, dic, required, g_id=g_id).search_entry_list())
                 else:
-                    r_list.extend(SearchObject(mdx, mdd_list, dic, required).search_sug_required(3))
+                    r_list.extend(SearchObject(mdx, mdd_list, dic, required).search_sug_list(3))
             else:  # 查询某个词典分组下的词典
                 group_list = MdictDicGroup.objects.filter(pk=group)
                 if len(group_list) > 0:
                     temp = group_list[0].mdict_group.filter(pk=dic.pk)
                     if len(temp) > 0:
                         if is_mdx:
-                            r_list.extend(SearchObject(mdx, mdd_list, dic, required, g_id=g_id).search_mdx_required())
+                            r_list.extend(SearchObject(mdx, mdd_list, dic, required, g_id=g_id).search_entry_list())
                         else:
-                            r_list.extend(SearchObject(mdx, mdd_list, dic, required).search_sug_required(3))
+                            r_list.extend(SearchObject(mdx, mdd_list, dic, required).search_sug_list(3))
 
     if is_mdx:
         r_list = merge_record(r_list)

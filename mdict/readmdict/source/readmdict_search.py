@@ -1359,8 +1359,9 @@ class MDX(MDict):
             # self._stylesheet为空时，清除r'`\d+`'
             return re.sub(r'`\d+`', '', txt)
 
-    def look_up_list(self, required):
-        f = open(self._fpath, 'rb')
+    def look_up_list(self, required, f=None):
+        if f is None:
+            f = open(self._fpath, 'rb')
         rr_dict = {}
         t_list = []
         for key in required:
@@ -1379,13 +1380,14 @@ class MDX(MDict):
         f.close()
         return rr_dict
 
-    def look_up(self, key):
+    def look_up(self, key, f=None):
         """
         search a entry in the MDX file
         @param key: the entry to search
         @return:
         """
-        f = open(self._fpath, 'rb')
+        if f is None:
+            f = open(self._fpath, 'rb')
         key = key.strip()
         result_list = self.look_up_key(key, f)
 

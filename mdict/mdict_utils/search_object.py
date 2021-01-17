@@ -66,6 +66,8 @@ class SearchObject:
         self.mdd_exist = False
         self.g_id = extra.get('g_id')
 
+        self.f_mdx = open(self.mdx.get_fpath(), 'rb')
+
         self.f_p1 = -1
         self.f_p2 = -1
         self.f_pk = -1
@@ -78,16 +80,23 @@ class SearchObject:
 
         self.m_path = get_m_path(self.mdx)
 
+    def close_all(self):
+        if not self.f_mdx.closed:
+            self.f_mdx.close()
+
     @search_exception()
-    def search_sug_required(self, num):
+    def search_sug_list(self, num):
+        self.close_all()
         return self.mdx.look_up_sug_list(self.required, num)
 
     @search_exception()
-    def search_sug_entry(self, num):
+    def search_sug(self, num):
+        self.close_all()
         return self.mdx.look_up_sug(self.query, num)
 
     @search_exception()
-    def search_list_entry(self, p1, p2, num, direction):
+    def search_key_list(self, p1, p2, num, direction):
+        self.close_all()
         return self.mdx.look_up_key_list(p1, p2, num, direction)
 
     def get_len(self):
@@ -95,10 +104,8 @@ class SearchObject:
 
     @search_exception()
     def search_key(self, entry):
-        f = open(self.mdx.get_fpath(), 'rb')
-        result_list = self.mdx.look_up_key(entry, f)
-        if not f.closed:
-            f.close()
+        result_list = self.mdx.look_up_key(entry, self.f_mdx)
+        self.close_all()
         return result_list
 
     @search_exception({})
@@ -110,27 +117,24 @@ class SearchObject:
         r_h = {}
         for k in sorted(header):
             r_h.update({k: header[k]})
+        self.close_all()
         return r_h
 
     @search_exception('')
     def search_record(self, s, e):
-        f = open(self.mdx.get_fpath(), 'rb')
-        record = self.mdx.look_up_record(s, e, f)
-        if not f.closed:
-            f.close()
+        record = self.mdx.look_up_record(s, e, self.f_mdx)
         self.cmp.append(s)
         record = self.substitute_record(record)
+        self.close_all()
         return record
 
     @search_exception('')
     def search_record_list(self, p_list):
-        f = open(self.mdx.get_fpath(), 'rb')
-        record_list = self.mdx.look_up_record_list(p_list, f)
-        if not f.closed:
-            f.close()
+        record_list = self.mdx.look_up_record_list(p_list, self.f_mdx)
         t_list = []
         for record in record_list:
             t_list.append(self.substitute_record(record))
+        self.close_all()
         return t_list
 
     def substitute_record(self, record):
@@ -216,9 +220,9 @@ class SearchObject:
         return record
 
     @search_exception()
-    def search_mdx_required(self):
+    def search_entry_list(self):
         # 查询一组词
-        result_dict = self.mdx.look_up_list(self.required)
+        result_dict = self.mdx.look_up_list(self.required, f=self.f_mdx)
         self.f_pk = self.dic.pk
         r_list = []
         t_list = []
@@ -236,12 +240,13 @@ class SearchObject:
                     r_list.append(
                         mdxentry(self.dic_name, rt[4], record, self.prior, self.dic.pk, self.f_pk, self.f_p1,
                                  self.f_p2))
+        self.close_all()
         return r_list
 
     @search_exception()
-    def search_mdx_entry(self):
+    def search_entry(self):
         # 查询一个词
-        result_list = self.mdx.look_up(self.query)
+        result_list = self.mdx.look_up(self.query, f=self.f_mdx)
         self.result_list = result_list
         # result_list 0:start,1:end,2:r_p1,3:r_p2:4:entry,5:record
 
@@ -259,7 +264,7 @@ class SearchObject:
 
         # 英文维基part3查back substitution结果是@@@LINK=Triangular matrixForward and back substitution，
         # LINK指向词条不存在时原样返回
-
+        self.close_all()
         return r_list
 
     @search_exception(('', ''))
@@ -293,7 +298,7 @@ class SearchObject:
                 temp = BytesIO()
                 im.save(temp, format="png")
                 res_content = temp.getvalue()
-
+        self.close_all()
         return res_content, mime_type
 
     def check_external_css(self, record):

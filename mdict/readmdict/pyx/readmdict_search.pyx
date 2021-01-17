@@ -1496,8 +1496,9 @@ cdef class MDX(MDict):
             return re.sub(r'`\d+`','',txt)
 
 
-    cpdef dict look_up_list(self, list required):
-        f = open(self._fpath, 'rb')
+    cpdef dict look_up_list(self, list required, f=None):
+        if f is None:
+            f = open(self._fpath, 'rb')
         cdef dict rr_dict = {}
         cdef list r_list
         cdef list t_list = []
@@ -1519,13 +1520,14 @@ cdef class MDX(MDict):
         return rr_dict
     
     
-    cpdef list look_up(self, str key):
+    cpdef list look_up(self, str key, f=None):
         """
         search a entry in the MDX file
         @param key: the entry to search
         @return:
         """
-        f = open(self._fpath, 'rb')
+        if f is None:
+            f = open(self._fpath, 'rb')
         key = key.strip()
         cdef list result_list = self.look_up_key(key, f)
         if len(result_list)==0:
