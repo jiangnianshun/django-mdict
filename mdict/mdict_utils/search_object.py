@@ -131,16 +131,22 @@ class SearchObject:
         return r_h
 
     @search_exception('')
-    def search_record(self, s, e):
+    def search_record(self, s, e, raw=False):
         record = self.mdx.look_up_record(s, e, self.f_mdx)
+        if raw:
+            self.close_all()
+            return record
         self.cmp.append(s)
         record = self.substitute_record(record)
         self.close_all()
         return record
 
     @search_exception('')
-    def search_record_list(self, p_list):
+    def search_record_list(self, p_list, raw=False):
         record_list = self.mdx.look_up_record_list(p_list, self.f_mdx)
+        if raw:
+            self.close_all()
+            return record_list
         t_list = []
         for record in record_list:
             t_list.append(self.substitute_record(record))
