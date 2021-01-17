@@ -689,6 +689,17 @@ function set_mdict_enable(obj,pk){
     });
 }
 
+function set_all_mdict_enable(obj){
+    $("#modal-container-mdict .modal-body .card-header input").each(function(){
+        var t_check = $(this).prop("checked");
+        var o_check = $(obj).prop("checked");
+        if(t_check!=o_check){
+            $(this).prop("checked", $(obj).prop("checked"));
+            $(this).change();
+        }
+    })
+}
+
 function get_mdict_list(container){//载入词典列表
 	$.ajax({
 		url:"/mdict/mdictlist/",
