@@ -67,6 +67,10 @@ class SearchObject:
         self.g_id = extra.get('g_id')
 
         self.f_mdx = open(self.mdx.get_fpath(), 'rb')
+        self.f_mdd_list = []
+        for m in self.mdd:
+            f = open(m.get_fpath(), 'rb')
+            self.f_mdd_list.append(f)
 
         self.f_p1 = -1
         self.f_p2 = -1
@@ -83,21 +87,27 @@ class SearchObject:
     def close_all(self):
         if not self.f_mdx.closed:
             self.f_mdx.close()
+        for f in self.f_mdd_list:
+            if not f.closed:
+                f.close()
 
     @search_exception()
     def search_sug_list(self, num):
+        sug = self.mdx.look_up_sug_list(self.required, num, self.f_mdx)
         self.close_all()
-        return self.mdx.look_up_sug_list(self.required, num)
+        return sug
 
     @search_exception()
     def search_sug(self, num):
+        sug = self.mdx.look_up_sug(self.query, num, self.f_mdx)
         self.close_all()
-        return self.mdx.look_up_sug(self.query, num)
+        return sug
 
     @search_exception()
     def search_key_list(self, p1, p2, num, direction):
+        entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = self.mdx.look_up_key_list(p1, p2, num, direction, self.f_mdx)
         self.close_all()
-        return self.mdx.look_up_key_list(p1, p2, num, direction)
+        return entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2
 
     def get_len(self):
         return self.mdx.get_len()
@@ -222,7 +232,7 @@ class SearchObject:
     @search_exception()
     def search_entry_list(self):
         # 查询一组词
-        result_dict = self.mdx.look_up_list(self.required, f=self.f_mdx)
+        result_dict = self.mdx.look_up_list(self.required, self.f_mdx)
         self.f_pk = self.dic.pk
         r_list = []
         t_list = []
@@ -246,7 +256,7 @@ class SearchObject:
     @search_exception()
     def search_entry(self):
         # 查询一个词
-        result_list = self.mdx.look_up(self.query, f=self.f_mdx)
+        result_list = self.mdx.look_up(self.query, self.f_mdx)
         self.result_list = result_list
         # result_list 0:start,1:end,2:r_p1,3:r_p2:4:entry,5:record
 
@@ -271,8 +281,10 @@ class SearchObject:
     def search_mdd(self):
         res_content = ''
         mime_type = ''
-        for mdd in self.mdd:
-            r_list = mdd.look_up(self.query)
+        for i in range(len(self.mdd)):
+            mdd = self.mdd[i]
+            f = self.f_mdd_list[i]
+            r_list = mdd.look_up(self.query, f)
             if len(r_list) > 0:
                 res_content = r_list[0][5]
                 f_name = r_list[0][4]
@@ -333,7 +345,7 @@ class SearchObject:
         if self.result_list and self.mdx.process_str_keys(res_name) == self.mdx.process_str_keys(self.query):
             result_list = self.result_list
         else:
-            result_list = self.mdx.look_up(res_name)
+            result_list = self.mdx.look_up(res_name, self.f_mdx)
 
         record = ''
 
@@ -369,7 +381,9 @@ class SearchObject:
             mdx = item.mdx
             g_id = item.g_id
             if self.g_id == g_id and mdx.get_fpath() != self.mdx.get_fpath():
-                result_list = mdx.look_up(res_name)
+                f = open(mdx.get_fpath(), 'rb')
+                result_list = mdx.look_up(res_name, f)
+                f.close()
                 temp_cmp = []
                 flag = False
                 for i in range(len(result_list)):
@@ -402,9 +416,10 @@ class SearchObject:
 
         start, end = -1, -1
 
-        for m in self.mdd:
-            f = open(m.get_fpath(), 'rb')
-            result_list = m.look_up_key(res_name, f)
+        for i in range(len(self.mdd)):
+            mdd = self.mdd[i]
+            f = self.f_mdd_list[i]
+            result_list = mdd.look_up_key(res_name, f)
 
             if len(result_list) > 0:
                 start = result_list[0][0]
@@ -436,9 +451,10 @@ class SearchObject:
         res_name = replace_res_name(matched.group(8))
 
         start, end = -1, -1
-        for m in self.mdd:
-            f = open(m.get_fpath(), 'rb')
-            result_list = m.look_up_key(res_name, f)
+        for i in range(len(self.mdd)):
+            mdd = self.mdd[i]
+            f = self.f_mdd_list[i]
+            result_list = mdd.look_up_key(res_name, f)
             if len(result_list) > 0:
                 start = result_list[0][0]
                 end = result_list[0][1]

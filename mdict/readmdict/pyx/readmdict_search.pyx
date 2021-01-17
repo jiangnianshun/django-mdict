@@ -1419,13 +1419,12 @@ cdef class MDD(MDict):
 
     
     
-    cpdef list look_up(self, str key):
+    cpdef list look_up(self, str key, f):
         """
         get the resource from the MDD file
         @param key: resouce name
         @return:
         """
-        f = open(self._fpath, 'rb')
         cdef list result_list = self.look_up_key(key, f)
         if len(result_list)==0:
             f.close()
@@ -1435,7 +1434,6 @@ cdef class MDD(MDict):
         for r in result_list:
             record = self.look_up_record(r[0], r[1], f)
             r_list.append((r[0],r[1],r[2],r[3],r[4],record))
-        f.close()
         return r_list
 
     
@@ -1496,9 +1494,7 @@ cdef class MDX(MDict):
             return re.sub(r'`\d+`','',txt)
 
 
-    cpdef dict look_up_list(self, list required, f=None):
-        if f is None:
-            f = open(self._fpath, 'rb')
+    cpdef dict look_up_list(self, list required, f):
         cdef dict rr_dict = {}
         cdef list r_list
         cdef list t_list = []
@@ -1516,18 +1512,15 @@ cdef class MDX(MDict):
                     record = self.look_up_record(r[0], r[1], f)
                     r_list.append((r[0],r[1],r[2],r[3],r[4],record))
             rr_dict.update({key: r_list})
-        f.close()
         return rr_dict
     
     
-    cpdef list look_up(self, str key, f=None):
+    cpdef list look_up(self, str key, f):
         """
         search a entry in the MDX file
         @param key: the entry to search
         @return:
         """
-        if f is None:
-            f = open(self._fpath, 'rb')
         key = key.strip()
         cdef list result_list = self.look_up_key(key, f)
         if len(result_list)==0:
@@ -1538,7 +1531,6 @@ cdef class MDX(MDict):
         for r in result_list:
             record = self.look_up_record(r[0], r[1], f)
             r_list.append((r[0],r[1],r[2],r[3],r[4],record))
-        f.close()
         return r_list
 
     
@@ -1572,14 +1564,13 @@ cdef class MDX(MDict):
         return record_list
 
 
-    cpdef list look_up_sug_list(self, list required, int num):
+    cpdef list look_up_sug_list(self, list required, int num, f):
         """
         search the suggestion of key
         @param key: entry to search
         @param num: the number of suggestion to get
         @return:
         """
-        f = open(self._fpath, 'rb')
         cdef list extra
         cdef list sug=[]
         for key in required:
@@ -1591,21 +1582,17 @@ cdef class MDX(MDict):
                 if e != '' and e not in sug:
                     sug.append(e)
 
-        f.close()
         return sug
     
     
-    cpdef list look_up_sug(self, str key, int num):
+    cpdef list look_up_sug(self, str key, int num, f):
         """
         search the suggestion of key
         @param key: entry to search
         @param num: the number of suggestion to get
         @return:
         """
-        #if not type(key) == str:
-            #return []
 
-        f = open(self._fpath, 'rb')
         self._sug_flag = -1
         cdef list extra = self._decode_key_block_sug(key, f, num)
         cdef list sug = []
@@ -1614,12 +1601,11 @@ cdef class MDX(MDict):
             if e != '':
                 sug.append(e)
 
-        f.close()
         return sug
 
     
     
-    cpdef tuple look_up_key_list(self, int p1, int p2, int num, bint direction):
+    cpdef tuple look_up_key_list(self, int p1, int p2, int num, bint direction, f):
         """
         to get a continuous list of entry in the dictionary
         @param p1: position of entry in the key_block_info_list
@@ -1629,7 +1615,6 @@ cdef class MDX(MDict):
                 direction=0 means getting half front and half back.
         @return:
         """
-        f = open(self._fpath, 'rb')
         self._sug_flag = -1
         cdef list entry_list
         cdef int r_s_p1
@@ -1637,5 +1622,4 @@ cdef class MDX(MDict):
         cdef int r_e_p1
         cdef int r_e_p2
         entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = self._decode_key_block_list(f, p1, p2, num, direction)
-        f.close()
         return entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2

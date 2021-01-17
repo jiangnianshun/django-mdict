@@ -1293,13 +1293,12 @@ class MDD(MDict):
     def __init__(self, fpath, passcode=None):
         MDict.__init__(self, fpath, encoding='UTF-16', passcode=passcode)
 
-    def look_up(self, key):
+    def look_up(self, key, f):
         """
         get the resource from the MDD file
         @param key: resouce name
         @return:
         """
-        f = open(self._fpath, 'rb')
         result_list = self.look_up_key(key, f)
         if len(result_list) == 0:
             f.close()
@@ -1308,7 +1307,6 @@ class MDD(MDict):
         for r in result_list:
             record = self.look_up_record(r[0], r[1], f)
             r_list.append((r[0], r[1], r[2], r[3], r[4], record))
-        f.close()
         return r_list
 
     def look_up_record(self, start, end, f):
@@ -1359,9 +1357,7 @@ class MDX(MDict):
             # self._stylesheet为空时，清除r'`\d+`'
             return re.sub(r'`\d+`', '', txt)
 
-    def look_up_list(self, required, f=None):
-        if f is None:
-            f = open(self._fpath, 'rb')
+    def look_up_list(self, required, f):
         rr_dict = {}
         t_list = []
         for key in required:
@@ -1376,18 +1372,14 @@ class MDX(MDict):
                     record = self.look_up_record(r[0], r[1], f)
                     r_list.append((r[0], r[1], r[2], r[3], r[4], record))
             rr_dict.update({key: r_list})
-
-        f.close()
         return rr_dict
 
-    def look_up(self, key, f=None):
+    def look_up(self, key, f):
         """
         search a entry in the MDX file
         @param key: the entry to search
         @return:
         """
-        if f is None:
-            f = open(self._fpath, 'rb')
         key = key.strip()
         result_list = self.look_up_key(key, f)
 
@@ -1399,7 +1391,6 @@ class MDX(MDict):
             record = self.look_up_record(r[0], r[1], f)
             r_list.append((r[0], r[1], r[2], r[3], r[4], record))
 
-        f.close()
         return r_list
 
     def look_up_record(self, start, end, f):
@@ -1431,14 +1422,14 @@ class MDX(MDict):
 
         return record_list
 
-    def look_up_sug_list(self, required, num):
+    def look_up_sug_list(self, required, num, f):
         """
         search the suggestion of key
         @param key: entry to search
         @param num: the number of suggestion to get
         @return:
         """
-        f = open(self._fpath, 'rb')
+
         sug = []
         for key in required:
 
@@ -1449,10 +1440,9 @@ class MDX(MDict):
                 if e != '' and e not in sug:
                     sug.append(e)
 
-        f.close()
         return sug
 
-    def look_up_sug(self, key, num):
+    def look_up_sug(self, key, num, f):
         """
         search the suggestion of key
         @param key: entry to search
@@ -1460,7 +1450,6 @@ class MDX(MDict):
         @return:
         """
 
-        f = open(self._fpath, 'rb')
         self._sug_flag = -1
         extra = self._decode_key_block_sug(key, f, num)
         sug = []
@@ -1469,10 +1458,9 @@ class MDX(MDict):
             if e != '':
                 sug.append(e)
 
-        f.close()
         return sug
 
-    def look_up_key_list(self, p1, p2, num, direction):
+    def look_up_key_list(self, p1, p2, num, direction, f):
         """
         to get a continuous list of entry in the dictionary
         @param p1: position of entry in the key_block_info_list
@@ -1482,8 +1470,6 @@ class MDX(MDict):
                 direction=0 means getting half front and half back.
         @return:
         """
-        f = open(self._fpath, 'rb')
         self._sug_flag = -1
         entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = self._decode_key_block_list(f, p1, p2, num, direction)
-        f.close()
         return entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2

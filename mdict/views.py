@@ -258,7 +258,8 @@ def search_audio(request):
     for tp in audio_type_list:
         res_name = '\\' + res_name + tp
         for mdd in sound_list:
-            rr_list = mdd.look_up(res_name)
+            f = open(mdd.get_fpath(), 'rb')
+            rr_list = mdd.look_up(res_name, f)
             if len(rr_list) > 0:
                 res_content = rr_list[0][5]
                 if mime_type is None:
