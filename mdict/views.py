@@ -445,8 +445,9 @@ def get_external_file(request, *args):
 
 
 def set_mdict_enable(request):  # 将这里改成在viewsets里处理
-    id = json.loads(request.GET.get('mdict_pk', -1))
+    id = json.loads(request.GET.get('mdict_pk', "-1"))
     enable = json.loads(request.GET.get('mdict_enable', "false"))
+    dic_list = request.GET.getlist('dic_list', [])
 
     if id > -1:
         dic = MdictDic.objects.filter(pk=id)
@@ -455,7 +456,17 @@ def set_mdict_enable(request):  # 将这里改成在viewsets里处理
         else:
             return HttpResponse("failed")
     else:
-        return HttpResponse("failed")
+        if len(dic_list) > 0:
+            update_list = []
+
+            for pk in dic_list:
+                qset = MdictDic.objects.filter(pk=pk)
+                if len(qset)>0:
+                    qset[0].mdict_enable = enable
+                    update_list.extend(qset)
+            MdictDic.objects.bulk_update(update_list, ['mdict_enable'])
+        else:
+            return HttpResponse("failed")
     return HttpResponse("success")
 
 

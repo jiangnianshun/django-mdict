@@ -673,8 +673,8 @@ function query_scroll(p1,p2,num,direction){
 	});
 }
 
-function set_mdict_enable(obj,pk){
-    var data={"mdict_pk":pk,"mdict_enable":$(obj).prop("checked")};
+function set_mdict_enable(obj){
+    var data={"mdict_pk":$(obj).attr("data-pk"),"mdict_enable":$(obj).prop("checked")};
     $.ajax({
 		url:"/mdict/mdictenable/",
 		contentType:'json',
@@ -690,14 +690,34 @@ function set_mdict_enable(obj,pk){
 }
 
 function set_all_mdict_enable(obj){
+    var dic_list=new Array();
+    var o_check = $(obj).prop("checked");
+
     $("#modal-container-mdict .modal-body .card-header input").each(function(){
         var t_check = $(this).prop("checked");
-        var o_check = $(obj).prop("checked");
         if(t_check!=o_check){
             $(this).prop("checked", $(obj).prop("checked"));
-            $(this).change();
+            dic_list.push($(this).attr("data-pk"));
+            //$(this).change();
         }
+
     })
+
+    data={'dic_list':dic_list,"mdict_enable":o_check};
+
+    $.ajax({
+		url:"/mdict/mdictenable/",
+		contentType:'json',
+		type:'GET',
+		traditional: true,
+		data:data,
+		success:function(data){
+            console.log(data);
+		},
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function get_mdict_list(container){//载入词典列表
@@ -721,7 +741,7 @@ function get_mdict_list(container){//载入词典列表
 
 				var checkbox_html=`
                             <div class="custom-control custom-checkbox" style="display:inline;">
-                                <input type="checkbox" class="custom-control-input" id="customControlInline${i}" ${checked} onchange="set_mdict_enable(this,${dic_pk})">
+                                <input type="checkbox" class="custom-control-input" id="customControlInline${i}" ${checked} data-pk=${dic_pk} onchange="set_mdict_enable(this)">
                                 <label class="custom-control-label" for="customControlInline${i}" style="display:inline;vertical-align:middle;"></label>
                             </div>
                             `
