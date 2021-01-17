@@ -963,7 +963,7 @@ class MDict(object):
         total_len = len(key_list)
         total_num = num
 
-        if r_s_p2 > total_len-1:
+        if r_s_p2 > total_len - 1:
             return [], -1, -1, -1, -1
 
         while total_num + 1 > total_len:
@@ -1359,7 +1359,7 @@ class MDX(MDict):
             # self._stylesheet为空时，清除r'`\d+`'
             return re.sub(r'`\d+`', '', txt)
 
-    def look_up_required(self, required):
+    def look_up_list(self, required):
         f = open(self._fpath, 'rb')
         rr_dict = {}
         t_list = []
@@ -1422,7 +1422,14 @@ class MDX(MDict):
 
         return record
 
-    def look_up_sug_required(self, required, num):
+    def look_up_record_list(self, p_list, f):
+        record_list = []
+        for s, e in p_list:
+            record_list.append(self.look_up_record(s, e, f))
+
+        return record_list
+
+    def look_up_sug_list(self, required, num):
         """
         search the suggestion of key
         @param key: entry to search
@@ -1463,7 +1470,7 @@ class MDX(MDict):
         f.close()
         return sug
 
-    def look_up_list(self, p1, p2, num, direction):
+    def look_up_key_list(self, p1, p2, num, direction):
         """
         to get a continuous list of entry in the dictionary
         @param p1: position of entry in the key_block_info_list

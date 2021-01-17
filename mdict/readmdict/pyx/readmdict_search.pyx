@@ -1496,7 +1496,7 @@ cdef class MDX(MDict):
             return re.sub(r'`\d+`','',txt)
 
 
-    cpdef dict look_up_required(self, list required):
+    cpdef dict look_up_list(self, list required):
         f = open(self._fpath, 'rb')
         cdef dict rr_dict = {}
         cdef list r_list
@@ -1562,7 +1562,15 @@ cdef class MDX(MDict):
         return record
 
 
-    cpdef list look_up_sug_required(self, list required, int num):
+    cpdef list look_up_record_list(self, p_list, f):
+        cdef list record_list = []
+        for s, e in p_list:
+            record_list.append(self.look_up_record(s, e, f))
+
+        return record_list
+
+
+    cpdef list look_up_sug_list(self, list required, int num):
         """
         search the suggestion of key
         @param key: entry to search
@@ -1609,7 +1617,7 @@ cdef class MDX(MDict):
 
     
     
-    cpdef tuple look_up_list(self, int p1, int p2, int num, bint direction):
+    cpdef tuple look_up_key_list(self, int p1, int p2, int num, bint direction):
         """
         to get a continuous list of entry in the dictionary
         @param p1: position of entry in the key_block_info_list

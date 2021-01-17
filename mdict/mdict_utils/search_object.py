@@ -80,7 +80,7 @@ class SearchObject:
 
     @search_exception()
     def search_sug_required(self, num):
-        return self.mdx.look_up_sug_required(self.required, num)
+        return self.mdx.look_up_sug_list(self.required, num)
 
     @search_exception()
     def search_sug_entry(self, num):
@@ -88,7 +88,7 @@ class SearchObject:
 
     @search_exception()
     def search_list_entry(self, p1, p2, num, direction):
-        return self.mdx.look_up_list(p1, p2, num, direction)
+        return self.mdx.look_up_key_list(p1, p2, num, direction)
 
     def get_len(self):
         return self.mdx.get_len()
@@ -121,6 +121,17 @@ class SearchObject:
         self.cmp.append(s)
         record = self.substitute_record(record)
         return record
+
+    @search_exception('')
+    def search_record_list(self, p_list):
+        f = open(self.mdx.get_fpath(), 'rb')
+        record_list = self.mdx.look_up_record_list(p_list, f)
+        if not f.closed:
+            f.close()
+        t_list = []
+        for record in record_list:
+            t_list.append(self.substitute_record(record))
+        return t_list
 
     def substitute_record(self, record):
         if record == '':
@@ -207,7 +218,7 @@ class SearchObject:
     @search_exception()
     def search_mdx_required(self):
         # 查询一组词
-        result_dict = self.mdx.look_up_required(self.required)
+        result_dict = self.mdx.look_up_list(self.required)
         self.f_pk = self.dic.pk
         r_list = []
         t_list = []
