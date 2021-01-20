@@ -68,9 +68,10 @@ class SearchObject:
 
         self.f_mdx = open(self.mdx.get_fpath(), 'rb')
         self.f_mdd_list = []
-        for m in self.mdd:
-            f = open(m.get_fpath(), 'rb')
-            self.f_mdd_list.append(f)
+        if self.mdd is not None:
+            for m in self.mdd:
+                f = open(m.get_fpath(), 'rb')
+                self.f_mdd_list.append(f)
 
         self.f_p1 = -1
         self.f_p2 = -1
@@ -79,7 +80,7 @@ class SearchObject:
         self.cmp = []
         self.result_list = []
 
-        if len(self.mdd) > 0:
+        if self.mdd is not None and len(self.mdd) > 0:
             self.mdd_exist = True
 
         self.m_path = get_m_path(self.mdx)

@@ -1,0 +1,3 @@
+psutil
+elasticsearch
+elasticsearch_dsl
