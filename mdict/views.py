@@ -7,9 +7,13 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from rest_framework import viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
+from elasticsearch_dsl.query import MultiMatch
 
 from base.base_func import print_log_info, is_en_func, strQ2B, request_body_serialze, guess_mime
 from base.base_func3 import t2s, s2t
@@ -22,15 +26,11 @@ from mdict.mdict_utils.mdict_config import *
 from mdict.mdict_utils.search_object import SearchObject
 from mdict.mdict_utils.search_utils import search, clear_duplication, search_bultin_dic_sug, search_mdx_sug, \
     search_revise
-from base.sys_utils import check_system
+from mdict.serializers import mdxentry
+
 from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
 from .mdict_utils.mdict_func import mdict_root_path, is_local, get_m_path
-
-if check_system() == 0:
-    from .mdict_utils.multiprocess_search import loop_create_model
-elif check_system() == 1:
-    from .mdict_utils.multithread_search import loop_create_thread_model
 
 from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
 
@@ -38,6 +38,14 @@ init_database()
 
 reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
 regp = re.compile(reg)
+
+client = Elasticsearch()
+
+meta_list = {}
+
+for index in client.indices.get('mdict-*'):
+    raw_data = client.indices.get_mapping(index=index)[index]['mappings']['_meta']
+    meta_list.update({index: raw_data})
 
 
 class MdictEntryViewSet(viewsets.ViewSet):
@@ -85,6 +93,83 @@ class MdictEntryViewSet(viewsets.ViewSet):
             record_list.sort(key=lambda k: k.mdx_pror)
 
         return record_list
+
+
+@api_view(['GET', 'POST', ])
+@permission_classes([])
+@authentication_classes([])
+def es_search(request):
+    query = request.GET.get('query', '')
+    force_refresh = json.loads(request.GET.get('force_refresh', False))
+
+    group = int(request.GET.get('dic_group', 0))
+    page = int(request.GET.get('page', 1))
+
+    result = get_es_results(query, -1)
+    serializer = MdictEntrySerializer(result, many=True)
+    p = MdictPage(query, group, serializer.data)
+    key_paginator.put(p)
+    k_page = key_paginator.get(query, group)
+    ret = k_page.get_ret(page)
+
+    return Response(ret)
+
+
+def get_es_results(query, group):
+    q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase')
+    s = Search(index='mdict-*').using(client).query(q)
+    # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
+    s = s.highlight('content', fragment_size=150)
+    s = s.highlight_options(order='score', pre_tags='<b style="background-color:yellow;color:red;"><font size="+1">',
+                            post_tags='</font></b>', encoder='default')
+    # html encoder会将html标签转换为实体
+    response = s.execute()
+
+    result = []
+
+    for hit in response:
+        meta = hit.meta
+
+        index_name = meta.index
+
+        highlight_content_text = ''
+
+        if 'highlight' in meta:
+            highlight = meta.highlight
+
+            if 'content' in highlight:
+                highlight_content = meta.highlight.content
+                for hl in highlight_content:
+
+                    hl = re.sub('<[^<]+?>', '', hl)
+
+                    hl = hl[hl.find('>') + 1:]
+
+                    flag = hl.rfind('<')
+                    if flag > -1:
+                        hl = hl[:flag]
+
+                    hl = hl.replace('<', '&lt;').replace('>', '&gt;').replace('\n','')
+                    t_text = '<b style="background-color:yellow;color:red;"><font size="+1">' + query + '</font></b>'
+                    hl = re.sub(query, t_text, hl, flags=re.IGNORECASE)
+                    if highlight_content_text == '':
+                        highlight_content_text = hl
+                    else:
+                        highlight_content_text = highlight_content_text + '<br/>' + hl
+
+        rd = meta_list[index_name]
+        item = init_vars.mdict_odict[rd['file']]
+
+        mdx = item.mdx
+        mdd_list = item.mdd_list
+
+        dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
+        dic = dics[0]
+        record = SearchObject(mdx, mdd_list, dic, '').substitute_record(hit['content'])
+
+        result.append(mdxentry(rd['name'], hit['entry'], record, 1, 1, 1, 1, 1, extra=highlight_content_text))
+
+    return result
 
 
 def get_query_list(query):
@@ -341,6 +426,11 @@ def mdict_index(request):
     return render(request, 'mdict/index.html', {'query': query})
 
 
+def es_index(request):
+    query = ''
+    return render(request, 'mdict/es-index.html', {'query': query})
+
+
 def mdict_dic(request):
     dic_pk = int(request.GET.get('dic_pk', -1))
     if dic_pk == -1:
@@ -462,7 +552,7 @@ def set_mdict_enable(request):  # 将这里改成在viewsets里处理
 
             for pk in dic_list:
                 qset = MdictDic.objects.filter(pk=pk)
-                if len(qset)>0:
+                if len(qset) > 0:
                     qset[0].mdict_enable = enable
                     update_list.extend(qset)
             MdictDic.objects.bulk_update(update_list, ['mdict_enable'])

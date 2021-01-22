@@ -228,6 +228,11 @@ function add_click_event(){
 			$("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
 			$("#result_time").attr("data-isover",false);
 			query_mdict(query,$("#card-container"),1,true,false);
+		}else if(dic_pk==-2){
+		    if(!query){return;}
+			$("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
+			$("#result_time").attr("data-isover",false);
+			query_es(query,$("#card-container"),1,true,false)
 		}else{//dic.html
 			dic_search=true;
 			dic_back=false;

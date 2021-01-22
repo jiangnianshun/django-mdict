@@ -22,7 +22,7 @@ function create_new_url(entry,group){
 
 function is_index(){
     var dic_pk=$("html").attr("data-dic-pk");
-    if(typeof(dic_pk)=="undefined"||dic_pk==-1){//index.html
+    if(typeof(dic_pk)=="undefined"||dic_pk==-1||dic_pk==-2){//index.html
         return true
     }else{//dic.html
         return false

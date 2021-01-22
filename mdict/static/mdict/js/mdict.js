@@ -105,6 +105,7 @@ function add_iframes(data,container,need_clear,is_list){
 			var mdx_entry=record["mdx_entry"];
 			var mdx_record=record["mdx_record"];
 			var mdx_pk=record["pk"];
+			var mdx_extra=record["extra"];
 			
 			if(need_clear){
 				var s_id=i;
@@ -123,6 +124,7 @@ function add_iframes(data,container,need_clear,is_list){
 				<div class='card-header'>
 					<span class='badge badge-pill badge-light'>${html_escape(mdx_entry,false)}</span>
 					<a class='card-link collapsed' href='#card-element-${s_id}' data-toggle='collapse' >${html_escape(mdx_name,false)}</a>
+					<div style='padding-left:50px;'>${mdx_extra}</div>
 				</div>
 				<div class='collapse' id='card-element-${s_id}' data-parent='${s_parent}'>
 					<div class='card-body' id='card-body-${s_id}'>
@@ -311,6 +313,64 @@ function add_to_history(query,result_num){
         })
 
     }
+}
+
+function query_es(query,container,page,need_clear,is_over){
+	var dic_group=$('#dic-group option:selected').attr('data-pk');
+	var data={"query":query,"dic_group":dic_group,"page":page,"force_refresh":$('#config-force-refresh').prop('checked')};
+	$.ajax({
+		url:"/mdict/essearch/",
+		contentType:'json',
+		type:'GET',
+		data:data,
+		success:function(data){
+			if(need_clear){clear_card();}
+
+			//每次按钮点击后清理掉已有的显示的词条
+            page=add_iframes(data,container,need_clear,false);
+			//page[0]是当前页码，page[1]是总页码
+			if(page[0]<page[1]){
+				var next_page=page[0]+1;
+				var t_over=false
+				if(next_page==page[1]){
+					t_over=true
+				}
+				query_es(query,container,next_page,false,t_over);
+			}else if(page[0]==page[1]){
+				is_over=true
+			}
+			if(need_clear){
+				$("#query").autocomplete("close");
+				//有时查询结果比搜索提示出现的快，此时autocomplete没有关闭，因此这里要关闭。
+				if(!is_over){
+					$("#result_num").text('');//清空上一次的结果数目
+					$("#result_time").text('');
+				}
+
+			}
+
+			if(is_over){
+                var result_num=$("#card-container iframe").length;
+
+				$("#result_num").text(result_num+"个结果");
+				var start_time=$("#result_time").attr("data-start-time");
+				var isover=$("#result_time").attr("data-isover");
+				var end_time=new Date().getTime();
+				if(isover){
+				    $("#result_time").attr("data-start-time",end_time);
+				}
+
+				var elapse_time=process_time(end_time-start_time);
+
+				$("#result_time").text(elapse_time);
+
+				add_to_history(query,result_num);
+			}
+		},
+		error:function(jqXHR,textStatus,errorThrown){
+			alert(jqXHR.responseText);
+		},
+	});
 }
 
 function query_mdict(query,container,page,need_clear,is_over){

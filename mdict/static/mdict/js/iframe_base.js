@@ -320,7 +320,7 @@ function init_iframe(){
 	    init_tooltip();
 	}
 	fix_chrome_bug();
-	fix_img_delay_bug();
+	//fix_img_delay_bug();
 	forbid_contextmenu();
 	init_night_mode();
 }

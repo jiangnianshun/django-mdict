@@ -1,6 +1,8 @@
 django
 djangorestframework
 django-ckeditor
+elasticsearch
+elasticsearch_dsl
 nltk
 opencc-python-reimplemented
 pyspellchecker

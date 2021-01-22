@@ -23,4 +23,6 @@ urlpatterns = [
     path('retrieveconfig/', views.retrieve_config),
     path('saveconfig/', views.save_config),
     path('bujian/', views.bujianjiansuo),
+    path('es/', views.es_index),
+    path('essearch/', views.es_search),
 ]
