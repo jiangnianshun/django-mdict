@@ -124,7 +124,7 @@ function add_iframes(data,container,need_clear,is_list){
 				<div class='card-header'>
 					<span class='badge badge-pill badge-light'>${html_escape(mdx_entry,false)}</span>
 					<a class='card-link collapsed' href='#card-element-${s_id}' data-toggle='collapse' >${html_escape(mdx_name,false)}</a>
-					<div style='padding-left:50px;'>${mdx_extra}</div>
+					<div style='padding-left:50px;font-size:0.6rem;'>${mdx_extra}</div>
 				</div>
 				<div class='collapse' id='card-element-${s_id}' data-parent='${s_parent}'>
 					<div class='card-body' id='card-body-${s_id}'>

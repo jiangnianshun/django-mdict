@@ -102,10 +102,23 @@ def es_search(request):
     query = request.GET.get('query', '')
     force_refresh = json.loads(request.GET.get('force_refresh', False))
 
+    result_num = int(request.GET.get('result_num ', 60))
+    frag_size = int(request.GET.get('frag_size', 60))
+    frag_num = int(request.GET.get('frag_num', 3))
+
+    if result_num > 1000:
+        result_num = 1000
+
+    if frag_num > 15:
+        frag_num = 15
+
+    if frag_size > 200:
+        frag_size = 200
+
     group = int(request.GET.get('dic_group', 0))
     page = int(request.GET.get('page', 1))
 
-    result = get_es_results(query, -1)
+    result = get_es_results(query, -1, result_num, frag_size, frag_num)
     serializer = MdictEntrySerializer(result, many=True)
     p = MdictPage(query, group, serializer.data)
     key_paginator.put(p)
@@ -115,14 +128,16 @@ def es_search(request):
     return Response(ret)
 
 
-def get_es_results(query, group):
+def get_es_results(query, group, result_num, frag_size, frag_num):
     q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase')
     s = Search(index='mdict-*').using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
-    s = s.highlight('content', fragment_size=150)
-    s = s.highlight_options(order='score', pre_tags='<b style="background-color:yellow;color:red;"><font size="+1">',
-                            post_tags='</font></b>', encoder='default')
+    s = s.highlight('content', fragment_size=frag_size)
+    s = s.highlight_options(order='score', pre_tags='', post_tags='', encoder='default', number_of_fragments=frag_num)
     # html encoder会将html标签转换为实体
+
+    s = s[0:result_num]
+    # 默认只返回10个结果
     response = s.execute()
 
     result = []
@@ -149,8 +164,8 @@ def get_es_results(query, group):
                     if flag > -1:
                         hl = hl[:flag]
 
-                    hl = hl.replace('<', '&lt;').replace('>', '&gt;').replace('\n','')
-                    t_text = '<b style="background-color:yellow;color:red;"><font size="+1">' + query + '</font></b>'
+                    hl = hl.replace('<', '&lt;').replace('>', '&gt;').replace('\n', '')
+                    t_text = '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + query + '</b>'
                     hl = re.sub(query, t_text, hl, flags=re.IGNORECASE)
                     if highlight_content_text == '':
                         highlight_content_text = hl
