@@ -24,7 +24,7 @@ class MdictDicAdmin(admin.ModelAdmin):
     list_display = ('id', 'mdict_file', 'mdict_name', 'get_mdict_groups', 'mdict_enable', 'mdict_es_enable', 'mdict_priority')
     # list_display不能是manytomanyfield
     list_filter = ['mdictdicgroup', 'mdict_enable', 'mdict_es_enable']
-    search_fields = ['mdict_name', 'mdict_file']
+    search_fields = ['mdict_name', 'mdict_file', 'id']
     list_display_links = ['mdict_file']
     actions = [EnableAllDics, DisableAllDics, EnableAllEs, DisableAllEs]
     # list_per_page = sys.maxsize  # 设置每页数目最大

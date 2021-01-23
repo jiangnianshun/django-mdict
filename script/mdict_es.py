@@ -2,9 +2,11 @@ import os
 import psutil
 import time
 import hashlib
+import zlib
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 import django
+
 django.setup()
 
 from mdict.mdict_utils.search_object import SearchObject
@@ -53,8 +55,29 @@ settings2 = {
 }
 
 
-def get_index_name(pk):
-    return 'mdict-' + str(pk)
+def get_index_name(dic_pk):
+    return 'mdict-' + get_md5_with_pk(dic_pk)
+
+
+def get_md5(mdx):
+    mdict_path = mdx.get_fpath()
+    with open(mdict_path, 'rb') as f:
+        data = f.read()
+
+    m = hashlib.md5(data)
+    return m.hexdigest()
+
+
+def get_md5_with_pk(dic_pk):
+    dic = MdictDic.objects.get(pk=dic_pk)
+    md5 = dic.mdict_md5
+    if md5 == '':
+        item = init_vars.mdict_odict[dic.mdict_file]
+        mdx = item.mdx
+        md5 = get_md5(mdx)
+        dic.mdict_md5 = md5
+        dic.save()
+    return md5
 
 
 def create_index(dic, mdx):
@@ -72,18 +95,13 @@ def create_index(dic, mdx):
     else:
         print('index', dic.pk, 'already exists.')
 
-    mdict_path = mdx.get_fpath()
-    with open(mdict_path, 'rb') as f:
-        data = f.read()
-
-    m = hashlib.md5(data)
-    mh = m.hexdigest()
+    md5 = get_md5_with_pk(dic.pk)
 
     body = {
         "_meta": {
             "file": dic.mdict_file,
             "name": dic.mdict_name,
-            "md5": mh,
+            "md5": md5,
         }
     }
 
@@ -106,7 +124,6 @@ def get_content(dic, mdx, entry_list):
 
     for i in range(len(record_list)):
         entry = entry_list[i][0]
-        query = entry[0]
         content = record_list[i]
 
         if content.startswith('@@@LINK='):
@@ -126,14 +143,16 @@ def create_cache(dic, mdx):
     total_num = mdx.get_len()
     mdx_path = mdx.get_fpath()
     mdx_file_size = int(os.path.getsize(mdx_path) / 1000000)
-    seg_size = seg_len * mdx_file_size / total_num
+    if seg_len < total_num:
+        seg_size = seg_len * mdx_file_size / total_num
+    else:
+        seg_size = mdx_file_size
+
     if seg_size > 50:
         seg_len = int(50 * total_num / mdx_file_size)
-        if seg_len < 1:
-            seg_len = 1
-        if seg_len < 1000:
-            chunk_size = seg_len
-
+        chunk_size = int(seg_len / 50)
+        if chunk_size < cpu_num:
+            chunk_size = cpu_num
     count = 0
     e_p1 = 0
     e_p2 = -1
@@ -157,10 +176,12 @@ def create_cache(dic, mdx):
         e_p2 = r_dict['e_p2']
 
         try:
-            for r in parallel_bulk(connections.get_connection(), get_content(dic, mdx, entry_list), thread_count=cpu_num,
-                                   chunk_size=chunk_size):
+            for r in parallel_bulk(connections.get_connection(), get_content(dic, mdx, entry_list),
+                                   thread_count=cpu_num, chunk_size=chunk_size):
                 pass
         except TransportError as e:
+            print(get_index_name(dic.pk), e)
+        except zlib.error as e:
             print(get_index_name(dic.pk), e)
         count += len(entry_list)
 
@@ -183,13 +204,17 @@ def delete_index(dic):
 
 def create_es_with_pk(dic_pk):
     t1 = time.perf_counter()
-    dic = MdictDic.objects.get(pk=dic_pk)
-    item = init_vars.mdict_odict[dic.mdict_file]
-    mdx = item.mdx
-    create_index(dic, mdx)
-    create_cache(dic, mdx)
-    t2 = time.perf_counter()
-    print(t2 - t1, mdx.get_fname(), mdx.get_len())
+    dics = MdictDic.objects.filter(pk=dic_pk)
+    if len(dics) > 0:
+        dic = dics[0]
+        item = init_vars.mdict_odict[dic.mdict_file]
+        mdx = item.mdx
+        create_index(dic, mdx)
+        create_cache(dic, mdx)
+        t2 = time.perf_counter()
+        print(t2 - t1, mdx.get_fname(), mdx.get_len())
+    else:
+        print(dic_pk, 'not exists')
 
 
 def create_es(dic, mdx):
@@ -205,7 +230,16 @@ def create_all_es(pk_list=[]):
     for k in odict.keys():
         item = odict[k]
         mdx = item.mdx
-        dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
+        md5 = get_md5(mdx)
+        dics = MdictDic.objects.filter(mdict_md5=md5)
+
+        if len(dics) == 0:
+            dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
+            if len(dics) > 0:
+                dic = dics[0]
+                if dic.mdict_md5 == '':
+                    dic.mdict_md5 = md5
+                    dic.save()
 
         if len(dics) > 0:
             t1 = time.perf_counter()
@@ -214,11 +248,11 @@ def create_all_es(pk_list=[]):
             index_name = get_index_name(dic.pk)
             index = Index(index_name)
             if index.exists():
-                print(index_name, 'already exists.')
+                print(dic.mdict_name, index_name, 'already exists.')
                 continue
 
             if not dic.mdict_es_enable:
-                print(index_name, 'skip')
+                print(dic.mdict_name, 'es index is disabled. skip', index_name)
                 continue
 
             if pk_list:
@@ -231,11 +265,14 @@ def create_all_es(pk_list=[]):
                 create_es(dic, mdx)
                 t2 = time.perf_counter()
                 print(i, '/', odict_len, get_index_name(dic.pk), t2 - t1, mdx.get_fname(), mdx.get_len())
+        else:
+            print(mdx.get_fname(), 'not exists in database.')
+
         i += 1
     t2 = time.perf_counter()
     print('indexing time', t2 - t1)
 
 
-create_es_with_pk(740)
+# create_es_with_pk(740)
 
-# create_all_es()
+create_all_es()

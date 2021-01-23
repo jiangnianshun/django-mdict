@@ -55,7 +55,6 @@ def init_meta_list():
         print(e)
 
 
-
 class MdictEntryViewSet(viewsets.ViewSet):
     authentication_classes = []
     permission_classes = []
@@ -126,22 +125,45 @@ def es_search(request):
     group = int(request.GET.get('dic_group', 0))
     page = int(request.GET.get('page', 1))
 
-    result = get_es_results(query, -1, result_num, frag_size, frag_num)
-    serializer = MdictEntrySerializer(result, many=True)
-    p = MdictPage(query, group, serializer.data)
-    key_paginator.put(p)
+    if (force_refresh and page == 1) or key_paginator.get(query, group) is None:
+        result = get_es_results(query, -1, result_num, frag_size, frag_num)
+        serializer = MdictEntrySerializer(result, many=True)
+        p = MdictPage(query, group, serializer.data)
+        key_paginator.put(p)
+
     k_page = key_paginator.get(query, group)
     ret = k_page.get_ret(page)
 
     return Response(ret)
 
+def init_index_list(group):
+    index_list = []
+    for index_name in meta_dict.keys():
+        md5 = index_name[6:]
+        dics = MdictDic.objects.filter(mdict_md5=md5)
+
+        if len(dics) == 0:
+            index_list.append(index_name)
+        else:
+            dic = dics[0]
+            if group == 0:
+                if dic.mdict_enable:
+                    index_list.append(index_name)
+            group_list = MdictDicGroup.objects.filter(pk=group)
+            if len(group_list) > 0:
+                temp = group_list[0].mdict_group.filter(pk=dic.pk)
+                if len(temp) > 0:
+                    index_list.append(index_name)
+    return index_list
 
 def get_es_results(query, group, result_num, frag_size, frag_num):
     if not meta_dict:
         init_meta_list()
 
+    index_list = init_index_list(group)
+
     q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase')
-    s = Search(index='mdict-*').using(client).query(q)
+    s = Search(index=index_list).using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
     s = s.highlight('content', fragment_size=frag_size)
     s = s.highlight_options(order='score', pre_tags='', post_tags='', encoder='default', number_of_fragments=frag_num)
@@ -189,11 +211,25 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
         mdx = item.mdx
         mdd_list = item.mdd_list
 
-        dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
-        dic = dics[0]
-        record = SearchObject(mdx, mdd_list, dic, '').substitute_record(hit['content'])
+        md5 = index_name[6:]
 
-        result.append(mdxentry(rd['name'], hit['entry'], record, 1, 1, 1, 1, 1, extra=highlight_content_text))
+        dics = MdictDic.objects.filter(mdict_md5=md5)
+
+        if len(dics) == 0:
+            dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
+            if len(dics) > 0:
+                dic = dics[0]
+                if dic.mdict_md5 == '':
+                    dic.mdict_md5 = md5
+                    dic.save()
+
+        if len(dics) > 0:
+            dic = dics[0]
+            record = SearchObject(mdx, mdd_list, dic, '').substitute_record(hit['content'])
+
+            result.append(mdxentry(rd['name'], hit['entry'], record, 1, 1, 1, 1, 1, extra=highlight_content_text))
+        else:
+            print(index_name, 'not exists in database.')
 
     return result
 
