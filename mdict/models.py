@@ -28,6 +28,7 @@ class MdictDic(models.Model):
     mdict_file = models.CharField('文件名', max_length=100, unique=True)
     mdict_enable = models.BooleanField('启用', default=True)
     mdict_priority = models.PositiveIntegerField('词典排序', default=1)  # 优先级显示，validator设置范围
+    mdict_es_enable = models.BooleanField('启用es索引', default=False)
     # mdict_group = models.ManyToManyField('MdictDicGroup', verbose_name='词典分组', blank=True)
 
     class Meta:

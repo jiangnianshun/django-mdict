@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
 from elasticsearch_dsl.query import MultiMatch
+from elasticsearch.exceptions import ConnectionError
 
 from base.base_func import print_log_info, is_en_func, strQ2B, request_body_serialze, guess_mime
 from base.base_func3 import t2s, s2t
@@ -41,11 +42,18 @@ regp = re.compile(reg)
 
 client = Elasticsearch()
 
-meta_list = {}
+meta_dict = {}
 
-for index in client.indices.get('mdict-*'):
-    raw_data = client.indices.get_mapping(index=index)[index]['mappings']['_meta']
-    meta_list.update({index: raw_data})
+
+def init_meta_list():
+    global meta_dict
+    try:
+        for index in client.indices.get('mdict-*'):
+            raw_data = client.indices.get_mapping(index=index)[index]['mappings']['_meta']
+            meta_dict.update({index: raw_data})
+    except ConnectionError as e:
+        print(e)
+
 
 
 class MdictEntryViewSet(viewsets.ViewSet):
@@ -129,6 +137,9 @@ def es_search(request):
 
 
 def get_es_results(query, group, result_num, frag_size, frag_num):
+    if not meta_dict:
+        init_meta_list()
+
     q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase')
     s = Search(index='mdict-*').using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
@@ -172,7 +183,7 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
                     else:
                         highlight_content_text = highlight_content_text + '<br/>' + hl
 
-        rd = meta_list[index_name]
+        rd = meta_dict[index_name]
         item = init_vars.mdict_odict[rd['file']]
 
         mdx = item.mdx

@@ -12,19 +12,26 @@ def DisableAllDics(modeladmin, request, queryset):
     queryset.update(mdict_enable=False)
     DisableAllDics.short_description = "关闭选择的词典"
 
+def EnableAllEs(modeladmin, request, queryset):
+    queryset.update(mdict_es_enable=True)
+    EnableAllEs.short_description = "开启es索引"
+
+def DisableAllEs(modeladmin, request, queryset):
+    queryset.update(mdict_es_enable=False)
+    DisableAllEs.short_description = "禁止es索引"
 
 class MdictDicAdmin(admin.ModelAdmin):
-    list_display = ('id', 'mdict_file', 'mdict_name', 'get_mdict_groups', 'mdict_enable', 'mdict_priority')
+    list_display = ('id', 'mdict_file', 'mdict_name', 'get_mdict_groups', 'mdict_enable', 'mdict_es_enable', 'mdict_priority')
     # list_display不能是manytomanyfield
-    list_filter = ['mdictdicgroup', 'mdict_enable']
+    list_filter = ['mdictdicgroup', 'mdict_enable', 'mdict_es_enable']
     search_fields = ['mdict_name', 'mdict_file']
     list_display_links = ['mdict_file']
-    actions = [EnableAllDics, DisableAllDics]
+    actions = [EnableAllDics, DisableAllDics, EnableAllEs, DisableAllEs]
     # list_per_page = sys.maxsize  # 设置每页数目最大
     list_per_page = 30
     ordering = ('mdict_priority',)  # 按照mdict_priority的降序排列
     # filter_horizontal = ('mdict_group',)
-    list_editable = ['mdict_priority', 'mdict_enable', 'mdict_name']
+    list_editable = ['mdict_priority', 'mdict_enable', 'mdict_name', 'mdict_es_enable']
     # 默认的MangToMany的样式是在一个方框内按住ctrl键选择多个对象，filter_horizontal设置水平两个方框，将对象左右移动。
 
     @staticmethod
