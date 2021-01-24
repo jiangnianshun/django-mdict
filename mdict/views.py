@@ -498,7 +498,7 @@ def mdict_index(request):
 
 
 def es_index(request):
-    query = ''
+    query = request.GET.get('query', '')
     return render(request, 'mdict/es-index.html', {'query': query})
 
 

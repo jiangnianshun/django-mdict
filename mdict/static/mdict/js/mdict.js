@@ -106,6 +106,10 @@ function add_iframes(data,container,need_clear,is_list){
 			var mdx_record=record["mdx_record"];
 			var mdx_pk=record["pk"];
 			var mdx_extra=record["extra"];
+
+			if(typeof(mdx_extra)=="undefined"){
+			    mdx_extra="";
+			}
 			
 			if(need_clear){
 				var s_id=i;

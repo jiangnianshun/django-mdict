@@ -587,6 +587,8 @@ function init_es(){
     $('#enable-all-dic').hide();
     $('#mdict-group-list').hide();
     $('#online-mdict-checkbox').hide();
+
+    first_query();
 }
 
 function init_scroll_list(){
