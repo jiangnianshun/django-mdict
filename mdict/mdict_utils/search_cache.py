@@ -142,3 +142,4 @@ class MdictPaginator:
 
 
 key_paginator = MdictPaginator()
+es_paginator = MdictPaginator()

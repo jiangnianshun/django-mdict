@@ -262,7 +262,7 @@ def create_all_es(pk_list=[]):
             dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
             if len(dics) > 0:
                 dic = dics[0]
-                if dic.mdict_md5 == '':
+                if dic.mdict_md5 == '' or dic.mdict_md5 is None:
                     dic.mdict_md5 = md5
                     dic.save()
 

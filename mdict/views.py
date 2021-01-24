@@ -33,7 +33,7 @@ from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
 from .mdict_utils.mdict_func import mdict_root_path, is_local, get_m_path
 
-from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
+from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator, es_paginator
 
 init_database()
 
@@ -125,13 +125,13 @@ def es_search(request):
     group = int(request.GET.get('dic_group', 0))
     page = int(request.GET.get('page', 1))
 
-    if (force_refresh and page == 1) or key_paginator.get(query, group) is None:
+    if (force_refresh and page == 1) or es_paginator.get(query, group) is None:
         result = get_es_results(query, -1, result_num, frag_size, frag_num)
         serializer = MdictEntrySerializer(result, many=True)
         p = MdictPage(query, group, serializer.data)
-        key_paginator.put(p)
+        es_paginator.put(p)
 
-    k_page = key_paginator.get(query, group)
+    k_page = es_paginator.get(query, group)
     ret = k_page.get_ret(page)
 
     return Response(ret)
@@ -163,10 +163,13 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
     if not meta_dict:
         init_meta_list()
 
-    index_list = init_index_list(group)
+    # index_list = init_index_list(group)
+    #
+    # if not index_list:
+    #     return []
 
-    if not index_list:
-        return []
+    index_list = ['mdict-*']
+    # 如果指定单独的index，当index_list长度超出后会报错RequestError 400 An HTTP line is larger than 4096 bytes.
 
     q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase')
     s = Search(index=index_list).using(client).query(q)
@@ -225,7 +228,7 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
             dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
             if len(dics) > 0:
                 dic = dics[0]
-                if dic.mdict_md5 == '':
+                if dic.mdict_md5 == '' or dic.mdict_md5 is None:
                     dic.mdict_md5 = md5
                     dic.save()
 

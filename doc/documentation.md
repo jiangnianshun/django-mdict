@@ -514,3 +514,7 @@ chmod +x /bin/sleep
 
 多进程的问题，多重复几次。
 
+8. 保存数据时报错attempt to write a readonly database
+
+修改db.sqlite3的权限。
+

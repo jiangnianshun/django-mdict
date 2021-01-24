@@ -40,4 +40,6 @@ pip3 install elasticsearch-dsl
 
    [http://127.0.0.1:8000/es/](http://127.0.0.1:8000/es/)
 
+8. 在进行全文查询时，eselasticsearch.bat需要一直运行，如果需要一直开启，可以加入系统启动项随系统启动。
+
 * 注意python依赖和elasticsearch以及ik分词器的版本应当是对应的，否则可能无法正常运行。
