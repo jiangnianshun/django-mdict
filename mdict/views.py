@@ -136,6 +136,7 @@ def es_search(request):
 
     return Response(ret)
 
+
 def init_index_list(group):
     index_list = []
     for index_name in meta_dict.keys():
@@ -146,21 +147,26 @@ def init_index_list(group):
             index_list.append(index_name)
         else:
             dic = dics[0]
-            if group == 0:
-                if dic.mdict_enable:
+            if dic.mdict_enable:
+                if group <= 0:
                     index_list.append(index_name)
-            group_list = MdictDicGroup.objects.filter(pk=group)
-            if len(group_list) > 0:
-                temp = group_list[0].mdict_group.filter(pk=dic.pk)
-                if len(temp) > 0:
-                    index_list.append(index_name)
+                else:
+                    group_list = MdictDicGroup.objects.filter(pk=group)
+                    if len(group_list) > 0:
+                        temp = group_list[0].mdict_group.filter(pk=dic.pk)
+                        if len(temp) > 0:
+                            index_list.append(index_name)
     return index_list
+
 
 def get_es_results(query, group, result_num, frag_size, frag_num):
     if not meta_dict:
         init_meta_list()
 
     index_list = init_index_list(group)
+
+    if not index_list:
+        return []
 
     q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase')
     s = Search(index=index_list).using(client).query(q)

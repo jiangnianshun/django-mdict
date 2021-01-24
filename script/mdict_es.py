@@ -122,6 +122,8 @@ def get_content(dic, mdx, entry_list):
 
     record_list = SearchObject(mdx, None, dic, '').search_record_list(p_list, raw=True)
 
+    index_name = get_index_name(dic.pk)
+
     for i in range(len(record_list)):
         entry = entry_list[i][0]
         content = record_list[i]
@@ -130,7 +132,7 @@ def get_content(dic, mdx, entry_list):
             continue
 
         yield {
-            '_index': get_index_name(dic.pk),
+            '_index': index_name,
             "entry": entry,
             "content": content,
         }
@@ -273,6 +275,6 @@ def create_all_es(pk_list=[]):
     print('indexing time', t2 - t1)
 
 
-# create_es_with_pk(740)
+# create_es_with_pk(743)
 
 create_all_es()
