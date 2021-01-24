@@ -538,8 +538,6 @@ function init_common(){
 
 	add_click_event();
 
-	get_mdict_list($("#modal-container-mdict .modal-body"));
-
 	init_btn_group();
 
 	init_dic_group();
@@ -574,7 +572,21 @@ function first_query(){
 function init_mdict(){
 	init_common();
 
+	get_mdict_list($("#modal-container-mdict .modal-body"),false);
+
 	first_query();
+}
+
+function init_es(){
+    init_common();
+
+    get_mdict_list($("#modal-container-mdict .modal-body"),true);
+
+    init_home_button();
+
+    $('#enable-all-dic').hide();
+    $('#mdict-group-list').hide();
+    $('#online-mdict-checkbox').hide();
 }
 
 function init_scroll_list(){
@@ -594,6 +606,8 @@ function init_single_dic(){
 	init_scroll_list();
 
 	init_common();
+
+	get_mdict_list($("#modal-container-mdict .modal-body"),false);
 
 	init_home_button();
 

@@ -780,7 +780,7 @@ function set_all_mdict_enable(obj){
     });
 }
 
-function get_mdict_list(container){//载入词典列表
+function get_mdict_list(container, flag){//载入词典列表
 	$.ajax({
 		url:"/mdict/mdictlist/",
 		contentType:'json',
@@ -794,10 +794,18 @@ function get_mdict_list(container){//载入词典列表
 				var dic_pror=d[i]["dic_pror"];
 				var dic_pk=d[i]["dic_pk"];
 				var dic_enable=d[i]["dic_enable"];
+				var dic_es_enable=d[i]["dic_es_enable"]
+
 
 				var checked="";
 
 				if(dic_enable){checked="checked";}
+
+				if(dic_es_enable){
+				    var es_flag="<span style='color:green;'>✔</span>"
+				}else{
+				    var es_flag="<span style='color:red;'>✖</span>"
+				}
 
 				var checkbox_html=`
                             <div class="custom-control custom-checkbox" style="display:inline;">
@@ -805,7 +813,11 @@ function get_mdict_list(container){//载入词典列表
                                 <label class="custom-control-label" for="customControlInline${i}" style="display:inline;vertical-align:middle;"></label>
                             </div>
                             `
-				var s="<div class='card-header'>"+checkbox_html+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
+                if(flag){
+				    var s="<div class='card-header'>"+es_flag+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
+                }else{
+				    var s="<div class='card-header'>"+checkbox_html+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
+				}
 
 				container.append(s);
 			}
