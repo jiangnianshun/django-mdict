@@ -1,8 +1,11 @@
 import os
+import sys
 import psutil
 import time
 import hashlib
 import zlib
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 import django

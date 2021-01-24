@@ -1,5 +1,8 @@
 import os
+import sys
 import shutil
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 import django
@@ -35,8 +38,8 @@ export_txt_path = os.path.join(BASE_DIR, 'export', 'export.txt')
 
 export_data_root_path = os.path.join(export_txt_root_path, 'data')
 
-uploads_path = os.path.join(BASE_DIR, 'media', 'uploads')
-export_uploads_path = os.path.join(export_data_root_path, 'media', 'uploads')
+uploads_path = os.path.join(BASE_DIR, '../media', 'uploads')
+export_uploads_path = os.path.join(export_data_root_path, '../media', 'uploads')
 
 
 def export_to_txt():
