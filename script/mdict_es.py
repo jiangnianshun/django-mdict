@@ -5,7 +5,8 @@ import time
 import hashlib
 import zlib
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+current_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(current_path))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 import django
@@ -19,6 +20,8 @@ from mdict.mdict_utils.init_utils import init_vars
 from elasticsearch.helpers import parallel_bulk
 from elasticsearch_dsl import connections, analyzer, Text, Index, Document
 from elasticsearch.exceptions import TransportError
+
+error_log_path = os.path.join(current_path, 'error.log')
 
 cpu_num = psutil.cpu_count(False)
 
@@ -141,6 +144,17 @@ def get_content(dic, mdx, entry_list):
         }
 
 
+def write_error_log(*args):
+    if not os.path.exists(error_log_path):
+        with open(error_log_path, 'w', encoding='utf-8') as f:
+            pass
+    text = ''
+    for arg in args:
+        text += str(arg)
+    with open(error_log_path, 'a', encoding='utf-8') as f:
+        f.write('\n' + text)
+
+
 def create_cache(dic, mdx):
     seg_len = 50000
     chunk_size = 1000
@@ -185,9 +199,15 @@ def create_cache(dic, mdx):
                                    thread_count=cpu_num, chunk_size=chunk_size):
                 pass
         except TransportError as e:
-            print(get_index_name(dic.pk), e)
+            index = Index(get_index_name(dic.pk))
+            index.delete()
+            error_info = (get_index_name(dic.pk), mdx.get_fname(), mdx.get_len(), e)
+            print(*error_info)
+            write_error_log(error_info)
         except zlib.error as e:
-            print(get_index_name(dic.pk), e)
+            error_info = (get_index_name(dic.pk), mdx.get_fname(), mdx.get_len(), e)
+            print(*error_info)
+            write_error_log(error_info)
         count += len(entry_list)
 
         if s_p1 == -1:

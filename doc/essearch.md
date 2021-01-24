@@ -2,6 +2,8 @@
 
 使用外置的elasticsearch实现全文搜索。
 
+### windows下的安装
+
 1. 安装依赖
 
 ```
