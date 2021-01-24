@@ -11,6 +11,13 @@ pip install elasticsearch
 pip install elasticsearch-dsl
 ```
 
+linux下是
+
+```
+pip3 install elasticsearch
+pip3 install elasticsearch-dsl
+```
+
 2. 下载elasticsearch并解压。
 
 [https://www.elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/elasticsearch)

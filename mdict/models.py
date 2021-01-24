@@ -28,8 +28,8 @@ class MdictDic(models.Model):
     mdict_file = models.CharField('文件名', max_length=100, unique=True)
     mdict_enable = models.BooleanField('启用', default=True)
     mdict_priority = models.PositiveIntegerField('词典排序', default=1)  # 优先级显示，validator设置范围
-    mdict_es_enable = models.BooleanField('启用es索引', default=False)
-    mdict_md5 = models.CharField('MD5值', max_length=35, default='')
+    mdict_es_enable = models.BooleanField('启用es索引', default=False,  null=True)
+    mdict_md5 = models.CharField('MD5值', max_length=35, default='', null=True)
 
     class Meta:
         verbose_name = 'Mdict词典'

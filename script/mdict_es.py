@@ -248,7 +248,7 @@ def create_es(dic, mdx):
 
 
 def create_all_es(pk_list=[]):
-    t1 = time.perf_counter()
+    t0 = time.perf_counter()
     odict = init_vars.mdict_odict
     odict_len = len(odict)
     i = 0
@@ -294,8 +294,8 @@ def create_all_es(pk_list=[]):
             print(mdx.get_fname(), 'not exists in database.')
 
         i += 1
-    t2 = time.perf_counter()
-    print('indexing time', t2 - t1)
+    t3 = time.perf_counter()
+    print('indexing time', t3 - t0)
 
 
 # create_es_with_pk(743)
