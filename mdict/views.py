@@ -206,9 +206,10 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
                     if flag > -1:
                         hl = hl[:flag]
 
-                    hl = hl.replace('<', '&lt;').replace('>', '&gt;').replace('\n', '')
-                    t_text = '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + query + '</b>'
-                    hl = re.sub(query, t_text, hl, flags=re.IGNORECASE)
+                    hl = hl.replace('\n', '')
+                    for q in query:
+                        t_text = '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + q + '</b>'
+                        hl = re.sub(q, t_text, hl, flags=re.IGNORECASE)
                     if highlight_content_text == '':
                         highlight_content_text = hl
                     else:
