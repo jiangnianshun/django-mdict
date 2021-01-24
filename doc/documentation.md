@@ -13,6 +13,7 @@
   * [部件检索和全宋体](#部件检索和全宋体)
   * [繁简转化和全角转化](#繁简转化和全角转化)
   * [同名加载](#同名加载)
+  * [全文搜索](#全文搜索)
   * [划词](#划词)
   * [修改词典库地址](#修改词典库地址)
   * [设置](#设置)
@@ -20,6 +21,7 @@
   * [在windows上运行测试服务器](#在windows上运行测试服务器)
   * [在wsl上运行测试服务器](#在wsl上运行测试服务器)
   * [部署到wsl apache](#部署到wsl-apache)
+  * [更新](#更新)
   * [可能的问题](#可能的问题)
 
 ### 适用情景
@@ -48,7 +50,7 @@
 
 ### 不支持
 
-1. 不支持模糊查找和全文查找。
+1. 不支持模糊查找。
 
 2. 不支持词头未排序的词典。
 
@@ -194,6 +196,10 @@ pdawiki部件检索和全宋体：[https://www.pdawiki.com/forum/forum.php?mod=v
 ### 同名加载
 
 mdx同名的js、css和字体文件会自动加载。
+
+### 全文搜索
+
+[全文搜索](essearch.md)
 
 ### 划词
 
@@ -414,6 +420,38 @@ ws.run "wsl -d ubuntu -u root /etc/init.d/apache2 start", vbhid
 
 其中ubuntu是发行版名称，具体名称用命令wsl -list来查看。
 
+### 更新
+
+运行git pull更新项目
+
+```
+git pull
+```
+
+如果有js和css的修改，可能需要清理浏览器的缓存（不需要清cookie）。
+
+如果有pyx文件的修改，需要手动运行build.bat或build.sh编译pyx文件。
+
+如果requirements1.text中有新增的依赖，需要安装依赖。
+
+```
+pip install -r requirements1.txt
+```
+
+如果有模型改动(models.py)，旧数据库可能无法正常使用，尝试运行
+
+```
+python manage.py makemigrations mdict
+python manage.py migrate mdict
+```
+
+如果仍然无法恢复正常，可尝试手动导出。
+
+将旧的db.sqlite3改名，重新运行run_server.bat或run_server.sh生成新的数据库，用软件导出所有mdict开头的数据表，再导入到新的数据库中。
+
+以DB browser for SQLite软件为例，打开旧数据库，选择文件导出/导出数据库到SQL文件，选择所有mdict开头的表，勾选在insert into语句中保留列名，然后导出。
+再打开新数据库，导入刚才的sql文件。
+
 ### 可能的问题
 
 1. 加入新的词典没有显示
@@ -432,21 +470,11 @@ windows下运行/django-mdict/mdict/readmdict/pyx/build.bat，linux下运行/dja
 
 这将对readmdict_search.py进行编译，编译后的pyd或so运行库在/django-mdict/mdict/readmdict/lib/下，编译后相比于没有编译，速度提升约1/3。
 
-4. 如何更新django-mdict
-
-先clone项目
-
-4.1 如果在内置词典中添加了词条或者想保留mdict词典的排序，那么将旧项目的db.sqlite3和mdict_path.json复制到新项目下，然后手动运行build.bat或build.sh进行cython编译
-
-4.2 如果没有使用内置词典且不想保留mdict词典的排序，直接运行run_server.bat或run_server.sh。
-
-如果有js和css的修改，可能需要清理浏览器的缓存才会生效（不需要清cookie）。
-
-5. 403错误
+4. 403错误
 
 权限问题，设置django-mdict文件夹及子文件的权限。
 
-6. Failed to enable APR_TCP_DEFER_ACCEPT
+5. Failed to enable APR_TCP_DEFER_ACCEPT
 
 ```
 sudo vim /etc/apache2/apache2.conf
@@ -458,7 +486,7 @@ sudo vim /etc/apache2/apache2.conf
 AcceptFilter http none
 ```
 
-7. sleep: cannot read realtime clock: Invalid argument
+6. sleep: cannot read realtime clock: Invalid argument
 
 ```
 sudo mv /bin/sleep /bin/sleep~
@@ -466,7 +494,7 @@ touch /bin/sleep
 chmod +x /bin/sleep
 ```
 
-8. apache在ubuntu20.04下restart和stop失败
+7. apache在ubuntu20.04下restart和stop失败
 
 多进程的问题，多重复几次。
 

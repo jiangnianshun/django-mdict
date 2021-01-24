@@ -41,8 +41,10 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 
 ### 说明文档
 
-[说明文档](documentation.md)
+[说明文档](doc/documentation.md)
 
 ### 样式
 
-![样式](https://github.com/jiangnianshun/django-mdict/blob/master/img/2020110301.jpg)
+![结构](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/structure.png)
+
+![样式](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/2020110301.jpg)
