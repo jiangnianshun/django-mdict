@@ -1086,7 +1086,7 @@ cdef class MDict(object):
             p += compressed_size_b
             f.seek(p)
 
-            key_block = self.get_key_block(f, compressed_size, decompressed_size, compressed_size_b,
+            key_block = get_key_block(f, compressed_size, decompressed_size, compressed_size_b,
                                            decompressed_size_b)
             if key_block == b'':
                 return myt_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2

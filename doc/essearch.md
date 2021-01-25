@@ -18,13 +18,13 @@ pip3 install elasticsearch
 pip3 install elasticsearch-dsl
 ```
 
-2. 下载elasticsearch并解压。
+2. 下载elasticsearch并解压，版本7.10.2或7.10.1。
 
 [https://www.elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/elasticsearch)
 
-3. 下载对应版本的elasticsearch-ik中文分词器并解压，将解压后的文件夹复制到elasticsearch的plugins目录下。
+3. 下载和es对应版本的elasticsearch-ik中文分词器并解压，将解压后的文件夹复制到elasticsearch的plugins目录下。
 
-[https://github.com/medcl/elasticsearch-analysis-ik](https://github.com/medcl/elasticsearch-analysis-ik)
+[https://github.com/medcl/elasticsearch-analysis-ik/releases](https://github.com/medcl/elasticsearch-analysis-ik/releases)
 
 4. 运行elasticsearch/bin/elasticsearch.bat。
 
