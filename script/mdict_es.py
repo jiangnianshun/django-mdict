@@ -18,6 +18,7 @@ from mdict.models import MdictDic
 from mdict.mdict_utils.init_utils import init_vars
 
 from elasticsearch.helpers import parallel_bulk
+from elasticsearch.helpers.errors import BulkIndexError
 from elasticsearch_dsl import connections, analyzer, Text, Index, Document
 from elasticsearch.exceptions import TransportError
 
@@ -25,17 +26,17 @@ error_log_path = os.path.join(current_path, 'error.log')
 
 cpu_num = psutil.cpu_count(False)
 
-connections.create_connection(hosts=['localhost'])
+connections.create_connection()
 
 html_strip1 = analyzer('html_strip',
-                       tokenizer="standard",
-                       filter=["lowercase", "stop", "snowball"],
+                       tokenizer="ik_smart",
+                       filter=["lowercase", "stop", "snowball", "stemmer"],
                        char_filter=["html_strip"]
                        )
 
 html_strip2 = analyzer('html_strip',
-                       tokenizer="standard",
-                       filter=["lowercase", "stop", "snowball"],
+                       tokenizer="ik_smart",
+                       filter=["lowercase", "stop", "snowball", "stemmer"],
                        char_filter=["html_strip"],
                        stopwords=["上一页", "下一页", "上一葉", "下一葉", "目录", "封面", "索引", "前言"]
                        )
@@ -61,8 +62,12 @@ settings2 = {
 }
 
 
-def get_index_name(dic_pk):
+def get_index_name_with_pk(dic_pk):
     return 'mdict-' + get_md5_with_pk(dic_pk)
+
+
+def get_index_name(md5):
+    return 'mdict-' + md5
 
 
 def get_md5(mdx):
@@ -86,8 +91,8 @@ def get_md5_with_pk(dic_pk):
     return md5
 
 
-def create_index(dic, mdx):
-    index = Index(get_index_name(dic.pk))
+def create_index(dic, md5):
+    index = Index(get_index_name_with_pk(dic.pk))
     index.settings(
         refresh_interval=-1,
         number_of_replicas=0,
@@ -100,8 +105,6 @@ def create_index(dic, mdx):
         index.create()
     else:
         print('index', dic.pk, 'already exists.')
-
-    md5 = get_md5_with_pk(dic.pk)
 
     body = {
         "_meta": {
@@ -128,7 +131,7 @@ def get_content(dic, mdx, entry_list):
 
     record_list = SearchObject(mdx, None, dic, '').search_record_list(p_list, raw=True)
 
-    index_name = get_index_name(dic.pk)
+    index_name = get_index_name_with_pk(dic.pk)
 
     for i in range(len(record_list)):
         entry = entry_list[i][0]
@@ -144,6 +147,11 @@ def get_content(dic, mdx, entry_list):
         }
 
 
+def yield_data(data):
+    for d in data:
+        yield d
+
+
 def write_error_log(*args):
     if not os.path.exists(error_log_path):
         with open(error_log_path, 'w', encoding='utf-8') as f:
@@ -156,22 +164,13 @@ def write_error_log(*args):
 
 
 def create_cache(dic, mdx):
-    seg_len = 50000
-    chunk_size = 1000
-
     total_num = mdx.get_len()
     mdx_path = mdx.get_fpath()
-    mdx_file_size = int(os.path.getsize(mdx_path) / 1000000)
-    if seg_len < total_num:
-        seg_size = seg_len * mdx_file_size / total_num
-    else:
-        seg_size = mdx_file_size
+    mdx_file_size = int(os.path.getsize(mdx_path) / (1024 * 1024))
 
-    if seg_size > 50:
-        seg_len = int(50 * total_num / mdx_file_size)
-        chunk_size = int(seg_len / 50)
-        if chunk_size < cpu_num:
-            chunk_size = cpu_num
+    seg_size = cpu_num * 5
+    seg_len = int(seg_size * total_num / mdx_file_size)
+
     count = 0
     e_p1 = 0
     e_p2 = -1
@@ -194,18 +193,33 @@ def create_cache(dic, mdx):
         e_p1 = r_dict['e_p1']
         e_p2 = r_dict['e_p2']
 
+        t_list = list(get_content(dic, mdx, entry_list))
+        t_size = sys.getsizeof(t_list)
+        t_len = len(entry_list)
+        chunk_size = int(cpu_num * 50 * t_len / t_size)
+        if chunk_size < cpu_num:
+            chunk_size = cpu_num
+
         try:
-            for r in parallel_bulk(connections.get_connection(), get_content(dic, mdx, entry_list),
+            for r in parallel_bulk(connections.get_connection(), yield_data(t_list),
                                    thread_count=cpu_num, chunk_size=chunk_size):
                 pass
         except TransportError as e:
-            index = Index(get_index_name(dic.pk))
+            index = Index(get_index_name_with_pk(dic.pk))
             index.delete()
-            error_info = (get_index_name(dic.pk), mdx.get_fname(), mdx.get_len(), e)
+            error_info = (get_index_name_with_pk(dic.pk), mdx.get_fname(), mdx.get_len(), str(e)[:2000])
             print(*error_info)
             write_error_log(error_info)
+            break
+        except BulkIndexError as e:
+            index = Index(get_index_name_with_pk(dic.pk))
+            index.delete()
+            error_info = (get_index_name_with_pk(dic.pk), mdx.get_fname(), mdx.get_len(), str(e)[:2000])
+            print(*error_info)
+            write_error_log(error_info)
+            break
         except zlib.error as e:
-            error_info = (get_index_name(dic.pk), mdx.get_fname(), mdx.get_len(), e)
+            error_info = (get_index_name_with_pk(dic.pk), mdx.get_fname(), mdx.get_len(), str(e)[:2000])
             print(*error_info)
             write_error_log(error_info)
         count += len(entry_list)
@@ -213,17 +227,17 @@ def create_cache(dic, mdx):
         if s_p1 == -1:
             break
 
-    index = Index(get_index_name(dic.pk))
+    index = Index(get_index_name_with_pk(dic.pk))
     index.put_settings(body=settings2)
 
 
 def close_index(dic):
-    index = Index(get_index_name(dic.pk))
+    index = Index(get_index_name_with_pk(dic.pk))
     index.close()
 
 
 def delete_index(dic):
-    index = Index(get_index_name(dic.pk))
+    index = Index(get_index_name_with_pk(dic.pk))
     index.delete()
 
 
@@ -234,16 +248,22 @@ def create_es_with_pk(dic_pk):
         dic = dics[0]
         item = init_vars.mdict_odict[dic.mdict_file]
         mdx = item.mdx
-        create_index(dic, mdx)
-        create_cache(dic, mdx)
+        md5 = get_md5_with_pk(dic.pk)
+        index_name = get_index_name(md5)
+        index = Index(index_name)
+        if index.exists():
+            print('already exists', dic.mdict_name, index_name)
+            return
+
+        create_es(dic, mdx, md5)
         t2 = time.perf_counter()
         print(t2 - t1, mdx.get_fname(), mdx.get_len())
     else:
         print(dic_pk, 'not exists')
 
 
-def create_es(dic, mdx):
-    create_index(dic, mdx)
+def create_es(dic, mdx, md5):
+    create_index(dic, md5)
     create_cache(dic, mdx)
 
 
@@ -270,26 +290,25 @@ def create_all_es(pk_list=[]):
             t1 = time.perf_counter()
             dic = dics[0]
 
-            index_name = get_index_name(dic.pk)
+            index_name = get_index_name_with_pk(dic.pk)
             index = Index(index_name)
             if index.exists():
-                print(dic.mdict_name, index_name, 'already exists.')
+                print('already exists', dic.mdict_name, index_name)
                 continue
 
             if not dic.mdict_es_enable:
-                print(dic.mdict_name, 'es index is disabled. skip', index_name)
+                print('index is disabled', dic.mdict_name, index_name)
                 continue
 
             if pk_list:
                 if dic.pk in pk_list:
-                    create_es(dic, mdx)
-
+                    create_es(dic, mdx, md5)
                     t2 = time.perf_counter()
-                    print(i, '/', len(pk_list), get_index_name(dic.pk), t2 - t1, mdx.get_fname(), mdx.get_len())
+                    print(i, '/', len(pk_list), get_index_name_with_pk(dic.pk), t2 - t1, mdx.get_fname(), mdx.get_len())
             else:
-                create_es(dic, mdx)
+                create_es(dic, mdx, md5)
                 t2 = time.perf_counter()
-                print(i, '/', odict_len, get_index_name(dic.pk), t2 - t1, mdx.get_fname(), mdx.get_len())
+                print(i, '/', odict_len, get_index_name_with_pk(dic.pk), t2 - t1, mdx.get_fname(), mdx.get_len())
         else:
             print(mdx.get_fname(), 'not exists in database.')
 
@@ -298,6 +317,6 @@ def create_all_es(pk_list=[]):
     print('indexing time', t3 - t0)
 
 
-# create_es_with_pk(743)
+create_es_with_pk(20)
 
-create_all_es()
+# create_all_es()

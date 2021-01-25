@@ -48,9 +48,11 @@ meta_dict = {}
 def init_meta_list():
     global meta_dict
     try:
-        for index in client.indices.get('mdict-*'):
-            raw_data = client.indices.get_mapping(index=index)[index]['mappings']['_meta']
-            meta_dict.update({index: raw_data})
+        # get('mdict-*')只能获取open的index
+        for index in client.indices.get_alias('mdict-*'):
+            if index not in meta_dict:
+                raw_data = client.indices.get_mapping(index=index)[index]['mappings']['_meta']
+                meta_dict.update({index: raw_data})
     except ConnectionError as e:
         print(e)
 
@@ -107,7 +109,7 @@ class MdictEntryViewSet(viewsets.ViewSet):
 @authentication_classes([])
 def es_search(request):
     query = request.GET.get('query', '')
-    force_refresh = json.loads(request.GET.get('force_refresh', False))
+    # force_refresh = json.loads(request.GET.get('force_refresh', False))
 
     result_num = int(request.GET.get('result_num ', 60))
     frag_size = int(request.GET.get('frag_size', 60))
@@ -125,11 +127,11 @@ def es_search(request):
     group = int(request.GET.get('dic_group', 0))
     page = int(request.GET.get('page', 1))
 
-    if (force_refresh and page == 1) or es_paginator.get(query, group) is None:
-        result = get_es_results(query, -1, result_num, frag_size, frag_num)
-        serializer = MdictEntrySerializer(result, many=True)
-        p = MdictPage(query, group, serializer.data)
-        es_paginator.put(p)
+    # if (force_refresh and page == 1) or es_paginator.get(query, group) is None:
+    result = get_es_results(query, group, result_num, frag_size, frag_num)
+    serializer = MdictEntrySerializer(result, many=True)
+    p = MdictPage(query, group, serializer.data)
+    es_paginator.put(p)
 
     k_page = es_paginator.get(query, group)
     ret = k_page.get_ret(page)
@@ -138,41 +140,41 @@ def es_search(request):
 
 
 def init_index_list(group):
-    index_list = []
-    for index_name in meta_dict.keys():
+    indices = client.indices
+    for index_name in meta_dict:
         md5 = index_name[6:]
         dics = MdictDic.objects.filter(mdict_md5=md5)
-
         if len(dics) == 0:
-            index_list.append(index_name)
+            indices.close(index=index_name, ignore=[400, 404])
         else:
             dic = dics[0]
             if dic.mdict_enable:
                 if group <= 0:
-                    index_list.append(index_name)
+                    indices.open(index=index_name, ignore=[400, 404])
                 else:
                     group_list = MdictDicGroup.objects.filter(pk=group)
                     if len(group_list) > 0:
                         temp = group_list[0].mdict_group.filter(pk=dic.pk)
                         if len(temp) > 0:
-                            index_list.append(index_name)
-    return index_list
+                            indices.open(index=index_name, ignore=[400, 404])
+                        else:
+                            indices.close(index=index_name, ignore=[400, 404])
+                    else:
+                        indices.close(index=index_name, ignore=[400, 404])
+            else:
+                indices.close(index=index_name, ignore=[400, 404])
 
 
 def get_es_results(query, group, result_num, frag_size, frag_num):
     if not meta_dict:
         init_meta_list()
 
-    # index_list = init_index_list(group)
-    #
-    # if not index_list:
-    #     return []
-
-    index_list = ['mdict-*']
+    init_index_list(group)
     # 如果指定单独的index，当index_list长度超出后会报错RequestError 400 An HTTP line is larger than 4096 bytes.
+    # 通过开关index实现指定index搜索，会增加。
 
     q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase')
-    s = Search(index=index_list).using(client).query(q)
+    s = Search(index='mdict-*').using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
     s = s.highlight('content', fragment_size=frag_size)
     s = s.highlight_options(order='score', pre_tags='', post_tags='', encoder='default', number_of_fragments=frag_num)
@@ -206,7 +208,8 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
                     if flag > -1:
                         hl = hl[:flag]
 
-                    hl = hl.replace('\n', '')
+                    hl = hl.replace('<', '&lt;').replace('>', '&gt;').replace('\n', '')
+
                     for q in query:
                         t_text = '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + q + '</b>'
                         hl = re.sub(q, t_text, hl, flags=re.IGNORECASE)

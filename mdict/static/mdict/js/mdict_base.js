@@ -584,8 +584,8 @@ function init_es(){
 
     init_home_button();
 
-    $('#enable-all-dic').hide();
-    $('#mdict-group-list').hide();
+    //$('#enable-all-dic').hide();
+    //$('#mdict-group-list').hide();
     $('#online-mdict-checkbox').hide();
 
     first_query();
