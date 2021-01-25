@@ -169,7 +169,10 @@ def create_cache(dic, mdx):
     mdx_file_size = int(os.path.getsize(mdx_path) / (1024 * 1024))
 
     seg_size = cpu_num * 5
-    seg_len = int(seg_size * total_num / mdx_file_size)
+    if mdx_file_size == 0:
+        seg_len = 50000
+    else:
+        seg_len = int(seg_size * total_num / mdx_file_size)
 
     count = 0
     e_p1 = 0
@@ -196,7 +199,10 @@ def create_cache(dic, mdx):
         t_list = list(get_content(dic, mdx, entry_list))
         t_size = sys.getsizeof(t_list)
         t_len = len(entry_list)
-        chunk_size = int(cpu_num * 50 * t_len / t_size)
+        if t_size == 0:
+            chunk_size = 1000
+        else:
+            chunk_size = int(cpu_num * 50 * t_len / t_size)
         if chunk_size < cpu_num:
             chunk_size = cpu_num
 
@@ -317,6 +323,6 @@ def create_all_es(pk_list=[]):
     print('indexing time', t3 - t0)
 
 
-create_es_with_pk(20)
+# create_es_with_pk(20)
 
-# create_all_es()
+create_all_es()
