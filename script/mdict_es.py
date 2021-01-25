@@ -20,7 +20,7 @@ from mdict.mdict_utils.init_utils import init_vars
 from elasticsearch.helpers import parallel_bulk
 from elasticsearch.helpers.errors import BulkIndexError
 from elasticsearch_dsl import connections, analyzer, Text, Index, Document
-from elasticsearch.exceptions import TransportError
+from elasticsearch.exceptions import TransportError, NotFoundError
 
 error_log_path = os.path.join(current_path, 'error.log')
 
@@ -168,7 +168,7 @@ def create_cache(dic, mdx):
     mdx_path = mdx.get_fpath()
     mdx_file_size = int(os.path.getsize(mdx_path) / (1024 * 1024))
 
-    seg_size = cpu_num * 5
+    seg_size = cpu_num * 3
     if mdx_file_size == 0:
         seg_len = 50000
     else:
@@ -196,17 +196,17 @@ def create_cache(dic, mdx):
         e_p1 = r_dict['e_p1']
         e_p2 = r_dict['e_p2']
 
-        t_list = list(get_content(dic, mdx, entry_list))
-        t_size = sys.getsizeof(t_list)
-        t_len = len(entry_list)
-        if t_size == 0:
-            chunk_size = 1000
-        else:
-            chunk_size = int(cpu_num * 50 * t_len / t_size)
-        if chunk_size < cpu_num:
-            chunk_size = cpu_num
-
         try:
+            t_list = list(get_content(dic, mdx, entry_list))
+            t_size = sys.getsizeof(t_list)
+            t_len = len(entry_list)
+            if t_size == 0:
+                chunk_size = 1000
+            else:
+                chunk_size = int(cpu_num * 50 * t_len / t_size)
+            if chunk_size < cpu_num:
+                chunk_size = cpu_num
+
             for r in parallel_bulk(connections.get_connection(), yield_data(t_list),
                                    thread_count=cpu_num, chunk_size=chunk_size):
                 pass
@@ -214,36 +214,35 @@ def create_cache(dic, mdx):
             index = Index(get_index_name_with_pk(dic.pk))
             index.delete()
             error_info = (get_index_name_with_pk(dic.pk), mdx.get_fname(), mdx.get_len(), str(e)[:2000])
-            print(*error_info)
+            print(error_info)
             write_error_log(error_info)
             break
         except BulkIndexError as e:
             index = Index(get_index_name_with_pk(dic.pk))
             index.delete()
             error_info = (get_index_name_with_pk(dic.pk), mdx.get_fname(), mdx.get_len(), str(e)[:2000])
-            print(*error_info)
+            print(error_info)
             write_error_log(error_info)
             break
         except zlib.error as e:
             error_info = (get_index_name_with_pk(dic.pk), mdx.get_fname(), mdx.get_len(), str(e)[:2000])
-            print(*error_info)
+            print(error_info)
             write_error_log(error_info)
         count += len(entry_list)
-
         if s_p1 == -1:
             break
-
     index = Index(get_index_name_with_pk(dic.pk))
-    index.put_settings(body=settings2)
+    if index.exists():
+        index.put_settings(body=settings2)
 
 
-def close_index(dic):
-    index = Index(get_index_name_with_pk(dic.pk))
+def close_index(dic_pk):
+    index = Index(get_index_name_with_pk(dic_pk))
     index.close()
 
 
-def delete_index(dic):
-    index = Index(get_index_name_with_pk(dic.pk))
+def delete_index(dic_pk):
+    index = Index(get_index_name_with_pk(dic_pk))
     index.delete()
 
 
@@ -323,6 +322,8 @@ def create_all_es(pk_list=[]):
     print('indexing time', t3 - t0)
 
 
-# create_es_with_pk(20)
+# create_es_with_pk(934)
+
+# delete_index(743)
 
 create_all_es()

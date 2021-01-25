@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
 from elasticsearch_dsl.query import MultiMatch
-from elasticsearch.exceptions import ConnectionError
+from elasticsearch.exceptions import ConnectionError, TransportError
 
 from base.base_func import print_log_info, is_en_func, strQ2B, request_body_serialze, guess_mime
 from base.base_func3 import t2s, s2t
@@ -111,8 +111,8 @@ def es_search(request):
     query = request.GET.get('query', '')
     # force_refresh = json.loads(request.GET.get('force_refresh', False))
 
-    result_num = int(request.GET.get('result_num ', 60))
-    frag_size = int(request.GET.get('frag_size', 60))
+    result_num = int(request.GET.get('result_num ', 50))
+    frag_size = int(request.GET.get('frag_size', 50))
     frag_num = int(request.GET.get('frag_num', 3))
 
     if result_num > 1000:
@@ -165,13 +165,18 @@ def init_index_list(group):
                 indices.close(index=index_name, ignore=[400, 404])
 
 
+def sub_highlight(matched):
+    text = matched.group(0)
+    return '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + text + '</b>'
+
+
 def get_es_results(query, group, result_num, frag_size, frag_num):
     if not meta_dict:
         init_meta_list()
 
-    init_index_list(group)
+    # init_index_list(group)
     # 如果指定单独的index，当index_list长度超出后会报错RequestError 400 An HTTP line is larger than 4096 bytes.
-    # 通过开关index实现指定index搜索，会增加。
+    # 通过开关index实现指定index搜索，会增加耗时。
 
     q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase')
     s = Search(index='mdict-*').using(client).query(q)
@@ -182,7 +187,12 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
 
     s = s[0:result_num]
     # 默认只返回10个结果
-    response = s.execute()
+
+    try:
+        response = s.execute()
+    except TransportError as e:
+        print(e)
+        return []
 
     result = []
 
@@ -210,13 +220,21 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
 
                     hl = hl.replace('<', '&lt;').replace('>', '&gt;').replace('\n', '')
 
+                    t_text = ''
                     for q in query:
-                        t_text = '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + q + '</b>'
-                        hl = re.sub(q, t_text, hl, flags=re.IGNORECASE)
+                        if t_text == '':
+                            t_text = q
+                        else:
+                            t_text = t_text + r'([ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]*?)' + q
+
+                    hl = re.sub(t_text, sub_highlight, hl, flags=re.IGNORECASE)
+                    hl = hl.strip()
                     if highlight_content_text == '':
-                        highlight_content_text = hl
+                        if hl not in highlight_content_text:
+                            highlight_content_text = hl
                     else:
-                        highlight_content_text = highlight_content_text + '<br/>' + hl
+                        if hl not in highlight_content_text:
+                            highlight_content_text = highlight_content_text + '<br/>' + hl
 
         rd = meta_dict[index_name]
         item = init_vars.mdict_odict[rd['file']]
