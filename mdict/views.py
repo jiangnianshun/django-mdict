@@ -111,7 +111,7 @@ def es_search(request):
     query = request.GET.get('query', '')
     # force_refresh = json.loads(request.GET.get('force_refresh', False))
 
-    result_num = int(request.GET.get('result_num ', 50))
+    result_num = int(request.GET.get('result_num ', 60))
     frag_size = int(request.GET.get('frag_size', 50))
     frag_num = int(request.GET.get('frag_num', 3))
 
