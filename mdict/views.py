@@ -170,6 +170,9 @@ def sub_highlight(matched):
     return '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + text + '</b>'
 
 
+hl_reg = r'([ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t，。、・？；：“”「」‐—（）br]*?)'
+
+
 def get_es_results(query, group, result_num, frag_size, frag_num):
     if not meta_dict:
         init_meta_list()
@@ -220,21 +223,24 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
 
                     hl = hl.replace('<', '&lt;').replace('>', '&gt;').replace('\n', '')
 
-                    t_text = ''
-                    for q in query:
-                        if t_text == '':
-                            t_text = q
-                        else:
-                            t_text = t_text + r'([ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]*?)' + q
-
-                    hl = re.sub(t_text, sub_highlight, hl, flags=re.IGNORECASE)
                     hl = hl.strip()
+
+
                     if highlight_content_text == '':
                         if hl not in highlight_content_text:
                             highlight_content_text = hl
                     else:
                         if hl not in highlight_content_text:
                             highlight_content_text = highlight_content_text + '<br/>' + hl
+
+                t_text = ''
+                for q in query:
+                    if t_text == '':
+                        t_text = q
+                    else:
+                        t_text = t_text + hl_reg + q
+
+                highlight_content_text = re.sub(t_text, sub_highlight, highlight_content_text, flags=re.IGNORECASE)
 
         rd = meta_dict[index_name]
         item = init_vars.mdict_odict[rd['file']]
