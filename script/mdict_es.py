@@ -170,8 +170,8 @@ def get_content(dic, mdx, entry_list):
         entry = entry_list[i][0]
         content = record_list[i]
 
-        if content.startswith('@@@LINK='):
-            continue
+        # if content.startswith('@@@LINK='):
+        #     continue
 
         yield {
             '_index': index_name,
