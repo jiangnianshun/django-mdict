@@ -111,7 +111,8 @@ def es_search(request):
     query = request.GET.get('query', '')
     # force_refresh = json.loads(request.GET.get('force_refresh', False))
 
-    result_num = int(request.GET.get('result_num ', 60))
+    result_num = int(request.GET.get('result_num', 60))
+    result_page = int(request.GET.get('result_page', 1))
     frag_size = int(request.GET.get('frag_size', 50))
     frag_num = int(request.GET.get('frag_num', 3))
 
@@ -125,16 +126,20 @@ def es_search(request):
         frag_size = 200
 
     group = int(request.GET.get('dic_group', 0))
-    page = int(request.GET.get('page', 1))
+    # page = int(request.GET.get('page', 1))
 
-    # if (force_refresh and page == 1) or es_paginator.get(query, group) is None:
-    result = get_es_results(query, group, result_num, frag_size, frag_num)
+    result = get_es_results(query, group, result_num, result_page, frag_size, frag_num)
     serializer = MdictEntrySerializer(result, many=True)
-    p = MdictPage(query, group, serializer.data)
-    es_paginator.put(p)
 
-    k_page = es_paginator.get(query, group)
-    ret = k_page.get_ret(page)
+    total_count = 1000
+
+    ret = {
+        "page_size": result_num,  # 每页显示两个
+        "total_count": total_count,  # 一共有多少数据
+        "total_page": int(total_count/result_num),  # 一共有多少页
+        "current_page": result_page,  # 当前页数
+        "data": serializer.data,
+    }
 
     return Response(ret)
 
@@ -173,7 +178,7 @@ def sub_highlight(matched):
 hl_reg = r'([ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t，。、・？；：“”「」‐—（）br]*?)'
 
 
-def get_es_results(query, group, result_num, frag_size, frag_num):
+def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
     if not meta_dict:
         init_meta_list()
 
@@ -189,7 +194,7 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
                             number_of_fragments=frag_num)
     # html encoder会将html标签转换为实体
 
-    s = s[0:result_num]
+    s = s[(result_page-1)*result_num:result_page*result_num]
     # 默认只返回10个结果
 
     try:

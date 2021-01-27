@@ -97,6 +97,8 @@ function add_iframes(data,container,need_clear,is_list){
 			var current_page=data['current_page'];
 			var iframe_length=$('#card-container iframe').length;
 		}
+
+		var s_id = 0;
 		
 		for(var i=0;i<d.length;i++){
 			var record=d[i];
@@ -112,9 +114,9 @@ function add_iframes(data,container,need_clear,is_list){
 			}
 			
 			if(need_clear){
-				var s_id=i;
+				s_id=i;
 			}else{
-				var s_id=iframe_length+i;
+				s_id=iframe_length+i;
 				
 			}
 
@@ -321,7 +323,7 @@ function add_to_history(query,result_num){
 
 function query_es(query,container,page,need_clear,is_over){
 	var dic_group=$('#dic-group option:selected').attr('data-pk');
-	var data={"query":query,"dic_group":dic_group,"page":page,"force_refresh":$('#config-force-refresh').prop('checked')};
+	var data={"query":query,"dic_group":dic_group,"result_page":page,"force_refresh":$('#config-force-refresh').prop('checked')};
 	$.ajax({
 		url:"/mdict/essearch/",
 		contentType:'json',
@@ -333,16 +335,32 @@ function query_es(query,container,page,need_clear,is_over){
 			//每次按钮点击后清理掉已有的显示的词条
             page=add_iframes(data,container,need_clear,false);
 			//page[0]是当前页码，page[1]是总页码
-			if(page[0]<page[1]){
-				var next_page=page[0]+1;
-				var t_over=false
-				if(next_page==page[1]){
-					t_over=true
-				}
-				query_es(query,container,next_page,false,t_over);
-			}else if(page[0]==page[1]){
-				is_over=true
-			}
+
+		    var s2=`
+			<div id='next-page' class='card card-header m-auto'>
+				<div class='m-auto' style='color:#007bff;hover:pointer;'>
+					继续加载
+				</div>
+			</div>
+			`;
+			$('#card-container #next-page').remove();
+			container.append(s2);
+
+			$('#card-container #next-page').on('click',function(){
+			    query_es(query,container,page[0]+1,false,true);
+			})
+
+			is_over=true
+//			if(page[0]<page[1]){
+//				var next_page=page[0]+1;
+//				var t_over=false
+//				if(next_page==page[1]){
+//					t_over=true
+//				}
+//				query_es(query,container,next_page,false,t_over);
+//			}else if(page[0]==page[1]){
+//				is_over=true
+//			}
 			if(need_clear){
 				$("#query").autocomplete("close");
 				//有时查询结果比搜索提示出现的快，此时autocomplete没有关闭，因此这里要关闭。

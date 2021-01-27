@@ -74,6 +74,11 @@ html,body,.container-fluid{
 	width:100%;
 }
 
+#next-page:hover{
+    color:orange;
+    cursor:pointer;
+}
+
 .ui-autocomplete{
     max-width:60%;
     word-wrap:break-word;
