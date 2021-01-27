@@ -185,7 +185,8 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
     s = Search(index='mdict-*').using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
     s = s.highlight('content', fragment_size=frag_size)
-    s = s.highlight_options(order='score', pre_tags='', post_tags='', encoder='default', number_of_fragments=frag_num)
+    s = s.highlight_options(order='score', pre_tags='@flag1', post_tags='@flag2', encoder='default',
+                            number_of_fragments=frag_num)
     # html encoder会将html标签转换为实体
 
     s = s[0:result_num]
@@ -225,7 +226,6 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
 
                     hl = hl.strip()
 
-
                     if highlight_content_text == '':
                         if hl not in highlight_content_text:
                             highlight_content_text = hl
@@ -233,14 +233,18 @@ def get_es_results(query, group, result_num, frag_size, frag_num):
                         if hl not in highlight_content_text:
                             highlight_content_text = highlight_content_text + '<br/>' + hl
 
-                t_text = ''
-                for q in query:
-                    if t_text == '':
-                        t_text = q
-                    else:
-                        t_text = t_text + hl_reg + q
+                highlight_content_text = highlight_content_text \
+                    .replace('@flag1', '<b style="background-color:yellow;color:red;font-size:0.8rem;">') \
+                    .replace('@flag2', '</b>')
 
-                highlight_content_text = re.sub(t_text, sub_highlight, highlight_content_text, flags=re.IGNORECASE)
+                # t_text = ''
+                # for q in query:
+                #     if t_text == '':
+                #         t_text = q
+                #     else:
+                #         t_text = t_text + hl_reg + q
+                #
+                # highlight_content_text = re.sub(t_text, sub_highlight, highlight_content_text, flags=re.IGNORECASE)
 
         rd = meta_dict[index_name]
         item = init_vars.mdict_odict[rd['file']]
