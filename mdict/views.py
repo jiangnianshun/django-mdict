@@ -217,6 +217,7 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
     s = Search(index='mdict-*').using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
     s = s.highlight('content', fragment_size=frag_size)
+
     s = s.highlight_options(order='score', pre_tags='@flag1', post_tags='@flag2', encoder='default',
                             number_of_fragments=frag_num)
     # html encoder会将html标签转换为实体
@@ -245,7 +246,6 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
             if 'content' in highlight:
                 highlight_content = meta.highlight.content
                 for hl in highlight_content:
-
                     hl = re.sub('<[^<]+?>', '', hl)
 
                     hl = hl[hl.find('>') + 1:]
@@ -257,6 +257,14 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
                     hl = hl.replace('<', '&lt;').replace('>', '&gt;').replace('\n', '')
 
                     hl = hl.strip()
+
+                    if len(hl) > frag_size * 2:
+                        # 有时候会出现长度4000多的摘要
+                        flag1 = hl.find('@flag1')
+                        flag2 = hl.rfind('@flag2')
+                        hl = hl[:flag2 + 6 + frag_size]
+                        if flag1 > frag_size:
+                            hl = hl[flag1 - frag_size:]
 
                     if highlight_content_text == '':
                         if hl not in highlight_content_text:

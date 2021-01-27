@@ -1,3 +1,4 @@
+# coding:utf-8
 import os
 import sys
 import psutil
@@ -279,7 +280,6 @@ def close_index_with_pk(dic_pk):
     except NotFoundError as e:
         print(e)
     print('close', dic_pk, index_name)
-
 
 
 def open_index_with_pk(dic_pk):
