@@ -25,4 +25,5 @@ urlpatterns = [
     path('bujian/', views.bujianjiansuo),
     path('es/', views.es_index),
     path('essearch/', views.es_search),
+    path('initindex/', views.init_index),
 ]

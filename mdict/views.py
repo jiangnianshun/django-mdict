@@ -1,6 +1,7 @@
 import json
 import mimetypes
 import re
+import time
 from urllib.parse import quote, unquote
 
 from django.http import HttpResponse
@@ -136,7 +137,7 @@ def es_search(request):
     ret = {
         "page_size": result_num,  # 每页显示两个
         "total_count": total_count,  # 一共有多少数据
-        "total_page": int(total_count/result_num),  # 一共有多少页
+        "total_page": int(total_count / result_num),  # 一共有多少页
         "current_page": result_page,  # 当前页数
         "data": serializer.data,
     }
@@ -144,9 +145,33 @@ def es_search(request):
     return Response(ret)
 
 
+def init_index(request):
+    group = int(request.GET.get('dic_group', 0))
+    try:
+        t1 = time.perf_counter()
+        init_index_list(group)
+        t2 = time.perf_counter()
+        return HttpResponse('success:' + str(t2 - t1))
+    except Exception as e:
+        print(e)
+        return HttpResponse('failed')
+
+
+def is_index_open(index_name):
+    index_info = client.cat.indices(index=index_name, format='json')[0]
+    index_status = index_info['status']
+    if index_status == 'open':
+        return True
+    else:
+        return False
+
+
 def init_index_list(group):
+    if not meta_dict:
+        init_meta_list()
     indices = client.indices
     for index_name in meta_dict:
+        is_open = is_index_open(index_name)
         md5 = index_name[6:]
         dics = MdictDic.objects.filter(mdict_md5=md5)
         if len(dics) == 0:
@@ -155,27 +180,29 @@ def init_index_list(group):
             dic = dics[0]
             if dic.mdict_enable:
                 if group <= 0:
-                    indices.open(index=index_name, ignore=[400, 404])
+                    if not is_open:
+                        indices.open(index=index_name, ignore=[400, 404])
                 else:
                     group_list = MdictDicGroup.objects.filter(pk=group)
                     if len(group_list) > 0:
                         temp = group_list[0].mdict_group.filter(pk=dic.pk)
                         if len(temp) > 0:
-                            indices.open(index=index_name, ignore=[400, 404])
+                            if not is_open:
+                                indices.open(index=index_name, ignore=[400, 404])
                         else:
-                            indices.close(index=index_name, ignore=[400, 404])
+                            if is_open:
+                                indices.close(index=index_name, ignore=[400, 404])
                     else:
-                        indices.close(index=index_name, ignore=[400, 404])
+                        if is_open:
+                            indices.close(index=index_name, ignore=[400, 404])
             else:
-                indices.close(index=index_name, ignore=[400, 404])
+                if is_open:
+                    indices.close(index=index_name, ignore=[400, 404])
 
 
 def sub_highlight(matched):
     text = matched.group(0)
     return '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + text + '</b>'
-
-
-hl_reg = r'([ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t，。、・？；：“”「」‐—（）br]*?)'
 
 
 def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
@@ -194,7 +221,7 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
                             number_of_fragments=frag_num)
     # html encoder会将html标签转换为实体
 
-    s = s[(result_page-1)*result_num:result_page*result_num]
+    s = s[(result_page - 1) * result_num:result_page * result_num]
     # 默认只返回10个结果
 
     try:
@@ -241,15 +268,6 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
                 highlight_content_text = highlight_content_text \
                     .replace('@flag1', '<b style="background-color:yellow;color:red;font-size:0.8rem;">') \
                     .replace('@flag2', '</b>')
-
-                # t_text = ''
-                # for q in query:
-                #     if t_text == '':
-                #         t_text = q
-                #     else:
-                #         t_text = t_text + hl_reg + q
-                #
-                # highlight_content_text = re.sub(t_text, sub_highlight, highlight_content_text, flags=re.IGNORECASE)
 
         rd = meta_dict[index_name]
         item = init_vars.mdict_odict[rd['file']]

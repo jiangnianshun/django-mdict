@@ -297,7 +297,7 @@ function add_iframes(data,container,need_clear,is_list){
 
 			})(iframe,html);
 		}
-		return [current_page,total_page]
+		return [current_page,total_page,d.length]
 	}
 	
 }
@@ -344,11 +344,13 @@ function query_es(query,container,page,need_clear,is_over){
 			</div>
 			`;
 			$('#card-container #next-page').remove();
-			container.append(s2);
+			if(page[2]>0){
+                container.append(s2);
 
-			$('#card-container #next-page').on('click',function(){
-			    query_es(query,container,page[0]+1,false,true);
-			})
+                $('#card-container #next-page').on('click',function(){
+                    query_es(query,container,page[0]+1,false,true);
+                })
+			}
 
 			is_over=true
 //			if(page[0]<page[1]){
@@ -836,7 +838,7 @@ function get_mdict_list(container, flag){//载入词典列表
                             </div>
                             `
                 if(flag){
-				    var s="<div class='card-header'>"+es_flag+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
+				    var s="<div class='card-header'>"+checkbox_html+es_flag+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
                 }else{
 				    var s="<div class='card-header'>"+checkbox_html+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
 				}

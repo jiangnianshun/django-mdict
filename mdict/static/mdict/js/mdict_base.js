@@ -584,11 +584,32 @@ function init_es(){
 
     init_home_button();
 
-    $('#enable-all-dic').hide();
-    $('#mdict-group-list').hide();
+    //$('#enable-all-dic').hide();
+    //$('#mdict-group-list').hide();
     $('#online-mdict-checkbox').hide();
+    $('#open-close-index').show();
+    $('#open-close-index').click(function(){
+        init_index();
+    })
 
     first_query();
+}
+
+function init_index(){//载入词典列表
+    var dic_group=$('#dic-group option:selected').attr('data-pk');
+    data={"dic_group":dic_group};
+	$.ajax({
+		url:"/mdict/initindex/",
+		contentType:'json',
+		type:'GET',
+		data:data,
+		success:function(data){
+		    console.log(data)
+		},
+		error:function(jqXHR,textStatus,errorThrown){
+			alert(jqXHR.responseText);
+		},
+	});
 }
 
 function init_scroll_list(){
