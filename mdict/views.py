@@ -248,11 +248,15 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
                 for hl in highlight_content:
                     hl = re.sub('<[^<]+?>', '', hl)
 
-                    hl = hl[hl.find('>') + 1:]
+                    lflag = hl.find('>')
+                    ltflag = hl.find('@flag1')
+                    if -1 < lflag < ltflag:
+                        hl = hl[lflag + 1:]
 
-                    flag = hl.rfind('<')
-                    if flag > -1:
-                        hl = hl[:flag]
+                    rflag = hl.rfind('<')
+                    rtflag = hl.rfind('@flag2')
+                    if rflag > -1 and rflag > rtflag + 6:
+                        hl = hl[:rflag]
 
                     hl = hl.replace('<', '&lt;').replace('>', '&gt;').replace('\n', '')
 
