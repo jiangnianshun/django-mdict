@@ -460,7 +460,7 @@ python3 manage.py migrate mdict
    
 4. 用软件导出所有mdict开头的数据表，再导入到新的数据库中。
 
-以DB browser for SQLite软件为例，打开旧数据库，选择文件导出/导出数据库到SQL文件，选择所有mdict开头的表，勾选在insert into语句中保留列名，然后导出。
+以DB browser for SQLite软件为例，打开旧数据库，选择菜单文件/导出/导出数据库到SQL文件，选择所有mdict开头的表，勾选在insert into语句中保留列名，然后导出。
 
 如果第2步没有删除mdict_path.json，导致新的数据库又导入了词典信息，那么这里应当手动将新数据库中mdict_mdictdic数据表中的记录都清空。
 

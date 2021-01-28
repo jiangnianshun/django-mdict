@@ -60,24 +60,35 @@ pip3 install elasticsearch-dsl
 
 * 词典分组和某个词典的启停仅修改了数据库中的值，需要单击启停索引按钮，才能将对应的词典的索引设置为开启或关闭状态，注意对大量索引进行启停操作可能耗时很长（进度可查看es的窗口提示）。
 
-* 删除索引需要手动进行
+* 操作索引需要手动进行
+
+创建所有设置为启用es但是索引不存在的词典的索引，直接运行mdict_es.py。
+
+创建id值(pk值)为66,68,51的词典的索引
+
+```
+# cmd
+mdict_es.py -c 66 68 51
+# powershell
+.\mdict_es.py -c 66 68 51
+```
 
 删除id值(pk值)为66,68,51的词典的索引
 
 ```
 # cmd
-python mdict_es.py -d 66 68 51
+mdict_es.py -d 66 68 51
 # powershell
-python ./mdict_es.py -d 66 68 51
+.\mdict_es.py -d 66 68 51
 ```
 
 删除全部索引
 
 ```
 # cmd
-python mdict_es.py -da
+mdict_es.py -da
 # powershell
-python ./mdict_es.py -da
+.\mdict_es.py -da
 ```
 
 curl删除指定索引(index name是mdict-前缀加mdx文件的md5值)

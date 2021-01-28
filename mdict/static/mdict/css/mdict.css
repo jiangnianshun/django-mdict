@@ -74,6 +74,10 @@ html,body,.container-fluid{
 	width:100%;
 }
 
+#next-page{
+    white-space: nowrap;
+}
+
 #next-page:hover{
     color:orange;
     cursor:pointer;
