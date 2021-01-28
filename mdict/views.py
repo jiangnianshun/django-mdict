@@ -303,7 +303,7 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
             dic = dics[0]
             record = SearchObject(mdx, mdd_list, dic, '').substitute_record(hit['content'])
 
-            result.append(mdxentry(rd['name'], hit['entry'], record, 1, 1, 1, 1, 1, extra=highlight_content_text))
+            result.append(mdxentry(rd['name'], hit['entry'], record, 1, dic.pk, 1, 1, 1, extra=highlight_content_text))
         else:
             print(index_name, 'not exists in database.')
 
