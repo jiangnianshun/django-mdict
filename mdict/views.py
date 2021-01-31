@@ -213,7 +213,7 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
     # 如果指定单独的index，当index_list长度超出后会报错RequestError 400 An HTTP line is larger than 4096 bytes.
     # 通过开关index实现指定index搜索，会增加耗时。
 
-    q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase')
+    q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase', analyzer='ik_smart')
     s = Search(index='mdict-*').using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
     s = s.highlight('content', fragment_size=frag_size)

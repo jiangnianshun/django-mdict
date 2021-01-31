@@ -77,8 +77,8 @@ class Huaci:
         thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         invert = 255 - thresh
 
-        text = pytesseract.image_to_string(invert, lang=self.lang_con, config='--psm 7 -c page_separator=""')
-        # psm设置布局，小段文本6或7比较好。
+        text = pytesseract.image_to_string(invert, lang=self.lang_con, config='--psm 6 -c page_separator=""')
+        # psm设置布局，小段文本6或7比较好，6可用于横向和竖向文字，7只能用于横向文字，文字方向转90度的用5。
         # tesseract会在末尾加form feed分页符，unicode码000c。
         # -c page_separator=""设置分页符为空
         text = regp.sub('', text)
