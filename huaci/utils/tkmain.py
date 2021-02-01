@@ -357,6 +357,30 @@ class NavigationBar(tk.Frame):
         tk.Frame.__init__(self, master)
         resources = os.path.join(os.path.dirname(__file__), "resources")
 
+        # Back button
+        back_png = os.path.join(resources, "back" + IMAGE_EXT)
+        if os.path.exists(back_png):
+            self.back_image = tk.PhotoImage(file=back_png)
+        self.back_button = tk.Button(self, image=self.back_image,
+                                     command=self.go_back)
+        self.back_button.grid(row=0, column=0)
+
+        # Forward button
+        forward_png = os.path.join(resources, "forward" + IMAGE_EXT)
+        if os.path.exists(forward_png):
+            self.forward_image = tk.PhotoImage(file=forward_png)
+        self.forward_button = tk.Button(self, image=self.forward_image,
+                                        command=self.go_forward)
+        self.forward_button.grid(row=0, column=1)
+
+        # Reload button
+        reload_png = os.path.join(resources, "reload" + IMAGE_EXT)
+        if os.path.exists(reload_png):
+            self.reload_image = tk.PhotoImage(file=reload_png)
+        self.reload_button = tk.Button(self, image=self.reload_image,
+                                       command=self.reload)
+        self.reload_button.grid(row=0, column=2)
+
         # settings button
         setting_png = os.path.join(resources, "setting" + IMAGE_EXT)
         if os.path.exists(setting_png):
@@ -364,6 +388,18 @@ class NavigationBar(tk.Frame):
         self.setting_button = tk.Button(self, image=self.setting_image,
                                         command=self.show_setting)
         self.setting_button.grid(row=0, column=4)
+
+    def go_back(self):
+        if self.master.get_browser():
+            self.master.get_browser().GoBack()
+
+    def go_forward(self):
+        if self.master.get_browser():
+            self.master.get_browser().GoForward()
+
+    def reload(self):
+        if self.master.get_browser():
+            self.master.get_browser().Reload()
 
     def show_setting(self):
         self.setting.show_window()
