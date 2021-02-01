@@ -15,11 +15,13 @@ except Exception:
     from tkbase import *
 
 
-class ConfigWindow():
+class ConfigWindow:
     def __init__(self, huaci):
         self.root = tk.Toplevel()
         self.root.title('设置')
         self.root.attributes('-topmost', True)
+        self.root.protocol('WM_DELETE_WINDOW', self.withdraw_window)
+        self.root.withdraw()
 
         self.huaci = huaci
 
@@ -30,12 +32,11 @@ class ConfigWindow():
 
         Widget1(self.root, self.huaci)
 
-    def quit_window(self, icon, item):
-        if self.huaci.p is not None:
-            print('closing process ', self.huaci.p.pid)
-            self.huaci.killtree(self.huaci.p.pid)
-        icon.stop()
-        self.root.destroy()
+    def withdraw_window(self):
+        self.root.withdraw()
+
+    def show_window(self):
+        self.root.deiconify()
 
 
 # 划词设置窗口

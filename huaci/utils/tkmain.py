@@ -352,6 +352,7 @@ class NavigationBar(tk.Frame):
         self.forward_image = None
         self.reload_image = None
         self.main = main
+        self.setting = ConfigWindow(self.main.huaci)
 
         tk.Frame.__init__(self, master)
         resources = os.path.join(os.path.dirname(__file__), "resources")
@@ -361,8 +362,8 @@ class NavigationBar(tk.Frame):
         if os.path.exists(setting_png):
             self.setting_image = tk.PhotoImage(file=setting_png)
         self.setting_button = tk.Button(self, image=self.setting_image,
-                                        command=self.setting_window)
+                                        command=self.show_setting)
         self.setting_button.grid(row=0, column=4)
 
-    def setting_window(self):
-        ConfigWindow(self.main.huaci)
+    def show_setting(self):
+        self.setting.show_window()
