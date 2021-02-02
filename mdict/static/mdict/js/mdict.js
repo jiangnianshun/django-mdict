@@ -312,7 +312,7 @@ function add_to_history(query,result_num){
         li_h.appendTo('#search-history');
         li_h.click(function(){
             if(query!=$("#query").val()){
-                $("#query").val(query);
+                $("#query").val(html_unescape(query));
                 $("#mdictquery").trigger("click");
             }
             $("#modal-container-history").modal("hide");

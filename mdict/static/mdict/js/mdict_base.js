@@ -554,7 +554,7 @@ function init_common(){
 
             $('html').data('data-pushstate',false);
 
-            $("#query").val(query);
+            $("#query").val(html_unescape(query));
             $("#mdictquery").trigger("click");
         }
     });
@@ -564,7 +564,7 @@ function first_query(){
 	var first_query=$("html").attr("data-first-query");
 
 	if(first_query!=''){
-		$('#query').val(first_query);
+		$('#query').val(html_unescape(first_query));
 		$('#mdictquery').trigger("click");
 	}
 }
