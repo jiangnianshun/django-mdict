@@ -28,11 +28,11 @@ pip3 install elasticsearch-dsl
 
 [https://www.elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/elasticsearch)
 
-3. 下载和es版本对应的elasticsearch-ik中文分词器并解压，将解压后的文件夹复制到elasticsearch的plugins目录下。
+3. （可跳过）下载和es版本对应的elasticsearch-ik中文分词器并解压，将解压后的文件夹复制到elasticsearch的plugins目录下。
 
 [https://github.com/medcl/elasticsearch-analysis-ik/releases](https://github.com/medcl/elasticsearch-analysis-ik/releases)
 
-4. 运行elasticsearch/bin/elasticsearch.bat。
+4. 运行elasticsearch/bin/elasticsearch.bat启动es。
 
 5. 进入django-mdict的admin，将需要索引的词典设置为启用es索引。对于反查词典和进行了词组提取的词典（比如搜韵诗词全文检索.mdx、英汉•汉英(专业•科技)词典.mdx）不需要进行全文索引。
 

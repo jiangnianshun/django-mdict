@@ -53,14 +53,23 @@ error_log_path = os.path.join(current_path, 'error.log')
 
 cpu_num = psutil.cpu_count(False)
 
-html_strip1 = analyzer('html_strip',
-                       tokenizer="ik_smart",
+client = Elasticsearch()
+
+tokenizer = 'standard'
+
+plugins_str = client.cat.plugins()
+
+if 'analysis-ik' in plugins_str:
+    tokenizer = 'ik_smart'
+
+html_strip1 = analyzer('html_analyzer',
+                       tokenizer=tokenizer,
                        filter=["lowercase", "stop", "snowball", "stemmer"],
                        char_filter=["html_strip"]
                        )
 
-html_strip2 = analyzer('html_strip',
-                       tokenizer="ik_smart",
+html_strip2 = analyzer('html_analyzer2',
+                       tokenizer=tokenizer,
                        filter=["lowercase", "stop", "snowball", "stemmer"],
                        char_filter=["html_strip"],
                        stopwords=["上一页", "下一页", "上一葉", "下一葉", "目录", "封面", "索引", "前言"]
@@ -309,7 +318,6 @@ def delete_index_with_pk(dic_pk):
 
 
 def delete_all_es():
-    client = Elasticsearch()
     for index in client.indices.get_alias('mdict-*'):
         index = Index(index)
         index.delete()
