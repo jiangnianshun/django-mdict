@@ -36,7 +36,7 @@ sug_cache = CacheControllor(_sug_cache, auto_clear=True)
 
 
 def get_key(query, group, dic_pk):
-    return str(group)+':'+str(dic_pk) + ':' + str(query)
+    return str(group) + ':' + str(dic_pk) + ':' + str(query)
 
 
 class MdictPage:
@@ -44,8 +44,8 @@ class MdictPage:
         self.query = query
         self.group = group
 
-        self.page_size = 30
-        self.max_page_size = 50
+        self.page_size = 50
+        self.max_page_size = 70
 
         self.total_count = len(data)
         if self.total_count % self.page_size <= self.max_page_size - self.page_size:
@@ -59,7 +59,7 @@ class MdictPage:
         self.finish = False  # 当前数据在分页中未被取完
         self.search_count = 0
 
-        key_cache.put(query, group,-1, data)
+        key_cache.put(query, group, -1, data)
 
     def get_ret(self, page):
         self.search_count += 1
@@ -96,7 +96,7 @@ class MdictPage:
         self.search_count -= 1
 
     def delete(self):
-        key_cache.delete(self.query, self.group,-1)
+        key_cache.delete(self.query, self.group, -1)
 
 
 class MdictPaginator:
