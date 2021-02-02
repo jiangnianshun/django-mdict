@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 from .mdict_config import get_config_con
 from .data_utils import get_or_create_dic, get_all_dic
 from .init_utils import init_vars, indicator
@@ -54,7 +52,7 @@ def merge_record(record_list):
             if counter > 1:
                 entry = entry[1:] + '【' + str(counter) + '】'
                 t_list.append(mdxentry(name, entry, record, pror, mdx_pk, -1, -1, -1))
-                del_list.append(deepcopy(del_item))
+                del_list.append(del_item.copy())
 
             name = mdx_name
             entry = '/' + mdx_entry
@@ -69,7 +67,7 @@ def merge_record(record_list):
             if counter > 1:
                 entry = entry[1:] + '【' + str(counter) + '】'
                 t_list.append(mdxentry(name, entry, record, pror, mdx_pk, -1, -1, -1))
-                del_list.append(deepcopy(del_item))
+                del_list.append(del_item.copy())
 
     for item in del_list:
         for i in item:
