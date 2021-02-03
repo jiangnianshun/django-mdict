@@ -10,7 +10,7 @@
             <audio style="display:none;"></audio>
         </div>
         <div class="ml-auto">
-            <a class="btn" data-toggle="modal" href="#modal-container-brief" id="modal-brief" role="button">
+            <a class="btn" data-bs-toggle="modal" data-bs-target="#modal-container-brief" id="modal-brief" role="button">
                 {{ name }}</a>
         </div>
         <div class="ml-auto top-menu">
@@ -18,9 +18,9 @@
                                                                               src="/static/mdict/img/es.png"></a>
             <a href="/mdict/bujian" target="_blank" style="color:white;"><img class="menu-icon" id="modal-bujian"
                                                                               src="/static/mdict/img/bujian.png"></a>
-            <img class="menu-icon" data-toggle="modal" href="#modal-container-mdict" id="modal-mdict"
+            <img class="menu-icon" data-bs-toggle="modal" data-bs-target="#modal-container-mdict" id="modal-mdict"
                  src="/static/mdict/img/default.png">
-            <img class="menu-icon" data-toggle="modal" href="#modal-container-config" id="modal-config"
+            <img class="menu-icon" data-bs-toggle="modal" data-bs-target="#modal-container-config" id="modal-config"
                  src="/static/mdict/img/gear.png">
         </div>
     </div>
@@ -31,17 +31,6 @@
 <div id="alert-box"></div>
 <div id="temp-data"></div>
 <div id="card-container">
-    <div class="card">
-        <div class="card-header">
-            <a class="card-link" data-parent="#card-container" data-toggle="collapse"
-               href="#card-element-488454"> </a>
-        </div>
-        <div class="collapse show" id="card-element-488454">
-            <div class="card-body">
-                查询结果显示
-            </div>
-        </div>
-    </div>
 </div>
 
 {% endblock %}

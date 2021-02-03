@@ -128,8 +128,8 @@ function add_iframes(data,container,need_clear,is_list){
 			var s=`
 			<div class='card'>
 				<div class='card-header'>
-					<span class='badge badge-pill badge-light'>${html_escape(mdx_entry,false)}</span>
-					<a class='card-link collapsed' href='#card-element-${s_id}' data-toggle='collapse' >${html_escape(mdx_name,false)}</a>
+					<span class='badge badge-pill badge-light text-dark'>${html_escape(mdx_entry,false)}</span>
+					<span class='text-primary collapsed card-link' href='#card-element-${s_id}' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#card-element-${s_id}">${html_escape(mdx_name,false)}</span>
 					<div style='padding-left:50px;font-size:0.6rem;'>${mdx_extra}</div>
 				</div>
 				<div class='collapse' id='card-element-${s_id}' data-parent='${s_parent}'>
@@ -142,6 +142,7 @@ function add_iframes(data,container,need_clear,is_list){
 			由于mdx_entry可能包含<等字符导致显示出错，因此需要转义。
 			data-toggle='collapse'操作是控制展开和折叠
 			href='#card-element-"+i+"'操作目标是#card-element-"+i+"
+			bootstrap5改为data-bs-toggle和data-bs-target
 			collapse默认折叠
 			collapse show默认展开
 			
@@ -475,8 +476,8 @@ function online_search(query,container){//有道在线
             var s=`
             <div class='card' style='display:none;'>
                 <div class='card-header'>
-                    <a class='card-link collapsed' href='#card-element-${s_id}' data-toggle='collapse' >
-                    <span class='badge badge-pill badge-light'>${html_escape(mdx_entry,false)}</span>${html_escape(mdx_name,false)}</a>
+                    <span class='text-primary card-link collapsed' data-bs-target='#card-element-${s_id}' data-bs-toggle='collapse' >
+                    <span class='badge badge-pill badge-light text-dark'>${html_escape(mdx_entry,false)}</span>${html_escape(mdx_name,false)}</span>
                 </div>
                 <div class='collapse' id='card-element-${s_id}' data-parent='#card-container'>
                     <div class='card-body' id='card-body-${s_id}'>
@@ -514,8 +515,8 @@ function online_search(query,container){//有道在线
             var s=`
             <div class='card'>
                 <div class='card-header'>
-                    <a class='card-link collapsed' id='card-new-${s_id}' href='javascript:void(0);'>
-                    <span class='badge badge-pill badge-light'>${html_escape(mdx_entry,false)}</span>${html_escape(mdx_name,false)}</a>
+                    <span class='text-primary card-link collapsed' id='card-new-${s_id}' href='javascript:void(0);'>
+                    <span class='badge badge-pill badge-light text-dark'>${html_escape(mdx_entry,false)}</span>${html_escape(mdx_name,false)}</span>
                 </div>
             </div>
             `;
@@ -677,10 +678,8 @@ function query_key(container,entry){
 			}else{
 				var alert_box=`
 				<div class="alert alert-danger alert-dismissable">
-					<button type="button" class="close" data-dismiss="alert"
-							aria-hidden="true">
-						&times;
-					</button>
+					<button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close">
+                    </button>
 					未查询到${entry}，无法跳转！
 				</div>
 				`;
@@ -838,9 +837,9 @@ function get_mdict_list(container, flag){//载入词典列表
                             </div>
                             `
                 if(flag){
-				    var s="<div class='card-header'>"+checkbox_html+es_flag+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
+				    var s="<div class='card-header'>"+checkbox_html+es_flag+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light text-dark'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
                 }else{
-				    var s="<div class='card-header'>"+checkbox_html+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
+				    var s="<div class='card-header'>"+checkbox_html+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light text-dark'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
 				}
 
 				container.append(s);

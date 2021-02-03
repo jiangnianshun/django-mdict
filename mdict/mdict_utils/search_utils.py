@@ -336,7 +336,7 @@ def lemmatize_func(query, record_list, is_en):
         mdict.append('<div>' + query + '原形推测：</div>')
         for w in words_list:
             mdict.append(
-                '<div><span class="badge badge-pill badge-light">' + w[1] + '</span><a href="entry://' + w[0] + '">' +
+                '<div><span class="badge badge-pill badge-light text-dark">' + w[1] + '</span><a href="entry://' + w[0] + '">' +
                 w[0] + '</a></div>')
 
         # if len(record_list) == 0:
