@@ -324,6 +324,17 @@ function init_online_dic_var(){
                 var o_url=online_dic[i]["mdict_url"];
                 var o_pror=online_dic[i]["mdict_priority"];
                 var o_isiframe=online_dic[i]['mdict_isiframe'];
+
+                var protocol=o_url.split('://')[0];
+                console.log('protocol',protocol)
+
+                if(protocol==''){
+                    var o_url_host=extractHostname(o_url);
+                }else{
+                    var o_url_host=protocol+'://'+extractHostname(o_url);
+                }
+
+
                 var checked="";
                 if(o_enable){
                     checked="checked";
@@ -331,7 +342,11 @@ function init_online_dic_var(){
                 online_ele=`
                 <div class="custom-control custom-checkbox" style="display:inline;">
                     <input type="checkbox" class="custom-control-input" id="${o_id}" ${checked} value="${o_name}" data-url="${o_url}" data-isiframe="${o_isiframe}">
-                    <label class="custom-control-label" for="${o_id}" style="display:inline;vertical-align:middle;"><span class='badge badge-pill badge-light'>${o_pror}</span>${o_name}</label>
+                    <label class="custom-control-label" for="${o_id}" style="display:inline;vertical-align:middle;">
+                        <span class='badge badge-pill badge-light'>${o_pror}</span>
+                        ${o_name}
+                        <a class='badge badge-primary badge-light' href="${o_url_host}" target="_blank">打开</a>
+                    </label>
                 </div><br />
                 `
 
