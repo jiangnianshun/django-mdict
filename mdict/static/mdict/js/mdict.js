@@ -593,9 +593,10 @@ function play_speex(ob,array,play,mime,func){
                func(true);
             }
             if(ob.children("audio").length==0){
-                ob.append('<audio style="display:none;"></audio>');
+                ob.append(new Audio(URL.createObjectURL(blob)));
             }
-            ob.children("audio")[0].src=URL.createObjectURL(blob);
+//            ob.children("audio")[0].src=URL.createObjectURL(blob);
+
 
             if(play){
                 ob.children("audio")[0].play();
@@ -615,9 +616,9 @@ function play_audio(ob,array,play,mime,func){
             func(true);
         }
         if(ob.children("audio").length==0){
-            ob.append('<audio style="display:none;"></audio>');
+            ob.append(new Audio(URL.createObjectURL(blob)));
         }
-        ob.children("audio")[0].src=URL.createObjectURL(blob);
+//        ob.children("audio")[0].src=URL.createObjectURL(blob);
         if(play){
             ob.children("audio")[0].play();
         }
