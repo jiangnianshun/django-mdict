@@ -6,32 +6,33 @@
                 <input autocomplete="off" class="btn btn-outline-secondary" id="query" type="text">
                 <i id="mdict-query-clear" class="bi bi-x input-group-text mdict-icon"></i>
                 <i id="mdict-query" class="bi bi-search btn mdict-icon"></i>
+            </div>
+        </div>
+
+        <div class="d-flex float-end">
+            {% if type == 'index' or type == 'es' %}
                 <div id="sound-speaker" class="nav-item btn">
                     <i class="bi bi-volume-mute-fill mdict-icon"></i>
                 </div>
                 <div class="btn">
-                    <div id="result_num" style="font-size:0.5rem;color:gray;"></div>
-                    <div id="result_time" style="font-size:0.5rem;color:gray;"></div>
+                    <div id="result_num" style="font-size:12px;color:gray;"></div>
+                    <div id="result_time" style="font-size:12px;color:gray;"></div>
                 </div>
-            </div>
-        </div>
-
-        <ul class="navbar-nav">
-            <li class="nav-item">
+            {% endif %}
+            <div class="input-group float-end">
                 <a class="btn" data-bs-toggle="modal" data-bs-target="#modal-container-brief" id="modal-brief">
                 {{ name }}</a>
-            </li>
-            <li class="nav-item">
-                <div class="input-group">
-                    <i class="bi bi-file-earmark-text btn mdict-icon" id="btn-es"></i>
-                    <i class="bi bi-file-spreadsheet btn mdict-icon" id="btn-bujian"></i>
-                    <i class="bi bi-journal-bookmark-fill btn mdict-icon" id="modal-mdict" data-bs-toggle="modal" data-bs-target="#modal-container-mdict"></i>
-                    <i class="bi bi-gear-fill btn mdict-icon" id="modal-config" data-bs-toggle="modal" data-bs-target="#modal-container-config"></i>
-                    <i class="bi bi-house-door-fill btn mdict-icon" id="btn-home"></i>
-                </div>
-            </li>
-        </ul>
-        <!--当input获得焦点，按回车会提交表单并刷新页面，点击button也会提交表单并刷新页面。如果不想刷新页面，方法一是将button的type从submit改成button，这只对点击按钮有效，方法二是form添加onsubmit="return false;，这对点击和回车都有效。-->
+            </div>
+        </div>
+        <div class="d-flex float-end">
+            <div class="input-group">
+                <span class="btn mdict-icon" id="btn-es">全</span>
+                <span class="btn mdict-icon" id="btn-bujian">部</span>
+                <i class="bi bi-journal-bookmark-fill btn mdict-icon" id="modal-mdict" data-bs-toggle="modal" data-bs-target="#modal-container-mdict"></i>
+                <i class="bi bi-gear-fill btn mdict-icon" id="modal-config" data-bs-toggle="modal" data-bs-target="#modal-container-config"></i>
+                <i class="bi bi-house-door-fill btn mdict-icon" id="btn-home"></i>
+            </div>
+        </div>
     </div>
-
+        <!--当input获得焦点，按回车会提交表单并刷新页面，点击button也会提交表单并刷新页面。如果不想刷新页面，方法一是将button的type从submit改成button，这只对点击按钮有效，方法二是form添加onsubmit="return false;，这对点击和回车都有效。-->
 </nav>

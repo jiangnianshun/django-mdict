@@ -5,6 +5,7 @@ Created on Fri Dec 20 12:11:06 2019
 @author: jns
 """
 import os
+import re
 import stat
 
 
@@ -67,3 +68,12 @@ def is_number(s):
         pass
 
     return False
+
+
+def is_mobile(request):
+    agent = request.META['HTTP_USER_AGENT'].lower()
+
+    if 'mobile' in agent or 'android' in agent or 'iphone' in agent:
+        return True
+    else:
+        return False

@@ -54,6 +54,8 @@
 
 2. 不支持mdxbuilder4.0制作的词典。
 
+3. 不支持IE浏览器。
+
 ### admin操作
 
 进入后台admin界面
@@ -420,7 +422,9 @@ ws.run "wsl -d ubuntu -u root /etc/init.d/apache2 start", vbhid
 
 ### 更新
 
-运行git pull更新项目
+* 如果不需要保存旧数据，重新git clone，注意可能要清除浏览器缓存（不需要清cookie）。
+
+* 如果需要保存旧数据，运行git pull更新项目
 
 ```
 git pull

@@ -18,10 +18,12 @@
 
 {% block script %}
 <script>
-        $("html").attr("data-dic-pk",{{ dic_pk }});
-        $("html").attr("data-dic-name","{{ name }}");
-        $("html").attr("data-first-query","{{ query }}");
-
+    $("html").attr("data-dic-pk",{{ dic_pk }});
+    $("html").attr("data-dic-name","{{ name }}");
+    $("html").attr("data-first-query","{{ query }}");
+    $("#result_num").hide();
+    $("#result_time").hide();
+    $("#sound-speaker").hide();
 </script>
 <script src="/static/mdict/js/init_dic.js"></script>
 {% endblock %}

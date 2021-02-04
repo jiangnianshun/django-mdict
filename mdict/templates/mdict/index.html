@@ -3,15 +3,14 @@
 {% block content %}
 {% include "mdict/mdict-navbar.html" %}
 <div id="card-container"></div>
-
 {% endblock %}
 
 {% block script %}
 <script>
-        //外部js文件无法使用django模板
-        $("html").attr("data-dic-pk",-1);
-        $("html").attr("data-first-query","{{ query }}");
-
+    //外部js文件无法使用django模板
+    $("html").attr("data-dic-pk",-1);
+    $("html").attr("data-first-query","{{ query }}");
+    $("#btn-home").hide();
+    init_mdict();
 </script>
-<script src="/static/mdict/js/init_index.js"></script>
 {% endblock %}

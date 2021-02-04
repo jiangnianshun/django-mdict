@@ -7,13 +7,13 @@
     </li>
     <li class="nav-item">
         <span class='float-a go-left text-center'>
-            <i class="bi bi-caret-left-fill mdict-icon"></i>
+            <i class="bi bi-caret-up-fill mdict-icon"></i>
             <span>上一<br/>词条</span>
         </span>
     </li>
     <li class="nav-item">
         <span class='float-a go-right text-center'>
-            <i class="bi bi-caret-right-fill mdict-icon"></i>
+            <i class="bi bi-caret-down-fill mdict-icon"></i>
             <span>下一<br/>词条</span>
         </span>
     </li>
@@ -29,15 +29,17 @@
             <span>缩小<br/>字号</span>
         </span>
     </li>
-    <li class="nav-item">
-        <span class='float-a go-rotate text-center'>
-            <i class="bi bi-arrow-clockwise mdict-icon"></i>
-            <span>旋转<br/>页面</span>
-        </span>
-    </li>
+    {% if is_mobile is not True %}
+        <li class="nav-item">
+            <span class='float-a go-rotate text-center'>
+                <i class="bi bi-arrow-clockwise mdict-icon"></i>
+                <span>旋转<br/>页面</span>
+            </span>
+        </li>
+    {% endif %}
     <li class="nav-item">
         <span class='float-a go-top text-center'>
-            <i class="bi bi-caret-up-fill mdict-icon"></i>
+            <i class="bi bi-chevron-bar-up mdict-icon"></i>
             <span>返回<br/>顶部</span>
         </span>
     </li>

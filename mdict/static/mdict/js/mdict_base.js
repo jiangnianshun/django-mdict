@@ -121,7 +121,10 @@ function speaker_func(c_blue){
         $("#sound-speaker").removeClass('text-primary');
         $("#sound-speaker i").removeClass('bi-volume-up-fill');
         $("#sound-speaker i").addClass('bi-volume-mute-fill');
-        $("#sound-speaker").children('audio')[0].src="";
+        var audio=$("#sound-speaker").children('audio');
+        if(audio.length>0){
+            audio[0].src="";
+        }
     }
 };
 
@@ -214,7 +217,10 @@ function add_click_event(){
 	    $("#query").autocomplete("close");//按下enter键时关闭autocomplete下拉框
 	    document.activeElement.blur();//收回手机浏览器的软键盘
 
-		$('#modal-container-brief').modal('hide');
+        var modal_brief=$('#modal-container-brief');
+        if(modal_brief.length>0){
+		    modal_brief.modal('hide');
+		}
 		//当#modal-container-brief中的entry点击时，触发#mdictquery的点击查询，此时要关闭#modal-container-brief。
 
 		var dic_pk=$("html").attr("data-dic-pk");
@@ -296,19 +302,6 @@ function add_click_event(){
 	});
 }
 
-//function init_home_button(){
-//	var r_b1=$('<a>',{
-//        href:'/mdict/',
-//        style:'color:white;',
-//    });
-//    var r_b2=$('<img>',{
-//        class:'menu-icon',
-//        src:'/static/mdict/img/home.png'
-//    });
-//    r_b2.appendTo(r_b1);
-//    $('.navbar .top-menu').append(r_b1);
-//}
-
 var online_dic=[];
 
 function init_online_dic_var(){
@@ -373,9 +366,9 @@ function init_common_config(){//这里后面改成从后台取数据
         var c_id="config-"+key;
         var c_text=common_config[key];
         s=`
-        <div class="custom-control custom-checkbox" style="display:inline;">
-            <input type="checkbox" class="custom-control-input" id="${c_id}">
-            <label class="custom-control-label" for="${c_id}" style="display:inline;vertical-align:middle;">${c_text}</label>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="${c_id}">
+            <label class="form-check-label" for="${c_id}" style="display:inline;vertical-align:middle;">${c_text}</label>
         </div><br />
         `
         c_parent.append(s);
@@ -614,8 +607,6 @@ function init_es(){
 
     get_mdict_list($("#modal-container-mdict .modal-body"),true);
 
-    //init_home_button();
-
     //$('#enable-all-dic').hide();
     //$('#mdict-group-list').hide();
     $('#online-mdict-checkbox').hide();
@@ -663,8 +654,6 @@ function init_single_dic(){
 	init_common();
 
 	get_mdict_list($("#modal-container-mdict .modal-body"),false);
-
-	//init_home_button();
 
 	first_query();//第一次查询会不会和初始化的0位置查询冲突？
 }

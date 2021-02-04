@@ -18,6 +18,7 @@ from elasticsearch_dsl.query import MultiMatch
 from elasticsearch.exceptions import ConnectionError, TransportError
 
 from base.base_func import print_log_info, is_en_func, strQ2B, request_body_serialze, guess_mime
+from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
@@ -561,12 +562,14 @@ def get_dic_info(request):
 
 def mdict_index(request):
     query = request.GET.get('query', '')
-    return render(request, 'mdict/index.html', {'query': query})
+    is_mb = is_mobile(request)
+    return render(request, 'mdict/index.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
 
 
 def es_index(request):
     query = request.GET.get('query', '')
-    return render(request, 'mdict/es-index.html', {'query': query})
+    is_mb = is_mobile(request)
+    return render(request, 'mdict/es-index.html', {'query': query, 'type': 'es', 'is_mobile': is_mb})
 
 
 def mdict_dic(request):
@@ -577,7 +580,8 @@ def mdict_dic(request):
             dic_pk = dics[0].pk
     dic_name = MdictDic.objects.get(pk=dic_pk).mdict_name
     query = request.GET.get('query', '')
-    return render(request, 'mdict/dic.html', {'dic_pk': dic_pk, 'name': dic_name, 'query': query})
+    is_mb = is_mobile(request)
+    return render(request, 'mdict/dic.html', {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'dic', 'is_mobile': is_mb})
 
 
 def bujianjiansuo(request):

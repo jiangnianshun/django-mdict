@@ -8,10 +8,11 @@
 
 {% block script %}
 <script>
-        //外部js文件无法使用django模板
-        $("html").attr("data-dic-pk",-2);
-        $("html").attr("data-first-query","{{ query }}");
-
+    //外部js文件无法使用django模板
+    $("html").attr("data-dic-pk",-2);
+    $("html").attr("data-first-query","{{ query }}");
+    document.title = "全文搜索";
+	$("link[rel='shortcut icon']").attr('href', '/static/mdict/img/shortcut_es.png');
+	init_es()
 </script>
-<script src="/static/mdict/js/init_es_index.js"></script>
 {% endblock %}

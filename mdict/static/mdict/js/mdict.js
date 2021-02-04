@@ -122,22 +122,36 @@ function add_iframes(data,container,need_clear,is_list){
 
 			var s_parent='#card-container';
 			if($('#config-card-show').prop('checked')){
-                s_parent='';
+                var s=`
+                <div class='card'>
+                    <div class='card-header'>
+                        <span class='badge badge-light text-dark'>${html_escape(mdx_entry,false)}</span>
+                        <span class='text-primary collapsed card-link' href='#card-element-${s_id}' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#card-element-${s_id}">${html_escape(mdx_name,false)}</span>
+                        <div style='padding-left:50px;font-size:0.6rem;'>${mdx_extra}</div>
+                    </div>
+                    <div class='collapse' id='card-element-${s_id}'>
+                        <div class='card-body' id='card-body-${s_id}'>
+                        </div>
+                    </div>
+                </div>
+                `;
+			}else{
+			    var s=`
+                <div class='card'>
+                    <div class='card-header'>
+                        <span class='badge badge-light text-dark'>${html_escape(mdx_entry,false)}</span>
+                        <span class='text-primary collapsed card-link' href='#card-element-${s_id}' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#card-element-${s_id}">${html_escape(mdx_name,false)}</span>
+                        <div style='padding-left:50px;font-size:0.6rem;'>${mdx_extra}</div>
+                    </div>
+                    <div class='collapse' id='card-element-${s_id}' data-bs-parent='${s_parent}'>
+                        <div class='card-body' id='card-body-${s_id}'>
+                        </div>
+                    </div>
+                </div>
+                `;
 			}
 
-			var s=`
-			<div class='card'>
-				<div class='card-header'>
-					<span class='badge badge-light text-dark'>${html_escape(mdx_entry,false)}</span>
-					<span class='text-primary collapsed card-link' href='#card-element-${s_id}' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#card-element-${s_id}">${html_escape(mdx_name,false)}</span>
-					<div style='padding-left:50px;font-size:0.6rem;'>${mdx_extra}</div>
-				</div>
-				<div class='collapse' id='card-element-${s_id}' data-bs-parent='${s_parent}'>
-					<div class='card-body' id='card-body-${s_id}'>
-					</div>
-				</div>
-			</div>
-			`;
+
 			/*
 			由于mdx_entry可能包含<等字符导致显示出错，因此需要转义。
 			data-toggle='collapse'操作是控制展开和折叠
@@ -149,6 +163,7 @@ function add_iframes(data,container,need_clear,is_list){
 			data-parent='#card-container'
 			bootstrap5改为data-bs-parent
 			在card-container的子元素的所有可折叠元素，同一时间只能有一个展开。
+			bs4可以对data-parent赋值空字符串，但是bs5不能对data-bs-parent赋值空字符串。
 			*/
 		   
             var force_font=$('#config-force-font',parent.document).prop("checked");
@@ -596,9 +611,6 @@ function play_speex(ob,array,play,mime,func){
             if(ob.children("audio").length==0){
                 ob.append(new Audio(URL.createObjectURL(blob)));
             }
-//            ob.children("audio")[0].src=URL.createObjectURL(blob);
-
-
             if(play){
                 ob.children("audio")[0].play();
             }
@@ -619,7 +631,6 @@ function play_audio(ob,array,play,mime,func){
         if(ob.children("audio").length==0){
             ob.append(new Audio(URL.createObjectURL(blob)));
         }
-//        ob.children("audio")[0].src=URL.createObjectURL(blob);
         if(play){
             ob.children("audio")[0].play();
         }
@@ -680,8 +691,7 @@ function query_key(container,entry){
 			}else{
 				var alert_box=`
 				<div class="alert alert-danger alert-dismissable">
-					<button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close">
-                    </button>
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 					未查询到${entry}，无法跳转！
 				</div>
 				`;
