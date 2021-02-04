@@ -336,12 +336,12 @@ function init_online_dic_var(){
                     checked="checked";
                 }
                 online_ele=`
-                <div class="custom-control custom-checkbox" style="display:inline;">
-                    <input type="checkbox" class="custom-control-input" id="${o_id}" ${checked} value="${o_name}" data-url="${o_url}" data-isiframe="${o_isiframe}">
-                    <label class="custom-control-label" for="${o_id}" style="display:inline;vertical-align:middle;">
+                <div class="form-checkbox" style="display:inline;">
+                    <input class="form-check-input" type="checkbox" id="${o_id}" ${checked} value="${o_name}" data-url="${o_url}" data-isiframe="${o_isiframe}">
+                    <label class="form-check-label" for="${o_id}">
                         <span class='badge badge-light text-dark'>${o_pror}</span>
                         ${o_name}
-                        <a class='badge badge-primary badge-light text-dark' href="${o_url_host}" target="_blank">打开</a>
+                        <a class='badge badge-primary badge-light text-dark' href="${o_url_host}" target="_blank" style="text-decoration:none;">打开</a>
                     </label>
                 </div><br />
                 `
@@ -368,8 +368,8 @@ function init_common_config(){//这里后面改成从后台取数据
         s=`
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" id="${c_id}">
-            <label class="form-check-label" for="${c_id}" style="display:inline;vertical-align:middle;">${c_text}</label>
-        </div><br />
+            <label class="form-check-label" for="${c_id}">${c_text}</label>
+        </div>
         `
         c_parent.append(s);
     }

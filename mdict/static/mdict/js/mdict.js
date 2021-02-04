@@ -843,9 +843,9 @@ function get_mdict_list(container, flag){//载入词典列表
 				}
 
 				var checkbox_html=`
-                            <div class="custom-control custom-checkbox" style="display:inline;">
-                                <input type="checkbox" class="custom-control-input" id="customControlInline${i}" ${checked} data-pk=${dic_pk} onchange="set_mdict_enable(this)">
-                                <label class="custom-control-label" for="customControlInline${i}" style="display:inline;vertical-align:middle;"></label>
+                            <div class="form-checkbox" style="display:inline;">
+                                <input class="form-check-input" type="checkbox" id="customControlInline${i}" ${checked} data-pk=${dic_pk} onchange="set_mdict_enable(this)">
+                                <label class="form-check-label" for="customControlInline${i}" style="display:inline;vertical-align:middle;"></label>
                             </div>
                             `
                 if(flag){

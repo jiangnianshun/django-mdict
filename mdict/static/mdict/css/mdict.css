@@ -183,6 +183,10 @@ img{
     cursor:pointer;
 }
 
+#mdict-query-clear:hover{
+    cursor:pointer;
+}
+
 .mdict-icon{font-size:22px;}
 
 .item_content{background-color:#EEEEEE;}
