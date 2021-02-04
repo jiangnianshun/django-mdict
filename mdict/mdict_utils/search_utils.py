@@ -85,12 +85,12 @@ def clear_duplication(record_list):
 
 
 def process_link(matched):
-    return '<a class="badge badge-pill badge-primary" style="text-decoration:underline" href="entry://' + matched.group(
+    return '<a class="badge badge-primary" style="text-decoration:underline" href="entry://' + matched.group(
         1) + '">' + matched.group(1) + '</a>'
 
 
 def process_link2(matched):
-    return '<div class="badge badge-pill badge-warning" style="cursor:pointer;" onclick="elementDisplay(\'wrap_div\')">展开/折叠</div><div name="wrap_div" style="display:none">' + matched.group(
+    return '<div class="badge badge-warning" style="cursor:pointer;" onclick="elementDisplay(\'wrap_div\')">展开/折叠</div><div name="wrap_div" style="display:none">' + matched.group(
         1) + '</div>'
 
 
@@ -172,7 +172,7 @@ def get_mdict_content(mymdictentry):
                 mdict_content.append(item_entry + '<br /><div class="item_content">' + item_content + "</div></li>")
         else:
             mdict_content.append(
-                "<li class='mymdict_item'>" + item_entry + "<span class='badge badge-pill badge-secondary'>"
+                "<li class='mymdict_item'>" + item_entry + "<span class='badge badge-secondary'>"
                 + m.item_type.mdict_type + "</span><br /><div class='item_content'>" + item_content + "</div></li>")
 
     mdict_content.append('</ol></div>')
@@ -336,7 +336,7 @@ def lemmatize_func(query, record_list, is_en):
         mdict.append('<div>' + query + '原形推测：</div>')
         for w in words_list:
             mdict.append(
-                '<div><span class="badge badge-pill badge-light text-dark">' + w[1] + '</span><a href="entry://' + w[0] + '">' +
+                '<div><span class="badge badge-light text-dark">' + w[1] + '</span><a href="entry://' + w[0] + '">' +
                 w[0] + '</a></div>')
 
         # if len(record_list) == 0:

@@ -37,22 +37,6 @@ html,body,.container-fluid{
 
 }
 
-#result_num{
-	padding-left:10px;
-	padding-right:10px;
-	color:#888888;
-	width:95px;
-	font-size:12px;
-}
-
-#result_time{
-	padding-left:10px;
-	padding-right:10px;
-	color:#888888;
-	width:95px;
-	font-size:12px;
-}
-
 #sound-speaker img{
     width:16px;
     height:16px;
@@ -106,14 +90,6 @@ iframe {
 	min-width: 100%;
 }
 
-span.badge{
-	max-width:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
-	padding-bottom:0px;
-}
-
 img{
 	max-width:100%;
 }
@@ -135,20 +111,6 @@ img{
 	padding:0;
 	margin:0;
 	list-style:none;
-}
-
-#result_num{
-	padding-left:10px;
-	padding-right:10px;
-	color:#888888;
-	width:95px;
-}
-
-#result_time{
-	padding-left:10px;
-	padding-right:10px;
-	color:#888888;
-	width:95px;
 }
 
 #dic-name{

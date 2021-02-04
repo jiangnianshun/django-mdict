@@ -128,11 +128,11 @@ function add_iframes(data,container,need_clear,is_list){
 			var s=`
 			<div class='card'>
 				<div class='card-header'>
-					<span class='badge badge-pill badge-light text-dark'>${html_escape(mdx_entry,false)}</span>
+					<span class='badge badge-light text-dark'>${html_escape(mdx_entry,false)}</span>
 					<span class='text-primary collapsed card-link' href='#card-element-${s_id}' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#card-element-${s_id}">${html_escape(mdx_name,false)}</span>
 					<div style='padding-left:50px;font-size:0.6rem;'>${mdx_extra}</div>
 				</div>
-				<div class='collapse' id='card-element-${s_id}' data-parent='${s_parent}'>
+				<div class='collapse' id='card-element-${s_id}' data-bs-parent='${s_parent}'>
 					<div class='card-body' id='card-body-${s_id}'>
 					</div>
 				</div>
@@ -147,6 +147,7 @@ function add_iframes(data,container,need_clear,is_list){
 			collapse show默认展开
 			
 			data-parent='#card-container'
+			bootstrap5改为data-bs-parent
 			在card-container的子元素的所有可折叠元素，同一时间只能有一个展开。
 			*/
 		   
@@ -377,7 +378,7 @@ function query_es(query,container,page,need_clear,is_over){
 			if(is_over){
                 var result_num=$("#card-container iframe").length;
 
-				$("#result_num").text(result_num+"个结果");
+				$("#result_num").text(result_num);
 				var start_time=$("#result_time").attr("data-start-time");
 				var isover=$("#result_time").attr("data-isover");
 				var end_time=new Date().getTime();
@@ -437,7 +438,7 @@ function query_mdict(query,container,page,need_clear,is_over){
 
                 var result_num=$("#card-container iframe").length;
 
-				$("#result_num").text(result_num+"个结果");
+				$("#result_num").text(result_num);
 				var start_time=$("#result_time").attr("data-start-time");
 				var isover=$("#result_time").attr("data-isover");
 				var end_time=new Date().getTime();
@@ -477,9 +478,9 @@ function online_search(query,container){//有道在线
             <div class='card' style='display:none;'>
                 <div class='card-header'>
                     <span class='text-primary card-link collapsed' data-bs-target='#card-element-${s_id}' data-bs-toggle='collapse' >
-                    <span class='badge badge-pill badge-light text-dark'>${html_escape(mdx_entry,false)}</span>${html_escape(mdx_name,false)}</span>
+                    <span class='badge badge-light text-dark'>${html_escape(mdx_entry,false)}</span>${html_escape(mdx_name,false)}</span>
                 </div>
-                <div class='collapse' id='card-element-${s_id}' data-parent='#card-container'>
+                <div class='collapse' id='card-element-${s_id}' data-bs-parent='#card-container'>
                     <div class='card-body' id='card-body-${s_id}'>
                     </div>
                 </div>
@@ -516,7 +517,7 @@ function online_search(query,container){//有道在线
             <div class='card'>
                 <div class='card-header'>
                     <span class='text-primary card-link collapsed' id='card-new-${s_id}' href='javascript:void(0);'>
-                    <span class='badge badge-pill badge-light text-dark'>${html_escape(mdx_entry,false)}</span>${html_escape(mdx_name,false)}</span>
+                    <span class='badge badge-light text-dark'>${html_escape(mdx_entry,false)}</span>${html_escape(mdx_name,false)}</span>
                 </div>
             </div>
             `;
@@ -538,9 +539,9 @@ function online_search(query,container){//有道在线
 
 function process_time(time){
 	if(time<1000){
-		return time+'毫秒';
+		return time+'ms';
 	}else{
-		return time/1000+'秒';
+		return time/1000+'s';
 	}
 }
 
@@ -838,9 +839,9 @@ function get_mdict_list(container, flag){//载入词典列表
                             </div>
                             `
                 if(flag){
-				    var s="<div class='card-header'>"+checkbox_html+es_flag+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light text-dark'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
+				    var s="<div class='card-header'>"+checkbox_html+es_flag+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-light text-dark'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
                 }else{
-				    var s="<div class='card-header'>"+checkbox_html+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-pill badge-light text-dark'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
+				    var s="<div class='card-header'>"+checkbox_html+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-light text-dark'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
 				}
 
 				container.append(s);

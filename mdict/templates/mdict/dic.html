@@ -1,30 +1,7 @@
 {% extends "mdict/mdict-base.html" %}
 
 {% block content %}
-<nav class="navbar navbar-expand-md navbar-light bg-light">
-    <div class="form-inline" style="width:100%">
-        {% include "mdict/mdict-searchbar.html" %}
-
-        <div id="sound-speaker" style="margin-left:28px;">
-            <img src="/static/mdict/img/sound_off.png"/>
-            <audio style="display:none;"></audio>
-        </div>
-        <div class="ml-auto">
-            <a class="btn" data-bs-toggle="modal" data-bs-target="#modal-container-brief" id="modal-brief" role="button">
-                {{ name }}</a>
-        </div>
-        <div class="ml-auto top-menu">
-            <a href="/mdict/es" style="color:white;"><img class="menu-icon" id="modal-es"
-                                                                              src="/static/mdict/img/es.png"></a>
-            <a href="/mdict/bujian" target="_blank" style="color:white;"><img class="menu-icon" id="modal-bujian"
-                                                                              src="/static/mdict/img/bujian.png"></a>
-            <img class="menu-icon" data-bs-toggle="modal" data-bs-target="#modal-container-mdict" id="modal-mdict"
-                 src="/static/mdict/img/default.png">
-            <img class="menu-icon" data-bs-toggle="modal" data-bs-target="#modal-container-config" id="modal-config"
-                 src="/static/mdict/img/gear.png">
-        </div>
-    </div>
-</nav>
+{% include "mdict/mdict-navbar.html" %}
 <div id="scroll_list" style="height:250px;overflow:auto;">
     <ul id="display_list"></ul>
 </div>

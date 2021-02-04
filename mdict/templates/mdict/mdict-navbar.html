@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <!--collapse navbar-collapse默认折叠，collapse navbar-collapse show默认展开。-->
+
+    <div class="container-fluid">
+        <!--form自动提交后刷新页面，因此onsubmit要返回false，阻止提交，在浏览器扩展中不能用onsubmit，导致不断刷新，或者有时候js错误，导致点击查询后，页面刷新，后面考虑去掉form，换成div。-->
+        <div class="d-flex">
+            <input autocomplete="off" class="form-control mr-sm-2" id="query" type="text">
+            <img id="mdictquery" src="/static/mdict/img/search.png" style="width:35px;height:35px;">
+            <div>
+                <div id="result_num" style="font-size:0.5rem;color:gray;"></div>
+                <div id="result_time" style="font-size:0.5rem;color:gray;"></div>
+            </div>
+            <div id="sound-speaker" class="nav-item">
+                <img src="/static/mdict/img/sound_off.png"/>
+            </div>
+        </div>
+
+
+        <ul class="navbar-nav">
+            <li class="ml-auto">
+                <a class="btn" data-bs-toggle="modal" data-bs-target="#modal-container-brief" id="modal-brief">
+                {{ name }}</a>
+            </li>
+            <li class="nav-item">
+                <a href="/mdict/es" style="color:white;">
+                    <img class="menu-icon" id="modal-es" src="/static/mdict/img/es.png">
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/mdict/bujian" target="_blank" style="color:white;">
+                    <img class="menu-icon" id="modal-bujian" src="/static/mdict/img/bujian.png">
+                </a>
+            </li>
+            <li class="nav-item">
+                <img class="menu-icon" data-bs-toggle="modal" data-bs-target="#modal-container-mdict" id="modal-mdict"
+                     src="/static/mdict/img/default.png">
+            </li>
+            <li class="nav-item">
+                <img class="menu-icon" data-bs-toggle="modal" data-bs-target="#modal-container-config" id="modal-config"
+                     src="/static/mdict/img/gear.png">
+            </li>
+            <li class="nav-item">
+                <a href="/mdict" style="color:white;">
+                    <img class="menu-icon" src="/static/mdict/img/home.png">
+                </a>
+            </li>
+        </ul>
+        <!--当input获得焦点，按回车会提交表单并刷新页面，点击button也会提交表单并刷新页面。如果不想刷新页面，方法一是将button的type从submit改成button，这只对点击按钮有效，方法二是form添加onsubmit="return false;，这对点击和回车都有效。-->
+    </div>
+
+</nav>

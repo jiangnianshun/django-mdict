@@ -292,18 +292,18 @@ function add_click_event(){
 	});
 }
 
-function init_home_button(){
-	var r_b1=$('<a>',{
-        href:'/mdict/',
-        style:'color:white;',
-    });
-    var r_b2=$('<img>',{
-        class:'menu-icon',
-        src:'/static/mdict/img/home.png'
-    });
-    r_b2.appendTo(r_b1);
-    $('.navbar .top-menu').append(r_b1);
-}
+//function init_home_button(){
+//	var r_b1=$('<a>',{
+//        href:'/mdict/',
+//        style:'color:white;',
+//    });
+//    var r_b2=$('<img>',{
+//        class:'menu-icon',
+//        src:'/static/mdict/img/home.png'
+//    });
+//    r_b2.appendTo(r_b1);
+//    $('.navbar .top-menu').append(r_b1);
+//}
 
 var online_dic=[];
 
@@ -342,7 +342,7 @@ function init_online_dic_var(){
                 <div class="custom-control custom-checkbox" style="display:inline;">
                     <input type="checkbox" class="custom-control-input" id="${o_id}" ${checked} value="${o_name}" data-url="${o_url}" data-isiframe="${o_isiframe}">
                     <label class="custom-control-label" for="${o_id}" style="display:inline;vertical-align:middle;">
-                        <span class='badge badge-pill badge-light text-dark'>${o_pror}</span>
+                        <span class='badge badge-light text-dark'>${o_pror}</span>
                         ${o_name}
                         <a class='badge badge-primary badge-light text-dark' href="${o_url_host}" target="_blank">打开</a>
                     </label>
@@ -596,7 +596,7 @@ function init_es(){
 
     get_mdict_list($("#modal-container-mdict .modal-body"),true);
 
-    init_home_button();
+    //init_home_button();
 
     //$('#enable-all-dic').hide();
     //$('#mdict-group-list').hide();
@@ -646,7 +646,7 @@ function init_single_dic(){
 
 	get_mdict_list($("#modal-container-mdict .modal-body"),false);
 
-	init_home_button();
+	//init_home_button();
 
 	first_query();//第一次查询会不会和初始化的0位置查询冲突？
 }
