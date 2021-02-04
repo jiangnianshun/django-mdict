@@ -53,14 +53,16 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-1 col-lg-2 col-xxl-3">
+        <div id="left-col" class="col-md-1 col-lg-2 col-xxl-3">
         </div>
         <div class="col-md-10 col-lg-8 col-xxl-6">
             {% block content %}{% endblock %}
         </div>
-        <div class="col-md-1 col-lg-2 col-xxl-3">
+        <div id="right-col" class="col-md-1 col-lg-2 col-xxl-3">
         </div>
     </div>
+    <div id="left-container" style="position:fixed;top:0;left:0;z-index:-1;width:400px;height:100%;overflow-y:scroll;"></div>
+    <div id="right-container" style="position:fixed;top:0;right:0;z-index:-1;width:400px;height:100%;overflow-y:scroll;"></div>
 </div>
 
 {% include "mdict/modal-container-mdict.html" %}

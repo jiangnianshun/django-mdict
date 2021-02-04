@@ -139,7 +139,7 @@ function init_mdict_filter(){
     $("#mdict-filter-input").bind("input propertychange",function(event){
         //juery的change事件，只有当input没有聚焦的时候才能触发，input propertychange能检测input输入过程中的变化
         var txt=$.trim($(this).val().toLowerCase( ));
-        var mdict_list=$("#modal-container-mdict .card-header");
+        var mdict_list=$("#mdict-list-content .card-header");
         if(txt.length>0){
 //延时有问题
             last =  event.timeStamp;
@@ -180,6 +180,7 @@ function init_input(){
 
     $("#mdict-query-clear").click(function(){
         $("#query").val("");
+        $("#query").focus();
     })
 
 	init_mdict_filter();
@@ -544,11 +545,46 @@ function init_navbar_link(){
         window.location.href="/mdict/es";
     });
     $("#btn-bujian").click(function(){
-        window.location.href="/mdict/bujian";
+        window.open("/mdict/bujian");
     });
     $("#btn-home").click(function(){
         window.location.href="/mdict";
     });
+}
+
+function change_modal(){
+    var lw=$("#left-col").width();
+    var lh=$("#left-col").height();
+    var rw=$("#right-col").width();
+    var rh=$("#right-col").height();
+    if(lw>400&&rw>400&&lh>0&&rh>0){
+        $("#modal-mdict").hide();
+        $("#modal-config").hide();
+        $("#history-btn").hide();
+
+        $("#left-container").show();
+        $("#left-container").append($("#mdict-list-content"));
+
+        $("#right-container").show();
+        $("#right-container").append($("#config-content"));
+        $("#right-container").append($("#history-content"));
+    }else{
+        $("#modal-container-mdict .modal-body").append($("#mdict-list-content"));
+        $("#left-container").hide();
+
+        $("#modal-container-config .modal-body").append($("#config-content"));
+        $("#modal-container-history .modal-body").append($("#history-content"));
+        $("#right-container").hide();
+
+        $("#modal-mdict").show();
+        $("#modal-config").show();
+        $("#history-btn").show();
+    }
+}
+
+function init_resize_listener(){
+    change_modal();
+    $(window).resize(change_modal);
 }
 
 
@@ -566,6 +602,8 @@ function init_common(){
 	init_btn_group();
 
 	init_dic_group();
+
+	init_resize_listener();
 
 	$(window).bind('popstate', function(e){
         //对pushstate的back和forward进行处理
@@ -597,7 +635,7 @@ function first_query(){
 function init_mdict(){
 	init_common();
 
-	get_mdict_list($("#modal-container-mdict .modal-body"),false);
+	get_mdict_list($("#mdict-list-content"),false);
 
 	first_query();
 }
@@ -605,10 +643,8 @@ function init_mdict(){
 function init_es(){
     init_common();
 
-    get_mdict_list($("#modal-container-mdict .modal-body"),true);
+    get_mdict_list($("#mdict-list-content"),true);
 
-    //$('#enable-all-dic').hide();
-    //$('#mdict-group-list').hide();
     $('#online-mdict-checkbox').hide();
     $('#open-close-index').show();
     $('#open-close-index').click(function(){
@@ -653,7 +689,7 @@ function init_single_dic(){
 
 	init_common();
 
-	get_mdict_list($("#modal-container-mdict .modal-body"),false);
+	get_mdict_list($("#mdict-list-content"),false);
 
 	first_query();//第一次查询会不会和初始化的0位置查询冲突？
 }

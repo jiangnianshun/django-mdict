@@ -21,7 +21,7 @@ html,body,.container-fluid{
 }
 
 .menu-icon:hover{
-    cursor:pointer
+    cursor:pointer;
 }
 
 #modal-container-config .menu-icon{
@@ -196,7 +196,7 @@ img{
 
 #bottom-button-group{margin:0;padding:0;position:fixed;bottom:10px;display:flex;justify-content:center;width:100%;pointer-events: none;}
 
-#bottom-button-group li{list-style: none;margin-top:2px;margin-bottom:2px;pointer-events: auto;}
+#bottom-button-group li{list-style: none;margin-top:2px;margin-bottom:2px;pointer-events: auto;cursor:pointer;}
 
 .float-a{float: left;width: 40px;height: 40px;background-color: #fff;box-shadow: 0 0 2px #bbb;position: relative;overflow: hidden;}
 .float-a i{-webkit-transition:all 0.5s;display: block;font-size:22px;width:40px;height:40px;}
