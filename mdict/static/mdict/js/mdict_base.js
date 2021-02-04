@@ -113,11 +113,14 @@ function init_btn_group(){
 }
 
 function speaker_func(c_blue){
-    var img=$("#sound-speaker").children('img')[0];
     if(c_blue){
-        img.src="/static/mdict/img/sound_on.png";
+        $("#sound-speaker").addClass('text-primary');
+        $("#sound-speaker i").removeClass('bi-volume-mute-fill');
+        $("#sound-speaker i").addClass('bi-volume-up-fill');
     }else{
-        img.src="/static/mdict/img/sound_off.png";
+        $("#sound-speaker").removeClass('text-primary');
+        $("#sound-speaker i").removeClass('bi-volume-up-fill');
+        $("#sound-speaker i").addClass('bi-volume-mute-fill');
         $("#sound-speaker").children('audio')[0].src="";
     }
 };
@@ -169,11 +172,12 @@ function init_mdict_filter(){
 
 function init_input(){
 	$("#query").focus(function(){//input聚焦时调用auocomplete
-		$( "#query" ).autocomplete("search");
+		$("#query").autocomplete("search");
 	});
 
-	$("#query").clearer();
-	//bootstrap4-input-clearer.js的clearer()方法为input框生成一个清除按钮
+    $("#mdict-query-clear").click(function(){
+        $("#query").val("");
+    })
 
 	init_mdict_filter();
 }
@@ -206,7 +210,7 @@ function init_autocomplete(){
 };
 
 function add_click_event(){
-	$('#mdictquery').click(function(e){
+	$('#mdict-query').click(function(e){
 	    $("#query").autocomplete("close");//按下enter键时关闭autocomplete下拉框
 	    document.activeElement.blur();//收回手机浏览器的软键盘
 
@@ -273,7 +277,7 @@ function add_click_event(){
 		//keypress检测不到方向键，必需用keydown或keyup
 		if (eCode==13){//回车键
 		    //判断modal是否打开，打开时，enter无效，这里返回的值有问题，再处理
-            $('#mdictquery').trigger('click');
+            $('#mdict-query').trigger('click');
 		}else if (eCode == 38){//方向键跳转词条
             //左37上38
 			$('.go-left').trigger('click');
@@ -542,9 +546,23 @@ function get_dic_group(container){//载入词典列表
 	});
 }
 
+function init_navbar_link(){
+    $("#btn-es").click(function(){
+        window.location.href="/mdict/es";
+    });
+    $("#btn-bujian").click(function(){
+        window.location.href="/mdict/bujian";
+    });
+    $("#btn-home").click(function(){
+        window.location.href="/mdict";
+    });
+}
+
 
 function init_common(){
 	$('html').data('data-pushstate',true);
+
+    init_navbar_link();
 
 	init_modal_config();
 
@@ -569,7 +587,7 @@ function init_common(){
             $('html').data('data-pushstate',false);
 
             $("#query").val(html_unescape(query));
-            $("#mdictquery").trigger("click");
+            $("#mdict-query").trigger("click");
         }
     });
 }
@@ -579,7 +597,7 @@ function first_query(){
 
 	if(first_query!=''){
 		$('#query').val(html_unescape(first_query));
-		$('#mdictquery').trigger("click");
+		$('#mdict-query').trigger("click");
 	}
 }
 

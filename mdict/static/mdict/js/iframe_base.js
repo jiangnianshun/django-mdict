@@ -107,7 +107,7 @@ function ihyperlink(e){
                 }else{
                     $('#query',parent.document).val(html_unescape(entry));
                     $("#card-container",parent.document).attr("in-page-jump",inPageJump);
-                    $('#mdictquery',parent.document).trigger("click");
+                    $('#mdict-query',parent.document).trigger("click");
                 }
 
 
@@ -240,7 +240,7 @@ function create_tooltip(e){
             //e.stopPropagation();
             $('#query',parent.document).val(select_words);
             window.getSelection().empty();
-            $('#mdictquery',parent.document).trigger("click");
+            $('#mdict-query',parent.document).trigger("click");
 
         })
 

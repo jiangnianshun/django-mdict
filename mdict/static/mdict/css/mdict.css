@@ -32,7 +32,7 @@ html,body,.container-fluid{
 
 
 
-#mdictquery{
+#mdict-query{
 	margin:0px !important;
 
 }
@@ -129,7 +129,7 @@ img{
 }
 
 
-#mdictquery:hover{
+#mdict-query:hover{
 	cursor:pointer;
 }
 
@@ -179,17 +179,22 @@ img{
 	margin-right:2px;
 }
 
+.card-link:hover{
+    cursor:pointer;
+}
+
+.mdict-icon{font-size:1.3rem;}
+
 .item_content{background-color:#EEEEEE;}
 
 .ui-selectmenu-menu{position:absolute;z-index:9999 !important;}
 
 
-#bottom-button-group{margin:0px;padding:0px;position:fixed;bottom:10px;display:flex;justify-content:center;width:100%;pointer-events: none;}
+#bottom-button-group{margin:0;padding:0;position:fixed;bottom:1rem;display:flex;justify-content:center;width:100%;pointer-events: none;}
 
-#bottom-button-group li{list-style: none;margin-top:2px;margin-bottom:2px;pointer-events: auto;}
+#bottom-button-group li{list-style: none;margin-top:0.2rem;margin-bottom:0.2rem;pointer-events: auto;}
 
-.float-a{float: left;width: 40px;height: 40px;background-color: #fff;box-shadow: 0 0 3px #bbb;position: relative;overflow: hidden;}
-.float-a img{-webkit-transition:all 0.5s;display: block;}
-.float-a:hover img{margin-top: -40px;}
-.float-a span{width: 40px;height: 40px;line-height: 16px;padding: 5px 0;background: #000;color: #fff;text-align: center;float: left;font-size:0.8rem;}
-.btn.float-a{padding:0px;}
+.float-a{float: left;width: 3rem;height: 2.5rem;background-color: #fff;box-shadow: 0 0 0.2rem #bbb;position: relative;overflow: hidden;}
+.float-a i{-webkit-transition:all 0.5s;display: block;font-size:1.3rem;width:3rem;height:2.5rem;}
+.float-a:hover i{margin-top: -2.5rem;}
+.float-a span{width: 3rem;height: 2.5rem;line-height: 1rem;padding: 0.2rem 0;background: #000;color: #fff;text-align: center;float: left;font-size:0.8rem;}
