@@ -572,7 +572,7 @@ function change_modal(){
         $("#modal-container-mdict .modal-body").append($("#mdict-list-content"));
         $("#left-container").hide();
 
-        $("#modal-container-config .modal-body").append($("#config-content"));
+        $("#modal-container-config .modal-content").append($("#config-content"));
         $("#modal-container-history .modal-body").append($("#history-content"));
         $("#right-container").hide();
 

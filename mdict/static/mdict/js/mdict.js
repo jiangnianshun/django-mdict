@@ -325,6 +325,7 @@ function add_to_history(query,result_num){
         search_history[query]=result_num;
         var li_h=$('<li>',{
             text:"查询："+query+"    结果："+result_num,
+            class:"list-group-item list-group-item-action",
         });
         li_h.appendTo('#search-history');
         li_h.click(function(){

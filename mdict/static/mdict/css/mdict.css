@@ -187,6 +187,10 @@ img{
     cursor:pointer;
 }
 
+#search-history:hover{
+    cursor:pointer;
+}
+
 .mdict-icon{font-size:22px;}
 
 .item_content{background-color:#EEEEEE;}
