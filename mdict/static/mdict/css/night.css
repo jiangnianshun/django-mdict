@@ -1,17 +1,17 @@
 .dm-night{
     background:black !important;
-    color:gray !important;
+    color:LightGrey !important;
 }
 
 .dm-night-img{
-    -webkit-filter: brightness(0.5);
-    filter: brightness(0.5);
+    -webkit-filter: brightness(0.6);
+    filter: brightness(0.6);
 }
 
 .dm-night-img-background{
-    background:gray !important;
+    background:LightGrey !important;
 }
 
 .dm-night-border{
-    border:1px solid gray !important;
+    border:1px solid LightGrey !important;
 }
