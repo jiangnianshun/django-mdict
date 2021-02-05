@@ -344,12 +344,13 @@ function query_es(query,container,page,need_clear,is_over){
 	var es_phrase=$('#es-filter-phrase').prop("checked");
 	var es_entry=$('#es-filter-entry').prop("checked");
 	var es_content=$('#es-filter-content').prop("checked");
+	var es_and=$('#es-filter-and').prop("checked");
 	if(!es_entry&&!es_content){
 	    console.log('must select one search item')
 	    return
 	}
 	var data={"query":query,"dic_group":dic_group,"result_page":page,"force_refresh":$('#config-force-refresh').prop('checked'),
-	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content};
+	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content,"es-and":es_and};
 	$.ajax({
 		url:"/mdict/essearch/",
 		contentType:'json',

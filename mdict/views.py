@@ -121,6 +121,7 @@ def es_search(request):
     es_phrase = json.loads(request.GET.get('es-phrase', 'false'))
     es_entry = json.loads(request.GET.get('es-entry', 'false'))
     es_content = json.loads(request.GET.get('es-content', 'false'))
+    es_and = json.loads(request.GET.get('es-and', 'false'))
 
     if result_num > 1000:
         result_num = 1000
@@ -133,7 +134,7 @@ def es_search(request):
 
     group = int(request.GET.get('dic_group', 0))
 
-    result = get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content)
+    result = get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content, es_and)
     serializer = MdictEntrySerializer(result, many=True)
 
     total_count = 2000
@@ -209,7 +210,7 @@ def sub_highlight(matched):
     return '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + text + '</b>'
 
 
-def get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content):
+def get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content, es_and):
     if not meta_dict:
         init_meta_list()
 
@@ -228,9 +229,15 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
         return []
 
     if es_phrase:
-        q = MultiMatch(query=query, fields=search_fields, type='phrase')
+        if es_and:
+            q = MultiMatch(query=query, fields=search_fields, type='phrase', operator='AND')
+        else:
+            q = MultiMatch(query=query, fields=search_fields, type='phrase')
     else:
-        q = MultiMatch(query=query, fields=search_fields)
+        if es_and:
+            q = MultiMatch(query=query, fields=search_fields, operator='AND')
+        else:
+            q = MultiMatch(query=query, fields=search_fields)
     s = Search(index='mdict-*').using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
     s = s.highlight('content', fragment_size=frag_size)
