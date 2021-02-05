@@ -795,7 +795,7 @@ function set_all_mdict_enable(obj){
     var dic_list=new Array();
     var o_check = $(obj).prop("checked");
 
-    $("#modal-container-mdict .modal-body .card-header input").each(function(){
+    $("#mdict-list-content .card-header input").each(function(){
         var t_check = $(this).prop("checked");
         if(t_check!=o_check){
             $(this).prop("checked", $(obj).prop("checked"));
