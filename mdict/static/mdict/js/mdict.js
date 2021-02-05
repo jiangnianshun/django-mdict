@@ -341,7 +341,15 @@ function add_to_history(query,result_num){
 
 function query_es(query,container,page,need_clear,is_over){
 	var dic_group=$('#dic-group option:selected').attr('data-pk');
-	var data={"query":query,"dic_group":dic_group,"result_page":page,"force_refresh":$('#config-force-refresh').prop('checked')};
+	var es_phrase=$('#es-filter-phrase').prop("checked");
+	var es_entry=$('#es-filter-entry').prop("checked");
+	var es_content=$('#es-filter-content').prop("checked");
+	if(!es_entry&&!es_content){
+	    console.log('must select one search item')
+	    return
+	}
+	var data={"query":query,"dic_group":dic_group,"result_page":page,"force_refresh":$('#config-force-refresh').prop('checked'),
+	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content};
 	$.ajax({
 		url:"/mdict/essearch/",
 		contentType:'json',
@@ -362,7 +370,7 @@ function query_es(query,container,page,need_clear,is_over){
 			</div>
 			`;
 			$('#card-container #next-page').remove();
-			if(page[2]>0){
+			if(page[2]>0&&page[2]>page[1]){
                 container.append(s2);
 
                 $('#card-container #next-page').on('click',function(){

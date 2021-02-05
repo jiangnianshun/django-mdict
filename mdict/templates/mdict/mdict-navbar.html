@@ -10,6 +10,10 @@
         </div>
 
         <div class="d-flex float-end">
+            {% if type == 'es' %}
+                <i class="bi bi-caret-down btn mdict-icon" id="es-filter"
+                   href='#es-filter-div' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#es-filter-div"></i>
+            {% endif %}
             {% if type == 'index' or type == 'es' %}
                 <div id="sound-speaker" class="nav-item btn">
                     <i class="bi bi-volume-mute-fill mdict-icon"></i>
@@ -19,10 +23,12 @@
                     <div id="result_time" style="font-size:12px;color:gray;"></div>
                 </div>
             {% endif %}
+            {% if type == 'dic' %}
             <div class="input-group float-end">
                 <a class="btn" data-bs-toggle="modal" data-bs-target="#modal-container-brief" id="modal-brief">
                 {{ name }}</a>
             </div>
+            {% endif %}
         </div>
         <div class="d-flex float-end">
             <div class="input-group">
@@ -36,3 +42,21 @@
     </div>
         <!--当input获得焦点，按回车会提交表单并刷新页面，点击button也会提交表单并刷新页面。如果不想刷新页面，方法一是将button的type从submit改成button，这只对点击按钮有效，方法二是form添加onsubmit="return false;，这对点击和回车都有效。-->
 </nav>
+{% if type == 'es' %}
+    <div class='collapse' id='es-filter-div'>
+        <div class='card-body'>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="es-filter-entry" checked>
+                <label class="form-check-label" for="es-filter-entry">查询词头</label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="es-filter-content" checked>
+                <label class="form-check-label" for="es-filter-content">查询内容</label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="es-filter-phrase">
+                <label class="form-check-label" for="es-filter-phrase">按照词组查询</label>
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -118,6 +118,10 @@ def es_search(request):
     frag_size = int(request.GET.get('frag_size', 50))
     frag_num = int(request.GET.get('frag_num', 3))
 
+    es_phrase = json.loads(request.GET.get('es-phrase', 'false'))
+    es_entry = json.loads(request.GET.get('es-entry', 'false'))
+    es_content = json.loads(request.GET.get('es-content', 'false'))
+
     if result_num > 1000:
         result_num = 1000
 
@@ -128,12 +132,11 @@ def es_search(request):
         frag_size = 200
 
     group = int(request.GET.get('dic_group', 0))
-    # page = int(request.GET.get('page', 1))
 
-    result = get_es_results(query, group, result_num, result_page, frag_size, frag_num)
+    result = get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content)
     serializer = MdictEntrySerializer(result, many=True)
 
-    total_count = 1000
+    total_count = 2000
 
     ret = {
         "page_size": result_num,  # 每页显示两个
@@ -206,7 +209,7 @@ def sub_highlight(matched):
     return '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + text + '</b>'
 
 
-def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
+def get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content):
     if not meta_dict:
         init_meta_list()
 
@@ -214,7 +217,20 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num):
     # 如果指定单独的index，当index_list长度超出后会报错RequestError 400 An HTTP line is larger than 4096 bytes.
     # 通过开关index实现指定index搜索，会增加耗时。
 
-    q = MultiMatch(query=query, fields=['entry', 'content'], type='phrase')
+    search_fields = []
+
+    if es_entry:
+        search_fields.append('entry')
+    if es_content:
+        search_fields.append('content')
+
+    if not search_fields:
+        return []
+
+    if es_phrase:
+        q = MultiMatch(query=query, fields=search_fields, type='phrase')
+    else:
+        q = MultiMatch(query=query, fields=search_fields)
     s = Search(index='mdict-*').using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
     s = s.highlight('content', fragment_size=frag_size)
