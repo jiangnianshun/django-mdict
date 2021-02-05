@@ -57,7 +57,7 @@ function rotate_content(item){
 function init_btn_group(){
 	$('.go-left').click(function(){//展开上一词条
 	    if(is_index()){
-            var c=$(".collapse.show");
+            var c=$("#card-container .collapse.show");
             if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
                 var c_id=c.attr("id");
                 var n_id=c_id.substring(0,c_id.lastIndexOf("-")+1)+(parseInt(c_id.substring(c_id.lastIndexOf("-")+1))-1);
@@ -73,7 +73,7 @@ function init_btn_group(){
 	});
 	$('.go-right').click(function(){//展开下一词条
 	    if(is_index()){
-            var c=$(".collapse.show");
+            var c=$("#card-container .collapse.show");
             //c.length==1表示当前有一个展开的词条
             //$('.ui-autocomplete').css('display')=='none'表示当前查询提示框没有显示
             if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
@@ -90,14 +90,14 @@ function init_btn_group(){
         }
 	});
 	$('.scaleup').click(function(){
-	    var c=$(".collapse.show");
+	    var c=$("#card-container .collapse.show");
 	    if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
 	        c.find('iframe').contents().find('*').animate({ fontSize: '+=2px' });
 	        //只放大字号对于设置height的行之间文字会重叠，同时放大行高，会导致总高度无法准确获取。
         }
 	});
 	$('.scaledown').click(function(){
-	    var c=$(".collapse.show");
+	    var c=$("#card-container .collapse.show");
 	    if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
 	        c.find('iframe').contents().find('*').animate({ fontSize: '-=2px' });
         }
