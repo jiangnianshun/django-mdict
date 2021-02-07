@@ -14,12 +14,18 @@ django-mdict是django实现的mdict词典查询工具。
 
 1. 安装python3。
 
-2. 安装Microsoft C++ Build Tools
+2. 安装Visual Studio（同时安装C++开发组件），或者安装Microsoft C++ Build Tools（安装时勾选C++开发组件）。
 
-在安装nltk、python-Levenshtein等库以及进行cython编译时需要该工具，安装时勾选C++开发组件。
+在安装nltk、python-Levenshtein等库以及进行cython编译时需要C++开发组件。
 
-[https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
-](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
+Visual Studio地址：
+
+[https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/)
+
+Microsoft C++ Build Tools地址：
+
+[https://visualstudio.microsoft.com/visual-cpp-build-tools/
+](https://visualstudio.microsoft.com/visual-cpp-build-tools/
 )
 
 3. 下载django-mdict
@@ -38,6 +44,14 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 <br />本地电脑访问http://127.0.0.1:8000/mdict/
 <br />其他设备访问http://本机ip:8000/mdict/
 <br />可能需要设置防火墙入站链接，开放8000端口。
+   
+### 注意
+
+建议使用ubuntu18.04进行部署。
+
+在windows上无法使用多进程，在windows上建议部署到wsl1 ubuntu。
+
+ubuntu下比windows下查询速度快一倍。
 
 ### 说明文档
 

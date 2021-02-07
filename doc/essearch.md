@@ -31,6 +31,8 @@ pip3 install elasticsearch-dsl
 
 3. （可跳过）下载和es版本对应的elasticsearch-ik中文分词器并解压，将解压后的文件夹复制到elasticsearch的plugins目录下。
 
+如果调过该步，将会使用内置的standard分词器。
+
 [https://github.com/medcl/elasticsearch-analysis-ik/releases](https://github.com/medcl/elasticsearch-analysis-ik/releases)
 
 4. 运行elasticsearch/bin/elasticsearch.bat启动es。
@@ -79,7 +81,7 @@ pip3 install elasticsearch-dsl
 # cmd
 mdict_es.py -c 66 68 51
 # powershell
-.\mdict_es.py -c 66 68 51
+./mdict_es.py -c 66 68 51
 ```
 
 删除id值(pk值)为66,68,51的词典的索引
@@ -88,7 +90,7 @@ mdict_es.py -c 66 68 51
 # cmd
 mdict_es.py -d 66 68 51
 # powershell
-.\mdict_es.py -d 66 68 51
+./mdict_es.py -d 66 68 51
 ```
 
 删除全部索引
@@ -97,7 +99,7 @@ mdict_es.py -d 66 68 51
 # cmd
 mdict_es.py -da
 # powershell
-.\mdict_es.py -da
+./mdict_es.py -da
 ```
 
 curl删除指定索引(index name是mdict-前缀加mdx文件的md5值)

@@ -77,7 +77,7 @@
 <br />[wrap]要折叠的内容[/wrap]
 <br />自定义命令插入：
 <br />1.选中文字，单击L按钮，自动将文字用[link]包裹，选中的文字显示为entry词条跳转。
-<br />2.选中文字，单击M按钮，自动将文字用[wrap]包裹，选中的文字被折叠。
+<br />2.选中文字，单击W按钮，自动将文字用[wrap]包裹，选中的文字被折叠。
 
 * MDICT/在线词典：
 <br />添加在线词典，将url中要查询的字符用%WORD%替换，有些网站不支持在iframe中显示，此时需要去掉在iframe中打开的勾选。
@@ -314,12 +314,18 @@ card_show 同时展开多个词典
 
 1. 安装python3。
 
-2. 安装Microsoft C++ Build Tools
+2. 安装Visual Studio（同时安装C++开发组件），或者安装Microsoft C++ Build Tools（安装时勾选C++开发组件）。
 
-在安装nltk、python-Levenshtein等库以及进行cython编译时需要该工具，安装时勾选C++开发组件。
+在安装nltk、python-Levenshtein等库以及进行cython编译时需要C++开发组件。
 
-[https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
-](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/
+Visual Studio地址：
+
+[https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/)
+
+Microsoft C++ Build Tools地址：
+
+[https://visualstudio.microsoft.com/visual-cpp-build-tools/
+](https://visualstudio.microsoft.com/visual-cpp-build-tools/
 )
 
 3. 下载django-mdict
