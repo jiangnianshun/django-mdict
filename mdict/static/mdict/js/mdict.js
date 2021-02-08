@@ -841,6 +841,7 @@ function get_mdict_list(container, flag){//载入词典列表
 			$("#dic_num").text(d.length);
 			for(var i=0;i<d.length;i++){
 				var dic_name=d[i]["dic_name"];
+				var dic_file=d[i]["dic_file"];
 				var dic_icon=d[i]["dic_icon"];
 				var dic_pror=d[i]["dic_pror"];
 				var dic_pk=d[i]["dic_pk"];
@@ -864,11 +865,19 @@ function get_mdict_list(container, flag){//载入词典列表
                                 <label class="form-check-label" for="customControlInline${i}" style="display:inline;vertical-align:middle;"></label>
                             </div>
                             `
-                if(flag){
-				    var s="<div class='card-header'>"+checkbox_html+es_flag+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-light text-dark'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
-                }else{
-				    var s="<div class='card-header'>"+checkbox_html+"<img class='dic-icon' src="+html_escape(dic_icon,false)+"></img><span class='badge badge-light text-dark'>"+dic_pror+"</span><a class='mdict-list-mark' href='/mdict/dic/?dic_pk="+dic_pk+"'>"+html_escape(dic_name)+"</a></div>";
+                if(!flag){
+				    es_flag="";
 				}
+                var s=`
+                <div class="card-header">${checkbox_html}${es_flag}
+                    <img class="dic-icon" src="${html_escape(dic_icon,false)}"></img>
+                    <span class="badge badge-light text-dark">${dic_pror}</span>
+                    <a class="mdict-list-mark" href="/mdict/dic/?dic_pk=${dic_pk}" data-file=${html_escape(dic_file)}>
+                        ${html_escape(dic_name)}
+                    </a>
+                </div>
+                `
+
 
 				container.append(s);
 			}

@@ -27,11 +27,18 @@ def init_database():
     try:
         print('init database')
         update_list = []
+        all_dics = MdictDic.objects.all()
         for k, v in init_vars.mdict_odict.items():
-            dics = MdictDic.objects.filter(mdict_file=k)
+            dics = all_dics.filter(mdict_file=k)
             if len(dics) == 0:
-                print(k)
-                obj = MdictDic(mdict_name=k, mdict_file=k)
+                header = v.mdx.header
+                mdict_name = k
+                if 'Title' in header:
+                    mdict_name = header['Title'].strip()
+                    if not mdict_name or mdict_name == 'Title (No HTML code allowed)':
+                        mdict_name = k
+                print(k, mdict_name)
+                obj = MdictDic(mdict_name=mdict_name, mdict_file=k)
                 update_list.append(obj)
         if update_list:
             MdictDic.objects.bulk_create(update_list, batch_size=100)

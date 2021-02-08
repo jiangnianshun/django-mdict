@@ -145,10 +145,11 @@ function init_mdict_filter(){
                 {
 
                     for(var i=0;i<=mdict_list.length;i++){
-                        var title=$(mdict_list[i]).children('a').text().toLowerCase();
-                        //var mdict_card=$(mdict_list[i])
+                        var dic_a=$(mdict_list[i]).children('a');
+                        var title=dic_a.text().toLowerCase();
+                        var file=dic_a.attr('data-file').toLowerCase();
 
-                        if(t2s(title).indexOf(txt)==-1&&s2t(title).indexOf(txt)==-1){
+                        if(t2s(title).indexOf(txt)==-1&&s2t(title).indexOf(txt)==-1&&t2s(file).indexOf(txt)==-1&&s2t(file).indexOf(txt)==-1){
                             $(mdict_list[i]).hide();
                         }else{
                             $(mdict_list[i]).show();
