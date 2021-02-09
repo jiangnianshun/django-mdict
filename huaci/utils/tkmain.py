@@ -147,7 +147,7 @@ class MainFrame(tk.Frame):
 
         # MainFrame
         tk.Frame.__init__(self, self.root)
-        self.master.title("Tkinter example")
+        self.master.title("词典")
         self.master.bind("<Configure>", self.on_root_configure)
         self.bind("<Configure>", self.on_configure)
 

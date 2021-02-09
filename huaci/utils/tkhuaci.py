@@ -242,8 +242,11 @@ class Huaci:
         browser = self.master.get_browser()
 
         self.master.main.show_main(url)
+
         if browser is not None:
             browser.LoadUrl(url)
+
+        self.master.master.title(query)
 
     def run_huaci(self, hm):
         self.huaci_mode = hm
