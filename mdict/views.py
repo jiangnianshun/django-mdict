@@ -86,17 +86,17 @@ class MdictEntryViewSet(viewsets.ViewSet):
         if is_en_func(query):
             self.is_en = True
 
-        required = get_query_list(query)
+        query_list = get_query_list(query)
 
-        if required:
-            record_list = search(required, group)
-            for query in required:
+        if query_list:
+            record_list = search(query_list, group)
+            for query in query_list:
                 record_list = search_revise(query, record_list, self.is_en)
             record_list = clear_duplication(record_list)
 
             if len(record_list) == 0 and query.find('.htm') != -1:
                 query = query[:query.find('.htm')]
-                record_list = search(query, self.is_en, group)
+                record_list = search(query, group)
                 # 二十五史词典有些词条比如 史记_06但在超链接错误写成了史记_06.htm
 
             record_list.sort(key=lambda k: k.mdx_pror)

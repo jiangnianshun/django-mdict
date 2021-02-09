@@ -50,7 +50,7 @@ class MdictPage:
         self.total_count = len(data)
         if self.total_count < self.max_page_size:
             self.total_page = 1
-        if self.total_count % self.page_size <= self.max_page_size - self.page_size:
+        elif self.total_count % self.page_size <= self.max_page_size - self.page_size:
             self.total_page = int(self.total_count / self.page_size)
         else:
             self.total_page = int(self.total_count / self.page_size) + 1
