@@ -1,5 +1,4 @@
 pynput
-psutil
 pywin32
 pystray
 pyperclip

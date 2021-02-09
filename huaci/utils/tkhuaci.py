@@ -5,11 +5,11 @@ import threading
 import time
 import collections
 
-import psutil
 import pyscreenshot
 import pytesseract
 import cv2
 import numpy as np
+from urllib.parse import quote
 from pynput.keyboard import Key, Listener as KeyboardListener
 from pynput.mouse import Button, Listener as MouseListener
 
@@ -92,7 +92,7 @@ class Huaci:
         try:
             # result = root.selection_get(selection="CLIPBOARD").strip()
             # tkinter的剪切板读取必须在mainloop中，当root widthdraw后，就不能用了。
-            result = pyperclip.paste()
+            result = pyperclip.paste().strip()
             if 0 < len(result) <= self.max_text_length:
                 self.search_mdict(result)
         except Exception as e:
@@ -109,26 +109,10 @@ class Huaci:
                     self.t1 = time.perf_counter()
                     self.start_x = x
                     self.start_y = y
-                    # print("start_x,start_y:", start_x, start_y)
                 else:
                     self.t2 = time.perf_counter()
                     self.end_x = x
                     self.end_y = y
-                    # print("end_x,end_y:", end_x, end_y)
-                    # if abs(self.end_y - self.start_y) > 100:
-                    #     self.start_x = self.end_x
-                    #     self.start_y = self.end_y
-                    #     self.end_x = 0
-                    #     self.end_y = 0
-                    #     print('exceed limit of height', abs(self.end_y - self.start_y))
-                    #     return
-                    # if abs(self.end_x - self.start_x) > 500:
-                    #     self.start_x = self.end_x
-                    #     self.start_y = self.end_y
-                    #     self.end_x = 0
-                    #     self.end_y = 0
-                    #     print('exceed limit of width', abs(self.end_x - self.start_x))
-                    #     return
 
                     if self.end_x == self.start_x or self.end_y == self.start_y:
                         self.flag -= 1
@@ -220,16 +204,6 @@ class Huaci:
         self.end_x = 0
         self.end_y = 0
 
-    def killtree(self, pid):
-        try:
-            parent = psutil.Process(pid)
-            for child in parent.children(recursive=True):
-                child.kill()
-
-            parent.kill()
-        except psutil.NoSuchProcess as e:
-            print(e)
-
     def set_master(self, master):
         self.master = master
 
@@ -237,7 +211,7 @@ class Huaci:
         self.start_flag = 0
         self.init_vars()
 
-        url = self.root_url.replace('%WORD%', query)
+        url = self.root_url.replace('%WORD%', quote(query))
 
         browser = self.master.get_browser()
 
