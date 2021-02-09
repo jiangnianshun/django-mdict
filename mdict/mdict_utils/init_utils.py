@@ -166,20 +166,20 @@ def sort_mdict_list(t_list):
         indicator.append(list())
 
     n = 0
-    flag = False
+    inc = True
 
-    for i in range(len(t_list) - 1, -1, -1):
-        indicator[n].append(i)
+    for k, v in t_list.items():
+        indicator[n].append(k)
 
-        if flag:
-            n -= 1
-        else:
+        if inc:
             n += 1
+        else:
+            n -= 1
         if n >= cnum:
-            flag = True
+            inc = False
             n = cnum - 1
         elif n < 0:
-            flag = False
+            inc = True
             n = 0
 
     return t_list

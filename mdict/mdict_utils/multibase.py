@@ -6,7 +6,7 @@ from .search_object import SearchObject
 from mdict.serializers import mdxentry
 from mdict.models import MdictDicGroup
 
-values_list = list(init_vars.mdict_odict.values())
+values_dict = init_vars.mdict_odict
 
 dics_list = get_all_dic()
 
@@ -19,7 +19,6 @@ def merge_record(record_list):
     if merge_entry_max_length == 0:
         return record_list
 
-    # dic_dict = {}
     t_list = []
     name = ''
     entry = ''
@@ -81,8 +80,8 @@ def merge_record(record_list):
 
 def multi_search_mdx(n, required, group, is_mdx=True):
     r_list = []
-    for i in indicator[n]:
-        temp_object = values_list[i]
+    for k in indicator[n]:
+        temp_object = values_dict[k]
         mdx = temp_object.mdx
         mdd_list = temp_object.mdd_list
         g_id = temp_object.g_id
