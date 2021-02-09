@@ -108,7 +108,7 @@ python 版本3.7就选cp37，python是32位选择win32，是64位选择win_amd64
 比如下载了python_lzo-1.12-cp37-cp37m-win_amd64.whl，在当前目录运行以下命令安装
 
 ```
-pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
+python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 ```
 
 3. requirements3.txt：划词工具的依赖

@@ -37,13 +37,13 @@ python版本3.7就选cp37，python是32位选择win32，是64位选择win_amd64�
 比如下载了python_lzo-1.12-cp37-cp37m-win_amd64.whl，在当前目录运行以下命令安装
 
 ```
-pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
+python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 ```
 
 4. 下载django-mdict
 
 ```
-git clone https://github.com/jiangnianshun/django-mdict.git
+git clone https://github.com/jiangnianshun/django-mdict.git --depth=1
 ```
 
 Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。
@@ -61,7 +61,7 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
    
 ### 注意
 
-建议使用ubuntu进行部署，ubuntu下比windows下查询速度快一倍。 在windows上建议部署到wsl1。
+建议使用ubuntu进行部署(18.04或20.04，20.04有多进程无法结束的问题)，ubuntu下比windows下查询速度快一倍。 在windows上建议部署到wsl1。不建议使用pypy。
 
 ### 说明文档
 

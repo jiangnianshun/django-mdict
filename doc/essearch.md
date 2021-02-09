@@ -3,6 +3,7 @@
   * [windows下的安装](#windows下的安装)
   * [筛选功能](#筛选功能)
   * [注意事项](#注意事项)
+  * [es设置](#es设置)
   * [索引性能测试](#索引性能测试)
 
 ### 全文搜索
@@ -112,6 +113,23 @@ curl删除全部索引
 
 ```
 curl -X DELETE localhost:9200/_all 
+```
+
+### es设置
+
+es设置文件为config/elasticsearch.yml
+
+1. 禁止内存交换会提高查询效率，但是当内存不足时进程会崩溃。
+
+```
+bootstrap.memory_lock: true
+```
+
+2. 如果要连接另一台机器上的es，需要设置network.host和discovery.type，并在防火墙中放开9200和9300端口，然后在django-mdict/config.ini中修改es_host参数。
+
+```
+network.host: 0.0.0.0
+discovery.type: single-node
 ```
 
 ### 索引性能测试
