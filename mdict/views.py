@@ -42,16 +42,10 @@ init_database()
 reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
 regp = re.compile(reg)
 
-es_host = get_config_con('es_host')
-
-print(11111,es_host)
-
-client = Elasticsearch(hosts=es_host)
-
 meta_dict = {}
 
 
-def init_meta_list():
+def init_meta_list(client):
     global meta_dict
     try:
         # get('mdict-*')只能获取open的index
@@ -158,7 +152,9 @@ def init_index(request):
     group = int(request.GET.get('dic_group', 0))
     try:
         t1 = time.perf_counter()
-        init_index_list(group)
+        es_host = get_config_con('es_host')
+        client = Elasticsearch(hosts=es_host)
+        init_index_list(group, client)
         t2 = time.perf_counter()
         return HttpResponse('success:' + str(t2 - t1))
     except Exception as e:
@@ -166,7 +162,7 @@ def init_index(request):
         return HttpResponse('failed')
 
 
-def is_index_open(index_name):
+def is_index_open(client, index_name):
     index_info = client.cat.indices(index=index_name, format='json')[0]
     index_status = index_info['status']
     if index_status == 'open':
@@ -175,12 +171,12 @@ def is_index_open(index_name):
         return False
 
 
-def init_index_list(group):
+def init_index_list(group, client):
     if not meta_dict:
-        init_meta_list()
+        init_meta_list(client)
     indices = client.indices
     for index_name in meta_dict:
-        is_open = is_index_open(index_name)
+        is_open = is_index_open(client, index_name)
         md5 = index_name[6:]
         dics = MdictDic.objects.filter(mdict_md5=md5)
         if len(dics) == 0:
@@ -215,8 +211,11 @@ def sub_highlight(matched):
 
 
 def get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content, es_and):
+    es_host = get_config_con('es_host')
+    client = Elasticsearch(hosts=es_host)
+
     if not meta_dict:
-        init_meta_list()
+        init_meta_list(client)
 
     # init_index_list(group)
     # 如果指定单独的index，当index_list长度超出后会报错RequestError 400 An HTTP line is larger than 4096 bytes.
