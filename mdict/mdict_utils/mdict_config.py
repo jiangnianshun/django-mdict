@@ -34,6 +34,7 @@ default_config = {
         'cache_num': 30,  # 查询提示缓存的个数
         'search_cache_num': 20,  # 查询（分页）缓存的个数
         'builtin_dic_enable': True,  # 启用内置词典
+        'es_host': 'http://127.0.0.1:9200/'
     },
     'SEARCH': {
         'merge_entry_max_length': 1000,
@@ -85,11 +86,13 @@ def get_config_con(con_name):
                     return int(value)
                 else:
                     return value
-            else:
-                for sec in default_config.keys():
-                    if con_name in default_config[sec].keys():
-                        return default_config[sec][con_name]
-    # config不存在时的处理，应该返回默认值，后面再处理
+
+    # config.ini中没有时查询默认值
+    for section in default_config:
+        if con_name in default_config[section].keys():
+            return default_config[section][con_name]
+
+    # 设置仍不存在
     print(con_name)
     raise Exception('config not exists!')
 

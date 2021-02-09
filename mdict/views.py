@@ -42,7 +42,11 @@ init_database()
 reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
 regp = re.compile(reg)
 
-client = Elasticsearch()
+es_host = get_config_con('es_host')
+
+print(11111,es_host)
+
+client = Elasticsearch(hosts=es_host)
 
 meta_dict = {}
 
