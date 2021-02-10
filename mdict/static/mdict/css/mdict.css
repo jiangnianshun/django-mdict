@@ -197,6 +197,8 @@ img{
 
 .ui-selectmenu-menu{position:absolute;z-index:9999 !important;}
 
+a{text-decoration:none !important;}
+
 
 #bottom-button-group{margin:0;padding:0;position:fixed;bottom:10px;display:flex;justify-content:center;width:100%;pointer-events: none;}
 
