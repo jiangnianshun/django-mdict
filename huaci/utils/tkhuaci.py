@@ -9,7 +9,6 @@ import pyscreenshot
 import pytesseract
 import cv2
 import numpy as np
-from urllib.parse import quote
 from pynput.keyboard import Key, Listener as KeyboardListener
 from pynput.mouse import Button, Listener as MouseListener
 
@@ -211,7 +210,7 @@ class Huaci:
         self.start_flag = 0
         self.init_vars()
 
-        url = self.root_url.replace('%WORD%', quote(query))
+        url = self.root_url.replace('%WORD%', query)
 
         browser = self.master.get_browser()
 

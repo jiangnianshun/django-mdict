@@ -32,7 +32,7 @@ pip3 install elasticsearch-dsl
 
 3. （可跳过）下载和es版本对应的elasticsearch-ik中文分词器并解压，将解压后的文件夹复制到elasticsearch的plugins目录下。
 
-如果调过该步，将会使用内置的standard分词器。
+如果跳过该步，将会使用内置的standard分词器。
 
 [https://github.com/medcl/elasticsearch-analysis-ik/releases](https://github.com/medcl/elasticsearch-analysis-ik/releases)
 

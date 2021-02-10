@@ -235,6 +235,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 3. 打开划词工具的设置界面，选择OCR查词。按ctrl+c+c，鼠标点击两次，框选OCR的范围。
 
+划词工具显示混乱，删除huaci/huaci.cache缓存文件夹。
 
 ### 修改词典库地址
 

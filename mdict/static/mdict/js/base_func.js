@@ -95,7 +95,7 @@ function html_unescape(text){
     if(text==null){
 		return "";
 	}else{
-        text = decodeURIComponent(text);
+        text = decodeURIComponent(text.replace('%', '%25'));
         return decodeHTMLEntities(text);
 	}
 }
