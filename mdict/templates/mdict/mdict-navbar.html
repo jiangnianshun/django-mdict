@@ -32,11 +32,15 @@
         </div>
         <div class="d-flex float-end">
             <div class="input-group">
-                <span class="btn mdict-icon" id="btn-es">全</span>
+                {% if type == 'index' or type == 'dic' %}
+                    <span class="btn mdict-icon" id="btn-es">全</span>
+                {% endif %}
                 <span class="btn mdict-icon" id="btn-bujian">部</span>
                 <i class="bi bi-journal-bookmark-fill btn mdict-icon" id="modal-mdict" data-bs-toggle="modal" data-bs-target="#modal-container-mdict"></i>
                 <i class="bi bi-gear-fill btn mdict-icon" id="modal-config" data-bs-toggle="modal" data-bs-target="#modal-container-config"></i>
-                <i class="bi bi-house-door-fill btn mdict-icon" id="btn-home"></i>
+                {% if type == 'es' or type == 'dic' %}
+                    <i class="bi bi-house-door-fill btn mdict-icon" id="btn-home"></i>
+                {% endif %}
             </div>
         </div>
     </div>
