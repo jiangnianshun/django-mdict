@@ -53,8 +53,10 @@ def init_meta_list(client):
             if index not in meta_dict:
                 raw_data = client.indices.get_mapping(index=index)[index]['mappings']['_meta']
                 meta_dict.update({index: raw_data})
+        return True, None
     except ConnectionError as e:
         print(e)
+        return False, e
 
 
 class MdictEntryViewSet(viewsets.ViewSet):
@@ -132,7 +134,8 @@ def es_search(request):
 
     group = int(request.GET.get('dic_group', 0))
 
-    result = get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content, es_and)
+    result = get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content,
+                            es_and)
     serializer = MdictEntrySerializer(result, many=True)
 
     total_count = 2000
@@ -154,12 +157,16 @@ def init_index(request):
         t1 = time.perf_counter()
         es_host = get_config_con('es_host')
         client = Elasticsearch(hosts=es_host)
+        if not meta_dict:
+            status, error = init_meta_list(client)
+            if not status:
+                return HttpResponse('error:' + str(error))
         init_index_list(group, client)
         t2 = time.perf_counter()
         return HttpResponse('success:' + str(t2 - t1))
     except Exception as e:
         print(e)
-        return HttpResponse('error')
+        return HttpResponse('error:' + str(e))
 
 
 def is_index_open(client, index_name):
@@ -172,8 +179,6 @@ def is_index_open(client, index_name):
 
 
 def init_index_list(group, client):
-    if not meta_dict:
-        init_meta_list(client)
     indices = client.indices
     for index_name in meta_dict:
         is_open = is_index_open(client, index_name)
@@ -190,7 +195,6 @@ def init_index_list(group, client):
                 if dic.mdict_md5 == '' or dic.mdict_md5 is None:
                     dic.mdict_md5 = md5
                     dic.save()
-
 
         if len(dics) == 0:
             indices.close(index=index_name, ignore=[400, 404])

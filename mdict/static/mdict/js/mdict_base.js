@@ -662,8 +662,12 @@ function init_index(){//载入词典列表
 		data:data,
 		success:function(data){
 		    console.log(data)
+		    $("#init-index-spinner").hide();
 		    if(data.indexOf("success")>-1){
-		        $("#init-index-spinner").hide();
+		        $("#live-toast-body").text("启停索引已完成。");
+		        new bootstrap.Toast($("#live-toast")[0]).show();
+		    }else{
+		        $("#live-toast-body").text(data);
 		        new bootstrap.Toast($("#live-toast")[0]).show();
 		    }
 		},
