@@ -642,9 +642,10 @@ function init_es(){
     get_mdict_list($("#mdict-list-content"),true);
 
     $('#online-mdict-checkbox').hide();
-    $('#open-close-index').show();
+    //$('#open-close-index').show();
     $('#open-close-index').click(function(){
         init_index();
+        $("#init-index-spinner").show();
     })
 
     first_query();
@@ -660,8 +661,13 @@ function init_index(){//载入词典列表
 		data:data,
 		success:function(data){
 		    console.log(data)
+		    if(data.indexOf("success")>-1){
+		        $("#init-index-spinner").hide();
+		        new bootstrap.Toast($("#live-toast")[0]).show();
+		    }
 		},
 		error:function(jqXHR,textStatus,errorThrown){
+			$("#init-index-spinner").hide();
 			alert(jqXHR.responseText);
 		},
 	});

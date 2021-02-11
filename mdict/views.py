@@ -159,7 +159,7 @@ def init_index(request):
         return HttpResponse('success:' + str(t2 - t1))
     except Exception as e:
         print(e)
-        return HttpResponse('failed')
+        return HttpResponse('error')
 
 
 def is_index_open(client, index_name):
@@ -607,7 +607,8 @@ def mdict_dic(request):
     dic_name = MdictDic.objects.get(pk=dic_pk).mdict_name
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
-    return render(request, 'mdict/dic.html', {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'dic', 'is_mobile': is_mb})
+    return render(request, 'mdict/dic.html',
+                  {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'dic', 'is_mobile': is_mb})
 
 
 def bujianjiansuo(request):
