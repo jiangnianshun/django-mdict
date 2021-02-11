@@ -323,13 +323,19 @@ function add_iframes(data,container,need_clear,is_list){
 function add_to_history(query,result_num){
     if(!(query in search_history)){//设置本页面查询历史，重复的查询不加入
         search_history[query]=result_num;
+        var badge_class="badge bg-primary rounded-pill";
+        var li_class="list-group-item list-group-item-action d-flex justify-content-between align-items-center";
+        if($('.dm-night').length>0){
+            badge_class+=" dm-night";
+            li_class+=" dm-night";
+        }
         var badge_h=$('<span>',{
             text:result_num,
-            class:"badge bg-primary rounded-pill",
+            class:badge_class,
         });
         var li_h=$('<li>',{
             text:query,
-            class:"list-group-item list-group-item-action d-flex justify-content-between align-items-center",
+            class:li_class,
         });
         badge_h.appendTo(li_h);
         li_h.appendTo('#search-history');
