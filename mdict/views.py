@@ -179,10 +179,27 @@ def init_index_list(group, client):
         is_open = is_index_open(client, index_name)
         md5 = index_name[6:]
         dics = MdictDic.objects.filter(mdict_md5=md5)
+
+        if len(dics) == 0:
+            rd = meta_dict[index_name]
+            item = init_vars.mdict_odict[rd['file']]
+            mdx = item.mdx
+            dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
+            if len(dics) > 0:
+                dic = dics[0]
+                if dic.mdict_md5 == '' or dic.mdict_md5 is None:
+                    dic.mdict_md5 = md5
+                    dic.save()
+
+
         if len(dics) == 0:
             indices.close(index=index_name, ignore=[400, 404])
         else:
             dic = dics[0]
+            if not dic.mdict_es_enable:
+                dic.mdict_es_enable = True
+                dic.save()
+
             if dic.mdict_enable:
                 if group <= 0:
                     if not is_open:
@@ -328,6 +345,9 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
 
         if len(dics) > 0:
             dic = dics[0]
+            if not dic.mdict_es_enable:
+                dic.mdict_es_enable = True
+                dic.save()
             record = SearchObject(mdx, mdd_list, dic, '').substitute_record(hit['content'])
 
             result.append(mdxentry(rd['name'], hit['entry'], record, 1, dic.pk, 1, 1, 1, extra=highlight_content_text))

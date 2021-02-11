@@ -147,6 +147,7 @@ function init_mdict_filter(){
                     for(var i=0;i<=mdict_list.length;i++){
                         var dic_a=$(mdict_list[i]).children('a');
                         var title=dic_a.text().toLowerCase();
+                        if(title=="")continue;
                         var file=dic_a.attr('data-file').toLowerCase();
 
                         if(t2s(title).indexOf(txt)==-1&&s2t(title).indexOf(txt)==-1&&t2s(file).indexOf(txt)==-1&&s2t(file).indexOf(txt)==-1){
