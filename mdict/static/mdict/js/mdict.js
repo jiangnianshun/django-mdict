@@ -323,10 +323,15 @@ function add_iframes(data,container,need_clear,is_list){
 function add_to_history(query,result_num){
     if(!(query in search_history)){//设置本页面查询历史，重复的查询不加入
         search_history[query]=result_num;
-        var li_h=$('<li>',{
-            text:"查询："+query+"    结果："+result_num,
-            class:"list-group-item list-group-item-action",
+        var badge_h=$('<span>',{
+            text:result_num,
+            class:"badge bg-primary rounded-pill",
         });
+        var li_h=$('<li>',{
+            text:query,
+            class:"list-group-item list-group-item-action d-flex justify-content-between align-items-center",
+        });
+        badge_h.appendTo(li_h);
         li_h.appendTo('#search-history');
         li_h.click(function(){
             if(query!=$("#query").val()){
