@@ -865,9 +865,9 @@ function get_mdict_list(container, flag){//载入词典列表
 				if(dic_enable){checked="checked";}
 
 				if(dic_es_enable){
-				    var es_flag="<span style='color:green;'>✔</span>"
+				    var es_flag="<i class='bi bi-check mdict-icon' style='color:green;'></i>"
 				}else{
-				    var es_flag="<span style='color:red;'>✖</span>"
+				    var es_flag="<i class='bi bi-x mdict-icon' style='color:red;'></i>"
 				}
 
 				var checkbox_html=`

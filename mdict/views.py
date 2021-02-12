@@ -180,10 +180,12 @@ def is_index_open(client, index_name):
 
 def init_index_list(group, client):
     indices = client.indices
+    all_dics = MdictDic.objects.all()
+    all_groups = MdictDicGroup.objects.all()
     for index_name in meta_dict:
         is_open = is_index_open(client, index_name)
         md5 = index_name[6:]
-        dics = MdictDic.objects.filter(mdict_md5=md5)
+        dics = all_dics.filter(mdict_md5=md5)
 
         if len(dics) == 0:
             rd = meta_dict[index_name]
@@ -197,7 +199,8 @@ def init_index_list(group, client):
                     dic.save()
 
         if len(dics) == 0:
-            indices.close(index=index_name, ignore=[400, 404])
+            if is_open:
+                indices.close(index=index_name, ignore=[400, 404])
         else:
             dic = dics[0]
             if not dic.mdict_es_enable:
@@ -209,7 +212,7 @@ def init_index_list(group, client):
                     if not is_open:
                         indices.open(index=index_name, ignore=[400, 404])
                 else:
-                    group_list = MdictDicGroup.objects.filter(pk=group)
+                    group_list = all_groups.filter(pk=group)
                     if len(group_list) > 0:
                         temp = group_list[0].mdict_group.filter(pk=dic.pk)
                         if len(temp) > 0:
