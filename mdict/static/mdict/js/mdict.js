@@ -1,7 +1,7 @@
 //模板字符串
 var script=`
 <script src="/static/jquery/jquery.min.js"><\/script>
-<script src='/static/mdict/iframe-resizer-master/js/iframeResizer.contentWindow.min.js'></script>
+<script src='/static/mdict/iframe-resizer/js/iframeResizer.contentWindow.min.js'></script>
 <script src="/static/mdict/js/transform.js"></script>
 <script src="/static/mdict/js/base_func.js"></script>
 <script src="/static/mdict/js/mdict_base.js"></script>
@@ -564,8 +564,8 @@ function online_search(query,container){//有道在线
                     card.css('display','block');//未加载完是隐藏的，加载完后显示
 
                     //var script = document.getElementById(iframe.id).contentWindow.document.createElement('script');
-                    //script.src='/static/mdict/iframe-resizer-master/js/iframeResizer.contentWindow.min.js';
-                    //跨域，无法获取iframe的document，也插入js
+                    //script.src='/static/mdict/iframe-resizer/js/iframeResizer.contentWindow.min.js';
+                    //跨域，无法获取iframe的document，也无法插入js
                 }
             })(iframe)
         }else{
