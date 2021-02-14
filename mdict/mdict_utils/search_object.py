@@ -66,11 +66,19 @@ class SearchObject:
         self.mdd_exist = False
         self.g_id = extra.get('g_id')
 
-        self.f_mdx = open(self.mdx.get_fpath(), 'rb')
+        try:
+            self.f_mdx = open(self.mdx.get_fpath(), 'rb')
+        except FileNotFoundError as e:
+            print(e)
+
         self.f_mdd_list = []
         if self.mdd is not None:
             for m in self.mdd:
-                f = open(m.get_fpath(), 'rb')
+                try:
+                    f = open(m.get_fpath(), 'rb')
+                except FileNotFoundError as e:
+                    print(e)
+                    f = None
                 self.f_mdd_list.append(f)
 
         self.f_p1 = -1

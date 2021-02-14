@@ -21,6 +21,8 @@ def search_exception(default_value=[]):
                 print(e)
             except OperationalError as e:
                 print(e)
+            except AttributeError as e:
+                print(e)
 
             return default_value
 
