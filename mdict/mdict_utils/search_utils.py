@@ -85,12 +85,12 @@ def clear_duplication(record_list):
 
 
 def process_link(matched):
-    return '<a class="badge badge-primary" style="text-decoration:underline" href="entry://' + matched.group(
+    return '<a class="badge bg-info" style="text-decoration:underline" href="entry://' + matched.group(
         1) + '">' + matched.group(1) + '</a>'
 
 
 def process_link2(matched):
-    return '<div class="badge badge-warning" style="cursor:pointer;" onclick="elementDisplay(\'wrap_div\')">展开/折叠</div><div name="wrap_div" style="display:none">' + matched.group(
+    return '<div class="badge bg-warning" style="cursor:pointer;" onclick="elementDisplay(\'wrap_div\')">展开/折叠</div><div name="wrap_div" style="display:none">' + matched.group(
         1) + '</div>'
 
 
@@ -167,13 +167,13 @@ def get_mdict_content(mymdictentry):
         if m.item_type is None:
             mdict_content.append('<li class="mymdict_item">')
             if m.item_entry is None:
-                mdict_content.append('<div class="item_content">' + item_content + "</div></li>")
+                mdict_content.append('<div class="bg-light">' + item_content + "</div></li>")
             else:
-                mdict_content.append(item_entry + '<br /><div class="item_content">' + item_content + "</div></li>")
+                mdict_content.append(item_entry + '<br /><div class="bg-light">' + item_content + "</div></li>")
         else:
             mdict_content.append(
-                "<li class='mymdict_item'>" + item_entry + "<span class='badge badge-secondary'>"
-                + m.item_type.mdict_type + "</span><br /><div class='item_content'>" + item_content + "</div></li>")
+                "<li class='mymdict_item'>" + item_entry + "<span class='badge bg-secondary'>"
+                + m.item_type.mdict_type + "</span><br /><div class='bg-light'>" + item_content + "</div></li>")
 
     mdict_content.append('</ol></div>')
     return mdict_content
