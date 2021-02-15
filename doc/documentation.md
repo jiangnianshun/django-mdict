@@ -68,7 +68,7 @@
 * MDICT/内置词条：
 <br />添加内置词典的词条，支持图片和富文本，支持LaTex公式。
 
-* latex公式插入：
+* LaTex公式插入：
 <br />方法1.单击latex公式按钮(求和符号的按钮)插入公式；
 <br />方法2.手动输入，将公式用$包裹。
 
@@ -235,7 +235,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 3. 打开划词工具的设置界面，选择OCR查词。按ctrl+c+c，鼠标点击两次，框选OCR的范围。
 
-划词工具显示混乱，删除huaci/huaci.cache缓存文件夹。
+如果划词工具显示混乱，尝试删除huaci/huaci.cache缓存文件夹。
 
 ### 修改词典库地址
 
@@ -541,3 +541,6 @@ chmod +x /bin/sleep
 
 修改db.sqlite3的权限。
 
+9. 内置词条存在，但是无法查询到。
+
+尝试将该词条重新保存。
