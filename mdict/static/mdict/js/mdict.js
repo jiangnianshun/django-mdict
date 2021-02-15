@@ -267,7 +267,7 @@ function add_iframes(data,container,need_clear,is_list){
                                 log:false,
                                 checkOrigin:false,
                                 widthCalculationMethod:'documentElementOffset',
-                                minHeight:450,
+                                minHeight:550,
                                 warningTimeout:0,
                                 scrolling:true,
     //							onInit: function(iframe_a){

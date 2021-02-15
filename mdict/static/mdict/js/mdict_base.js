@@ -559,19 +559,21 @@ function change_modal(){
         $("#modal-config").hide();
         $("#history-btn").hide();
 
-        $("#left-container").show();
+        $("#left-container").append($("#mdict-filter-input"));
         $("#left-container").append($("#mdict-list-content"));
+        $("#left-container").show();
 
-        $("#right-container").show();
         $("#right-container").append($("#config-content"));
         $("#right-container").append($("#history-content"));
+        $("#right-container").show();
     }else{
-        $("#modal-container-mdict .modal-body").append($("#mdict-list-content"));
         $("#left-container").hide();
+        $("#mdict-filter-input-container").append($("#mdict-filter-input"));
+        $("#modal-container-mdict .modal-body").append($("#mdict-list-content"));
 
+        $("#right-container").hide();
         $("#modal-container-config .modal-content").append($("#config-content"));
         $("#modal-container-history .modal-body").append($("#history-content"));
-        $("#right-container").hide();
 
         $("#modal-mdict").show();
         $("#modal-config").show();

@@ -3,15 +3,15 @@
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalConfig">
-                    词典
-                </h5>
+                <div id="mdict-filter-input-container">
+                    <input autocomplete="off" id="mdict-filter-input" class="form-control" type="text">
+                </div>
                 <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close">
                 </button>
             </div>
             <div class="modal-body">
                 <div id="mdict-list-content">
-                    <input autocomplete="off" id="mdict-filter-input" class="form-control" type="text">
+
                     {% if type == 'es' %}
                     <div class="d-grid gap-2">
                         <button class="btn btn-outline-primary" type="button" id="open-close-index">
