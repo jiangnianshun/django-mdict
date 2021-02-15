@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from urllib.parse import quote
 
 from base.sys_utils import split_os_path, find_os_path
@@ -60,8 +61,12 @@ def set_mdict_path():
 
 set_mdict_path()
 
+reg = r'^\.+(\\|/)'
+regp = re.compile(reg)
+
 
 def replace_res_name(res_name):
+    res_name = regp.sub('', res_name)
     # 在html中href是用/，在mdd中文件名用\，因此这里要替换。
     if res_name[0] != '/' and res_name[0] != '\\':
         res_name = '/' + res_name
@@ -103,7 +108,7 @@ is_mdict_media_local()
 
 
 def get_m_path(mdx):
-    m_path=''
+    m_path = ''
     mdict_path_dict = split_os_path(mdict_root_path)
     mdict_path_t = mdict_path_dict['path']
 
