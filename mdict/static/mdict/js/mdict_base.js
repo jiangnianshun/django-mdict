@@ -567,17 +567,19 @@ function change_modal(){
         $("#right-container").append($("#history-content"));
         $("#right-container").show();
     }else{
-        $("#left-container").hide();
-        $("#mdict-filter-input-container").append($("#mdict-filter-input"));
-        $("#modal-container-mdict .modal-body").append($("#mdict-list-content"));
+        if($("#left-container").is(':visible')){
+            $("#left-container").hide();
+            $("#modal-container-mdict .modal-header").prepend($("#mdict-filter-input"));
+            $("#modal-container-mdict .modal-body").append($("#mdict-list-content"));
 
-        $("#right-container").hide();
-        $("#modal-container-config .modal-content").append($("#config-content"));
-        $("#modal-container-history .modal-body").append($("#history-content"));
+            $("#right-container").hide();
+            $("#modal-container-config .modal-content").append($("#config-content"));
+            $("#modal-container-history .modal-body").append($("#history-content"));
 
-        $("#modal-mdict").show();
-        $("#modal-config").show();
-        $("#history-btn").show();
+            $("#modal-mdict").show();
+            $("#modal-config").show();
+            $("#history-btn").show();
+        }
     }
 }
 
