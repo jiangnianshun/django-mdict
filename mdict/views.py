@@ -17,7 +17,7 @@ from elasticsearch_dsl import Search
 from elasticsearch_dsl.query import MultiMatch
 from elasticsearch.exceptions import ConnectionError, TransportError
 
-from base.base_func import print_log_info, is_en_func, strQ2B, request_body_serialze, guess_mime
+from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
@@ -365,48 +365,58 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
 
 
 def get_query_list(query):
-    required = []
+    # 找出query的各种变体（简繁，拆字反查，全角半角，假名）
+    query_list = []
 
     query = query.strip()
 
     if query:  # 非空字符串为True
-        required.append(query)
+        query_list.append(query)
         if not is_en_func(query):  # 繁简转化
-
             st_enable = get_config_con('st_enable')
             chaizi_enable = get_config_con('chaizi_enable')
+            fh_char_enable = get_config_con('fh_char_enable')
+            kana_enable = get_config_con('kana_enable')
 
             if chaizi_enable and len(query) > 1:  # 长度大于1时拆字反查
-                # required.append(chaizi_search(query, group))
                 result = hc.reverse_query(query)
                 if result:
                     for r in result:
-                        required.append(r)
+                        query_list.append(r)
 
             if st_enable:
                 q_s = t2s.convert(query)
                 q_t = s2t.convert(query)
                 if q_t != query:
-                    required.append(q_t)
+                    query_list.append(q_t)
                     if chaizi_enable and len(q_t) > 1:
                         result = hc.reverse_query(q_t)
                         if result:
                             for r in result:
-                                required.append(r)
+                                query_list.append(r)
                 elif q_s != query:
-                    required.append(q_s)
+                    query_list.append(q_s)
                     if chaizi_enable and len(q_s) > 1:
                         result = hc.reverse_query(q_s)
                         if result:
                             for r in result:
-                                required.append(r)
-            fh_char_enable = get_config_con('fh_char_enable')
+                                query_list.append(r)
+
             if fh_char_enable:
                 q2b = strQ2B(query)
 
                 if q2b != query:  # 全角字符进行转换
-                    required.append(q2b)
-    return required
+                    query_list.append(q2b)
+
+            if kana_enable:
+                k_kana = h2k(query)
+                h_kana = k2h(query)
+                if k_kana != query:
+                    query_list.append(k_kana)
+                elif h_kana != query:
+                    query_list.append(h_kana)
+
+    return query_list
 
 
 hc = HanziChaizi()

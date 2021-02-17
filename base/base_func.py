@@ -5,6 +5,7 @@ import os
 import re
 
 from django.http.request import QueryDict
+from base.base_constant import regp
 
 
 def get_log_header(mod_name, debug_level, start=-1, end=-1):
@@ -52,7 +53,10 @@ def get_running_time(start, end):
 
 
 def is_en_func(s):  # 是否纯英文
-    zhmodel = re.compile(r'^[ \'a-zA-Z\-]+$')
+    s = regp.sub('', s)
+    if s == '':
+        return False
+    zhmodel = re.compile(r'^[a-zA-Z]+$')
     match = zhmodel.search(s)
     if match:
         return True
@@ -108,6 +112,7 @@ def guess_mime(f_name):
             mime_type = 'audio/x-speex'
     return mime_type
 
+
 def is_number(s):
     try:
         float(s)
@@ -123,3 +128,45 @@ def is_number(s):
         pass
 
     return False
+
+
+kana = {
+    'あ': 'ア', 'い': 'イ', 'う': 'ウ', 'え': 'エ', 'お': 'オ',
+    'か': 'カ', 'き': 'キ', 'く': 'ク', 'け': 'ケ', 'こ': 'コ',
+    'さ': 'サ', 'し': 'シ', 'す': 'ス', 'せ': 'セ', 'そ': 'ソ',
+    'た': 'タ', 'ち': 'チ', 'つ': 'ツ', 'て': 'テ', 'と': 'ト',
+    'な': 'ナ', 'に': 'ニ', 'ぬ': 'ウ', 'ね': 'ネ', 'の': 'ノ',
+    'は': 'ハ', 'ひ': 'ヒ', 'ふ': 'フ', 'へ': 'ヘ', 'ほ': 'ホ',
+    'ら': 'ラ', 'り': 'リ', 'る': 'ル', 'れ': 'レ', 'ろ': 'ロ',
+    'わ': 'ワ', 'を': 'ヲ', 'ん': 'ン',
+    'が': 'ガ', 'ぎ': 'ギ', 'ぐ': 'グ', 'げ': 'ゲ', 'ご': 'ゴ',
+    'ざ': 'ザ', 'じ': 'ジ', 'ず': 'ズ', 'ぜ': 'ゼ', 'ぞ': 'ゾ',
+    'だ': 'ダ', 'ぢ': 'ヂ', 'づ': 'ヅ', 'で': 'デ', 'ど': 'ド',
+    'ば': 'バ', 'び': 'ビ', 'ぶ': 'ブ', 'べ': 'ベ', 'ぼ': 'ボ',
+    'ぱ': 'パ', 'ぴ': 'ピ', 'ぷ': 'プ', 'ぺ': 'ペ', 'ぽ': 'ポ',
+    'ぁ': 'ァ', 'ぃ': 'ィ', 'ぅ': 'ゥ', 'ぇ': 'ェ', 'ぉ': 'ォ', 'っ': 'ッ',
+}
+
+invert_kana = {value: key for key, value in kana.items()}
+
+
+def h2k(words):
+    # 平假名转片假名
+    trans_words = ''
+    for w in words:
+        if w in kana.keys():
+            trans_words += kana[w]
+        else:
+            trans_words += w
+    return trans_words
+
+
+def k2h(words):
+    # 片假名转平假名
+    trans_words = ''
+    for w in words:
+        if w in invert_kana.keys():
+            trans_words += invert_kana[w]
+        else:
+            trans_words += w
+    return trans_words

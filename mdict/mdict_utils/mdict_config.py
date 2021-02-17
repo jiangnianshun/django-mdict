@@ -41,6 +41,7 @@ default_config = {
         'st_enable': True,  # 繁简和简繁转化
         'chaizi_enable': True,  # 拆字反查
         'fh_char_enable': True,  # 全角转换
+        'kana_enable': True,  # 假名转换
         'force_refresh': False,  # 强制刷新
         'select_btn_enable': True,  # 是否启用选择文字弹出框
         'suggestion_num': 30,  # 查询提示显示的数目
