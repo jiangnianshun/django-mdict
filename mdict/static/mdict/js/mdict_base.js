@@ -555,17 +555,19 @@ function change_modal(){
     var rw=$("#right-col").width();
     var rh=$("#right-col").height();
     if(lw>400&&rw>400&&lh>0&&rh>0){
-        $("#modal-mdict").hide();
-        $("#modal-config").hide();
-        $("#history-btn").hide();
+        if($("#left-container").is(':hidden')){
+            $("#modal-mdict").hide();
+            $("#modal-config").hide();
+            $("#history-btn").hide();
 
-        $("#left-container").append($("#mdict-filter-input"));
-        $("#left-container").append($("#mdict-list-content"));
-        $("#left-container").show();
+            $("#left-container").append($("#mdict-filter-input"));
+            $("#left-container").append($("#mdict-list-content"));
+            $("#left-container").show();
 
-        $("#right-container").append($("#config-content"));
-        $("#right-container").append($("#history-content"));
-        $("#right-container").show();
+            $("#right-container").append($("#config-content"));
+            $("#right-container").append($("#history-content"));
+            $("#right-container").show();
+        }
     }else{
         if($("#left-container").is(':visible')){
             $("#left-container").hide();

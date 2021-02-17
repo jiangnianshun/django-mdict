@@ -16,6 +16,7 @@
   * [全文搜索](#全文搜索)
   * [划词](#划词)
   * [修改词典库地址](#修改词典库地址)
+  * [缩放](#缩放)
   * [设置](#设置)
   * [配置文件](#配置文件)
   * [在windows上运行测试服务器](#在windows上运行测试服务器)
@@ -239,13 +240,15 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ### 修改词典库地址
 
-修改mdict_path.json的路径，样式如下，mdict_path是词典库路径，audio_path是发音库路径。
+1. 重新运行init_mdict_path.py，选择路径。
+
+2. 手动修改mdict_path.json的路径，样式如下，mdict_path是词典库路径，audio_path是发音库路径。
 
 第一个含有mdx的路径会被设置为词典库路径，第一个含有mdd的路径会被设置为发音库路径。
 
 如果mdict_path.json为空，词典库地址设置为/django-mdict/media/mdict/doc/，发音库地址设置为/django-mdict/media/mdict/audio/。
 
-注意输入规范的路径，用双引号并且用反斜杠或者双斜杠作为路径分隔符。
+windows下的d盘在wsl下为/mnt/d/。 注意输入规范的路径，用双引号并且用反斜杠或者双斜杠作为路径分隔符。
 
 ```
 {
@@ -259,6 +262,15 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
     ]
 }
 ```
+
+### 缩放
+
+整个页面的缩放，使用浏览器的缩放进行设置。
+
+文字的缩放，使用下面按钮栏放大字号和缩小字号按钮。
+
+图片的缩放，在手机上直接双指缩放，在电脑上在图片右键，在新标签页中打开图像，然后再进行缩放。
+
 ### 设置
 
 * 键盘的enter键绑定查询按钮，上下方向键绑定展开上一词条和展开下一词条按钮。
