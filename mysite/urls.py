@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import redirect
 from django.conf.urls import url
+from django.shortcuts import render
 from django.views.static import serve
 from django.contrib.auth.models import User, Group
 
@@ -60,8 +61,12 @@ router.register(r'mdictonline', views_mdict.MdictOnlineViewSet)
 def redirect_font(request):  # url重定向
     return redirect('/media/font')
 
+def main(request):
+    return render(request, 'index.html')
+
 
 urlpatterns = [
+    path('', main, name='main'),
     path('api/', include(router.urls)),  # djangoresrframework生成的url
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('font/', redirect_font),
