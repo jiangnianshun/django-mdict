@@ -72,7 +72,7 @@ class Widget1:
             tr.pack(fill='both', expand=True)
 
     def set_root_url(self):
-        # self.huaci.root_url = self.url_dict[self.radio_v2.get()]
+        self.huaci.root_url = self.url_dict[self.radio_v2.get()]
         print('root url:', self.huaci.root_url)
 
     def set_lang(self):

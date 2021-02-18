@@ -31,14 +31,14 @@ class Huaci:
         self.end_x = 0
         self.end_y = 0
 
-        # self.root =root
         self.master = None
 
         self.t1 = 0
         self.t2 = 0
 
         self.url_dict = collections.OrderedDict()
-        self.url_dict['django-mdict'] = 'http://127.0.0.1:8000/mdict/?query=%WORD%'
+        self.url_dict['查询'] = 'http://127.0.0.1:8000/mdict/?query=%WORD%'
+        self.url_dict['全文查询'] = 'http://127.0.0.1:8000/mdict/es/?query=%WORD%'
 
         self.p = None
 
