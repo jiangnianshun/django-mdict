@@ -846,9 +846,9 @@ function set_all_mdict_enable(obj){
 
     })
 
-    for(var i=0;i<dic_tmp_list.length;i=i+100){
+    for(var i=0;i<dic_tmp_list.length;i=i+300){
         dic_list[i]=new Array();
-        for(var j=i;j<i+100;j++){
+        for(var j=i;j<i+300;j++){
             if(j>=dic_tmp_list.length)break;
             dic_list[i].push(dic_tmp_list[j])
         }
