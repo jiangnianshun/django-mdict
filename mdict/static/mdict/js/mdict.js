@@ -833,20 +833,34 @@ function set_mdict_enable(obj){
 
 function set_all_mdict_enable(obj){
     var dic_list=new Array();
+    var dic_tmp_list=new Array();
     var o_check = $(obj).prop("checked");
 
     $("#mdict-list-content .card-header input").each(function(){
         var t_check = $(this).prop("checked");
         if(t_check!=o_check){
             $(this).prop("checked", $(obj).prop("checked"));
-            dic_list.push($(this).attr("data-pk"));
+            dic_tmp_list.push($(this).attr("data-pk"));
             //$(this).change();
         }
 
     })
 
-    data={'dic_list':dic_list,"mdict_enable":o_check};
+    for(var i=0;i<dic_tmp_list.length;i=i+100){
+        dic_list[i]=new Array();
+        for(var j=i;j<i+100;j++){
+            if(j>=dic_tmp_list.length)break;
+            dic_list[i].push(dic_tmp_list[j])
+        }
+    }
 
+    for(var i=0;i<dic_list.length;i++){
+        set_all_mdict_ajax(dic_list[i],o_check)
+    }
+}
+
+function set_all_mdict_ajax(dic_list,o_check){
+    data={'dic_list':dic_list,"mdict_enable":o_check};
     $.ajax({
 		url:"/mdict/mdictenable/",
 		contentType:'json',
