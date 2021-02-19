@@ -372,19 +372,22 @@ def get_query_list(query):
 
     if query:  # 非空字符串为True
         query_list.append(query)
-        if not is_en_func(query):  # 繁简转化
+
+        if not is_en_func(query):
+            # 非纯英文的处理
             st_enable = get_config_con('st_enable')
             chaizi_enable = get_config_con('chaizi_enable')
-            fh_char_enable = get_config_con('fh_char_enable')
             kana_enable = get_config_con('kana_enable')
 
-            if chaizi_enable and len(query) > 1:  # 长度大于1时拆字反查
+            if chaizi_enable and len(query) > 1:
+                # 长度大于1时拆字反查
                 result = hc.reverse_query(query)
                 if result:
                     for r in result:
                         query_list.append(r)
 
             if st_enable:
+                # 繁简转化
                 q_s = t2s.convert(query)
                 q_t = s2t.convert(query)
                 if q_t != query:
@@ -402,19 +405,21 @@ def get_query_list(query):
                             for r in result:
                                 query_list.append(r)
 
-            if fh_char_enable:
-                q2b = strQ2B(query)
-
-                if q2b != query:  # 全角字符进行转换
-                    query_list.append(q2b)
-
             if kana_enable:
+                # 平假名、片假名转化
                 k_kana = h2k(query)
                 h_kana = k2h(query)
                 if k_kana != query:
                     query_list.append(k_kana)
                 elif h_kana != query:
                     query_list.append(h_kana)
+
+        fh_char_enable = get_config_con('fh_char_enable')
+        if fh_char_enable:
+            # 全角英文字母转半角
+            q2b = strQ2B(query)
+            if q2b != query:
+                query_list.append(q2b)
 
     return query_list
 

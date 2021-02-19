@@ -52,11 +52,12 @@ def get_running_time(start, end):
     return '[' + str(round(abs(end - start), 4)) + 's' + ']'
 
 
-def is_en_func(s):  # 是否纯英文
+def is_en_func(s):
+    # 是否纯英文字母(全角和半角)
     s = regp.sub('', s)
     if s == '':
         return False
-    zhmodel = re.compile(r'^[a-zA-Z]+$')
+    zhmodel = re.compile(r'^[a-zA-Zａ-ｚＡ-Ｚ]+$')
     match = zhmodel.search(s)
     if match:
         return True
@@ -74,7 +75,7 @@ def conatain_upper_characters(s):
 
 
 def strQ2B(ustring):
-    """把字符串全角转半角"""
+    """英文字母全角转半角"""
     rstring = ""
     for uchar in ustring:
         inside_code = ord(uchar)
