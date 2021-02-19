@@ -5,24 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link href="/static/bootstrap/css/bootstrap-icons.css" rel="stylesheet">
     <script src="/static/jquery/jquery.min.js"></script>
 	<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
     <style>
-        a{text-decoration:none}
+        a{text-decoration:none;color:black;}
         .row{height:10rem}
         .col{height:10rem}
         .card{height:8rem}
+        .card-body{color:gray}
+        .card-body h5{color:black}
+        .container{margin-top:2rem;}
     </style>
 </head>
-<body>
-
+<body class="bg-light">
 <div class="container">
     <div class="row">
         <div class="col">
             <a class="card" href="mynav/" target="_blank">
                 <div class="card-body">
                     <h5 class="card-title">导航</h5>
-                    <span class="icon-style"><img src="/media/image/s1.png" alt=""></span>
+                    <i class="bi bi-card-heading"></i>
                     进入本地导航页面
                 </div>
             </a>
@@ -31,7 +34,7 @@
             <a class="card" href="mdict/" target="_blank">
                 <div class="card-body">
                     <h5 class="card-title">词典</h5>
-                    <span class="icon-style"><img src="/media/image/s2.png" alt=""></span>
+                    <i class="bi bi-file-break"></i>
                     进入mdict词典查询页面
                 </div>
             </a>
@@ -40,7 +43,7 @@
             <a class="card" href="mdict/es/" target="_blank">
                 <div class="card-body">
                     <h5 class="card-title">全文搜索</h5>
-                    <span class="icon-style"><img src="/media/image/s2.png" alt=""></span>
+                    <i class="bi bi-file-break-fill"></i>
                     <span class="themes-sub">对mdict进行全文搜索</span>
                 </div>
             </a>
@@ -51,7 +54,7 @@
             <a class="card" href="manga/" target="_self" data-toggle="modal" data-target="#category_product_faq">
                 <div class="card-body">
                     <h5 class="card-title">漫画</h5>
-                    <span class="icon-style"><img src="/media/image/s3.png" alt=""></span>
+                    <i class="bi bi-book"></i>
                     <span class="themes-sub">进入app下载页面</span>
                 </div>
             </a>
@@ -60,7 +63,7 @@
             <a class="card" href="/log" target="_self">
                 <div class="card-body">
                     <h5 class="card-title">日志</h5>
-                    <span class="icon-style"><img src="/media/image/s5.png" alt=""></span>
+                    <i class="bi bi-columns-gap"></i>
                     <span class="themes-sub">查看网站更新日志</span>
                 </div>
             </a>
@@ -69,12 +72,11 @@
             <a class="card" href="/admin" target="_self">
                 <div class="card-body">
                     <h5 class="card-title">管理</h5>
-                    <span class="icon-style"><img src="/media/image/s4.png" alt=""></span>
-                    <span class="themes-sub">进入后台管理</span>
+                    <i class="bi bi-wrench"></i>
+                    <span class="themes-sub">打开admin管理页面</span>
                 </div>
             </a>
         </div>
-
     </div>
 </div>
 </body>
