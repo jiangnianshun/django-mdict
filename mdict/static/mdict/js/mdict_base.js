@@ -335,7 +335,7 @@ function init_online_dic_var(){
                 }
                 online_ele=`
                 <div class="form-checkbox" style="display:inline;">
-                    <input class="form-check-input" type="checkbox" id="${o_id}" ${checked} value="${o_name}" data-url="${o_url}" data-isiframe="${o_isiframe}">
+                    <input class="form-check-input" type="checkbox" id="${o_id}" ${checked} value="${o_name}" data-url="${o_url}" data-isiframe="${o_isiframe}" autocomplete='off'>
                     <label class="form-check-label" for="${o_id}">
                         <span class='badge badge-light text-dark'>${o_pror}</span>
                         ${o_name}
@@ -343,6 +343,7 @@ function init_online_dic_var(){
                     </label>
                 </div><br />
                 `
+//                chrome中复制标签页时，在线词典的checkbox会被自动选中，需要设置autocomplete='off'。
 
                 online_div.append(online_ele);
             }
