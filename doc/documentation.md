@@ -194,6 +194,8 @@ pdawiki部件检索和全宋体：[https://www.pdawiki.com/forum/forum.php?mod=v
 
 部分pdf复制的字符是全角字符，查询时会全角查询一遍，转化为半角再查询一遍。
 
+日文平假名和片假名自动转换，半角平假名会转换为全角片假名。
+
 ### 同名加载
 
 mdx同名的js、css和字体文件会自动加载。
@@ -242,7 +244,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 1. 重新运行init_mdict_path.py，选择路径。
 
-2. 手动修改mdict_path.json的路径，样式如下，mdict_path是词典库路径，audio_path是发音库路径。
+2. 或者手动修改mdict_path.json的路径，样式如下，mdict_path是词典库路径，audio_path是发音库路径。
 
 第一个含有mdx的路径会被设置为词典库路径，第一个含有mdd的路径会被设置为发音库路径。
 
@@ -310,6 +312,8 @@ st_enable 启用繁简转化
 chaizi_enable 启用拆字反查
 
 fh_char_enable 启用全角字符转换
+
+kana_enable 启用假名转换
 
 force_refresh 启用强制刷新，启用后会重新查询，而不是从缓存中读取。
 
