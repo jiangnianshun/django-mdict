@@ -17,7 +17,7 @@ from elasticsearch_dsl import Search
 from elasticsearch_dsl.query import MultiMatch
 from elasticsearch.exceptions import ConnectionError, TransportError
 
-from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h
+from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h, kh2f
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
@@ -373,6 +373,13 @@ def get_query_list(query):
     if query:  # 非空字符串为True
         query_list.append(query)
 
+        fh_char_enable = get_config_con('fh_char_enable')
+        if fh_char_enable:
+            # 全角英文字母转半角
+            q2b = strQ2B(query)
+            if q2b != query:
+                query_list.append(q2b)
+
         if not is_en_func(query):
             # 非纯英文的处理
             st_enable = get_config_con('st_enable')
@@ -409,17 +416,17 @@ def get_query_list(query):
                 # 平假名、片假名转化
                 k_kana = h2k(query)
                 h_kana = k2h(query)
+                f_kana = kh2f(query)
                 if k_kana != query:
                     query_list.append(k_kana)
                 elif h_kana != query:
                     query_list.append(h_kana)
 
-        fh_char_enable = get_config_con('fh_char_enable')
-        if fh_char_enable:
-            # 全角英文字母转半角
-            q2b = strQ2B(query)
-            if q2b != query:
-                query_list.append(q2b)
+                if f_kana != query:
+                    query_list.append(f_kana)
+                    fk_kana = k2h(f_kana)
+                    if fk_kana != f_kana:
+                        query_list.append(fk_kana)
 
     return query_list
 
