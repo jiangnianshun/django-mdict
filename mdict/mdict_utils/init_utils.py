@@ -91,7 +91,7 @@ def get_mdict_list():
                     if f.startswith(f_name):
                         mime_type = guess_mime(f)
                         if mime_type is not None and mime_type.startswith('image'):
-                            if f.split('.')[0] == f_name:
+                            if f[:f.rfind('.')] == f_name:
                                 icon = f.split('.')[-1]
                                 break
                 mdx = MDX(mdx_path)
