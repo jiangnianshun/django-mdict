@@ -1,3 +1,4 @@
+import html
 from django.core.exceptions import AppRegistryNotReady
 from django.db.utils import OperationalError as DjangoError
 from sqlite3 import OperationalError as Sqlite3Error
@@ -34,7 +35,7 @@ def init_database():
                 header = v.mdx.header
                 mdict_name = k
                 if 'Title' in header:
-                    mdict_name = header['Title'].strip()
+                    mdict_name = html.unescape(header['Title'].strip())
                     if not mdict_name or mdict_name == 'Title (No HTML code allowed)':
                         mdict_name = k
                 print(k, mdict_name)
