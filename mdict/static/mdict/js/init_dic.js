@@ -64,6 +64,9 @@ var func = function(){
 		}
 	);
 
+	$("#display_list").unbind("click");
+	//去除重复绑定的click
+
 	$("#display_list").on("click","li",function(){
 		$("#alert-box").empty();
 		$("li").each(function(){

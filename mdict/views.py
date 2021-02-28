@@ -81,7 +81,9 @@ class MdictEntryViewSet(viewsets.ViewSet):
         ret = k_page.get_ret(page)
 
         if page == 1:
-            write_to_history(query, ret['total_count'])
+            history_enable = get_config_con('history_enable')
+            if history_enable:
+                write_to_history(query, ret['total_count'])
 
         return Response(ret)
 
@@ -153,7 +155,9 @@ def es_search(request):
     }
 
     if result_page == 1:
-        write_to_history(query, len(result))
+        history_enable = get_config_con('history_enable')
+        if history_enable:
+            write_to_history(query, len(result))
 
     return Response(ret)
 
@@ -517,7 +521,9 @@ def search_mdx_record(request):
     else:
         return_list = search_mdx_record_object({'query': query, 'target_pk': dic_pk, 'start': s, 'end': e})
 
-    write_to_history(query, 1)
+    history_enable = get_config_con('history_enable')
+    if history_enable:
+        write_to_history(query, 1)
 
     return HttpResponse(json.dumps(return_list))
 
