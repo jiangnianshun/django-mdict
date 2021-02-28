@@ -8,6 +8,7 @@
 *.ini
 *.json
 *.dat
+*.dat.*
 *.log
 *.c
 .Windows.cache

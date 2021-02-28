@@ -53,23 +53,6 @@ def process_num(t):
     return str1
 
 
-def is_number(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        pass
-
-    try:
-        import unicodedata
-        unicodedata.numeric(s)
-        return True
-    except (TypeError, ValueError):
-        pass
-
-    return False
-
-
 def is_mobile(request):
     agent = request.META['HTTP_USER_AGENT'].lower()
 

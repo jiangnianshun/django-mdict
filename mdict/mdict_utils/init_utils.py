@@ -7,6 +7,7 @@ from mysite.settings import BASE_DIR
 from base.base_func import print_log_info, guess_mime
 from base.sys_utils import get_sys_name
 from .mdict_config import set_cpunum, get_cpunum
+from .mdict_func import rename_history
 
 print_log_info(['system is', get_sys_name(), '.'])
 
@@ -245,6 +246,8 @@ def write_dir_change():
 def init_mdict_list(rewrite_cache):
     t1 = time.perf_counter()
     print_log_info(['media root path:', mdict_root_path])
+
+    rename_history()
 
     if rewrite_cache:
         init_vars.need_recreate = True

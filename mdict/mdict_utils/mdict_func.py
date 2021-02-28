@@ -5,6 +5,7 @@ import time
 from urllib.parse import quote
 
 from base.sys_utils import split_os_path, find_os_path
+from base.base_func import is_number
 from mysite.settings import BASE_DIR
 
 mdict_path = os.path.join('media', 'mdict', 'doc')
@@ -139,5 +140,22 @@ def write_to_history(query, num):
         try:
             with open(history_path, 'w', encoding='utf-8') as f:
                 f.write(history_str)
+        except Exception as e:
+            print(e)
+
+
+def rename_history():
+    if os.path.exists(history_path) and os.path.getsize(history_path) / (1024 * 1024) > 1:
+        try:
+            max_num = 0
+            for file in os.listdir(BASE_DIR):
+                if file.startswith('history.dat') and file != 'history.dat':
+                    file_split = file.split('.')
+                    if len(file_split) == 3:
+                        if is_number(file_split[2]):
+                            tmp_num = int(file_split[2])
+                            if tmp_num > max_num:
+                                max_num = tmp_num
+            os.rename(history_path, history_path + '.' + str(max_num+1))
         except Exception as e:
             print(e)
