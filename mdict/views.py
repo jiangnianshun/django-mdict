@@ -21,6 +21,7 @@ from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
+from mdict.mdict_utils.mdict_func import write_to_history
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
 from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
 from mdict.mdict_utils.decorator import loop_mdict_list, inner_object
@@ -78,6 +79,9 @@ class MdictEntryViewSet(viewsets.ViewSet):
 
         k_page = key_paginator.get(query, group)
         ret = k_page.get_ret(page)
+
+        if page == 1:
+            write_to_history(query, ret['total_count'])
 
         return Response(ret)
 
@@ -147,6 +151,9 @@ def es_search(request):
         "current_page": result_page,  # 当前页数
         "data": serializer.data,
     }
+
+    if result_page == 1:
+        write_to_history(query, len(result))
 
     return Response(ret)
 
@@ -509,6 +516,8 @@ def search_mdx_record(request):
         return_list = []
     else:
         return_list = search_mdx_record_object({'query': query, 'target_pk': dic_pk, 'start': s, 'end': e})
+
+    write_to_history(query, 1)
 
     return HttpResponse(json.dumps(return_list))
 

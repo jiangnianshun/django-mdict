@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import time
 from urllib.parse import quote
 
 from base.sys_utils import split_os_path, find_os_path
@@ -8,6 +9,8 @@ from mysite.settings import BASE_DIR
 
 mdict_path = os.path.join('media', 'mdict', 'doc')
 mdict_root_path = os.path.join(BASE_DIR, mdict_path)
+
+history_path = os.path.join(BASE_DIR, 'history.dat')
 
 audio_path = os.path.join(BASE_DIR, 'media', 'mdict', 'audio')
 
@@ -121,3 +124,20 @@ def get_m_path(mdx):
         t_path = mdx_path[e:-1]
         m_path = '/'.join(t_path)
     return quote(m_path)
+
+
+def write_to_history(query, num):
+    time_str = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
+    history_str = time_str + '\t' + query + '\t' + str(num) + '\n'
+    if os.path.exists(history_path):
+        try:
+            with open(history_path, 'a', encoding='utf-8') as f:
+                f.write(history_str)
+        except Exception as e:
+            print(e)
+    else:
+        try:
+            with open(history_path, 'w', encoding='utf-8') as f:
+                f.write(history_str)
+        except Exception as e:
+            print(e)
