@@ -128,7 +128,7 @@ def get_m_path(mdx):
 
 
 def write_to_history(query, num):
-    time_str = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
+    time_str = time.strftime("%Y.%m.%d:%H:%M:%S", time.localtime(time.time()))
     history_str = time_str + '\t' + query + '\t' + str(num) + '\n'
     if os.path.exists(history_path):
         try:

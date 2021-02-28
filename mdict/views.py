@@ -2,6 +2,7 @@ import json
 import mimetypes
 import re
 import time
+import csv
 from urllib.parse import quote, unquote
 
 from django.http import HttpResponse
@@ -178,6 +179,35 @@ def init_index(request):
     except Exception as e:
         print(e)
         return HttpResponse('error:' + str(e))
+
+
+def download_history(request):
+    file_list = []
+    for file in os.listdir(BASE_DIR):
+        if file.startswith('history.dat') and file != 'history.dat':
+            file_list.append(file)
+
+    file_list.sort(key=lambda x: int(x.split('.')[2]))
+    if os.path.exists(os.path.join(BASE_DIR, 'history.dat')):
+        file_list.append('history.dat')
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="history.csv"'
+    writer = csv.writer(response)
+
+    for file in file_list:
+        try:
+            file_path = os.path.join(BASE_DIR, file)
+            with open(file_path, 'r', encoding='utf-8') as f:
+                results = f.readlines()
+            for result in results:
+                if result.strip() != '':
+                    data_item = result.strip().split('\t')
+                    writer.writerow(data_item)
+        except Exception as e:
+            print(e)
+
+    return response
 
 
 def is_index_open(client, index_name):
