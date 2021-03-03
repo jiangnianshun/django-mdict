@@ -22,7 +22,7 @@ from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
-from mdict.mdict_utils.mdict_func import write_to_history
+from mdict.mdict_utils.mdict_func import write_to_history, get_history_file
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
 from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
 from mdict.mdict_utils.decorator import loop_mdict_list, inner_object
@@ -84,7 +84,7 @@ class MdictEntryViewSet(viewsets.ViewSet):
         if page == 1:
             history_enable = get_config_con('history_enable')
             if history_enable:
-                write_to_history(query, ret['total_count'])
+                write_to_history(query)
 
         return Response(ret)
 
@@ -158,7 +158,7 @@ def es_search(request):
     if result_page == 1:
         history_enable = get_config_con('history_enable')
         if history_enable:
-            write_to_history(query, len(result))
+            write_to_history(query)
 
     return Response(ret)
 
@@ -182,14 +182,7 @@ def init_index(request):
 
 
 def download_history(request):
-    file_list = []
-    for file in os.listdir(BASE_DIR):
-        if file.startswith('history.dat') and file != 'history.dat':
-            file_list.append(file)
-
-    file_list.sort(key=lambda x: int(x.split('.')[2]))
-    if os.path.exists(os.path.join(BASE_DIR, 'history.dat')):
-        file_list.append('history.dat')
+    file_list = get_history_file()
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="history.csv"'
@@ -553,7 +546,7 @@ def search_mdx_record(request):
 
     history_enable = get_config_con('history_enable')
     if history_enable:
-        write_to_history(query, 1)
+        write_to_history(query)
 
     return HttpResponse(json.dumps(return_list))
 
@@ -684,6 +677,49 @@ def mdict_index(request):
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
     return render(request, 'mdict/index.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
+
+
+def wordcloud(request):
+    return render(request, 'mdict/wordcloud.html')
+
+
+def getwordlist(request):
+    file_list = get_history_file()
+
+    word_dict = {}
+    for file in file_list:
+        try:
+            file_path = os.path.join(BASE_DIR, file)
+            with open(file_path, 'r', encoding='utf-8') as f:
+                results = f.readlines()
+            for result in results:
+                if result.strip() != '':
+                    data_item = result.strip().split('\t')
+                    if len(data_item) > 1:
+                        word = data_item[1]
+                        if word in word_dict.keys():
+                            word_dict[word] += 1
+                        else:
+                            word_dict[word] = 1
+        except Exception as e:
+            print(e)
+
+    word_list = []
+
+    max_num = max(word_dict.items(), key=lambda x: x[1])[1]
+    # min_num = min(word_dict.items(), key=lambda x: x[1])[1]
+
+    if max_num < 200:
+        scale = int(200 / max_num)
+    else:
+        scale = int(max_num / 200)
+
+    for word, num in word_dict.items():
+        word_list.append([word, num * scale])
+
+    word_list.sort(key=lambda k: k[1], reverse=True)
+
+    return HttpResponse(json.dumps(word_list[:2000]))
 
 
 def es_index(request):

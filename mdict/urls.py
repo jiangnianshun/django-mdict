@@ -30,4 +30,6 @@ urlpatterns = [
     path('essearch/', views.es_search),
     path('initindex/', views.init_index),
     path('downloadhistory/', views.download_history),
+    path('wordcloud/', views.wordcloud),
+    path('getwordlist/', views.getwordlist),
 ]

@@ -127,9 +127,9 @@ def get_m_path(mdx):
     return quote(m_path)
 
 
-def write_to_history(query, num):
+def write_to_history(query):
     time_str = time.strftime("%Y.%m.%d:%H:%M:%S", time.localtime(time.time()))
-    history_str = time_str + '\t' + query + '\t' + str(num) + '\n'
+    history_str = time_str + '\t' + query + '\n'
     if os.path.exists(history_path):
         try:
             with open(history_path, 'a', encoding='utf-8') as f:
@@ -142,6 +142,18 @@ def write_to_history(query, num):
                 f.write(history_str)
         except Exception as e:
             print(e)
+
+
+def get_history_file():
+    file_list = []
+    for file in os.listdir(BASE_DIR):
+        if file.startswith('history.dat') and file != 'history.dat':
+            file_list.append(file)
+
+    file_list.sort(key=lambda x: int(x.split('.')[2]))
+    if os.path.exists(os.path.join(BASE_DIR, 'history.dat')):
+        file_list.append('history.dat')
+    return file_list
 
 
 def rename_history():
