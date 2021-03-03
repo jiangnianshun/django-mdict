@@ -14,7 +14,7 @@
     <script>
         function resizeCanvasToDisplaySize() {
            // look up the size the canvas is being displayed
-           var canvas=document.getElementById('wordcloud_canvas');
+           var canvas = document.getElementById('wordcloud_canvas');
            var width = canvas.clientWidth;
            var height = canvas.clientHeight;
 
@@ -28,13 +28,12 @@
            return false;
         }
         function change_canvas(){
-            console.log($("body").width(),$("body").height())
             $("#wordcloud_canvas").width($("body").width());
             $("#wordcloud_canvas").height($("body").height());
             resizeCanvasToDisplaySize();
         }
         change_canvas();
-        $(window).resize(change_canvas);
+        //$(window).resize(change_canvas);
         $.ajax({
             url:"/mdict/getwordlist/",
             contentType:'json',
