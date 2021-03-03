@@ -8,7 +8,6 @@
         <script src="/static/mdict/wordcloud/wordcloud2.js"></script>
     </head>
     <body>
-        <span id="wordcloud_container"></span>
         <canvas id="wordcloud_canvas"></canvas>
     </body>
     <script>
@@ -31,22 +30,27 @@
             $("#wordcloud_canvas").width($("body").width());
             $("#wordcloud_canvas").height($("body").height());
             resizeCanvasToDisplaySize();
+            get_word_list();
+        }
+
+        function get_word_list(){
+            $.ajax({
+                url:"/mdict/getwordlist/",
+                contentType:'json',
+                type:'GET',
+                success:function(data){
+                    var canvas=document.getElementById('wordcloud_canvas');
+                    var word_list=$.parseJSON(data);
+                    var options={"list":word_list};
+                    WordCloud(canvas, options);
+                },
+                error:function(jqXHR,textStatus,errorThrown){
+                    alert(jqXHR.responseText);
+                },
+            });
         }
         change_canvas();
-        //$(window).resize(change_canvas);
-        $.ajax({
-            url:"/mdict/getwordlist/",
-            contentType:'json',
-            type:'GET',
-            success:function(data){
-                var canvas=document.getElementById('wordcloud_canvas');
-                var word_list=$.parseJSON(data);
-                var options={"list":word_list};
-                WordCloud(canvas, options);
-            },
-            error:function(jqXHR,textStatus,errorThrown){
-                alert(jqXHR.responseText);
-            },
-        });
+        $(window).resize(change_canvas);
+
     </script>
 </html>
