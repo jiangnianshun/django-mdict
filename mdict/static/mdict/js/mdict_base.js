@@ -548,6 +548,9 @@ function init_navbar_link(){
     $("#btn-home").click(function(){
         window.location.href="/mdict";
     });
+    $("#btn-index").click(function(){
+        window.location.href="/";
+    });
 }
 
 function change_modal(){
