@@ -171,3 +171,12 @@ def rename_history():
             os.rename(history_path, history_path + '.' + str(max_num+1))
         except Exception as e:
             print(e)
+
+
+def compare_time(time1, time2):
+    try:
+        s_time = time.mktime(time.strptime(time1, '%Y-%m-%d'))
+        e_time = time.mktime(time.strptime(time2, '%Y-%m-%d'))
+        return int(s_time) - int(e_time)
+    except Exception as e:
+        return 0

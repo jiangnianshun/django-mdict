@@ -22,7 +22,7 @@ from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
-from mdict.mdict_utils.mdict_func import write_to_history, get_history_file
+from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
 from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
 from mdict.mdict_utils.decorator import loop_mdict_list, inner_object
@@ -684,6 +684,9 @@ def wordcloud(request):
 
 
 def getwordlist(request):
+    start_time = request.GET.get('start_time', '')
+    end_time = request.GET.get('end_time', '')
+
     file_list = get_history_file()
 
     word_dict = {}
@@ -696,7 +699,17 @@ def getwordlist(request):
                 if result.strip() != '':
                     data_item = result.strip().split('\t')
                     if len(data_item) > 1:
+                        time = data_item[0]
+                        src_time = time[:time.find(':')].replace('.', '-')
                         word = data_item[1]
+                        if start_time != '':
+                            cmp = compare_time(src_time, start_time)
+                            if cmp < 0:
+                                continue
+                        if end_time != '':
+                            cmp = compare_time(src_time, end_time)
+                            if cmp > 0:
+                                continue
                         if word in word_dict.keys():
                             word_dict[word] += 1
                         else:
@@ -707,7 +720,7 @@ def getwordlist(request):
     word_list = []
 
     if len(word_dict) == 0:
-        word_dict['当前无查询记录。'] = 200
+        word_dict['无记录'] = 200
 
     max_num = max(word_dict.items(), key=lambda x: x[1])[1]
 

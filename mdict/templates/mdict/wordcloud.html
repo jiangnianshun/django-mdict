@@ -1,56 +1,73 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <style>
-            html,body{padding:0;margin:0;width:100%;height:100%;}
-        </style>
-        <script src="/static/jquery/jquery.min.js"></script>
-        <script src="/static/mdict/wordcloud/wordcloud2.js"></script>
-    </head>
-    <body>
-        <canvas id="wordcloud_canvas"></canvas>
-    </body>
-    <script>
-        function resizeCanvasToDisplaySize() {
-           // look up the size the canvas is being displayed
-           var canvas = document.getElementById('wordcloud_canvas');
-           var width = canvas.clientWidth;
-           var height = canvas.clientHeight;
+<head>
+    <style>
+        html,body{padding:0;margin:0;width:100%;height:100%;}
+        #setting_btn{position:fixed;right:20px;top:20px;color:black;font-size:36px;}
+    </style>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/bootstrap/css/bootstrap-icons.css" rel="stylesheet">
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/jquery/jquery.min.js"></script>
+    <script src="/static/mdict/wordcloud/wordcloud2.js"></script>
+</head>
+<body>
+    <i class="bi bi-gear-fill btn" id="setting_btn" data-bs-toggle="modal" data-bs-target="#modal-wordcloud-config"></i>
+    <canvas id="wordcloud_canvas"></canvas>
+    {% include "mdict/wordcloud-modal-config.html" %}
+</body>
+<script>
+    function resizeCanvasToDisplaySize() {
+       // look up the size the canvas is being displayed
+       var canvas = document.getElementById('wordcloud_canvas');
+       var width = canvas.clientWidth;
+       var height = canvas.clientHeight;
 
-           // If it's resolution does not match change it
-           if (canvas.width !== width || canvas.height !== height) {
-             canvas.width = width;
-             canvas.height = height;
-             return true;
-           }
+       // If it's resolution does not match change it
+       if (canvas.width !== width || canvas.height !== height) {
+         canvas.width = width;
+         canvas.height = height;
+         return true;
+       }
 
-           return false;
-        }
-        function change_canvas(){
-            $("#wordcloud_canvas").width($("body").width());
-            $("#wordcloud_canvas").height($("body").height());
-            resizeCanvasToDisplaySize();
-            get_word_list();
-        }
+       return false;
+    }
 
-        function get_word_list(){
-            $.ajax({
-                url:"/mdict/getwordlist/",
-                contentType:'json',
-                type:'GET',
-                success:function(data){
-                    var canvas=document.getElementById('wordcloud_canvas');
-                    var word_list=$.parseJSON(data);
-                    var options={"list":word_list};
-                    WordCloud(canvas, options);
-                },
-                error:function(jqXHR,textStatus,errorThrown){
-                    alert(jqXHR.responseText);
-                },
-            });
-        }
-        change_canvas();
-        $(window).resize(change_canvas);
+    function change_canvas(){
+        $("#wordcloud_canvas").width($("body").width());
+        $("#wordcloud_canvas").height($("body").height());
+        resizeCanvasToDisplaySize();
+        get_word_list();
+    }
 
-    </script>
+    function get_word_list(){
+        data={"start_time":$("#start-time").val(),"end_time":$("#end-time").val()}
+        $.ajax({
+            url:"/mdict/getwordlist/",
+            contentType:'json',
+            type:'GET',
+            data:data,
+            success:function(data){
+                var canvas=document.getElementById('wordcloud_canvas');
+                var word_list=$.parseJSON(data);
+                var options={"list":word_list};
+                console.log('aaa',word_list)
+                WordCloud(canvas, options);
+                console.log('bbbbb')
+            },
+            error:function(jqXHR,textStatus,errorThrown){
+                alert(jqXHR.responseText);
+            },
+        });
+    }
+
+    $("#wordcloud-setting").click(function(){
+        console.log(2222,$("#start-time").val());
+        console.log(3333,$("#end-time").val());
+        get_word_list();
+    });
+
+    change_canvas();
+    $(window).resize(change_canvas);
+</script>
 </html>
