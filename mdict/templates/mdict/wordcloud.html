@@ -51,9 +51,7 @@
                 var canvas=document.getElementById('wordcloud_canvas');
                 var word_list=$.parseJSON(data);
                 var options={"list":word_list};
-                console.log('aaa',word_list)
                 WordCloud(canvas, options);
-                console.log('bbbbb')
             },
             error:function(jqXHR,textStatus,errorThrown){
                 alert(jqXHR.responseText);
@@ -62,8 +60,6 @@
     }
 
     $("#wordcloud-setting").click(function(){
-        console.log(2222,$("#start-time").val());
-        console.log(3333,$("#end-time").val());
         get_word_list();
     });
 
