@@ -706,8 +706,10 @@ def getwordlist(request):
 
     word_list = []
 
+    if len(word_dict) == 0:
+        word_dict['当前无查询记录。'] = 200
+
     max_num = max(word_dict.items(), key=lambda x: x[1])[1]
-    # min_num = min(word_dict.items(), key=lambda x: x[1])[1]
 
     if max_num < 200:
         scale = int(200 / max_num)
@@ -715,7 +717,10 @@ def getwordlist(request):
         scale = int(max_num / 200)
 
     for word, num in word_dict.items():
-        word_list.append([word, num * scale])
+        tmp_num = num * scale
+        if tmp_num < 1:
+            tmp_num = 1
+        word_list.append([word, tmp_num])
 
     word_list.sort(key=lambda k: k[1], reverse=True)
 
