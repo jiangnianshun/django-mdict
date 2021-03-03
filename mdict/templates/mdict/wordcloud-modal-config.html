@@ -1,6 +1,6 @@
 <div aria-hidden="true" class="modal fade" id="modal-wordcloud-config"
      role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-container-brief-title">
@@ -10,8 +10,24 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div>起始时间<input id="start-time" type="date"></div>
-                <div>结束时间<input id="end-time" type="date"></div>
+                <div class="input-group mb-3">
+                    <label class="wordcloud">起始时间</label>
+                    <input id="start-time" type="date">
+                </div>
+                <div class="input-group mb-3">
+                    <label class="wordcloud">结束时间</label>
+                    <input id="end-time" type="date">
+                </div>
+                <div class="input-group mb-3">
+                    <label class="wordcloud">词云长度</label>
+                    <input autocomplete="off" id="wordcloud-length" class="form-control" type="text" value="2000"
+                                oninput="value=value.replace(/[^\d]/g,'')">
+                </div>
+                <div class="input-group mb-3">
+                    <label class="wordcloud">缩放比例</label>
+                    <input autocomplete="off" id="weight-factor" class="form-control" type="text" value="1"
+                                oninput="value=value.replace(/[^\d\.]/g,'')">
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal" type="button" id="wordcloud-setting">

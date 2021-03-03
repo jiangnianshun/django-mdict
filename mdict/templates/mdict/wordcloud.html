@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>词云</title>
+    <link href='/static/mdict/img/shortcut.png' rel='shortcut icon' type='image/x-icon'/>
     <style>
         html,body{padding:0;margin:0;width:100%;height:100%;}
         #setting_btn{position:fixed;right:20px;top:20px;color:black;font-size:36px;}
+        .wordcloud{padding-right:20px;}
     </style>
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/bootstrap/css/bootstrap-icons.css" rel="stylesheet">
@@ -41,7 +46,10 @@
     }
 
     function get_word_list(){
-        data={"start_time":$("#start-time").val(),"end_time":$("#end-time").val()}
+        weight_factor=$("#weight-factor").val()
+        data={"start_time":$("#start-time").val(),
+        "end_time":$("#end-time").val(),
+        "wordcloud_length":$("#wordcloud-length").val()}
         $.ajax({
             url:"/mdict/getwordlist/",
             contentType:'json',
@@ -50,7 +58,7 @@
             success:function(data){
                 var canvas=document.getElementById('wordcloud_canvas');
                 var word_list=$.parseJSON(data);
-                var options={"list":word_list};
+                var options={"list":word_list,"weightFactor":weight_factor};
                 WordCloud(canvas, options);
             },
             error:function(jqXHR,textStatus,errorThrown){

@@ -686,6 +686,10 @@ def wordcloud(request):
 def getwordlist(request):
     start_time = request.GET.get('start_time', '')
     end_time = request.GET.get('end_time', '')
+    wordcloud_length = int(request.GET.get('wordcloud_length', 2000))
+
+    if wordcloud_length <= 0:
+        wordcloud_length = 2000
 
     file_list = get_history_file()
 
@@ -737,7 +741,7 @@ def getwordlist(request):
 
     word_list.sort(key=lambda k: k[1], reverse=True)
 
-    return HttpResponse(json.dumps(word_list[:2000]))
+    return HttpResponse(json.dumps(word_list[:wordcloud_length]))
 
 
 def es_index(request):
