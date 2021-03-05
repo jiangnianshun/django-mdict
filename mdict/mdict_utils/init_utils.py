@@ -95,8 +95,11 @@ def get_mdict_list():
                             if f[:f.rfind('.')] == f_name:
                                 icon = f.split('.')[-1]
                                 break
-                mdx = MDX(mdx_path)
-                m_list.update({f_name: MdictItem(mdx, tuple(mdd_list), g_id, icon, mdx.get_len())})
+                try:
+                    mdx = MDX(mdx_path)
+                    m_list.update({f_name: MdictItem(mdx, tuple(mdd_list), g_id, icon, mdx.get_len())})
+                except Exception as e:
+                    print_log_info([f_name, 'loading failed', e])
 
                 g_id += 1
 
