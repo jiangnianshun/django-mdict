@@ -753,6 +753,7 @@ function query_key(container,entry){
 }
 
 function query_record(container,entry,dic_pk,start,end){
+    if(end==0){end=-1;}//-1存储后变为0
 	var data={"entry":entry,"dic_pk":dic_pk,"start":start,"end":end};
 	$.ajax({
 		url:"/mdict/record/",

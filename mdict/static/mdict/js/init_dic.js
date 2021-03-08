@@ -80,8 +80,8 @@ var func = function(){
 		//这里填充的话会导致传入dic的query无法被查询。
 		//后面再处理
 		var dic_pk=$("html").attr("data-dic-pk");
-		var s=$(this).attr("data-start");
-		var e=$(this).attr("data-end");
+		var s=parseInt($(this).attr("data-start"));
+		var e=parseInt($(this).attr("data-end"));
 
 		rotate_item_list={};//清空页面旋转记录
 
