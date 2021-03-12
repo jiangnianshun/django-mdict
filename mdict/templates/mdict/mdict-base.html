@@ -94,7 +94,12 @@
 <script src="/static/mdict/js/base_func.js"></script>
 <script src="/static/mdict/js/mdict_base.js"></script>
 <script src="/static/mdict/js/mdict.js"></script>
-
+<script>
+    function call_query(entry){
+        $('#query').val(html_unescape(entry));
+        $('#mdict-query').trigger("click");
+    }
+</script>
 {% block script %}{% endblock %}
 
 </body>

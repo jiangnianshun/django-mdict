@@ -62,9 +62,12 @@ class MainWindow:
         # 永久窗口置顶，而lift()是暂时置顶。
         self.huaci = Huaci()
         self.huaci.run_huaci('copy')
+        self.query = ''
+        self.param = ''
         self.url = self.huaci.root_url
         flag = self.url.find('?')
         if flag > -1:
+            self.param = self.url[flag:]
             self.url = self.url[:flag]
 
         self.root.protocol('WM_DELETE_WINDOW', self.withdraw_window)
@@ -98,12 +101,12 @@ class MainWindow:
         self.root.after(10, lambda: self.root.wm_deiconify())
         set_icon(self.root)
 
-    def show_main(self, url):
+    def show_main(self, query):
         self.icon.stop()
         self.root.after(0, self.root.deiconify)
         self.root.after(10, self.set_appwindow)
         set_icon(self.root)
-        self.url = url
+        self.query = query
 
     def show_window(self, icon, item):
         icon.stop()
@@ -210,7 +213,11 @@ class BrowserFrame(tk.Frame):
 
         rect = [0, 0, self.winfo_width(), self.winfo_height()]
         window_info.SetAsChild(self.get_window_handle(), rect)
-        return cef.CreateBrowserSync(window_info, url=self.main.url)
+        if '%WORD%' in self.main.param:
+            url = self.main.url + self.main.param.replace('%WORD%', self.main.query)
+        else:
+            url = self.main.url + '?query=' + self.main.query
+        return cef.CreateBrowserSync(window_info, url=url)
 
     def embed_browser(self):
         if self.browser is None:

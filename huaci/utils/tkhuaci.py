@@ -210,14 +210,15 @@ class Huaci:
         self.start_flag = 0
         self.init_vars()
 
-        url = self.root_url.replace('%WORD%', query)
+        # url = self.root_url.replace('%WORD%', query)
 
         browser = self.master.get_browser()
 
-        self.master.main.show_main(url)
+        self.master.main.show_main(query)
 
         if browser is not None:
-            browser.LoadUrl(url)
+            # browser.LoadUrl(url)
+            browser.ExecuteFunction('call_query', query)
 
         self.master.master.title(query)
 
