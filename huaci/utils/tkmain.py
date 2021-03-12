@@ -62,13 +62,7 @@ class MainWindow:
         # 永久窗口置顶，而lift()是暂时置顶。
         self.huaci = Huaci()
         self.huaci.run_huaci('copy')
-        self.query = ''
-        self.param = ''
-        self.url = self.huaci.root_url
-        flag = self.url.find('?')
-        if flag > -1:
-            self.param = self.url[flag:]
-            self.url = self.url[:flag]
+        self.init_param()
 
         self.root.protocol('WM_DELETE_WINDOW', self.withdraw_window)
 
@@ -83,6 +77,18 @@ class MainWindow:
         self.app.mainloop()
 
         cef.Shutdown()
+
+    def init_param(self):
+        self.query = ''
+        self.param = ''
+        self.url = self.huaci.root_url
+        flag = self.url.find('?')
+        if flag > -1:
+            self.param = self.url[flag:]
+            self.url = self.url[:flag]
+        print(2222,self.url)
+        print(3333,self.param)
+        print(444,self.url)
 
     def quit_window(self, icon, item):
         icon.stop()
@@ -126,7 +132,7 @@ class MainWindow:
         # 鼠标左键点击托盘图标运行default=True的Menuitem，如果default均为False，则无动作。
         self.icon = pystray.Icon("djangomdict", icon=image, title='django-mdict', menu=self.menu)
         if self.huaci.master is None:
-            self.huaci.set_master(self.app)
+            self.huaci.set_master(self)
         self.icon.run()
 
     def withdraw_window(self):
@@ -217,6 +223,7 @@ class BrowserFrame(tk.Frame):
             url = self.main.url + self.main.param.replace('%WORD%', self.main.query)
         else:
             url = self.main.url + '?query=' + self.main.query
+        print('aaaaa',url)
         return cef.CreateBrowserSync(window_info, url=url)
 
     def embed_browser(self):

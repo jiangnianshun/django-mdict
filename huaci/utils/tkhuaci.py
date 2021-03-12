@@ -56,6 +56,7 @@ class Huaci:
             os.chmod(self.ini_path, 0o777)
 
         self.root_url = list(self.url_dict.values())[0]  # 这里换有序词典
+        self.old_root_url = self.root_url
         print('root url', self.root_url)
 
         self.lang_con = 'eng'
@@ -210,17 +211,21 @@ class Huaci:
         self.start_flag = 0
         self.init_vars()
 
-        # url = self.root_url.replace('%WORD%', query)
+        browser = self.master.app.get_browser()
 
-        browser = self.master.get_browser()
-
-        self.master.main.show_main(query)
+        self.master.show_main(query)
 
         if browser is not None:
-            # browser.LoadUrl(url)
-            browser.ExecuteFunction('call_query', query)
+            if self.root_url != self.old_root_url:
+                self.master.init_param()
+                url = self.root_url.replace('%WORD%', query)
+                print(11111,url)
+                browser.LoadUrl(url)
+                self.old_root_url = self.root_url
+            else:
+                browser.ExecuteFunction('call_query', query)
 
-        self.master.master.title(query)
+        self.master.root.title(query)
 
     def run_huaci(self, hm):
         self.huaci_mode = hm

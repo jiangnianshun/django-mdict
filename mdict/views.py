@@ -367,14 +367,26 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
                     .replace('@flag2', '</b>')
 
         rd = meta_dict[index_name]
-        item = init_vars.mdict_odict[rd['file']]
-
-        mdx = item.mdx
-        mdd_list = item.mdd_list
 
         md5 = index_name[6:]
 
         dics = MdictDic.objects.filter(mdict_md5=md5)
+
+        try:
+            item = init_vars.mdict_odict[rd['file']]
+        except KeyError as e:
+            print(e)
+            print(rd['file'], 'not in the dic cache, the html cannot be rendered.')
+            if len(dics) > 0:
+                dic_pk = dics[0].pk
+            else:
+                dic_pk = 1
+            result.append(
+                mdxentry(rd['name'], hit['entry'], hit['content'], 1, dic_pk, 1, 1, 1, extra=highlight_content_text))
+            continue
+
+        mdx = item.mdx
+        mdd_list = item.mdd_list
 
         if len(dics) == 0:
             dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
