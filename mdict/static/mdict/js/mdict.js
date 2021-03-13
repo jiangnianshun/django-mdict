@@ -35,6 +35,10 @@ html,body{
 	color:#EEEEEE;
 	font-style:normal;
 }
+mark{
+    color:red;
+    font-size:+=2px;
+}
 </style>
 <link href="/static/mdict/css/night.css" rel="stylesheet">
 `
@@ -334,6 +338,19 @@ function add_iframes(data,container,need_clear,is_list){
                             $(window).scrollTop(t);
                         }
                     }
+
+                    var highlight_content=$('#highlight-content').prop("checked");
+                    if(highlight_content){
+                        var query=$.trim($('#query').val());
+                        tmp_query = [].filter.call(query,function(s,i,o){return o.indexOf(s)==i;}).join('');
+                        if(tmp_query!=''){
+                            var context = $(iframe).contents().find('body')[0];
+                            var instance = new Mark(context);
+                            for(var j=0;j<tmp_query.length;j++){
+                                instance.mark(tmp_query[j]);
+                            }
+                        }
+                    }
 				});
 
 				card.find('.defaultscale').click(function(){
@@ -388,12 +405,19 @@ function query_es(query,container,page,need_clear,is_over){
 	var es_entry=$('#es-filter-entry').prop("checked");
 	var es_content=$('#es-filter-content').prop("checked");
 	var es_and=$('#es-filter-and').prop("checked");
+
+	var frag_num=$('#frag-num').val();
+	var frag_size=$('#frag-size').val();
+	if(frag_num==''){frag_num=3;}
+	if(frag_size==''){frag_size=50;}
+
 	if(!es_entry&&!es_content){
 	    console.log('must select one search item')
 	    return
 	}
+
 	var data={"query":query,"dic_group":dic_group,"result_page":page,"force_refresh":$('#config-force-refresh').prop('checked'),
-	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content,"es-and":es_and};
+	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content,"es-and":es_and,"frag_num":frag_num,"frag_size":frag_size};
 	$.ajax({
 		url:"/mdict/essearch/",
 		contentType:'json',

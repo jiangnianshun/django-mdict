@@ -52,21 +52,43 @@
 {% if type == 'es' %}
     <div class='collapse show' id='es-filter-div'>
         <div class='card-body'>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="es-filter-entry" checked>
-                <label class="form-check-label" for="es-filter-entry">查询词头</label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="es-filter-content" checked>
-                <label class="form-check-label" for="es-filter-content">查询内容</label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="es-filter-and" checked>
-                <label class="form-check-label" for="es-filter-and">按照AND查询</label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="es-filter-phrase">
-                <label class="form-check-label" for="es-filter-phrase">按照词组查询</label>
+            <div class="row">
+                <div class="col">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="es-filter-entry" checked>
+                        <label class="form-check-label" for="es-filter-entry">词头</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="es-filter-content" checked>
+                        <label class="form-check-label" for="es-filter-content">内容</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="es-filter-and" checked>
+                        <label class="form-check-label" for="es-filter-and">AND查询</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="es-filter-phrase">
+                        <label class="form-check-label" for="es-filter-phrase">词组查询</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="highlight-content" checked>
+                        <label class="form-check-label" for="es-filter-phrase">正文高亮</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text">摘要个数</span>
+                        <input type="text" class="form-control" placeholder="" oninput = "value=value.replace(/[^\d]/g,'')" value="3" id="frag-num">
+                    </div>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text">摘要长度</span>
+                        <input type="text" class="form-control" placeholder="" oninput = "value=value.replace(/[^\d]/g,'')" value="50" id="frag-size">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

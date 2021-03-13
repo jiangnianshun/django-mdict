@@ -381,8 +381,9 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
                 dic_pk = dics[0].pk
             else:
                 dic_pk = 1
+            record = hit['content']
             result.append(
-                mdxentry(rd['name'], hit['entry'], hit['content'], 1, dic_pk, 1, 1, 1, extra=highlight_content_text))
+                mdxentry(rd['name'], hit['entry'], record, 1, dic_pk, 1, 1, 1, extra=highlight_content_text))
             continue
 
         mdx = item.mdx
