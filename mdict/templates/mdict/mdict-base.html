@@ -96,6 +96,7 @@
 <script src="/static/mdict/js/mdict.js"></script>
 <script>
     function call_query(entry){
+        $('html,body').animate({scrollTop:0},'fast');
         $('#query').val(html_unescape(entry));
         $('#mdict-query').trigger("click");
     }
