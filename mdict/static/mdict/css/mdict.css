@@ -3,6 +3,10 @@ html,body,.container-fluid{
 	margin:0px;
 }
 
+#es-filter-div label{
+    white-space:nowrap !important;
+}
+
 .col-lg-2,.col-lg-8,.row{
     padding-left:0px;
     padding-right:0px;

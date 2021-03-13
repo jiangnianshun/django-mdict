@@ -37,7 +37,7 @@ html,body{
 }
 mark{
     color:red !important;
-    font-size:+=2px !important;
+    font-size:110% !important;
 }
 </style>
 <link href="/static/mdict/css/night.css" rel="stylesheet">
@@ -339,15 +339,28 @@ function add_iframes(data,container,need_clear,is_list){
                         }
                     }
 
+                    //正文高亮
                     var highlight_content=$('#highlight-content').prop("checked");
                     if(highlight_content){
                         var query=$.trim($('#query').val());
-                        tmp_query = [].filter.call(query,function(s,i,o){return o.indexOf(s)==i;}).join('');
-                        if(tmp_query!=''){
-                            var context = $(iframe).contents().find('body')[0];
-                            var instance = new Mark(context);
-                            for(var j=0;j<tmp_query.length;j++){
-                                instance.mark(tmp_query[j]);
+                        if(query!=''){
+                            var pattern=/[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|《》（）？！，。“”‘’：；]/g;
+                            var tmp_query = query.split(pattern);
+                            //去符号
+                            for(var tmp of tmp_query){
+                                if(tmp!=''){
+                                    var context = $(iframe).contents().find('body')[0];
+                                    var instance = new Mark(context);
+                                    if(/[a-zA-Z]+/.test(tmp)){
+                                        instance.mark(tmp);
+                                    }else{
+                                        tmp = [].filter.call(tmp,function(s,i,o){return o.indexOf(s)==i;}).join('');
+                                        //去重
+                                        for(var j=0;j<tmp.length;j++){
+                                            instance.mark(tmp[j]);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
