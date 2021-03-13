@@ -57,8 +57,24 @@ def search(required, group):
 
 def search_revise(query, record_list, is_en):
     if len(record_list) == 0:
-        record_list = lemmatize_func(query, record_list, is_en)
-        record_list = key_spellcheck(query, record_list, is_en)
+        words_list = lemmatize_func(query, record_list, is_en)
+        c_list = key_spellcheck(query, record_list, is_en)
+        if len(c_list) > 15:
+            c_list = c_list[:15]
+
+        mdict = [builtin_dic_prefix, '<div>' + query + '</div>']
+        if len(words_list) > 0:
+            for w in words_list:
+                mdict.append(
+                    '<div><span class="badge bg-secondary">原形推测</span><span class="badge bg-primary text-dark">'
+                    + w[1] + '</span><a href="entry://' + w[0] + '">'
+                    + w[0] + '</a></div>')
+
+        if len(c_list) > 0:
+            for c in c_list:
+                mdict.append('<div><span class="badge bg-secondary">拼写检查</span><a href="entry://' + c + '">'
+                             + c + '</a></div>')
+        record_list.append(mdxentry(builtin_dic_name, query, ''.join(mdict), 0, -1, -1, -1, -1))
     return record_list
 
 
@@ -289,39 +305,14 @@ def search_mdx_dic(required, record_list, group):
 def key_spellcheck(query, record_list, is_en):
     # 拼写检查
     # 对只含字母，短横杠、撇号和空格的单词进行拼写检查
+    c_list = []
     if is_en:
-        # 这里设置成自定义配置，是否开启拼写检查，始终开启拼写检查，仅当查询无结果时开启拼写检查，关闭拼写检查，推荐第二种设置。
-        '''
-        if len(record_list) > 0 and record_list[0].mdx_name == builtin_dic_name:
-            c_list = spellcheck(query)
-            for i in range(len(c_list) - 1, -1, -1):
-                if c_list[i] == query.lower():
-                    del c_list[i]
-            if len(c_list) > 0:
-                if len(c_list) > 9:
-                    c_list = c_list[:9]
-                mdxentry_t = record_list[0]
-                mdict_content = list(mdxentry_t.mdx_record)
-                mdict_content.append('<hr /><div>' + query + '拼写检查：</div>')
-                for c in c_list:
-                    mdict_content.append('<div><a href="entry://' + c + '">' + c + '</a></div>')
-                mdxentry_t.mdx_record = ''.join(mdict_content)
-                record_list.pop(0)
-                record_list.append(mdxentry_t)
-        '''
         c_list = spellcheck(query)
         for i in range(len(c_list) - 1, -1, -1):
             if c_list[i] == query.lower():
                 del c_list[i]
-        if len(c_list) > 0:
-            if len(c_list) > 9:
-                c_list = c_list[:9]
-            mdict_content = ['<div>' + query + '拼写检查：</div>']
-            for c in c_list:
-                mdict_content.append('<div><a href="entry://' + c + '">' + c + '</a></div>')
-            # record_list.insert(0, mdxentry(builtin_dic_name, query, ''.join(mdict_content), 20, -1, -1, -1))
-            record_list.append(mdxentry(builtin_dic_name, query, ''.join(mdict_content), 20, -1, -1, -1, -1))
-    return record_list
+
+    return c_list
 
 
 def lemmatize_func(query, record_list, is_en):
@@ -330,30 +321,7 @@ def lemmatize_func(query, record_list, is_en):
     if is_en:
         words_list = lemmatize_word(query)
 
-    words_list_len = len(words_list)
-    mdict = []
-    if words_list_len > 0:
-        mdict.append('<div>' + query + '原形推测：</div>')
-        for w in words_list:
-            mdict.append(
-                '<div><span class="badge badge-light text-dark">' + w[1] + '</span><a href="entry://' + w[0] + '">' +
-                w[0] + '</a></div>')
-
-        # if len(record_list) == 0:
-        record_list.append(mdxentry(builtin_dic_name, '', ''.join(mdict), 0, -1, -1, -1, -1))
-        # else:
-        #     if record_list[len(record_list) - 1].mdx_name == builtin_dic_name:
-        #         b = record_list[len(record_list) - 1]
-        #
-        #         txt = b.mdx_record
-        #         txt += '<hr />'
-        #         txt += ''.join(mdict)
-        #         b.mdx_record = txt
-        #         del record_list[len(record_list) - 1]
-        #         record_list.append(b)
-        #     else:
-        #         record_list.append(mdxentry(builtin_dic_name, '', ''.join(mdict), builtin_dic_pror, -1, -1, -1, -1))
-    return record_list
+    return words_list
 
 
 def lemmatize_word(query):  # 使用nltk的WordNetLemmatizer()获得单词变体的原形

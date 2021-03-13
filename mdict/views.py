@@ -130,6 +130,11 @@ def es_search(request):
     es_content = json.loads(request.GET.get('es-content', 'false'))
     es_and = json.loads(request.GET.get('es-and', 'false'))
 
+    is_en = False
+
+    if is_en_func(query):
+        is_en = True
+
     if result_num > 1000:
         result_num = 1000
 
@@ -143,6 +148,9 @@ def es_search(request):
 
     result = get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content,
                             es_and)
+
+    result = search_revise(query, result, is_en)
+
     serializer = MdictEntrySerializer(result, many=True)
 
     total_count = 2000
@@ -626,18 +634,20 @@ def search_audio(request):
 
 def search_mdd(request, *args):
     dic_id = args[0]
-    dic = MdictDic.objects.get(pk=dic_id)
-    res_name = unquote(args[1]).replace('/', '\\')
-
+    dics = MdictDic.objects.filter(pk=dic_id)
     res_content = ''
     mime_type = ''
 
-    dic_name = dic.mdict_file
-    if dic_name in init_vars.mdict_odict.keys():
-        item = init_vars.mdict_odict[dic_name]
-        mdx = item.mdx
-        mdd_list = item.mdd_list
-        res_content, mime_type = SearchObject(mdx, mdd_list, dic, res_name).search_mdd()
+    if len(dics) > 0:
+        res_name = unquote(args[1]).replace('/', '\\')
+
+        dic = dics[0]
+        dic_name = dic.mdict_file
+        if dic_name in init_vars.mdict_odict.keys():
+            item = init_vars.mdict_odict[dic_name]
+            mdx = item.mdx
+            mdd_list = item.mdd_list
+            res_content, mime_type = SearchObject(mdx, mdd_list, dic, res_name).search_mdd()
 
     return HttpResponse(res_content, content_type=mime_type)
 
