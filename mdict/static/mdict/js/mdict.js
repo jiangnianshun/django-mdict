@@ -18,10 +18,6 @@ html,body{
 	padding:0;
 	overflow-y:hidden;
 }
-img{
-	max-width:100% !important;
-}
-/*这里如果设置全部元素强制max-width:100%，slangit.com中smh词条的svg会特别大。*/
 .mdict-tooltip{
 	background-color:gray;
 	color:#EEEEEE;
@@ -41,6 +37,14 @@ img{
 }
 </style>
 <link href="/static/mdict/css/night.css" rel="stylesheet">
+`
+var style_img=`
+<style>
+img{
+	max-width:100% !important;
+}
+/*这里如果设置全部元素强制max-width:100%，slangit.com中smh词条的svg会特别大。*/
+</style>
 `
 var style_font=`
 <style>
@@ -168,9 +172,17 @@ function add_iframes(data,container,need_clear,is_list){
 		   
             var force_font=$('#config-force-font',parent.document).prop("checked");
 			if(force_font){
-			    var header=style+style_font+script;
+			    if(mdx_name=='内置词典'){
+			        var header=style+style_font+script;
+			    }else{
+			        var header=style+style_img+style_font+script;
+			    }
 			}else{
-			    var header=style+script;
+			    if(mdx_name=='内置词典'){
+			        var header=style+script;
+			    }else{
+			        var header=style+style_img+script;
+			    }
 			}
 			var html=`
 			<!DOCTYPE HTML>
