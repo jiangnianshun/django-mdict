@@ -19,21 +19,21 @@ html,body{
 	overflow-y:hidden;
 }
 .mdict-tooltip{
-	background-color:gray;
-	color:#EEEEEE;
-	border-radius:5px;
-	font-size:1.1em;
-	z-index:999;
+	background-color:gray !important;
+	color:#EEEEEE !important;
+	border-radius:5px !important;
+	font-size:1.1em !important;
+	z-index:999 !important;
 }
 .mdict-tooltip span{
-	white-space:nowrap;
-	margin:5px;
+	white-space:nowrap !important;
+	margin:5px !important;
 }
 .mdict-tooltip span a{
-	background-color:gray;
-	text-decoration:none;
-	color:#EEEEEE;
-	font-style:normal;
+	background-color:gray !important;
+	text-decoration:none !important;
+	color:#EEEEEE !important;
+	font-style:normal !important;
 }
 mark{
     color:red !important;
