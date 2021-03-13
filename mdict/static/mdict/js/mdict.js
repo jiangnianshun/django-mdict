@@ -37,7 +37,6 @@ html,body{
 }
 mark{
     color:red !important;
-    font-size:110% !important;
 }
 </style>
 <link href="/static/mdict/css/night.css" rel="stylesheet">

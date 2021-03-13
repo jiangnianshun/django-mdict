@@ -62,6 +62,9 @@ def search_revise(query, record_list, is_en):
         if len(c_list) > 15:
             c_list = c_list[:15]
 
+        if len(words_list) == 0 and len(c_list) == 0:
+            return record_list
+
         mdict = [builtin_dic_prefix, '<div>' + query + '</div>']
         if len(words_list) > 0:
             for w in words_list:
