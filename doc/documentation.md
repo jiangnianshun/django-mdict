@@ -209,6 +209,8 @@ mdx同名的js、css和字体文件会自动加载。
 
 在mdict/wordcloud/下查看查询历史生成的词云，可以在右上角设置中选择时间范围。
 
+删除保存的查询历史，直接删除根目录下所有history.data开头的文件。
+
 ### 全文搜索
 
 [全文搜索](essearch.md)
@@ -229,9 +231,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 4. 默认url是http://127.0.0.1:8000/mdict/?query=%WORD%，在huaci/utils/huaci.ini中修改url。
 
-如果查词结果是空白，查看ip和端口是否正确。
-
-也可以添加其他在线词典，将url中要查询的词的部分用%WORD%代替。
+如果查词结果是空白，查看huaci/utils/huaci.ini中的ip和端口是否正确。
 
 5. 选择文字，按ctrl+c+c快捷键开始查询。
 
