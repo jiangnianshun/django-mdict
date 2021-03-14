@@ -167,6 +167,153 @@ function create_html(mdx_pk,mdx_name,mdx_record){
     return html;
 }
 
+function bind_card(iframe,html){
+    var card_link=$(iframe).parents(".card").find(".card-link");
+    var card=$(iframe).parents(".card");
+    card.on('hidden.bs.collapse',function(){
+        //card折叠时消除选择文字弹出框
+        var tooltop=$(this).find('iframe').contents().find('#tooltip');
+        if(tooltop.length>0){
+            tooltop.remove();
+        }
+    });
+
+    card.on('show.bs.collapse',function(){//当card展开时才加载iframe内容，避免手机上的卡顿。
+        if($(iframe).attr('data-content-fill')!='true'){
+            if(iframe.getAttribute("data-name")!="内置词典"){
+                html=html.replace(/\\n/g,'<br />');
+                //懶虫簡明英漢漢英詞典错误的使用\n换行，很少词典有这个问题，因此放在前端处理
+                //内置词典的\n不能被替换，会导致mathjax的\nu,\neq等命令无效
+            }
+
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(html);
+            iframe.contentWindow.document.close();
+
+            if($("#night-mode").attr('data-value')=='yes'){
+                var eles=$(iframe).contents().find('*');
+                eles.not('img').addClass('dm-night');
+                eles.find('img').addClass('dm-night-img');
+            }
+
+            $(iframe).contents().find('span[src]').each(function(){
+                //朗文现代5查jarring,jarringly,结果是span,span的src是base64图片，浏览器中不显示，这里重新生成img标签。
+                var new_img=$('<img>',{
+                    src:$(this).attr('src')
+                })
+                $(this).after(new_img);
+            });
+        }else{
+            if($("#night-mode").attr('data-value')=='yes'){
+                $(iframe).contents().find('*').not('img').addClass('dm-night');
+            }else{
+                $(iframe).contents().find('*').removeClass('dm-night').removeClass('dm-night-img');;
+            }
+        }
+    });
+
+    card.on('shown.bs.collapse',function(){
+        //shown.bs.collapse是collapse展开完成事件
+        var iframe_content=$(iframe).contents();
+        if($(iframe).attr('data-content-fill')!='true'){
+            if(iframe_content.find('html').css('writing-mode')=='vertical-rl'||iframe_content.find('body').css('writing-mode')=='vertical-rl'){
+                //处理日文从右往左的竖排排版
+                iFrameResize({
+                    log:false,
+                    checkOrigin:false,
+                    widthCalculationMethod:'documentElementOffset',
+                    minHeight:550,
+                    warningTimeout:0,
+                    scrolling:true,
+//							onInit: function(iframe_a){
+//							},
+//							onResized: function(messageData) {
+//							},
+                },iframe);
+                iframe_content.find('html').css('overflow-y','visible');
+                iframe_content.find('body').css('overflow-y','visible');
+            }else{
+                iFrameResize({
+                    log:false,
+                    checkOrigin:false,
+                    heightCalculationMethod:'documentElementOffset',
+                    warningTimeout:0,
+                    scrolling:true,
+//							onInit: function(iframe_a){
+//							},
+//							onResized: function(messageData) {
+//							},
+                },iframe);
+            }
+            $(iframe).attr('data-content-fill','true');
+        }
+
+        /*
+        log:false不显示debug信息
+        checkOrigin:false不对iframe的url进行检查
+        heightCalculationMethod
+        bodyOffset和bodyScroll不计算margin，都偏小
+        max一是有闪烁问题，二是有的词条有很大一块空白
+        documentElementScroll会有大块空白
+        documentElementOffset的白边较小，且点击后能恢复
+        lowestElement准确度最高，会遍历各元素，问题一性能消耗高，二有的词条，比如朗文5++的comet，
+        每次点击iframe高度都增大，原因是有元素设置了height="100%"，
+        或者设置了固定约束距底边的距离，position="fixed",bottom="45px"，导致高度获取出问题。
+        resizeFrom:'child'设置当iframe变化时更新状态，默认是parent窗口变化时更新状态。
+        在modal-mdict需要设置为child，否则不会显示。
+        warningTimeout:0,抑制iframeresizer的警告信息
+        第二个参数是iframe的dom对象，如果不设置，则对全部的iframe都生效。
+        tolerance设置iframe前后相差多少px时重绘
+        scrolling:true显示滚动条，然后用overflow-y:hidden;抑制竖向，只显示横向。
+        */
+
+        var d=$(document).scrollTop();
+        var t=$(this).offset().top;
+        var s=$(window).height();
+        if($(".card").length>1){
+            //d>t,//当card-body展开使得card-header跑到屏幕上方去，且length大于1时，跳转。
+            //t>s当词条在屏幕下方时
+            if(d>t||t+35>d+s){
+                $(window).scrollTop(t);
+            }
+        }
+
+        //正文高亮
+        var highlight_content=$('#highlight-content').prop("checked");
+        if(highlight_content){
+            var query=$.trim($('#query').val());
+            if(query!=''){
+                var pattern=/[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|《》（）？！，。“”‘’：；]/g;
+                var tmp_query = query.split(pattern);
+                //去符号
+                for(var tmp of tmp_query){
+                    if(tmp!=''){
+                        var context = $(iframe).contents().find('body')[0];
+                        var instance = new Mark(context);
+                        if(/[a-zA-Z]+/.test(tmp)){
+                            instance.mark(tmp);
+                        }else{
+                            tmp = [].filter.call(tmp,function(s,i,o){return o.indexOf(s)==i;}).join('');
+                            //去重
+                            for(var j=0;j<tmp.length;j++){
+                                instance.mark(tmp[j]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    card.find('.defaultscale').click(function(){
+        var iframe_body=card.find('iframe').contents().find('body');
+        if($(this).val()==''){
+            $(this).val(parseInt(iframe_body.css('font-size')));
+        }
+        iframe_body.animate({ fontSize: $(this).val() });
+    });
+}
+
 function add_iframes(data,container,need_clear,is_list){
 	//need_clear，第一次需要清除card
 	//is_list，query_mdict传进来的字典，query_record传进来的是列表
@@ -239,151 +386,7 @@ function add_iframes(data,container,need_clear,is_list){
             }
 			
 			(function(iframe,html){//通过闭包来避免for循环事件绑定中的赋值问题
-				var card_link=$(iframe).parents(".card").find(".card-link");
-				var card=$(iframe).parents(".card");
-				card.on('hidden.bs.collapse',function(){
-					//card折叠时消除选择文字弹出框
-					var tooltop=$(this).find('iframe').contents().find('#tooltip');
-					if(tooltop.length>0){
-						tooltop.remove();
-					}
-				});
-			
-				card.on('show.bs.collapse',function(){//当card展开时才加载iframe内容，避免手机上的卡顿。
-					if($(iframe).attr('data-content-fill')!='true'){
-					    if(iframe.getAttribute("data-name")!="内置词典"){
-					        html=html.replace(/\\n/g,'<br />');
-					        //懶虫簡明英漢漢英詞典错误的使用\n换行，很少词典有这个问题，因此放在前端处理
-					        //内置词典的\n不能被替换，会导致mathjax的\nu,\neq等命令无效
-					    }
-
-						iframe.contentWindow.document.open();
-						iframe.contentWindow.document.write(html);
-						iframe.contentWindow.document.close();
-
-						if($("#night-mode").attr('data-value')=='yes'){
-						    var eles=$(iframe).contents().find('*');
-						    eles.not('img').addClass('dm-night');
-						    eles.find('img').addClass('dm-night-img');
-						}
-
-						$(iframe).contents().find('span[src]').each(function(){
-						    //朗文现代5查jarring,jarringly,结果是span,span的src是base64图片，浏览器中不显示，这里重新生成img标签。
-						    var new_img=$('<img>',{
-                                src:$(this).attr('src')
-                            })
-						    $(this).after(new_img);
-						});
-					}else{
-					    if($("#night-mode").attr('data-value')=='yes'){
-						    $(iframe).contents().find('*').not('img').addClass('dm-night');
-						}else{
-						    $(iframe).contents().find('*').removeClass('dm-night').removeClass('dm-night-img');;
-						}
-					}
-				});
-			
-				card.on('shown.bs.collapse',function(){
-					//shown.bs.collapse是collapse展开完成事件
-                    var iframe_content=$(iframe).contents();
-                    if($(iframe).attr('data-content-fill')!='true'){
-                        if(iframe_content.find('html').css('writing-mode')=='vertical-rl'||iframe_content.find('body').css('writing-mode')=='vertical-rl'){
-                            //处理日文从右往左的竖排排版
-                            iFrameResize({
-                                log:false,
-                                checkOrigin:false,
-                                widthCalculationMethod:'documentElementOffset',
-                                minHeight:550,
-                                warningTimeout:0,
-                                scrolling:true,
-    //							onInit: function(iframe_a){
-    //							},
-    //							onResized: function(messageData) {
-    //							},
-                            },iframe);
-                            iframe_content.find('html').css('overflow-y','visible');
-                            iframe_content.find('body').css('overflow-y','visible');
-                        }else{
-                            iFrameResize({
-                                log:false,
-                                checkOrigin:false,
-                                heightCalculationMethod:'documentElementOffset',
-                                warningTimeout:0,
-                                scrolling:true,
-    //							onInit: function(iframe_a){
-    //							},
-    //							onResized: function(messageData) {
-    //							},
-                            },iframe);
-                        }
-                        $(iframe).attr('data-content-fill','true');
-                    }
-
-                    /*
-                    log:false不显示debug信息
-                    checkOrigin:false不对iframe的url进行检查
-                    heightCalculationMethod
-                    bodyOffset和bodyScroll不计算margin，都偏小
-                    max一是有闪烁问题，二是有的词条有很大一块空白
-                    documentElementScroll会有大块空白
-                    documentElementOffset的白边较小，且点击后能恢复
-                    lowestElement准确度最高，会遍历各元素，问题一性能消耗高，二有的词条，比如朗文5++的comet，
-                    每次点击iframe高度都增大，原因是有元素设置了height="100%"，
-                    或者设置了固定约束距底边的距离，position="fixed",bottom="45px"，导致高度获取出问题。
-                    resizeFrom:'child'设置当iframe变化时更新状态，默认是parent窗口变化时更新状态。
-                    在modal-mdict需要设置为child，否则不会显示。
-                    warningTimeout:0,抑制iframeresizer的警告信息
-                    第二个参数是iframe的dom对象，如果不设置，则对全部的iframe都生效。
-                    tolerance设置iframe前后相差多少px时重绘
-                    scrolling:true显示滚动条，然后用overflow-y:hidden;抑制竖向，只显示横向。
-                    */
-
-					var d=$(document).scrollTop();
-					var t=$(this).offset().top;
-					var s=$(window).height();
-					if($(".card").length>1){
-					    //d>t,//当card-body展开使得card-header跑到屏幕上方去，且length大于1时，跳转。
-					    //t>s当词条在屏幕下方时
-                        if(d>t||t+35>d+s){
-                            $(window).scrollTop(t);
-                        }
-                    }
-
-                    //正文高亮
-                    var highlight_content=$('#highlight-content').prop("checked");
-                    if(highlight_content){
-                        var query=$.trim($('#query').val());
-                        if(query!=''){
-                            var pattern=/[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|《》（）？！，。“”‘’：；]/g;
-                            var tmp_query = query.split(pattern);
-                            //去符号
-                            for(var tmp of tmp_query){
-                                if(tmp!=''){
-                                    var context = $(iframe).contents().find('body')[0];
-                                    var instance = new Mark(context);
-                                    if(/[a-zA-Z]+/.test(tmp)){
-                                        instance.mark(tmp);
-                                    }else{
-                                        tmp = [].filter.call(tmp,function(s,i,o){return o.indexOf(s)==i;}).join('');
-                                        //去重
-                                        for(var j=0;j<tmp.length;j++){
-                                            instance.mark(tmp[j]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-				});
-
-				card.find('.defaultscale').click(function(){
-					var iframe_body=card.find('iframe').contents().find('body');
-					if($(this).val()==''){
-					    $(this).val(parseInt(iframe_body.css('font-size')));
-					}
-					iframe_body.animate({ fontSize: $(this).val() });
-				});
-
+				bind_card(iframe,html);
 			})(iframe,html);
 		}
 		return [current_page,total_page,d.length]
