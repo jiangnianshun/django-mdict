@@ -85,6 +85,88 @@ font-display:swap;
 </style>
 `
 
+function create_card(s_id,mdx_pk,mdx_name,mdx_entry,mdx_record,mdx_extra){
+    var s_parent='#card-container';
+    if($('#config-card-show').prop('checked')){
+        var card_ele=`
+        <div class='card' id='card-${s_id}'>
+            <div class='card-header'>
+                <span class='badge badge-light text-dark'>${html_escape(mdx_entry,false)}</span>
+                <span class='text-primary collapsed card-link' href='#card-element-${s_id}' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#card-element-${s_id}">${html_escape(mdx_name,false)}</span>
+                <div style='padding-left:50px;font-size:0.6rem;'>${mdx_extra}</div>
+            </div>
+            <div class='collapse' id='card-element-${s_id}'>
+                <div class='card-body' id='card-body-${s_id}'>
+                </div>
+            </div>
+        </div>
+        `;
+    }else{
+        var card_ele=`
+        <div class='card' id='card-${s_id}'>
+            <div class='card-header'>
+                <span class='badge badge-light text-dark'>${html_escape(mdx_entry,false)}</span>
+                <span class='text-primary collapsed card-link' href='#card-element-${s_id}' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#card-element-${s_id}">${html_escape(mdx_name,false)}</span>
+                <div style='padding-left:50px;font-size:0.6rem;'>${mdx_extra}</div>
+            </div>
+            <div class='collapse' id='card-element-${s_id}' data-bs-parent='${s_parent}'>
+                <div class='card-body' id='card-body-${s_id}'>
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+
+    /*
+    由于mdx_entry可能包含<等字符导致显示出错，因此需要转义。
+    data-toggle='collapse'操作是控制展开和折叠
+    href='#card-element-"+i+"'操作目标是#card-element-"+i+"
+    bootstrap5改为data-bs-toggle和data-bs-target
+    collapse默认折叠
+    collapse show默认展开
+
+    data-parent='#card-container'
+    bootstrap5改为data-bs-parent
+    在card-container的子元素的所有可折叠元素，同一时间只能有一个展开。
+    bs4可以对data-parent赋值空字符串，但是bs5不能对data-bs-parent赋值空字符串。
+    */
+    return card_ele;
+}
+
+
+function create_html(mdx_pk,mdx_name,mdx_record){
+    var force_font=$('#config-force-font',parent.document).prop("checked");
+    if(force_font){
+        if(mdx_name=='内置词典'){
+            var header=style+style_font+script;
+        }else{
+            var header=style+style_img+style_font+script;
+        }
+    }else{
+        if(mdx_name=='内置词典'){
+            var header=style+script;
+        }else{
+            var header=style+style_img+script;
+        }
+    }
+    var html=`
+    <!DOCTYPE HTML>
+    <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="referrer" content="never">
+            ${header}
+        </head>
+            <body data-pk="${mdx_pk}">
+            ${mdx_record}
+        </body>
+    </html>
+    `;
+
+    return html;
+}
+
 function add_iframes(data,container,need_clear,is_list){
 	//need_clear，第一次需要清除card
 	//is_list，query_mdict传进来的字典，query_record传进来的是列表
@@ -127,79 +209,8 @@ function add_iframes(data,container,need_clear,is_list){
 				
 			}
 
-			var s_parent='#card-container';
-			if($('#config-card-show').prop('checked')){
-                var s=`
-                <div class='card'>
-                    <div class='card-header'>
-                        <span class='badge badge-light text-dark'>${html_escape(mdx_entry,false)}</span>
-                        <span class='text-primary collapsed card-link' href='#card-element-${s_id}' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#card-element-${s_id}">${html_escape(mdx_name,false)}</span>
-                        <div style='padding-left:50px;font-size:0.6rem;'>${mdx_extra}</div>
-                    </div>
-                    <div class='collapse' id='card-element-${s_id}'>
-                        <div class='card-body' id='card-body-${s_id}'>
-                        </div>
-                    </div>
-                </div>
-                `;
-			}else{
-			    var s=`
-                <div class='card'>
-                    <div class='card-header'>
-                        <span class='badge badge-light text-dark'>${html_escape(mdx_entry,false)}</span>
-                        <span class='text-primary collapsed card-link' href='#card-element-${s_id}' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#card-element-${s_id}">${html_escape(mdx_name,false)}</span>
-                        <div style='padding-left:50px;font-size:0.6rem;'>${mdx_extra}</div>
-                    </div>
-                    <div class='collapse' id='card-element-${s_id}' data-bs-parent='${s_parent}'>
-                        <div class='card-body' id='card-body-${s_id}'>
-                        </div>
-                    </div>
-                </div>
-                `;
-			}
-
-
-			/*
-			由于mdx_entry可能包含<等字符导致显示出错，因此需要转义。
-			data-toggle='collapse'操作是控制展开和折叠
-			href='#card-element-"+i+"'操作目标是#card-element-"+i+"
-			bootstrap5改为data-bs-toggle和data-bs-target
-			collapse默认折叠
-			collapse show默认展开
-			
-			data-parent='#card-container'
-			bootstrap5改为data-bs-parent
-			在card-container的子元素的所有可折叠元素，同一时间只能有一个展开。
-			bs4可以对data-parent赋值空字符串，但是bs5不能对data-bs-parent赋值空字符串。
-			*/
-		   
-            var force_font=$('#config-force-font',parent.document).prop("checked");
-			if(force_font){
-			    if(mdx_name=='内置词典'){
-			        var header=style+style_font+script;
-			    }else{
-			        var header=style+style_img+style_font+script;
-			    }
-			}else{
-			    if(mdx_name=='内置词典'){
-			        var header=style+script;
-			    }else{
-			        var header=style+style_img+script;
-			    }
-			}
-			var html=`
-			<!DOCTYPE HTML>
-			<html>
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="referrer" content="never">
-                    ${header}
-                </head>
-                    <body data-pk="${mdx_pk}">
-                    ${mdx_record}
-                </body>
-			</html>
-			`;
+            var card_ele=create_card(s_id,mdx_pk,mdx_name,mdx_entry,mdx_record,mdx_extra)
+            var html=create_html(mdx_pk,mdx_name,mdx_record);
 
 
 			//script加到最后，因为enwikipart1查gucci，最后有未完成的注释<!--，导致script被注释掉。
@@ -217,7 +228,7 @@ function add_iframes(data,container,need_clear,is_list){
 			if(card_mdict_i.length>0){//清理同一时间的多次异步产生的多个重复词条
 				card_mdict_i.children().remove();
 			}else{
-				container.append(s);
+				container.append(card_ele);
 			}
 			$(card_body_id).append(iframe);
 
