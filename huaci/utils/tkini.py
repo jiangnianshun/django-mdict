@@ -11,7 +11,7 @@ tkwidth = 500
 tkheigtht = 800
 
 '''
-auto_zooming:页面缩放比例，默认0.0。
+auto_zooming:页面缩放比例，默认0.0，只支持windows。
 -1.0,75%;0.0,100%;1.0,125%;2.0,150%.
 
 xpos,ypos:窗口位置

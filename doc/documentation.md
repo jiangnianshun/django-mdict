@@ -249,6 +249,8 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 如果划词工具显示混乱，尝试删除huaci/huaci.cache缓存文件夹。
 
+页面缩放比例，设置huaci/utils/huaci.ini中auto_zooming，-1.0是75%;0.0是100%;1.0是125%;2.0是150%。
+
 ### 修改词典库地址
 
 1. 重新运行init_mdict_path.py，选择路径。
