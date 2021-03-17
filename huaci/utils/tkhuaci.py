@@ -1,6 +1,4 @@
-import os
 import re
-import json
 import threading
 import time
 import collections
@@ -13,6 +11,11 @@ from pynput.keyboard import Key, Listener as KeyboardListener
 from pynput.mouse import Button, Listener as MouseListener
 
 import pyperclip
+
+try:
+    from .tkini import get_huaci_config
+except Exception:
+    from tkini import get_huaci_config
 
 # tesseract-OCR训练数据
 # https://tesseract-ocr.github.io/tessdoc/Data-Files.html
@@ -42,22 +45,11 @@ class Huaci:
 
         self.p = None
 
-        self.root_dir = os.path.dirname(__file__)
-        self.ini_path = os.path.join(self.root_dir, 'huaci.ini')
-
-        if os.path.exists(self.ini_path):
-            with open(self.ini_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                if isinstance(data, dict):
-                    self.url_dict.update(data)
-        else:
-            with open(self.ini_path, 'w', encoding='utf-8') as f:
-                json.dump(self.url_dict, f, indent=4, ensure_ascii=False)
-            os.chmod(self.ini_path, 0o777)
+        self.url_dict = get_huaci_config()['url']
 
         self.root_url = list(self.url_dict.values())[0]  # 这里换有序词典
         self.old_root_url = self.root_url
-        print('root url', self.root_url)
+        print('root url:', self.root_url)
 
         self.lang_con = 'eng'
         self.huaci_mode = 'copy'
@@ -219,7 +211,7 @@ class Huaci:
             if self.root_url != self.old_root_url:
                 self.master.init_param()
                 url = self.root_url.replace('%WORD%', query)
-                print(11111,url)
+                print(11111, url)
                 browser.LoadUrl(url)
                 self.old_root_url = self.root_url
             else:

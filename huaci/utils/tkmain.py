@@ -18,10 +18,12 @@ try:
     from .tkconfig import ConfigWindow
     from .tkhuaci import *
     from .tkbase import *
+    from .tkini import get_huaci_config
 except Exception:
     from tkconfig import ConfigWindow
     from tkhuaci import *
     from tkbase import *
+    from tkini import get_huaci_config
 
 # Fix for PyCharm hints warnings
 WindowUtils = cef.WindowUtils()
@@ -34,14 +36,6 @@ GWL_EXSTYLE = -20
 WS_EX_APPWINDOW = 0x00040000
 # WS_EX_TOOLWINDOW=0x00000080
 
-# 窗口位置
-xpos = 0
-ypos = 40
-typos = ypos + 40
-
-tkwidth = 500
-tkheigtht = 800
-
 sys.path.append(os.path.abspath(__file__))
 
 count = 0
@@ -49,6 +43,8 @@ count = 0
 myappid = 'django-mdict'  # arbitrary string
 windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
+huaci_config = get_huaci_config()
+cef_config = huaci_config['cef']
 
 class MainWindow:
     def __init__(self):
@@ -66,11 +62,21 @@ class MainWindow:
 
         self.root.protocol('WM_DELETE_WINDOW', self.withdraw_window)
 
+        tkwidth = cef_config['tkwidth']
+        tkheight = cef_config['tkheight']
+        xpos = cef_config['xpos']
+        ypos = cef_config['ypos']
+
         self.app = MainFrame(self)
-        pos = str(tkwidth) + "x" + str(tkheigtht) + "+" + str(xpos) + "+" + str(ypos)
+        pos = str(tkwidth) + "x" + str(tkheight) + "+" + str(xpos) + "+" + str(ypos)
         self.root.geometry(pos)
         # 宽度x高度+左端距离+上端距离
+
         settings = {'cache_path': 'huaci.cache'}
+
+        if 'auto_zooming' in cef_config.keys():
+            settings.update({'auto_zooming': cef_config['auto_zooming']})
+
         cef.Initialize(settings=settings)
         self.create_systray()
         self.root.withdraw()
@@ -86,9 +92,6 @@ class MainWindow:
         if flag > -1:
             self.param = self.url[flag:]
             self.url = self.url[:flag]
-        print(2222,self.url)
-        print(3333,self.param)
-        print(444,self.url)
 
     def quit_window(self, icon, item):
         icon.stop()
@@ -121,8 +124,8 @@ class MainWindow:
         set_icon(self.root)
 
     def create_systray(self):
-        global typos
-        typos = ypos + 40
+        ypos = cef_config['ypos']
+        cef_config['typos'] = ypos + 40
         # 显示系统托盘
         image = get_icon()
         # 这里如果用相对路径default.ico，那么用bat调用时报错。
@@ -223,7 +226,7 @@ class BrowserFrame(tk.Frame):
             url = self.main.url + self.main.param.replace('%WORD%', self.main.query)
         else:
             url = self.main.url + '?query=' + self.main.query
-        print('aaaaa',url)
+
         return cef.CreateBrowserSync(window_info, url=url)
 
     def embed_browser(self):
@@ -270,10 +273,13 @@ def create_window_info(class_name):
     }
     # 每个窗口的class_name不能相同
 
+    tkwidth = cef_config['tkwidth']
+    tkheight = cef_config['tkheight']
+
     window_handle = create_window(title='词典',
                                   class_name=class_name,
                                   width=tkwidth,
-                                  height=tkheigtht,
+                                  height=tkheight,
                                   window_proc=window_proc)
 
     window_info = cef.WindowInfo()
@@ -283,7 +289,6 @@ def create_window_info(class_name):
 
 
 def create_window(title, class_name, width, height, window_proc):
-    global xpos, typos
     # Register window class
     wndclass = win32gui.WNDCLASS()
     wndclass.hInstance = win32api.GetModuleHandle(None)
@@ -298,6 +303,9 @@ def create_window(title, class_name, width, height, window_proc):
     windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
     # 设置任务栏的图标为窗口的图标
 
+    xpos = cef_config['xpos']
+    typos = cef_config['typos']
+
     # Create window
     window_style = (win32con.WS_OVERLAPPEDWINDOW | win32con.WS_CLIPCHILDREN
                     | win32con.WS_VISIBLE)
@@ -308,7 +316,7 @@ def create_window(title, class_name, width, height, window_proc):
     assert (window_handle != 0)
     win32gui.SetWindowPos(window_handle, win32con.HWND_TOPMOST, xpos, typos, width, height, win32con.SWP_SHOWWINDOW)
     # win32con.HWND_TOPMOST窗口置顶
-    typos += 40
+    cef_config['typos'] += 40
 
     # Window icon
     icon = ico_path
