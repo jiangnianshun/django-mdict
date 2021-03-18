@@ -679,11 +679,14 @@ function init_index(){//载入词典列表
 		    }else{
 		        $("#live-toast-body").text(data);
 		        new bootstrap.Toast($("#live-toast")[0]).show();
+		        console.log('error:',data)
 		    }
+		    get_index_status();
 		},
 		error:function(jqXHR,textStatus,errorThrown){
 			$("#init-index-spinner").hide();
 			alert(jqXHR.responseText);
+			get_index_status();
 		},
 	});
 }

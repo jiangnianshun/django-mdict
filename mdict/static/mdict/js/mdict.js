@@ -962,10 +962,12 @@ function get_mdict_list(container, flag){//载入词典列表
 				if(dic_enable){checked="checked";}
 
 				if(dic_es_enable){
-				    var es_flag="<i class='bi bi-check mdict-icon' style='color:green;'></i>"
+				    var es_flag="<i class='bi bi-check' style='color:green;'></i>"
 				}else{
-				    var es_flag="<i class='bi bi-x mdict-icon' style='color:red;'></i>"
+				    var es_flag="<i class='bi bi-x' style='color:red;'></i>"
 				}
+
+				es_flag+="<i class='bi bi-question index-status' style='color:gray;' data-pk="+dic_pk+"></i>"
 
 				var checkbox_html=`
                             <div class="form-checkbox" style="display:inline;">
@@ -986,11 +988,65 @@ function get_mdict_list(container, flag){//载入词典列表
                 </div>
                 `
 
-
 				container.append(s);
 			}
-
+            get_index_status();
 		
+		},
+		error:function(jqXHR,textStatus,errorThrown){
+			alert(jqXHR.responseText);
+		},
+	});
+}
+
+function get_index_status(){
+    $.ajax({
+		url:"/mdict/indexstatus/",
+		contentType:'json',
+		type:'GET',
+		success:function(data){
+			var st_data=$.parseJSON(data);
+			var st_status = st_data['status'];
+			var st_error = st_data['error'];
+
+			if(st_error!=''){
+			    $("#live-toast-body").text("error:"+st_error);
+		        new bootstrap.Toast($("#live-toast")[0]).show();
+		        console.log("error:",st_error);
+		        if(st_error.indexOf('ConnectionError')>-1){
+		            $('#mdict-list-content .index-status').each(function(){
+		                $(this).removeClass('bi-question');
+                        $(this).removeClass('bi-moon');
+                        $(this).removeClass('bi-sun');
+                        $(this).removeClass('bi-x');
+                        $(this).addClass('bi-cloud-slash');
+                        $(this).css('color','gray');
+		            });
+		        }
+			}else{
+                $('#mdict-list-content .index-status').each(function(){
+                    var dic_pk = $(this).attr('data-pk');
+                    if(st_status.hasOwnProperty(dic_pk)){
+                        var index_status=st_status[dic_pk];
+
+                        $(this).removeClass('bi-question');
+                        $(this).removeClass('bi-moon');
+                        $(this).removeClass('bi-sun');
+                        $(this).removeClass('bi-x');
+                        if(index_status==1){
+                            $(this).addClass('bi-sun');
+                            $(this).css('color','green');
+                        }else if(index_status==0){
+                            $(this).addClass('bi-moon');
+                            $(this).css('color','orange');
+                        }else{
+                            $(this).addClass('bi-x');
+                            $(this).css('color','red');
+                        }
+                    }
+                });
+			}
+
 		},
 		error:function(jqXHR,textStatus,errorThrown){
 			alert(jqXHR.responseText);

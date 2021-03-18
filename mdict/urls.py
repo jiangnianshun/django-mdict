@@ -29,6 +29,7 @@ urlpatterns = [
     path('es/', views.es_index),
     path('essearch/', views.es_search),
     path('initindex/', views.init_index),
+    path('indexstatus/', views.get_index_status),
     path('downloadhistory/', views.download_history),
     path('wordcloud/', views.wordcloud),
     path('getwordlist/', views.getwordlist),

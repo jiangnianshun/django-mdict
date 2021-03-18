@@ -220,10 +220,65 @@ def is_index_open(client, index_name):
         return False
 
 
+def get_index_status(request):
+    status_dict = {}
+    try:
+        es_host = get_config_con('es_host')
+        client = Elasticsearch(hosts=es_host)
+        indices = client.indices
+        all_dics = MdictDic.objects.all()
+
+        if not meta_dict:
+            status, error = init_meta_list(client)
+            if not status:
+                return HttpResponse('error:' + str(error))
+
+        mdict_keys = init_vars.mdict_odict.keys()
+
+        for index_name in meta_dict:
+            is_open = is_index_open(client, index_name)
+            md5 = index_name[6:]
+            dics = all_dics.filter(mdict_md5=md5)
+
+            if len(dics) == 0:
+                rd = meta_dict[index_name]
+                if rd['file'] in mdict_keys:
+                    item = init_vars.mdict_odict[rd['file']]
+                    mdx = item.mdx
+                    dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
+                    if len(dics) > 0:
+                        dic = dics[0]
+                        if dic.mdict_md5 == '' or dic.mdict_md5 is None:
+                            dic.mdict_md5 = md5
+                            dic.save()
+                else:
+                    indices.close(index=index_name, ignore=[400, 404])
+
+            if len(dics) > 0:
+                dic = dics[0]
+                # 1:index存在且打开，0:index存在但关闭，-1:index不存在
+                if is_open:
+                    index_status = 1
+                else:
+                    index_status = 0
+                status_dict.update({dic.pk: index_status})
+
+        for dic in all_dics:
+            if dic.pk not in status_dict.keys():
+                status_dict.update({dic.pk: -1})
+
+        return HttpResponse(json.dumps({'status': status_dict, 'error': ''}))
+    except Exception as e:
+        return HttpResponse(json.dumps({'status': [], 'error': str(e)}))
+
+
 def init_index_list(group, client):
     indices = client.indices
     all_dics = MdictDic.objects.all()
     all_groups = MdictDicGroup.objects.all()
+
+    mdict_keys = init_vars.mdict_odict.keys()
+
     for index_name in meta_dict:
         is_open = is_index_open(client, index_name)
         md5 = index_name[6:]
@@ -231,14 +286,17 @@ def init_index_list(group, client):
 
         if len(dics) == 0:
             rd = meta_dict[index_name]
-            item = init_vars.mdict_odict[rd['file']]
-            mdx = item.mdx
-            dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
-            if len(dics) > 0:
-                dic = dics[0]
-                if dic.mdict_md5 == '' or dic.mdict_md5 is None:
-                    dic.mdict_md5 = md5
-                    dic.save()
+            if rd['file'] in mdict_keys:
+                item = init_vars.mdict_odict[rd['file']]
+                mdx = item.mdx
+                dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
+                if len(dics) > 0:
+                    dic = dics[0]
+                    if dic.mdict_md5 == '' or dic.mdict_md5 is None:
+                        dic.mdict_md5 = md5
+                        dic.save()
+            else:
+                indices.close(index=index_name, ignore=[400, 404])
 
         if len(dics) == 0:
             if is_open:
