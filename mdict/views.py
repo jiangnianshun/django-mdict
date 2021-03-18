@@ -326,6 +326,8 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
 
     result = []
 
+    mdict_keys = init_vars.mdict_odict.keys()
+
     for hit in response:
         meta = hit.meta
 
@@ -380,11 +382,20 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
 
         dics = MdictDic.objects.filter(mdict_md5=md5)
 
-        try:
+        if len(dics) == 0:
+            dics = MdictDic.objects.filter(mdict_file=rd['file'])
+            if len(dics) > 0:
+                dic = dics[0]
+                if dic.mdict_md5 == '' or dic.mdict_md5 is None:
+                    dic.mdict_md5 = md5
+                    dic.save()
+
+        if rd['file'] in mdict_keys:
             item = init_vars.mdict_odict[rd['file']]
-        except KeyError as e:
-            print(e)
-            print(rd['file'], 'not in the dic cache, the html cannot be rendered.')
+        elif rd['name'] in mdict_keys:
+            item = init_vars.mdict_odict[rd['name']]
+        else:
+            print(rd['file'], rd['name'], 'not in the dic cache, the html cannot be rendered.')
             if len(dics) > 0:
                 dic_pk = dics[0].pk
             else:
@@ -396,14 +407,6 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
 
         mdx = item.mdx
         mdd_list = item.mdd_list
-
-        if len(dics) == 0:
-            dics = MdictDic.objects.filter(mdict_file=mdx.get_fname())
-            if len(dics) > 0:
-                dic = dics[0]
-                if dic.mdict_md5 == '' or dic.mdict_md5 is None:
-                    dic.mdict_md5 = md5
-                    dic.save()
 
         if len(dics) > 0:
             dic = dics[0]
