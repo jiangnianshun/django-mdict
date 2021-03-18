@@ -1,43 +1,75 @@
 from django.contrib import admin
-
+from elasticsearch import Elasticsearch
+from mdict.mdict_utils.mdict_config import *
 from .models import MdictDic, MdictOnline, MyMdictEntry, MyMdictItem, MyMdictEntryType, MdictDicGroup
 
 
 def EnableAllDics(modeladmin, request, queryset):
     queryset.update(mdict_enable=True)
-    EnableAllDics.short_description = "启用选择的词典"
+
+
+EnableAllDics.short_description = "启用选择的词典"
 
 
 def DisableAllDics(modeladmin, request, queryset):
     queryset.update(mdict_enable=False)
-    DisableAllDics.short_description = "关闭选择的词典"
+
+
+DisableAllDics.short_description = "关闭选择的词典"
+
 
 def EnableAllEs(modeladmin, request, queryset):
     queryset.update(mdict_es_enable=True)
-    EnableAllEs.short_description = "开启es索引"
+
+
+EnableAllEs.short_description = "开启es索引"
+
 
 def DisableAllEs(modeladmin, request, queryset):
     queryset.update(mdict_es_enable=False)
-    DisableAllEs.short_description = "禁止es索引"
+
+
+DisableAllEs.short_description = "禁止es索引"
+
+
+def deleteAllIndex(modeladmin, request, queryset):
+    try:
+        es_host = get_config_con('es_host')
+        client = Elasticsearch(hosts=es_host)
+        indices = client.indices
+        for dic in queryset:
+            dic_pk = dic.pk
+            dic_md5 = dic.mdict_md5
+            if dic_md5 != '':
+                index_name = 'mdict-' + dic_md5
+                indices.delete(index=index_name, ignore=[400, 404])
+                print('delete', dic_pk, index_name)
+    except Exception as e:
+        print(e)
+
+
+deleteAllIndex.short_description = "删除es索引"
+
 
 class MdictDicAdmin(admin.ModelAdmin):
-    list_display = ('id', 'mdict_file', 'mdict_name', 'get_mdict_groups', 'mdict_enable', 'mdict_es_enable', 'mdict_priority')
+    list_display = (
+        'id', 'mdict_file', 'mdict_name', 'get_mdict_groups', 'mdict_enable', 'mdict_es_enable', 'mdict_priority')
     # list_display不能是manytomanyfield
     list_filter = ['mdictdicgroup', 'mdict_enable', 'mdict_es_enable']
     search_fields = ['mdict_name', 'mdict_file', 'id']
     list_display_links = ['mdict_file']
-    actions = [EnableAllDics, DisableAllDics, EnableAllEs, DisableAllEs]
+    actions = [EnableAllDics, DisableAllDics, EnableAllEs, DisableAllEs, deleteAllIndex]
     # list_per_page = sys.maxsize  # 设置每页数目最大
     list_per_page = 30
     ordering = ('mdict_priority',)  # 按照mdict_priority的降序排列
     # filter_horizontal = ('mdict_group',)
     list_editable = ['mdict_priority', 'mdict_enable', 'mdict_name', 'mdict_es_enable']
+
     # 默认的MangToMany的样式是在一个方框内按住ctrl键选择多个对象，filter_horizontal设置水平两个方框，将对象左右移动。
 
     @staticmethod
     def get_mdict_groups(obj):
         return "|".join([g.dic_group_name for g in obj.mdictdicgroup_set.all()])
-
 
 
 class MyMdictItemAdmin(admin.StackedInline):
