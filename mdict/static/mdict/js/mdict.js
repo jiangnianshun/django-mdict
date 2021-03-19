@@ -1005,46 +1005,49 @@ function get_index_status(){
 		contentType:'json',
 		type:'GET',
 		success:function(data){
-			var st_data=$.parseJSON(data);
-			var st_status = st_data['status'];
-			var st_error = st_data['error'];
-
-			if(st_error!=''){
-			    $("#live-toast-body").text("error:"+st_error);
-		        new bootstrap.Toast($("#live-toast")[0]).show();
-		        console.log("error:",st_error);
-		        if(st_error.indexOf('ConnectionError')>-1){
-		            $('#mdict-list-content .index-status').each(function(){
-		                $(this).removeClass('bi-question');
-                        $(this).removeClass('bi-moon');
-                        $(this).removeClass('bi-sun');
-                        $(this).removeClass('bi-x');
-                        $(this).addClass('bi-cloud-slash');
-                        $(this).css('color','gray');
-		            });
-		        }
-			}else{
+			if(typeof(data)=='undefined'||data.indexOf('ConnectionError')>-1){
+			    $("#live-toast-body").text("error:"+data);
+                new bootstrap.Toast($("#live-toast")[0]).show();
+                console.log("error:",data);
                 $('#mdict-list-content .index-status').each(function(){
-                    var dic_pk = $(this).attr('data-pk');
-                    if(st_status.hasOwnProperty(dic_pk)){
-                        var index_status=st_status[dic_pk];
-
-                        $(this).removeClass('bi-question');
-                        $(this).removeClass('bi-moon');
-                        $(this).removeClass('bi-sun');
-                        $(this).removeClass('bi-x');
-                        if(index_status==1){
-                            $(this).addClass('bi-sun');
-                            $(this).css('color','green');
-                        }else if(index_status==0){
-                            $(this).addClass('bi-moon');
-                            $(this).css('color','orange');
-                        }else{
-                            $(this).addClass('bi-x');
-                            $(this).css('color','red');
-                        }
-                    }
+                    $(this).removeClass('bi-question');
+                    $(this).removeClass('bi-moon');
+                    $(this).removeClass('bi-sun');
+                    $(this).removeClass('bi-x');
+                    $(this).addClass('bi-cloud-slash');
+                    $(this).css('color','gray');
                 });
+			}else{
+                var st_data=$.parseJSON(data);
+                var st_status = st_data['status'];
+                var st_error = st_data['error'];
+                if(st_error==''){
+                    $('#mdict-list-content .index-status').each(function(){
+                        var dic_pk = $(this).attr('data-pk');
+                        if(st_status.hasOwnProperty(dic_pk)){
+                            var index_status=st_status[dic_pk];
+
+                            $(this).removeClass('bi-question');
+                            $(this).removeClass('bi-moon');
+                            $(this).removeClass('bi-sun');
+                            $(this).removeClass('bi-x');
+                            if(index_status==1){
+                                $(this).addClass('bi-sun');
+                                $(this).css('color','green');
+                            }else if(index_status==0){
+                                $(this).addClass('bi-moon');
+                                $(this).css('color','orange');
+                            }else{
+                                $(this).addClass('bi-x');
+                                $(this).css('color','red');
+                            }
+                        }
+                    });
+                }else{
+                    $("#live-toast-body").text("error:"+st_error);
+                    new bootstrap.Toast($("#live-toast")[0]).show();
+                    console.log("error:",st_error);
+                }
 			}
 
 		},
