@@ -1,6 +1,8 @@
 from django.contrib import admin
+import subprocess
 from elasticsearch import Elasticsearch
 from mdict.mdict_utils.mdict_config import *
+from base.sys_utils import check_system
 from .models import MdictDic, MdictOnline, MyMdictEntry, MyMdictItem, MyMdictEntryType, MdictDicGroup
 
 
@@ -31,6 +33,28 @@ def DisableAllEs(modeladmin, request, queryset):
 
 DisableAllEs.short_description = "禁止es索引"
 
+script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'script')
+
+
+def createAllIndex(modeladmin, request, queryset):
+    try:
+        cmd = ['mdict_es.py', '-c']
+        if check_system() == 0:
+            cmd.insert(0, 'python3')
+        else:
+            cmd.insert(0, 'python')
+
+        for dic in queryset:
+            cmd.append(str(dic.pk))
+
+        print('running script:', ' '.join(cmd))
+        pp = subprocess.Popen(cmd, shell=True, cwd=script_path)
+    except Exception as e:
+        print(e)
+
+
+createAllIndex.short_description = "创建es索引"
+
 
 def deleteAllIndex(modeladmin, request, queryset):
     try:
@@ -38,12 +62,12 @@ def deleteAllIndex(modeladmin, request, queryset):
         client = Elasticsearch(hosts=es_host)
         indices = client.indices
         for dic in queryset:
-            dic_pk = dic.pk
             dic_md5 = dic.mdict_md5
             if dic_md5 != '':
                 index_name = 'mdict-' + dic_md5
                 indices.delete(index=index_name, ignore=[400, 404])
-                print('delete', dic_pk, index_name)
+                print('delete', dic.mdict_name, dic.mdict_file, dic.pk, index_name)
+        print('delete operation has completed.')
     except Exception as e:
         print(e)
 
@@ -58,7 +82,7 @@ class MdictDicAdmin(admin.ModelAdmin):
     list_filter = ['mdictdicgroup', 'mdict_enable', 'mdict_es_enable']
     search_fields = ['mdict_name', 'mdict_file', 'id']
     list_display_links = ['mdict_file']
-    actions = [EnableAllDics, DisableAllDics, EnableAllEs, DisableAllEs, deleteAllIndex]
+    actions = [EnableAllDics, DisableAllDics, EnableAllEs, DisableAllEs, createAllIndex, deleteAllIndex]
     # list_per_page = sys.maxsize  # 设置每页数目最大
     list_per_page = 30
     ordering = ('mdict_priority',)  # 按照mdict_priority的降序排列

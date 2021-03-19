@@ -334,8 +334,13 @@ def create_es_with_pk(dic_pk):
         md5 = get_md5_with_pk(dic.pk)
         index_name = get_index_name(md5)
         index = Index(index_name)
+
         if index.exists():
-            print('already exists', dic.mdict_name, index_name)
+            print('index already exists', dic.mdict_name, index_name)
+            return
+
+        if not dic.mdict_es_enable:
+            print('mdict_es_enable is False, index will not be created.', dic.mdict_name, index_name)
             return
 
         create_es(dic, mdx, md5)
@@ -376,22 +381,22 @@ def create_all_es(pk_list=[]):
             index_name = get_index_name_with_pk(dic.pk)
             index = Index(index_name)
             if index.exists():
-                print('already exists', dic.mdict_name, index_name)
+                print('index already exists', dic.mdict_name, index_name)
                 continue
 
             if not dic.mdict_es_enable:
-                print('index is disabled', dic.mdict_name, index_name)
+                print('mdict_es_enable is False, index will not be created.', dic.mdict_name, index_name)
                 continue
 
             if pk_list:
                 if dic.pk in pk_list:
                     create_es(dic, mdx, md5)
                     t2 = time.perf_counter()
-                    print(i, '/', len(pk_list), get_index_name_with_pk(dic.pk), t2 - t1, mdx.get_fname(), mdx.get_len())
+                    print(i, '/', len(pk_list), get_index_name_with_pk(dic.pk), t2 - t1, mdx.get_fname(), dic.pk, mdx.get_len())
             else:
                 create_es(dic, mdx, md5)
                 t2 = time.perf_counter()
-                print(i, '/', odict_len, get_index_name_with_pk(dic.pk), t2 - t1, mdx.get_fname(), mdx.get_len())
+                print(i, '/', odict_len, get_index_name_with_pk(dic.pk), t2 - t1, mdx.get_fname(), dic.pk, mdx.get_len())
         else:
             print(mdx.get_fname(), 'not exists in database.')
 
@@ -407,6 +412,7 @@ if __name__ == '__main__':
     print('deleteall_param', deleteall_param)
     try:
         connections.create_connection()
+        print('operation starting...')
         if delete_param:
             delete_list = []
             for d in delete_param:
@@ -424,6 +430,6 @@ if __name__ == '__main__':
             create_all_es()
         elif deleteall_param:
             delete_all_es()
-
+        print('index operation has completed.')
     except ConnectionError as e:
         print(e)
