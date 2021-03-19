@@ -48,7 +48,7 @@ def createAllIndex(modeladmin, request, queryset):
             cmd.append(str(dic.pk))
 
         print('running script:', ' '.join(cmd))
-        pp = subprocess.Popen(cmd, shell=True, cwd=script_path)
+        subprocess.Popen(cmd, shell=True, cwd=script_path)
     except Exception as e:
         print(e)
 
@@ -63,7 +63,7 @@ def deleteAllIndex(modeladmin, request, queryset):
         indices = client.indices
         for dic in queryset:
             dic_md5 = dic.mdict_md5
-            if dic_md5 != '':
+            if dic_md5 != '' and dic_md5 is not None:
                 index_name = 'mdict-' + dic_md5
                 indices.delete(index=index_name, ignore=[400, 404])
                 print('delete', dic.mdict_name, dic.mdict_file, dic.pk, index_name)
