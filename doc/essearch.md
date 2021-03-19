@@ -142,7 +142,7 @@ curl -X DELETE localhost:9200/_all
 
 es设置文件为config/elasticsearch.yml
 
-1. 禁止内存交换会提高查询效率，但是当内存不足时进程会崩溃。
+1. 禁止内存交换会提高查询效率，但是当内存不足时进程会崩溃，不建议开启。
 
 ```
 bootstrap.memory_lock: true

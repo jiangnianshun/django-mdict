@@ -366,8 +366,11 @@ def create_es_with_pk(dic_pk):
 
 
 def create_es(dic, mdx, md5):
-    create_index(dic, md5)
-    create_cache(dic, mdx)
+    try:
+        create_index(dic, md5)
+        create_cache(dic, mdx)
+    except Exception as e:
+        write_exception_error(mdx, dic.pk, e)
 
 
 def create_all_es(pk_list=[]):
