@@ -198,11 +198,27 @@ def write_error_log(*args):
     if not os.path.exists(error_log_path):
         with open(error_log_path, 'w', encoding='utf-8') as f:
             pass
-    text = ''
+
+    text = time.strftime("%Y.%m.%d:%H:%M:%S", time.localtime(time.time()))
     for arg in args:
         text += str(arg)
+    text = '\n' + text + '\n'
     with open(error_log_path, 'a', encoding='utf-8') as f:
-        f.write('\n' + text)
+        f.write(text)
+
+
+def write_exception_error(mdx, dic_pk, error):
+    error_info = (get_index_name_with_pk(dic_pk), mdx.get_fname(), mdx.get_len(), str(error)[:2000])
+    print(error_info)
+    write_error_log(error_info)
+
+
+def delete_failed_index(mdx, dic_pk):
+    try:
+        index = Index(get_index_name_with_pk(dic_pk))
+        index.delete()
+    except Exception as e:
+        write_exception_error(mdx, dic_pk, e)
 
 
 def create_cache(dic, mdx):
@@ -245,37 +261,35 @@ def create_cache(dic, mdx):
             if t_size == 0:
                 chunk_size = 1000
             else:
-                chunk_size = int(cpu_num * 50 * t_len / t_size)
+                chunk_size = int(cpu_num * 40 * t_len / t_size)
             if chunk_size < cpu_num:
                 chunk_size = cpu_num
 
             for r in parallel_bulk(connections.get_connection(), yield_data(t_list),
                                    thread_count=cpu_num, chunk_size=chunk_size):
                 pass
+
         except TransportError as e:
-            index = Index(get_index_name_with_pk(dic.pk))
-            index.delete()
-            error_info = (get_index_name_with_pk(dic.pk), mdx.get_fname(), mdx.get_len(), str(e)[:2000])
-            print(error_info)
-            write_error_log(error_info)
-            break
+            # delete_failed_index(mdx, dic.pk)
+            write_exception_error(mdx, dic.pk, e)
+            # break
         except BulkIndexError as e:
-            index = Index(get_index_name_with_pk(dic.pk))
-            index.delete()
-            error_info = (get_index_name_with_pk(dic.pk), mdx.get_fname(), mdx.get_len(), str(e)[:2000])
-            print(error_info)
-            write_error_log(error_info)
-            break
+            # delete_failed_index(mdx, dic.pk)
+            write_exception_error(mdx, dic.pk, e)
+            # break
         except zlib.error as e:
-            error_info = (get_index_name_with_pk(dic.pk), mdx.get_fname(), mdx.get_len(), str(e)[:2000])
-            print(error_info)
-            write_error_log(error_info)
+            write_exception_error(mdx, dic.pk, e)
+
         count += len(entry_list)
         if s_p1 == -1:
             break
-    index = Index(get_index_name_with_pk(dic.pk))
-    if index.exists():
-        index.put_settings(body=settings2)
+
+    try:
+        index = Index(get_index_name_with_pk(dic.pk))
+        if index.exists():
+            index.put_settings(body=settings2)
+    except TransportError as e:
+        write_exception_error(mdx, dic.pk, e)
 
 
 def close_index_with_pk(dic_pk):
@@ -390,13 +404,17 @@ def create_all_es(pk_list=[]):
 
             if pk_list:
                 if dic.pk in pk_list:
+                    print('...starting indexing', mdx.get_fname(), dic.pk)
                     create_es(dic, mdx, md5)
                     t2 = time.perf_counter()
-                    print(i, '/', len(pk_list), get_index_name_with_pk(dic.pk), t2 - t1, mdx.get_fname(), dic.pk, mdx.get_len())
+                    print(i, '/', len(pk_list), get_index_name_with_pk(dic.pk), t2 - t1, mdx.get_fname(), dic.pk,
+                          mdx.get_len())
             else:
+                print('...starting indexing', mdx.get_fname(), dic.pk)
                 create_es(dic, mdx, md5)
                 t2 = time.perf_counter()
-                print(i, '/', odict_len, get_index_name_with_pk(dic.pk), t2 - t1, mdx.get_fname(), dic.pk, mdx.get_len())
+                print(i, '/', odict_len, get_index_name_with_pk(dic.pk), t2 - t1, mdx.get_fname(), dic.pk,
+                      mdx.get_len())
         else:
             print(mdx.get_fname(), 'not exists in database.')
 

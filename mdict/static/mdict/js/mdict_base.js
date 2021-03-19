@@ -357,7 +357,7 @@ function init_online_dic_var(){
 }
 
 common_config={'force-refresh':'强制刷新','link-new-label':'entry链接打开新标签页',
-'force-font':'强制使用全宋体','card-show':'同时展开多个词典','select-btn-enable':'启用文字选择菜单'}
+'force-font':'强制使用全宋体','card-show':'同时展开多个词典','select-btn-enable':'启用文字选择菜单','disable-iframe-click':'屏蔽默认点击'}
 
 function init_common_config(){//这里后面改成从后台取数据
     var c_parent=$('#function-checkbox');
@@ -379,6 +379,7 @@ function init_common_config(){//这里后面改成从后台取数据
         $('#config-force-font').prop("checked",config['force_font']);
         $('#config-card-show').prop("checked",config['card_show']);
         $('#config-select-btn-enable').prop("checked",config['select_btn_enable']);
+        $('#config-disable-iframe-click').prop("checked",config['disable_iframe_click']);
     })
 
 }
@@ -464,10 +465,13 @@ function update_config(){
     var force_font=$('#config-force-font').prop("checked");
     var card_show=$('#config-card-show').prop("checked");
     var select_btn_enable=$('#config-select-btn-enable').prop("checked");
+    var disable_iframe_click=$('#config-disable-iframe-click').prop("checked");
     var group_name=$('#dic-group').val();
     var default_group=$('#dic-group').find('option:contains('+group_name+')').attr('data-pk');
+
     var data={"force_refresh":force_refresh,"link_new_label":link_new_label,
-    "force_font":force_font,"card_show":card_show,"select_btn_enable":select_btn_enable,"default_group":default_group};
+    "force_font":force_font,"card_show":card_show,"select_btn_enable":select_btn_enable,"default_group":default_group,
+    "disable_iframe_click":disable_iframe_click};
     $.ajax({
             url:"/mdict/saveconfig",
             contentType:'json',

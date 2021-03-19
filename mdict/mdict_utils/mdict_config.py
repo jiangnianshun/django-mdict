@@ -44,6 +44,7 @@ default_config = {
         'kana_enable': True,  # 假名转换
         'force_refresh': False,  # 强制刷新
         'select_btn_enable': True,  # 是否启用选择文字弹出框
+        'disable_iframe_click': True,  # 屏蔽iframe中的默认点击事件
         'history_enable': True,  # 保存查询历史
         'suggestion_num': 30,  # 查询提示显示的数目
         'link_new_label': False,
@@ -67,6 +68,9 @@ def get_config():
 
     if os.path.exists(user_config_path):
         config.read(user_config_path, encoding='utf-8')
+        for k, v in default_config['SEARCH'].items():
+            if k not in config['SEARCH'].keys():
+                config['SEARCH'][k] = str(v)
     else:
         try:
             with open(user_config_path, 'w', encoding='utf-8') as f:

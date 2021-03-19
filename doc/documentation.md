@@ -330,6 +330,9 @@ force_refresh 启用强制刷新，启用后会重新查询，而不是从缓存
 
 select_btn_enable 启用文字选择菜单
 
+disable_iframe_click 屏蔽iframe中的默认点击事件，关闭词典的自动发音和解决点击发重音的问题。但可能带来其他的问题，比如在低版本浏览器内核中可能导致页面空白。
+重新查询后生效。
+
 suggestion_num 查询提示数目
 
 link_new_label entry链接打开新标签页

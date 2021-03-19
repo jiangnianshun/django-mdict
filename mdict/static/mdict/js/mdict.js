@@ -990,8 +990,11 @@ function get_mdict_list(container, flag){//载入词典列表
 
 				container.append(s);
 			}
-            get_index_status();
-		
+
+			var dic_pk=$("html").attr("data-dic-pk");
+			if(dic_pk==-2){
+                get_index_status();
+		    }
 		},
 		error:function(jqXHR,textStatus,errorThrown){
 			alert(jqXHR.responseText);
