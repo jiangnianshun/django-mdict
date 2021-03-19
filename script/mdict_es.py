@@ -215,6 +215,7 @@ def write_exception_error(mdx, dic_pk, error):
 
 def delete_failed_index(mdx, dic_pk):
     try:
+        print('try delete failed index', get_index_name_with_pk(dic_pk))
         index = Index(get_index_name_with_pk(dic_pk))
         index.delete()
     except Exception as e:
@@ -261,7 +262,7 @@ def create_cache(dic, mdx):
             if t_size == 0:
                 chunk_size = 1000
             else:
-                chunk_size = int(cpu_num * 40 * t_len / t_size)
+                chunk_size = int(cpu_num * 50 * t_len / t_size)
             if chunk_size < cpu_num:
                 chunk_size = cpu_num
 
@@ -270,13 +271,13 @@ def create_cache(dic, mdx):
                 pass
 
         except TransportError as e:
-            # delete_failed_index(mdx, dic.pk)
+            delete_failed_index(mdx, dic.pk)
             write_exception_error(mdx, dic.pk, e)
-            # break
+            break
         except BulkIndexError as e:
-            # delete_failed_index(mdx, dic.pk)
+            delete_failed_index(mdx, dic.pk)
             write_exception_error(mdx, dic.pk, e)
-            # break
+            break
         except zlib.error as e:
             write_exception_error(mdx, dic.pk, e)
 
@@ -394,9 +395,12 @@ def create_all_es(pk_list=[]):
 
             index_name = get_index_name_with_pk(dic.pk)
             index = Index(index_name)
-            if index.exists():
-                print('index already exists', dic.mdict_name, index_name)
-                continue
+            try:
+                if index.exists():
+                    print('index already exists', dic.mdict_name, index_name)
+                    continue
+            except TransportError as e:
+                write_exception_error(mdx, dic.pk, e)
 
             if not dic.mdict_es_enable:
                 print('mdict_es_enable is False, index will not be created.', dic.mdict_name, index_name)
