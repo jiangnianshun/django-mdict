@@ -38,14 +38,19 @@ script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 def createAllIndex(modeladmin, request, queryset):
     try:
-        cmd = ['mdict_es.py', '-c']
+        cmd = ['mdict_es.py']
         if check_system() == 0:
             cmd.insert(0, 'python3')
         else:
             cmd.insert(0, 'python')
 
-        for dic in queryset:
-            cmd.append(str(dic.pk))
+        all_dics = MdictDic.objects.all()
+        if len(queryset) < len(all_dics):
+            cmd.append('-c')
+            for dic in queryset:
+                cmd.append(str(dic.pk))
+        else:
+            cmd.append('-ca')
 
         print('running script:', ' '.join(cmd))
         subprocess.Popen(cmd, shell=True, cwd=script_path)
