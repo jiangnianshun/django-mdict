@@ -335,6 +335,7 @@ def sub_highlight(matched):
 
 
 def get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content, es_and):
+    global meta_dict
     es_host = get_config_con('es_host')
     client = Elasticsearch(hosts=es_host)
 
@@ -385,11 +386,15 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
     result = []
 
     mdict_keys = init_vars.mdict_odict.keys()
+    meta_dict_keys = meta_dict.keys()
 
     for hit in response:
         meta = hit.meta
 
         index_name = meta.index
+
+        if index_name not in meta_dict_keys:
+            init_meta_list(client)
 
         highlight_content_text = ''
 

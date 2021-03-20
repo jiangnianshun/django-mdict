@@ -38,14 +38,17 @@ pip3 install elasticsearch-dsl
 
 [https://github.com/medcl/elasticsearch-analysis-ik/releases](https://github.com/medcl/elasticsearch-analysis-ik/releases)
 
-4. 运行elasticsearch/bin/elasticsearch.bat启动es。
+4. （可跳过）建议查询时es分配2g或以上内存，索引时分配4g或以上内存，修改config/jvm.options中的参数-Xms1g和-Xmx1g，将1改为2或4，重启es生效。
 
-5. 进入django-mdict的admin，将需要索引的词典设置为启用es索引。
+5. 运行elasticsearch/bin/elasticsearch.bat启动es。
+
+6. 进入django-mdict的admin，将需要索引的词典设置为启用es索引，然后单击下面的保存。
    对于反查词典和进行了词组提取的词典（比如搜韵诗词全文检索.mdx、英汉•汉英(专业•科技)词典.mdx），全文索引会有很多重复词条，不建议创建全文索引。
 
-6. 手动运行/django-mdict/script/mdict_es.py开始索引。
+7. 进入django-mdict的admin，勾选要创建索引的词典，选择动作下拉框中的创建es索引，然后单击执行，开始创建索引。
+   创建索引进度在run_server脚本的命令行窗口和es的命令行窗口中查看。
 
-7. 索引完成后，打开
+8. 创建索引完成后，打开
    
    [http://127.0.0.1/mdict/es/](http://127.0.0.1/mdict/es/)
    
@@ -53,7 +56,7 @@ pip3 install elasticsearch-dsl
 
    [http://127.0.0.1:8000/mdict/es/](http://127.0.0.1:8000/mdict/es/)
 
-8. 在进行全文查询时，eselasticsearch.bat需要一直运行，否则查询无结果，如果需要一直开启，需设置开机启动。
+   在进行全文查询时，eselasticsearch.bat需要一直运行，否则查询无结果，如果需要一直开启，需设置开机启动。
 
 ### 筛选功能
 
@@ -67,10 +70,7 @@ pip3 install elasticsearch-dsl
 
 * 注意python依赖和elasticsearch以及ik分词器的版本应当是对应的。
 
-* 固态硬盘会大大提高索引速度，索引文件大小大约是mdx文件大小的2.5-3.5倍，注意保留足够的空间。
-
-* 如果es内存满载，尝试分配更多内存，建议查询时分配2g或以上内存，索引时分配4g或以上内存，修改config/jvm.options中的参数-Xms1g和-Xmx1g，
-  将1改为2或4，重启es生效。
+* 固态硬盘会大大提高索引速度，建议将es放置在固态硬盘上，索引文件大小大约是mdx文件大小的2.5-3.5倍，注意保留足够的空间。
 
 * es中保存的是未处理的html，必须保证正确设置词典库路径，这样查询时词典的mdx和mdd才会被加载，否则生成的页面无样式且无图片，mdx修改过使得文件名或md5发生变化，可能导致全文搜索时无法正确载入mdx，导致页面无样式、无图片。
 
@@ -164,6 +164,10 @@ discovery.type: single-node
 2. 尝试每次只对少量词典创建索引。
    
 3. 尝试重启es，清除缓存。
+
+* 大量词典创建索引时，卡住不动，cpu占用0%，无报错。
+
+1. 原因未知，尝试在命令行窗口内选择一段文字，右键复制，可能恢复运行。
 
 ### 索引性能测试
 
