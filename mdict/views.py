@@ -120,7 +120,7 @@ def es_search(request):
     query = request.GET.get('query', '')
     # force_refresh = json.loads(request.GET.get('force_refresh', False))
 
-    result_num = int(request.GET.get('result_num', 60))
+    result_num = int(request.GET.get('result_num', 50))
     result_page = int(request.GET.get('result_page', 1))
     frag_size = int(request.GET.get('frag_size', 50))
     frag_num = int(request.GET.get('frag_num', 3))
@@ -156,7 +156,7 @@ def es_search(request):
     total_count = 2000
 
     ret = {
-        "page_size": result_num,  # 每页显示两个
+        "page_size": result_num,  # 每页显示
         "total_count": total_count,  # 一共有多少数据
         "total_page": int(total_count / result_num),  # 一共有多少页
         "current_page": result_page,  # 当前页数

@@ -75,3 +75,5 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 
 ![图片3](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/img2.jpg)
 
+![图片4](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/img3.jpg)
+
