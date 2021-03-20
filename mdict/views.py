@@ -388,6 +388,8 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
     mdict_keys = init_vars.mdict_odict.keys()
     meta_dict_keys = meta_dict.keys()
 
+    duplication_dict = {}
+
     for hit in response:
         meta = hit.meta
 
@@ -477,6 +479,14 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
                 dic.mdict_es_enable = True
                 dic.save()
             record = SearchObject(mdx, mdd_list, dic, '').substitute_record(hit['content'])
+
+            duplication_dict.update({hit['entry'].strip(): dic.pk})
+            if hit['content'].startswith('@@@LINK='):
+                link2entry = hit['content'][8:].strip()
+                if link2entry in duplication_dict.keys():
+                    if dic.pk == duplication_dict[link2entry]:
+                        # 去重
+                        continue
 
             result.append(mdxentry(rd['name'], hit['entry'], record, 1, dic.pk, 1, 1, 1, extra=highlight_content_text))
         else:
