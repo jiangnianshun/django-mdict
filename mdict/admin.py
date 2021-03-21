@@ -52,8 +52,11 @@ def createAllIndex(modeladmin, request, queryset):
         else:
             cmd.append('-ca')
 
-        print('running script:', ' '.join(cmd))
-        subprocess.Popen(cmd, shell=True, cwd=script_path)
+        command = ' '.join(cmd)
+        # 直接传cmd，在ubuntu里可能不会正确运行脚本，而是打开了python解释器，需要转换为字符串。
+
+        print('running script:', command)
+        subprocess.Popen(command, shell=True, cwd=script_path)
     except Exception as e:
         print(e)
 

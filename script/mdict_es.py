@@ -341,26 +341,30 @@ def delete_all_es():
 
 def create_es_with_pk(dic_pk):
     t1 = time.perf_counter()
+    odict = init_vars.mdict_odict
     dics = MdictDic.objects.filter(pk=dic_pk)
     if len(dics) > 0:
         dic = dics[0]
-        item = init_vars.mdict_odict[dic.mdict_file]
-        mdx = item.mdx
-        md5 = get_md5_with_pk(dic.pk)
-        index_name = get_index_name(md5)
-        index = Index(index_name)
+        if dic.mdict_file in odict.keys():
+            item = odict[dic.mdict_file]
+            mdx = item.mdx
+            md5 = get_md5_with_pk(dic.pk)
+            index_name = get_index_name(md5)
+            index = Index(index_name)
 
-        if index.exists():
-            print('index already exists', dic.mdict_name, index_name)
-            return
+            if index.exists():
+                print('index already exists', dic.mdict_name, index_name)
+                return
 
-        if not dic.mdict_es_enable:
-            print('mdict_es_enable is False, index will not be created.', dic.mdict_name, index_name)
-            return
+            if not dic.mdict_es_enable:
+                print('mdict_es_enable is False, index will not be created.', dic.mdict_name, index_name)
+                return
 
-        create_es(dic, mdx, md5)
-        t2 = time.perf_counter()
-        print(t2 - t1, mdx.get_fname(), mdx.get_len())
+            create_es(dic, mdx, md5)
+            t2 = time.perf_counter()
+            print(t2 - t1, mdx.get_fname(), mdx.get_len())
+        else:
+            print(dic.pk, dic.mdict_name, 'not exists in cache. maybe the mdict root path is not correct.')
     else:
         print(dic_pk, 'not exists')
 
