@@ -105,5 +105,13 @@
 
     change_canvas();
     $(window).resize(change_canvas);
+
+    $("#wordcloud-save-img").click(function(){
+        //保存图片
+        var link = document.createElement('a');
+        link.download = 'wordcloud.png';
+        link.href = document.getElementById('wordcloud_canvas').toDataURL();
+        link.click();
+    })
 </script>
 </html>
