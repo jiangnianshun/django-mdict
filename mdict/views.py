@@ -487,6 +487,8 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
                     if dic.pk == duplication_dict[link2entry]:
                         # 去重
                         continue
+                else:
+                    duplication_dict.update({link2entry: dic.pk})
 
             result.append(mdxentry(rd['name'], hit['entry'], record, 1, dic.pk, 1, 1, 1, extra=highlight_content_text))
         else:

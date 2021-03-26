@@ -464,7 +464,8 @@ function query_es(query,container,page,need_clear,is_over){
 			</div>
 			`;
 			$('#card-container #next-page').remove();
-			if(page[2]>0&&page[2]>page[1]){
+
+			if(page[2]>0&&page[1]>page[0]){
                 container.append(s2);
 
                 $('#card-container #next-page').on('click',function(){
