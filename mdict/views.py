@@ -146,17 +146,18 @@ def es_search(request):
 
     group = int(request.GET.get('dic_group', 0))
 
-    result = get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content,
-                            es_and)
+    result, total_count = get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase,
+                                         es_entry, es_content,
+                                         es_and)
 
     result = search_revise(query, result, is_en)
 
     serializer = MdictEntrySerializer(result, many=True)
 
-    total_count = 2000
+    # total_count = 2000
 
     ret = {
-        "page_size": result_num,  # 每页显示
+        "page_size": len(result),  # 每页显示
         "total_count": total_count,  # 一共有多少数据
         "total_page": int(total_count / result_num),  # 一共有多少页
         "current_page": result_page,  # 当前页数
@@ -354,7 +355,7 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
         search_fields.append('content')
 
     if not search_fields:
-        return []
+        return [],0
 
     if es_phrase:
         if es_and:
@@ -368,20 +369,24 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
             q = MultiMatch(query=query, fields=search_fields)
     s = Search(index='mdict-*').using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
+
+    s = s[(result_page - 1) * result_num:result_page * result_num]
+    # 默认只返回10个结果
+
     s = s.highlight('content', fragment_size=frag_size)
 
     s = s.highlight_options(order='score', pre_tags='@flag1', post_tags='@flag2', encoder='default',
                             number_of_fragments=frag_num)
     # html encoder会将html标签转换为实体
 
-    s = s[(result_page - 1) * result_num:result_page * result_num]
-    # 默认只返回10个结果
-
     try:
         response = s.execute()
     except TransportError as e:
         print(e)
-        return []
+        return [],0
+
+    total_count = response.hits.total.value
+    # 结果总数，默认最大值是10000.
 
     result = []
 
@@ -480,21 +485,23 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
                 dic.save()
             record = SearchObject(mdx, mdd_list, dic, '').substitute_record(hit['content'])
 
-            duplication_dict.update({hit['entry'].strip(): dic.pk})
+            # 去重
+            duplication_dict.update({hit['entry'].strip(): [dic.pk]})
             if hit['content'].startswith('@@@LINK='):
                 link2entry = hit['content'][8:].strip()
                 if link2entry in duplication_dict.keys():
-                    if dic.pk == duplication_dict[link2entry]:
-                        # 去重
+                    if dic.pk in duplication_dict[link2entry]:
                         continue
+                    else:
+                        duplication_dict[link2entry].append(dic.pk)
                 else:
-                    duplication_dict.update({link2entry: dic.pk})
+                    duplication_dict.update({link2entry: [dic.pk]})
 
             result.append(mdxentry(rd['name'], hit['entry'], record, 1, dic.pk, 1, 1, 1, extra=highlight_content_text))
         else:
             print(index_name, 'not exists in database.')
 
-    return result
+    return result, total_count
 
 
 def get_query_list(query):
