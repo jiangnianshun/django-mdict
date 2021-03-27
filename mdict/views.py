@@ -72,8 +72,24 @@ class MdictEntryViewSet(viewsets.ViewSet):
         group = int(self.request.query_params.get('dic_group', 0))
         page = int(self.request.query_params.get('page', 1))
 
+        fh_char_enable = self.request.query_params.get('fh_char_enable', None)
+        st_enable = self.request.query_params.get('st_enable', None)
+        chaizi_enable = self.request.query_params.get('chaizi_enable', None)
+        kana_enable = self.request.query_params.get('kana_enable', None)
+
+        query_params = {}
+
+        if fh_char_enable is not None:
+            query_params['fh_char_enable'] = json.loads(fh_char_enable)
+        if st_enable is not None:
+            query_params['st_enable'] = json.loads(st_enable)
+        if chaizi_enable is not None:
+            query_params['chaizi_enable'] = json.loads(chaizi_enable)
+        if kana_enable is not None:
+            query_params['kana_enable'] = json.loads(kana_enable)
+
         if (force_refresh and page == 1) or key_paginator.get(query, group) is None:
-            record_list = self.get_results(query, group)
+            record_list = self.get_results(query, group, query_params)
             serializer = MdictEntrySerializer(record_list, many=True)
             p = MdictPage(query, group, serializer.data)
             key_paginator.put(p)
@@ -88,14 +104,14 @@ class MdictEntryViewSet(viewsets.ViewSet):
 
         return Response(ret)
 
-    def get_results(self, query, group):
+    def get_results(self, query, group, query_params={}):
         record_list = []
         self.is_en = False
 
         if is_en_func(query):
             self.is_en = True
 
-        query_list = get_query_list(query)
+        query_list = get_query_list(query, query_params)
 
         if query_list:
             record_list = search(query_list, group)
@@ -355,7 +371,7 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
         search_fields.append('content')
 
     if not search_fields:
-        return [],0
+        return [], 0
 
     if es_phrase:
         if es_and:
@@ -383,7 +399,7 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
         response = s.execute()
     except TransportError as e:
         print(e)
-        return [],0
+        return [], 0
 
     total_count = response.hits.total.value
     # 结果总数，默认最大值是10000.
@@ -504,7 +520,7 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
     return result, total_count
 
 
-def get_query_list(query):
+def get_query_list(query, query_params={}):
     # 找出query的各种变体（简繁，拆字反查，全角半角，假名）
     query_list = []
 
@@ -513,7 +529,11 @@ def get_query_list(query):
     if query:  # 非空字符串为True
         query_list.append(query)
 
-        fh_char_enable = get_config_con('fh_char_enable')
+        if 'fh_char_enable' in query_params.keys():
+            fh_char_enable = query_params['fh_char_enable']
+        else:
+            fh_char_enable = get_config_con('fh_char_enable')
+
         if fh_char_enable:
             # 全角英文字母转半角
             q2b = strQ2B(query)
@@ -522,9 +542,18 @@ def get_query_list(query):
 
         if not is_en_func(query):
             # 非纯英文的处理
-            st_enable = get_config_con('st_enable')
-            chaizi_enable = get_config_con('chaizi_enable')
-            kana_enable = get_config_con('kana_enable')
+            if 'st_enable' in query_params.keys():
+                st_enable = query_params['st_enable']
+            else:
+                st_enable = get_config_con('st_enable')
+            if 'chaizi_enable' in query_params.keys():
+                chaizi_enable = query_params['chaizi_enable']
+            else:
+                chaizi_enable = get_config_con('chaizi_enable')
+            if 'kana_enable' in query_params.keys():
+                kana_enable = query_params['kana_enable']
+            else:
+                kana_enable = get_config_con('kana_enable')
 
             if chaizi_enable and len(query) > 1:
                 # 长度大于1时拆字反查

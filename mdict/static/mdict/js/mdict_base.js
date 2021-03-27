@@ -356,8 +356,8 @@ function init_online_dic_var(){
 
 }
 
-common_config={'force-refresh':'强制刷新','link-new-label':'entry链接打开新标签页',
-'force-font':'强制使用全宋体','card-show':'同时展开多个词典','select-btn-enable':'启用文字选择菜单','disable-iframe-click':'屏蔽默认点击'}
+common_config={'force-refresh':'强制刷新','st-enable':'繁简转化','kana-enable':'假名转化','chaizi-enable':'拆字反查','fh-char-enable':'英文全角转半角',
+'link-new-label':'entry链接打开新标签页','force-font':'强制使用全宋体','card-show':'同时展开多个词典','select-btn-enable':'启用文字选择菜单','disable-iframe-click':'屏蔽默认点击',}
 
 function init_common_config(){//这里后面改成从后台取数据
     var c_parent=$('#function-checkbox');
@@ -380,6 +380,10 @@ function init_common_config(){//这里后面改成从后台取数据
         $('#config-card-show').prop("checked",config['card_show']);
         $('#config-select-btn-enable').prop("checked",config['select_btn_enable']);
         $('#config-disable-iframe-click').prop("checked",config['disable_iframe_click']);
+        $('#config-fh-char-enable').prop("checked",config['fh_char_enable']);
+        $('#config-st-enable').prop("checked",config['st_enable']);
+        $('#config-chaizi-enable').prop("checked",config['chaizi_enable']);
+        $('#config-kana-enable').prop("checked",config['kana_enable']);
     })
 
 }
@@ -466,12 +470,19 @@ function update_config(){
     var card_show=$('#config-card-show').prop("checked");
     var select_btn_enable=$('#config-select-btn-enable').prop("checked");
     var disable_iframe_click=$('#config-disable-iframe-click').prop("checked");
+    var fh_char_enable=$('#config-fh-char-enable').prop("checked");
+    var st_enable=$('#config-st-enable').prop("checked");
+    var chaizi_enable=$('#config-chaizi-enable').prop("checked");
+    var kana_enable=$('#config-kana-enable').prop("checked");
+
+
     var group_name=$('#dic-group').val();
     var default_group=$('#dic-group').find('option:contains('+group_name+')').attr('data-pk');
 
     var data={"force_refresh":force_refresh,"link_new_label":link_new_label,
     "force_font":force_font,"card_show":card_show,"select_btn_enable":select_btn_enable,"default_group":default_group,
-    "disable_iframe_click":disable_iframe_click};
+    "disable_iframe_click":disable_iframe_click,"fh_char_enable":fh_char_enable,"st_enable":st_enable,
+    "chaizi_enable":chaizi_enable,"kana_enable":kana_enable};
     $.ajax({
             url:"/mdict/saveconfig",
             contentType:'json',

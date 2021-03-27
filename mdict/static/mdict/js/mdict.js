@@ -520,7 +520,15 @@ function query_es(query,container,page,need_clear,is_over){
 
 function query_mdict(query,container,page,need_clear,is_over){
 	var dic_group=$('#dic-group option:selected').attr('data-pk');
-	var data={"query":query,"dic_group":dic_group,"page":page,"force_refresh":$('#config-force-refresh').prop('checked')};
+
+	var force_refresh=$('#config-force-refresh').prop('checked');
+	var fh_char_enable=$('#config-fh-char-enable').prop("checked");
+    var st_enable=$('#config-st-enable').prop("checked");
+    var chaizi_enable=$('#config-chaizi-enable').prop("checked");
+    var kana_enable=$('#config-kana-enable').prop("checked");
+
+	var data={"query":query,"dic_group":dic_group,"page":page,"force_refresh":force_refresh,"fh_char_enable":fh_char_enable,"st_enable":st_enable,
+    "chaizi_enable":chaizi_enable,"kana_enable":kana_enable};
 	$.ajax({
 		url:"/api/mdict2/mdict/",
 		contentType:'json',
