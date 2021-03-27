@@ -357,20 +357,30 @@ function init_online_dic_var(){
 }
 
 common_config={'force-refresh':'强制刷新','st-enable':'繁简转化','kana-enable':'假名转化','chaizi-enable':'拆字反查','fh-char-enable':'英文全角转半角',
-'link-new-label':'entry链接打开新标签页','force-font':'强制使用全宋体','card-show':'同时展开多个词典','select-btn-enable':'启用文字选择菜单','disable-iframe-click':'屏蔽默认点击',}
+'link-new-label':'跳转新标签页','force-font':'强制使用全宋体','card-show':'展开多个词典','select-btn-enable':'启用查询菜单','disable-iframe-click':'屏蔽默认点击',}
 
 function init_common_config(){//这里后面改成从后台取数据
     var c_parent=$('#function-checkbox');
+    var row_ele='<div class="row"><div id="config-col-1" class="col"></div><div id="config-col-2" class="col"></div></div>';
+    c_parent.append(row_ele)
+    var i=1;
+    var col_num=5;
+
     for(var key in common_config){
         var c_id="config-"+key;
         var c_text=common_config[key];
-        s=`
+        var config_ele=`
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" id="${c_id}">
             <label class="form-check-label" for="${c_id}">${c_text}</label>
         </div>
         `
-        c_parent.append(s);
+        if(i<=col_num){
+           c_parent.find("#config-col-1").append(config_ele);
+        }else{
+           c_parent.find("#config-col-2").append(config_ele);
+        }
+        i+=1;
     }
 
     retrieveconfig(true,function(config){

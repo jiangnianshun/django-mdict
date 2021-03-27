@@ -67,7 +67,7 @@ class MdictEntryViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         query = self.request.query_params.get('query', '').strip()
-        force_refresh = json.loads(self.request.query_params.get('force_refresh', False))
+        force_refresh = json.loads(self.request.query_params.get('force_refresh', 'false'))
 
         group = int(self.request.query_params.get('dic_group', 0))
         page = int(self.request.query_params.get('page', 1))

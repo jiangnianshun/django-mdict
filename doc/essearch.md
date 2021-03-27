@@ -142,13 +142,19 @@ curl -X DELETE localhost:9200/_all
 
 es设置文件为config/elasticsearch.yml
 
-1. 禁止内存交换会提高查询效率，但是当内存不足时可能导致崩溃，不建议开启。
+1. 设置use_real_memory为false有助于减少CircuitBreakingException Data too large的发生。
+
+```
+indices.breaker.total.use_real_memory: false
+```
+
+2. 禁止内存交换会提高查询效率，但是当内存不足时可能导致崩溃，不建议开启。
 
 ```
 bootstrap.memory_lock: true
 ```
 
-2. 如果要连接另一台机器上的es，需要设置network.host和discovery.type，并在防火墙中放开9200和9300端口，然后在django-mdict/config.ini中修改es_host参数。
+3. 如果要连接另一台机器上的es，需要设置network.host和discovery.type，并在防火墙中放开9200和9300端口，然后在django-mdict/config.ini中修改es_host参数。
 
 ```
 network.host: 0.0.0.0
