@@ -10,6 +10,7 @@
     <style>
         html,body{padding:0;margin:0;width:100%;height:100%;}
         #setting_btn{position:fixed;right:20px;top:20px;color:black;font-size:36px;}
+        #btn-index{position:fixed;right:65px;top:20px;color:black;font-size:36px;}
         .wordcloud{padding-right:20px;}
         @font-face {
         font-family: FSung-m;
@@ -44,6 +45,7 @@
     </style>
 </head>
 <body>
+    <i class="bi bi-house-door btn mdict-icon" id="btn-index"></i>
     <i class="bi bi-gear-fill btn" id="setting_btn" data-bs-toggle="modal" data-bs-target="#modal-wordcloud-config"></i>
     <canvas id="wordcloud_canvas"></canvas>
     {% include "mdict/wordcloud-modal-config.html" %}
@@ -113,5 +115,9 @@
         link.href = document.getElementById('wordcloud_canvas').toDataURL();
         link.click();
     })
+
+    $("#btn-index").click(function(){
+        window.location.href="/";
+    });
 </script>
 </html>

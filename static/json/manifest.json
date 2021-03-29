@@ -1,0 +1,35 @@
+{
+  "name"              : "DjangoMdict",
+  "short_name"        : "DMdict",
+  "description"       : "Mdict search tool based on Django.",
+  "start_url"         : "/",
+  "display"           : "standalone",
+  "orientation"       : "any",
+  "icons": [
+    {
+      "src"           : "/static/mdict/img/book72.png",
+      "sizes"         : "72x72",
+      "type"          : "image/png"
+    },
+    {
+      "src"           : "/static/mdict/img/book152.png",
+      "sizes"         : "152x152",
+      "type"          : "image/png"
+    },
+    {
+      "src"           : "/static/mdict/img/book192.png",
+      "sizes"         : "192x192",
+      "type"          : "image/png"
+    },
+    {
+      "src"           : "/static/mdict/img/book256.png",
+      "sizes"         : "256x256",
+      "type"          : "image/png"
+    },
+    {
+      "src"           : "/static/mdict/img/book512.png",
+      "sizes"         : "512x512",
+      "type"          : "image/png"
+    }
+  ]
+}

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import sys
+import mimetypes
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,6 +23,9 @@ SECRET_KEY = 'frh*4wr$jh5j(ny99*i=-gur7d)(=-#ldipq@m2gbpmsw1ast$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+mimetypes.add_type("text/css", ".css", True)
+mimetypes.add_type("text/javascript", ".js", True)
 
 ALLOWED_HOSTS = ['*']
 

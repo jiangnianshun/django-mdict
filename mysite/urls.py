@@ -8,6 +8,7 @@ from django.conf.urls import url
 from django.shortcuts import render
 from django.views.static import serve
 from django.contrib.auth.models import User, Group
+from django.http import HttpResponse
 
 from mysite.settings import MEDIA_ROOT
 
@@ -61,8 +62,14 @@ router.register(r'mdictonline', views_mdict.MdictOnlineViewSet)
 def redirect_font(request):  # url重定向
     return redirect('/media/font')
 
+
 def main(request):
     return render(request, 'index.html')
+
+
+def swView(request):
+    with open(settings.BASE_DIR + "/static/js/sw.js") as fp:
+        return HttpResponse(fp.read(), 'text/javascript')
 
 
 urlpatterns = [
@@ -77,6 +84,7 @@ urlpatterns = [
     path('users/', UserList.as_view()),
     path('users/<pk>/', UserDetails.as_view()),
     path('groups/', GroupList.as_view()),
+    path('sw.js', swView)
 ]
 
 urlpatterns += staticfiles_urlpatterns()
