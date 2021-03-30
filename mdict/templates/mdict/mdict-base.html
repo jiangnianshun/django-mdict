@@ -5,6 +5,7 @@
     <meta content="never" name="referrer">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link rel="manifest" href="/static/json/manifest.json">
 
     <title>{% block title %}词典{% endblock %}</title>
     <link href='/static/mdict/img/shortcut.png' rel='shortcut icon' type='image/x-icon'/>
@@ -96,6 +97,10 @@
 <script src="/static/mdict/js/mdict.js"></script>
 <script src="/static/mdict/js/mark.min.js"></script>
 <script>
+    if ('serviceWorker' in navigator) {
+      // register service worker
+      navigator.serviceWorker.register("/sw.js");
+    }
     function call_query(entry){
         $('html,body').animate({scrollTop:0},'fast');
         $('#query').val(html_unescape(entry));

@@ -2,7 +2,8 @@
   "name"              : "DjangoMdict",
   "short_name"        : "DMdict",
   "description"       : "Mdict search tool based on Django.",
-  "start_url"         : "/",
+  "scope"             : "/",
+  "start_url"         : "/mdict/",
   "display"           : "standalone",
   "orientation"       : "any",
   "icons": [
