@@ -75,7 +75,10 @@ def get_mdict_list():
                             if f2_name + '.mdx' in files:
                                 continue
                         mdd_path = os.path.join(root, f)
-                        mdd_list.append(MDD(mdd_path))
+                        try:
+                            mdd_list.append(MDD(mdd_path))
+                        except Exception as e:
+                            print_log_info([f_name, 'mdd loading failed', e])
 
                 if mdx_path.find('.part') != -1:
                     for item in m_list.values():
@@ -99,7 +102,7 @@ def get_mdict_list():
                     mdx = MDX(mdx_path)
                     m_list.update({f_name: MdictItem(mdx, tuple(mdd_list), g_id, icon, mdx.get_len())})
                 except Exception as e:
-                    print_log_info([f_name, 'loading failed', e])
+                    print_log_info([f_name, 'mdx loading failed', e])
 
                 g_id += 1
 
