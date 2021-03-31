@@ -77,11 +77,16 @@ src: url(/media/font/FSung-3.ttf);
 font-display:swap;
 }
 @font-face {
-font-family: FSung-F;
-src: url(/media/font/FSung-F.ttf);
+font-family: FSung-F-1;
+src: url(/media/font/FSung-F-1.ttf);
 font-display:swap;
 }
-*{font-family:Arial,FSung-p,FSung-m,FSung-1,FSung-2-1,FSung-2-2,FSung-3,FSung-F !important;}
+@font-face {
+font-family: FSung-F-2;
+src: url(/media/font/FSung-F-2.ttf);
+font-display:swap;
+}
+*{font-family:Arial,FSung-p,FSung-m,FSung-1,FSung-2-1,FSung-2-2,FSung-3,FSung-F-1,FSung-F-2 !important;}
 </style>
 `
 

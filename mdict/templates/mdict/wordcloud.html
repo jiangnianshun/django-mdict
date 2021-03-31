@@ -38,8 +38,13 @@
         font-display:swap;
         }
         @font-face {
-        font-family: FSung-F;
-        src: url(/media/font/FSung-F.ttf);
+        font-family: FSung-F-1;
+        src: url(/media/font/FSung-F-1.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-F-2;
+        src: url(/media/font/FSung-F-2.ttf);
         font-display:swap;
         }
     </style>
@@ -92,7 +97,7 @@
                 var word_list=$.parseJSON(data);
                 var options={"list":word_list,
                 "weightFactor":weight_factor,
-                "fontFamily":"Arial,FSung-m,FSung-1,FSung-2-1,FSung-2-2,FSung-3,FSung-F"};
+                "fontFamily":"Arial,FSung-m,FSung-1,FSung-2-1,FSung-2-2,FSung-3,FSung-F-1,FSung-F-2"};
                 WordCloud(canvas, options);
             },
             error:function(jqXHR,textStatus,errorThrown){
