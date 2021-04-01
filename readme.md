@@ -1,5 +1,7 @@
 ﻿## django-mdict
 
+[English](doc/readme_en.md)
+
 ### 简介
 
 django-mdict是django实现的mdict词典查询工具。
