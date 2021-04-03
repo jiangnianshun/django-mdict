@@ -226,7 +226,7 @@ function bind_card(iframe,html){
                 iFrameResize({
                     log:false,
                     checkOrigin:false,
-                    widthCalculationMethod:'documentElementOffset',
+                    widthCalculationMethod:'lowestElement',
                     minHeight:550,
                     warningTimeout:0,
                     scrolling:true,
@@ -241,7 +241,7 @@ function bind_card(iframe,html){
                 iFrameResize({
                     log:false,
                     checkOrigin:false,
-                    heightCalculationMethod:'documentElementOffset',
+                    heightCalculationMethod:'lowestElement',
                     warningTimeout:0,
                     scrolling:true,
 //							onInit: function(iframe_a){
@@ -260,7 +260,7 @@ function bind_card(iframe,html){
         bodyOffset和bodyScroll不计算margin，都偏小
         max一是有闪烁问题，二是有的词条有很大一块空白
         documentElementScroll会有大块空白
-        documentElementOffset的白边较小，且点击后能恢复
+        documentElementOffset的白边较小，且点击后能恢复,但是pdf2htmlex生成的页面无高度.
         lowestElement准确度最高，会遍历各元素，问题一性能消耗高，二有的词条，比如朗文5++的comet，
         每次点击iframe高度都增大，原因是有元素设置了height="100%"，
         或者设置了固定约束距底边的距离，position="fixed",bottom="45px"，导致高度获取出问题。
