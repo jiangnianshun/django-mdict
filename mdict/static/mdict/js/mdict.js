@@ -226,7 +226,7 @@ function bind_card(iframe,html){
                 iFrameResize({
                     log:false,
                     checkOrigin:false,
-                    widthCalculationMethod:'lowestElement',
+                    widthCalculationMethod:'documentElementOffset',
                     minHeight:550,
                     warningTimeout:0,
                     scrolling:true,
@@ -241,7 +241,7 @@ function bind_card(iframe,html){
                 iFrameResize({
                     log:false,
                     checkOrigin:false,
-                    heightCalculationMethod:'lowestElement',
+                    heightCalculationMethod:'documentElementOffset',
                     warningTimeout:0,
                     scrolling:true,
 //							onInit: function(iframe_a){
@@ -264,6 +264,7 @@ function bind_card(iframe,html){
         lowestElement准确度最高，会遍历各元素，问题一性能消耗高，二有的词条，比如朗文5++的comet，
         每次点击iframe高度都增大，原因是有元素设置了height="100%"，
         或者设置了固定约束距底边的距离，position="fixed",bottom="45px"，导致高度获取出问题。
+        card展开关闭一段时间后再展开，高度0，需要手动点击一下高度才恢复正常。
         resizeFrom:'child'设置当iframe变化时更新状态，默认是parent窗口变化时更新状态。
         在modal-mdict需要设置为child，否则不会显示。
         warningTimeout:0,抑制iframeresizer的警告信息
