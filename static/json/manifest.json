@@ -5,7 +5,7 @@
   "scope"             : "/",
   "start_url"         : "/mdict/",
   "display"           : "standalone",
-  "orientation"       : "any",
+  "orientation"       : "natural",
   "icons": [
     {
       "src"           : "/static/mdict/img/book72.png",

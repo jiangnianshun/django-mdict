@@ -1029,8 +1029,8 @@ function get_index_status(){
                 console.log("error:",data);
                 $('#mdict-list-content .index-status').each(function(){
                     $(this).removeClass('bi-question');
-                    $(this).removeClass('bi-moon');
-                    $(this).removeClass('bi-sun');
+                    $(this).removeClass('bi-moon-fill');
+                    $(this).removeClass('bi-sun-fill');
                     $(this).removeClass('bi-x');
                     $(this).addClass('bi-cloud-slash');
                     $(this).css('color','gray');
@@ -1046,14 +1046,14 @@ function get_index_status(){
                             var index_status=st_status[dic_pk];
 
                             $(this).removeClass('bi-question');
-                            $(this).removeClass('bi-moon');
-                            $(this).removeClass('bi-sun');
+                            $(this).removeClass('bi-moon-fill');
+                            $(this).removeClass('bi-sun-fill');
                             $(this).removeClass('bi-x');
                             if(index_status==1){
-                                $(this).addClass('bi-sun');
+                                $(this).addClass('bi-sun-fill');
                                 $(this).css('color','green');
                             }else if(index_status==0){
-                                $(this).addClass('bi-moon');
+                                $(this).addClass('bi-moon-fill');
                                 $(this).css('color','orange');
                             }else{
                                 $(this).addClass('bi-x');
