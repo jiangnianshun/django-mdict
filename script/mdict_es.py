@@ -91,7 +91,7 @@ def get_list(dic, mdx, p1, p2, num, direction=1):
 
 settings2 = {
     "settings": {
-        "refresh_interval": '30s',
+        "refresh_interval": '20s',
     },
 }
 
