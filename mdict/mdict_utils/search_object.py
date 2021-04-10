@@ -306,22 +306,24 @@ class SearchObject:
         return r_list
 
     def get_mdd_cache(self):
-        if self.dic_id in caches_dict.keys():
-            mime_type = guess_mime(self.query)
-            if mime_type is not None:
-                if self.file_type in caches_dict[self.dic_id].keys():
-                    if self.query in caches_dict[self.dic_id][self.file_type].keys():
-                        return caches_dict[self.dic_id][self.file_type][self.query], mime_type
+        if self.file_type is not None:
+            if self.dic_id in caches_dict.keys():
+                mime_type = guess_mime(self.query)
+                if mime_type is not None:
+                    if self.file_type in caches_dict[self.dic_id].keys():
+                        if self.query in caches_dict[self.dic_id][self.file_type].keys():
+                            return caches_dict[self.dic_id][self.file_type][self.query], mime_type
         return None, None
 
     def set_mdd_cache(self, res_content):
-        if self.dic_id in caches_dict.keys():
-            if self.file_type in caches_dict[self.dic_id].keys():
-                caches_dict[self.dic_id][self.file_type][self.query] = res_content
+        if self.file_type is not None:
+            if self.dic_id in caches_dict.keys():
+                if self.file_type in caches_dict[self.dic_id].keys():
+                    caches_dict[self.dic_id][self.file_type][self.query] = res_content
+                else:
+                    caches_dict[self.dic_id][self.file_type] = {self.query: res_content}
             else:
-                caches_dict[self.dic_id][self.file_type] = {self.query: res_content}
-        else:
-            caches_dict[self.dic_id] = {self.file_type: {self.query: res_content}}
+                caches_dict[self.dic_id] = {self.file_type: {self.query: res_content}}
 
     @search_exception(('', ''))
     def search_mdd(self):
