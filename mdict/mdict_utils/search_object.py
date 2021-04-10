@@ -43,6 +43,8 @@ scriptregp = re.compile(scriptreg)
 
 values_list = init_vars.mdict_odict.values()
 
+caches_dict = {}
+
 
 class SearchObject:
     def __init__(self, mdx, mdd_list, dic, required, **extra):
@@ -53,10 +55,10 @@ class SearchObject:
         self.prior = dic.mdict_priority
 
         if isinstance(required, list):
-            self.required = required
+            self.query_list = required
             self.query = required[0]
         elif isinstance(required, str):
-            self.required = []
+            self.query_list = []
             self.query = required
         else:
             raise Exception('error query type')
@@ -93,6 +95,17 @@ class SearchObject:
 
         self.m_path = get_m_path(self.mdx)
 
+        if self.dic_id in caches_dict.keys():
+            for file_type in caches_dict[self.dic_id].keys():
+                if len(caches_dict[self.dic_id][file_type]) > 5000:
+                    caches_dict[self.dic_id][file_type].clear()
+
+        self.file_type = None
+        if '.' in self.query:
+            tmp_type = self.query[self.query.rfind('.') + 1:]
+            if tmp_type.strip() != '':
+                self.file_type = tmp_type
+
     def close_all(self):
         if not self.f_mdx.closed:
             self.f_mdx.close()
@@ -102,7 +115,7 @@ class SearchObject:
 
     @search_exception()
     def search_sug_list(self, num):
-        sug = self.mdx.look_up_sug_list(self.required, num, self.f_mdx)
+        sug = self.mdx.look_up_sug_list(self.query_list, num, self.f_mdx)
         self.close_all()
         return sug
 
@@ -247,7 +260,7 @@ class SearchObject:
     @search_exception()
     def search_entry_list(self):
         # 查询一组词
-        result_dict = self.mdx.look_up_list(self.required, self.f_mdx)
+        result_dict = self.mdx.look_up_list(self.query_list, self.f_mdx)
         self.f_pk = self.dic.pk
         r_list = []
         t_list = []
@@ -292,10 +305,31 @@ class SearchObject:
         self.close_all()
         return r_list
 
+    def get_mdd_cache(self):
+        if self.dic_id in caches_dict.keys():
+            mime_type = guess_mime(self.query)
+            if mime_type is not None:
+                if self.file_type in caches_dict[self.dic_id].keys():
+                    if self.query in caches_dict[self.dic_id][self.file_type].keys():
+                        return caches_dict[self.dic_id][self.file_type][self.query], mime_type
+        return None, None
+
+    def set_mdd_cache(self, res_content):
+        if self.dic_id in caches_dict.keys():
+            if self.file_type in caches_dict[self.dic_id].keys():
+                caches_dict[self.dic_id][self.file_type][self.query] = res_content
+            else:
+                caches_dict[self.dic_id][self.file_type] = {self.query: res_content}
+        else:
+            caches_dict[self.dic_id] = {self.file_type: {self.query: res_content}}
+
     @search_exception(('', ''))
     def search_mdd(self):
-        res_content = ''
-        mime_type = ''
+        res_content, mime_type = self.get_mdd_cache()
+
+        if res_content is not None:
+            return res_content, mime_type
+
         for i in range(len(self.mdd)):
             mdd = self.mdd[i]
             f = self.f_mdd_list[i]
@@ -326,6 +360,7 @@ class SearchObject:
                 im.save(temp, format="png")
                 res_content = temp.getvalue()
         self.close_all()
+        self.set_mdd_cache(res_content)
         return res_content, mime_type
 
     def check_external_css(self, record):
