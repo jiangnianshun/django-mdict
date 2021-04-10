@@ -346,7 +346,7 @@ class SearchObject:
         if self.query.endswith('.spx'):
             mime_type = 'audio/speex'
 
-        if mime_type is not None:
+        if mime_type is not None and res_content != '':
             if 'css' in mime_type:
                 res_content = reg2p.sub(self.substitute_css_link,
                                         res_content.decode(self.mdx.get_encoding(), errors='replace'))
