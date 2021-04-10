@@ -315,7 +315,7 @@ class SearchObject:
                     if self.file_type in caches_dict[self.dic_id].keys():
                         if self.query in caches_dict[self.dic_id][self.file_type].keys():
                             return caches_dict[self.dic_id][self.file_type][self.query], mime_type
-        return None, None
+        return '', ''
 
     def set_mdd_cache(self, res_content):
         if self.file_type is not None:
@@ -331,7 +331,7 @@ class SearchObject:
     def search_mdd(self):
         res_content, mime_type = self.get_mdd_cache()
 
-        if res_content is not None:
+        if res_content != '':
             return res_content, mime_type
 
         for i in range(len(self.mdd)):
@@ -546,4 +546,4 @@ class SearchObject:
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
 
         return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
-               str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
+               str(self.dic_id) + '/' + quote(str(res_name)) + '?path=' + self.m_path + delimiter_r
