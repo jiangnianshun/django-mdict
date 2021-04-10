@@ -25,10 +25,12 @@ from .decorator import search_exception
 from base.base_func import guess_mime
 
 # 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64，mailto:开头是邮件,javascript:脚本，#开头可能是锚点，www.开头可能是网址，这两个当在mdd中查询不存在时不处理。
-reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'
+# reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'
+reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'
 regp = re.compile(reg, re.IGNORECASE)
 
-reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!data:)([^"\'\(\)]+)(["|\']*\))'
+# reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!data:)([^"\'\(\)]+)(["|\']*\))'
+reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!www\.)(?!#)(?!data:)([^"\'\(\)]+)(["|\']*\))'
 reg2p = re.compile(reg2)
 
 # excssreg = r'(href=")([\w\s-]+\.css")'
@@ -466,29 +468,30 @@ class SearchObject:
         res_name = dotregp.sub('', matched.group(2))
         res_name = replace_res_name(res_name)
 
-        start, end = -1, -1
+        # 在正则替换中查询耗时长
+        # start, end = -1, -1
 
-        for i in range(len(self.mdd)):
-            mdd = self.mdd[i]
-            f = self.f_mdd_list[i]
-            result_list = mdd.look_up_key(res_name, f)
-
-            if len(result_list) > 0:
-                start = result_list[0][0]
-                end = result_list[0][1]
-                # 这里后面再处理
-                break
-
-        if start == -1:
-            if res_name[0] == '\\':
-                res_name = res_name[1:]
-            if res_name[0] == '#' or res_name.startswith('www.'):
-                return matched.group(0)
-            if is_local:
-                return str(matched.group(1)) + '/' + self.m_path + '/' + str(res_name) + str(matched.group(3))
-            else:
-                return str(matched.group(1)) + '/mdict/exfile/?path=' + self.m_path + '/' + \
-                       str(res_name) + str(matched.group(3))
+        # for i in range(len(self.mdd)):
+        #     mdd = self.mdd[i]
+        #     f = self.f_mdd_list[i]
+        #     result_list = mdd.look_up_key(res_name, f)
+        #
+        #     if len(result_list) > 0:
+        #         start = result_list[0][0]
+        #         end = result_list[0][1]
+        #         # 这里后面再处理
+        #         break
+        #
+        # if start == -1:
+        #     if res_name[0] == '\\':
+        #         res_name = res_name[1:]
+        #     # if res_name[0] == '#' or res_name.startswith('www.'):
+        #     #     return matched.group(0)
+        #     if is_local:
+        #         return str(matched.group(1)) + '/' + self.m_path + '/' + str(res_name) + str(matched.group(3))
+        #     else:
+        #         return str(matched.group(1)) + '/mdict/exfile/?path=' + self.m_path + '/' + \
+        #                str(res_name) + str(matched.group(3))
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
         return str(matched.group(1)) + '/mdict/' + str(self.dic_id) + '/' + quote(str(res_name)) + \
                str(matched.group(3))
@@ -501,17 +504,6 @@ class SearchObject:
         # 对于没有扩展名的不作处理，vocabulary2020查artefact有800多隐藏的连接，全部替换耗时6秒。
 
         res_name = replace_res_name(matched.group(8))
-
-        start, end = -1, -1
-        for i in range(len(self.mdd)):
-            mdd = self.mdd[i]
-            f = self.f_mdd_list[i]
-            result_list = mdd.look_up_key(res_name, f)
-            if len(result_list) > 0:
-                start = result_list[0][0]
-                end = result_list[0][1]
-                # 这里后面再处理
-                break
 
         temp_1 = matched.group(4)
         temp_2 = matched.group(6)
@@ -526,19 +518,31 @@ class SearchObject:
         if temp_3[-1] == '>':
             delimiter_r += '>'
 
-        if start == -1:
-            if res_name[0] == '\\':
-                res_name = res_name[1:]
-            if res_name == '':
-                return matched_text
-            if res_name[0] == '#' or res_name.startswith('www.'):
-                return matched_text
-            if is_local:
-                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + '/' + self.m_path + '/' + \
-                       str(res_name) + delimiter_r
-            else:
-                return str(matched.group(1)) + str(matched.group(2)) + \
-                       delimiter_l + '/mdict/exfile/?path=' + self.m_path + '/' + str(res_name) + delimiter_r
+        # start, end = -1, -1
+
+        # for i in range(len(self.mdd)):
+        #     mdd = self.mdd[i]
+        #     f = self.f_mdd_list[i]
+        #     result_list = mdd.look_up_key(res_name, f)
+        #     if len(result_list) > 0:
+        #         start = result_list[0][0]
+        #         end = result_list[0][1]
+        #         # 这里后面再处理
+        #         break
+        #
+        # if start == -1:
+        #     if res_name[0] == '\\':
+        #         res_name = res_name[1:]
+        #     if res_name == '':
+        #         return matched_text
+        #     # if res_name[0] == '#' or res_name.startswith('www.'):
+        #     #     return matched_text
+        #     if is_local:
+        #         return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + '/' + self.m_path + '/' + \
+        #                str(res_name) + delimiter_r
+        #     else:
+        #         return str(matched.group(1)) + str(matched.group(2)) + \
+        #                delimiter_l + '/mdict/exfile/?path=' + self.m_path + '/' + str(res_name) + delimiter_r
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
 
         return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
