@@ -140,6 +140,7 @@ def es_search(request):
     result_page = int(request.GET.get('result_page', 1))
     frag_size = int(request.GET.get('frag_size', 50))
     frag_num = int(request.GET.get('frag_num', 3))
+    dic_pk = int(request.GET.get('dic_pk', -1))
 
     es_phrase = json.loads(request.GET.get('es-phrase', 'false'))
     es_entry = json.loads(request.GET.get('es-entry', 'false'))
@@ -162,7 +163,7 @@ def es_search(request):
 
     group = int(request.GET.get('dic_group', 0))
 
-    result, total_count = get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase,
+    result, total_count = get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, es_phrase,
                                          es_entry, es_content,
                                          es_and)
 
@@ -351,7 +352,8 @@ def sub_highlight(matched):
     return '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + text + '</b>'
 
 
-def get_es_results(query, group, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content, es_and):
+def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content,
+                   es_and):
     global meta_dict
     es_host = get_config_con('es_host')
     client = Elasticsearch(hosts=es_host)
@@ -383,7 +385,34 @@ def get_es_results(query, group, result_num, result_page, frag_size, frag_num, e
             q = MultiMatch(query=query, fields=search_fields, operator='AND')
         else:
             q = MultiMatch(query=query, fields=search_fields)
-    s = Search(index='mdict-*').using(client).query(q)
+
+    if dic_pk > -1:
+        dics = MdictDic.objects.filter(pk=dic_pk)
+        index_name = ''
+
+        if len(dics) > 0:
+            dic = dics[0]
+            dic_md5 = dic.mdict_md5
+
+            if dic_md5 == '' or dic_md5 is None:
+                for meta_name, meta_body in meta_dict.items():
+                    if dic.mdict_file == meta_body['file']:
+                        index_name = meta_name
+                        dic.mdict_md5 = index_name[6:]
+                        dic.save()
+                        break
+            else:
+                index_name = 'mdict-' + dic_md5
+
+            if index_name == '':
+                return [], 0
+            else:
+                s = Search(index=index_name).using(client).query(q)
+        else:
+            return [], 0
+    else:
+        # 查询全部索引
+        s = Search(index='mdict-*').using(client).query(q)
     # s = Search(index='mdict-*').using(client).query("match_phrase", content=query)
 
     s = s[(result_page - 1) * result_num:result_page * result_num]
@@ -918,6 +947,19 @@ def mdict_dic(request):
     is_mb = is_mobile(request)
     return render(request, 'mdict/dic.html',
                   {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'dic', 'is_mobile': is_mb})
+
+
+def es_dic(request):
+    dic_pk = int(request.GET.get('dic_pk', -1))
+    if dic_pk == -1:
+        dics = MdictDic.objects.all().order_by('mdict_priority')
+        if len(dics) > 0:
+            dic_pk = dics[0].pk
+    dic_name = MdictDic.objects.get(pk=dic_pk).mdict_name
+    query = request.GET.get('query', '')
+    is_mb = is_mobile(request)
+    return render(request, 'mdict/es-dic.html',
+                  {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'esdic', 'is_mobile': is_mb})
 
 
 def bujianjiansuo(request):

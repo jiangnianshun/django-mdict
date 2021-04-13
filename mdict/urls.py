@@ -33,4 +33,5 @@ urlpatterns = [
     path('downloadhistory/', views.download_history),
     path('wordcloud/', views.wordcloud),
     path('getwordlist/', views.getwordlist),
+    path('esdic/', views.es_dic),
 ]

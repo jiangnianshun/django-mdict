@@ -215,10 +215,10 @@ function add_click_event(){
 	    $("#query").autocomplete("close");//按下enter键时关闭autocomplete下拉框
 	    document.activeElement.blur();//收回手机浏览器的软键盘
 
-        var modal_brief=$('#modal-container-brief');
-        if(modal_brief.length>0){
-		    modal_brief.modal('hide');
-		}
+        //var modal_brief=$('#modal-container-brief');
+        //if(modal_brief.length>0){
+		    //modal_brief.modal('hide');
+		//}
 		//当#modal-container-brief中的entry点击时，触发#mdictquery的点击查询，此时要关闭#modal-container-brief。
 
 		var dic_pk=$("html").attr("data-dic-pk");
@@ -245,7 +245,11 @@ function add_click_event(){
 			dic_search=true;
 			dic_back=false;
 			var container=$("#card-container");
-			query_key(container,query);
+			if($("#scroll_list").length>0){
+			    query_key(container,query);
+			}else{
+			    query_es(query,$("#card-container"),1,true,false)
+			}
 		}
         if($('html').data('data-pushstate')){
 		    change_title_and_url(query);
@@ -667,7 +671,7 @@ function first_query(){
 function init_mdict(){
 	init_common();
 
-	get_mdict_list($("#mdict-list-content"),false);
+	get_mdict_list($("#mdict-list-content"),false,false);
 
 	first_query();
 }
@@ -675,7 +679,7 @@ function init_mdict(){
 function init_es(){
     init_common();
 
-    get_mdict_list($("#mdict-list-content"),true);
+    get_mdict_list($("#mdict-list-content"),true,true);
 
     $('#online-mdict-checkbox').hide();
     //$('#open-close-index').show();
@@ -734,7 +738,17 @@ function init_single_dic(){
 
 	init_common();
 
-	get_mdict_list($("#mdict-list-content"),false);
+	get_mdict_list($("#mdict-list-content"),false,false);
 
 	first_query();//第一次查询会不会和初始化的0位置查询冲突？
+}
+
+function init_es_dic(){
+    get_header($("#modal-container-brief .modal-body"));
+
+    init_common();
+
+    get_mdict_list($("#mdict-list-content"),true,true);
+
+    first_query();//第一次查询会不会和初始化的0位置查询冲突？
 }

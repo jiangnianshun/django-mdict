@@ -10,7 +10,7 @@
         </div>
 
         <div class="d-flex float-end">
-            {% if type == 'es' %}
+            {% if type == 'es' or type == 'esdic' %}
                 <i class="bi bi-caret-down btn mdict-icon" id="es-filter"
                    href='#es-filter-div' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#es-filter-div"></i>
             {% endif %}
@@ -23,7 +23,7 @@
                     <div id="result_time" style="font-size:12px;color:gray;"></div>
                 </div>
             {% endif %}
-            {% if type == 'dic' %}
+            {% if type == 'dic' or type == 'esdic' %}
             <div class="input-group float-end">
                 <a class="btn" data-bs-toggle="modal" data-bs-target="#modal-container-brief" id="modal-brief">
                 {{ name }}</a>
@@ -32,13 +32,13 @@
         </div>
         <div class="d-flex float-end">
             <div class="input-group">
-                {% if type == 'index' or type == 'dic' %}
+                {% if type == 'index' or type == 'dic' or type == 'esdic' %}
                     <span class="btn mdict-icon" id="btn-es">全</span>
                 {% endif %}
                 <span class="btn mdict-icon" id="btn-bujian">部</span>
                 <i class="bi bi-journal-bookmark-fill btn mdict-icon" id="modal-mdict" data-bs-toggle="modal" data-bs-target="#modal-container-mdict"></i>
                 <i class="bi bi-gear-fill btn mdict-icon" id="modal-config" data-bs-toggle="modal" data-bs-target="#modal-container-config"></i>
-                {% if type == 'es' or type == 'dic' %}
+                {% if type == 'es' or type == 'dic' or type == 'esdic' %}
                     <i class="bi bi-house-door-fill btn mdict-icon" id="btn-home"></i>
                 {% endif %}
                 {% if type == 'index' %}
@@ -49,7 +49,7 @@
     </div>
         <!--当input获得焦点，按回车会提交表单并刷新页面，点击button也会提交表单并刷新页面。如果不想刷新页面，方法一是将button的type从submit改成button，这只对点击按钮有效，方法二是form添加onsubmit="return false;，这对点击和回车都有效。-->
 </nav>
-{% if type == 'es' %}
+{% if type == 'es' or type == 'esdic' %}
     <div class='collapse show' id='es-filter-div'>
         <div class='card-body'>
             <div class="row">

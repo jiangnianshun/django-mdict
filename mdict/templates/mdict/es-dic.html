@@ -1,0 +1,25 @@
+{% extends "mdict/mdict-base.html" %}
+
+{% block content %}
+{% include "mdict/mdict-navbar.html" %}
+
+<div id="card-container">
+</div>
+
+{% endblock %}
+
+{% block modal %}
+{% include "mdict/modal-container-brief.html" %}
+{% endblock %}
+
+{% block script %}
+<script>
+    $("html").attr("data-dic-pk",{{ dic_pk }});
+    $("html").attr("data-dic-name","{{ name }}");
+    $("html").attr("data-first-query","{{ query }}");
+    //$("#result_num").hide();
+    //$("#result_time").hide();
+    $("#sound-speaker").hide();
+    init_es_dic();
+</script>
+{% endblock %}

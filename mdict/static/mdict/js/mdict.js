@@ -438,6 +438,8 @@ function query_es(query,container,page,need_clear,is_over){
 	var es_content=$('#es-filter-content').prop("checked");
 	var es_and=$('#es-filter-and').prop("checked");
 
+	var dic_pk=$("html").attr("data-dic-pk");
+
 	var frag_num=$('#frag-num').val();
 	var frag_size=$('#frag-size').val();
 	if(frag_num==''){frag_num=3;}
@@ -449,7 +451,8 @@ function query_es(query,container,page,need_clear,is_over){
 	}
 
 	var data={"query":query,"dic_group":dic_group,"result_page":page,"force_refresh":$('#config-force-refresh').prop('checked'),
-	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content,"es-and":es_and,"frag_num":frag_num,"frag_size":frag_size};
+	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content,"es-and":es_and,"frag_num":frag_num,"frag_size":frag_size,
+	"dic_pk":dic_pk};
 	$.ajax({
 		url:"/mdict/essearch/",
 		contentType:'json',
@@ -954,7 +957,7 @@ function set_all_mdict_ajax(dic_list,o_check){
     });
 }
 
-function get_mdict_list(container, flag){//载入词典列表
+function get_mdict_list(container, es_icon_enable, es_page_enable){//载入词典列表
 	$.ajax({
 		url:"/mdict/mdictlist/",
 		contentType:'json',
@@ -977,12 +980,12 @@ function get_mdict_list(container, flag){//载入词典列表
 				if(dic_enable){checked="checked";}
 
 				if(dic_es_enable){
-				    var es_flag="<i class='bi bi-check' style='color:green;'></i>"
+				    var es_icon="<i class='bi bi-check' style='color:green;'></i>"
 				}else{
-				    var es_flag="<i class='bi bi-x' style='color:red;'></i>"
+				    var es_icon="<i class='bi bi-x' style='color:red;'></i>"
 				}
 
-				es_flag+="<i class='bi bi-question index-status' style='color:gray;' data-pk="+dic_pk+"></i>"
+				es_icon+="<i class='bi bi-question index-status' style='color:gray;' data-pk="+dic_pk+"></i>"
 
 				var checkbox_html=`
                             <div class="form-checkbox" style="display:inline;">
@@ -990,14 +993,19 @@ function get_mdict_list(container, flag){//载入词典列表
                                 <label class="form-check-label" for="customControlInline${i}" style="display:inline;vertical-align:middle;"></label>
                             </div>
                             `
-                if(!flag){
-				    es_flag="";
+                if(!es_icon_enable){
+				    es_icon="";
+				}
+				if(es_page_enable){
+				    es_page='esdic'
+				}else{
+				    es_page='dic'
 				}
                 var s=`
-                <div class="card-header">${checkbox_html}${es_flag}
+                <div class="card-header">${checkbox_html}${es_icon}
                     <img class="dic-icon" src="${html_escape(dic_icon,false)}"></img>
                     <span class="badge badge-light text-dark">${dic_pror}</span>
-                    <a class="mdict-list-mark" href="/mdict/dic/?dic_pk=${dic_pk}" data-file=${html_escape(dic_file)}>
+                    <a class="mdict-list-mark" href="/mdict/${es_page}/?dic_pk=${dic_pk}" data-file=${html_escape(dic_file)}>
                         ${html_escape(dic_name)}
                     </a>
                 </div>
