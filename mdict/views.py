@@ -773,7 +773,7 @@ def search_mdd(request, *args):
         if res_content == '':
             if res_name[0] == '\\' or res_name[0] == '/':
                 res_name = res_name[1:]
-            file_path = os.path.join(mdict_root_path, get_m_path(mdx), res_name)
+            file_path = os.path.join(mdict_root_path, get_m_path(mdx, False), res_name)
             if os.path.exists(file_path):
                 with open(file_path, 'rb') as f:
                     res_content = f.read()

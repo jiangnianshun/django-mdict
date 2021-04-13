@@ -111,7 +111,7 @@ def is_mdict_media_local():
 is_mdict_media_local()
 
 
-def get_m_path(mdx):
+def get_m_path(mdx, enable_quote=True):
     m_path = ''
     mdict_path_dict = split_os_path(mdict_root_path)
     mdict_path_t = mdict_path_dict['path']
@@ -124,7 +124,10 @@ def get_m_path(mdx):
     if s > -1:
         t_path = mdx_path[e:-1]
         m_path = '/'.join(t_path)
-    return quote(m_path)
+    if enable_quote:
+        return quote(m_path)
+    else:
+        return m_path
 
 
 def write_to_history(query):
