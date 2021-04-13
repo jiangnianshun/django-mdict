@@ -207,6 +207,6 @@ a{text-decoration:none !important;}
 #bottom-button-group li{list-style: none;margin-top:2px;margin-bottom:2px;pointer-events: auto;cursor:pointer;}
 
 .float-a{float: left;width: 40px;height: 40px;background-color: #fff;box-shadow: 0 0 2px #bbb;position: relative;overflow: hidden;}
-.float-a i{-webkit-transition:all 0.5s;display: block;font-size:22px;width:40px;height:40px;}
+.float-a i{-webkit-transition:all 0.5s;display: block;font-size:24px;width:40px;height:40px;}
 .float-a:hover i{margin-top: -40px;}
 .float-a span{width: 40px;height: 40px;line-height: 18px;padding: 2px 0;background: #000;color: #fff;text-align: center;float: left;font-size:13px;}
