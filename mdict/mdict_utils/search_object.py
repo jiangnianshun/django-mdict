@@ -6,6 +6,7 @@ Created on Tue Jul 16 11:41:22 2019
 """
 import os
 import re
+import copy
 import imghdr
 from PIL import Image
 from io import BytesIO
@@ -144,7 +145,8 @@ class SearchObject:
 
     @search_exception({})
     def get_header(self):
-        header = self.mdx.header
+        header = copy.copy(self.mdx.header)
+        # 这里需要浅拷贝，否则header会被反复转义，导致简介中的图片刷新后获取失败。
         if 'Description' in header.keys():
             header['Description'] = self.substitute_record(header['Description'])
 
