@@ -545,5 +545,8 @@ class SearchObject:
         #                delimiter_l + '/mdict/exfile/?path=' + self.m_path + '/' + str(res_name) + delimiter_r
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
 
+        # return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
+        #        str(self.dic_id) + '/' + quote(str(res_name)) + '?path=' + self.m_path + delimiter_r
+
         return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
-               str(self.dic_id) + '/' + quote(str(res_name)) + '?path=' + self.m_path + delimiter_r
+               str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
