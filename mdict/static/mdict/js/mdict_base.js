@@ -56,7 +56,7 @@ function rotate_content(item){
 
 function init_btn_group(){
 	$('.go-left').click(function(){//展开上一词条
-	    if(is_index()){
+	    if(is_index()||$("#scroll_list").length==0){
             var c=$("#card-container .collapse.show");
             if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
                 var c_id=c.attr("id");
@@ -72,7 +72,7 @@ function init_btn_group(){
         }
 	});
 	$('.go-right').click(function(){//展开下一词条
-	    if(is_index()){
+	    if(is_index()||$("#scroll_list").length==0){
             var c=$("#card-container .collapse.show");
             //c.length==1表示当前有一个展开的词条
             //$('.ui-autocomplete').css('display')=='none'表示当前查询提示框没有显示
@@ -363,7 +363,8 @@ function init_online_dic_var(){
 }
 
 common_config={'force-refresh':'强制刷新','st-enable':'繁简转化','kana-enable':'假名转化','chaizi-enable':'拆字反查','fh-char-enable':'英文全角转半角',
-'link-new-label':'跳转新标签页','force-font':'强制使用全宋体','card-show':'展开多个词典','select-btn-enable':'启用查询菜单','disable-iframe-click':'屏蔽默认点击',}
+'link-new-label':'跳转新标签页','force-font':'强制使用全宋体','card-show':'展开多个词典','select-btn-enable':'启用查询菜单','disable-iframe-click':'屏蔽默认点击',
+'new-label-link':'新标签页正查'}
 
 function init_common_config(){//这里后面改成从后台取数据
     var c_parent=$('#function-checkbox');
@@ -400,13 +401,14 @@ function init_common_config(){//这里后面改成从后台取数据
         $('#config-st-enable').prop("checked",config['st_enable']);
         $('#config-chaizi-enable').prop("checked",config['chaizi_enable']);
         $('#config-kana-enable').prop("checked",config['kana_enable']);
+        $('#config-new-label-link').prop("checked",config['new_label_link']);
     })
 
 }
 
 function retrieveconfig(async,func){
     $.ajax({
-        url:"/mdict/retrieveconfig",
+        url:"/mdict/retrieveconfig/",
         contentType:'json',
         type:'GET',
         async:async,
@@ -490,6 +492,7 @@ function update_config(){
     var st_enable=$('#config-st-enable').prop("checked");
     var chaizi_enable=$('#config-chaizi-enable').prop("checked");
     var kana_enable=$('#config-kana-enable').prop("checked");
+    var new_label_link=$('#config-new-label-link').prop("checked");
 
 
     var group_name=$('#dic-group').val();

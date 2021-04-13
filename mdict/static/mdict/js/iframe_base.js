@@ -205,9 +205,9 @@ function create_tooltip(e){
         var dic_name=$("html",parent.document).attr("data-dic-name");
 
         var href=window.location.href;
-        var i=href.indexOf('?');
-        if(i>-1){
-            href=href.substring(0,i-1);
+        var mark=href.indexOf('?');
+        if(mark>-1){
+            href=href.substring(0,mark-1);
         }
 
 
@@ -216,7 +216,16 @@ function create_tooltip(e){
         if(dic_pk!=-1){
             url+='&dic_pk='+dic_pk;
         }
-        url+='&token='+ new Date().getTime();
+        //url+='&token='+ new Date().getTime();
+
+        if($('#config-new-label-link',parent.document).prop("checked")){
+            href=window.location.href;
+            mark=href.indexOf('mdict');
+            if(mark>-1){
+                href=href.substring(0,mark);
+            }
+            url=href+'mdict?query='+select_words;
+        }
 
         var t_copy="<span id='t_copy'><a href='javascript:'>复制</a></span>";
         var t_search="<span id='t_search'><a href='javascript:'>查询</a></span>";
