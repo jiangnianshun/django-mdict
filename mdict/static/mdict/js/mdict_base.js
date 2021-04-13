@@ -248,6 +248,8 @@ function add_click_event(){
 			if($("#scroll_list").length>0){
 			    query_key(container,query);
 			}else{
+			    $("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
+			    $("#result_time").attr("data-isover",false);
 			    query_es(query,$("#card-container"),1,true,false)
 			}
 		}
@@ -749,6 +751,13 @@ function init_es_dic(){
     init_common();
 
     get_mdict_list($("#mdict-list-content"),true,true);
+
+    $('#online-mdict-checkbox').hide();
+    //$('#open-close-index').show();
+    $('#open-close-index').click(function(){
+        init_index();
+        $("#init-index-spinner").show();
+    })
 
     first_query();//第一次查询会不会和初始化的0位置查询冲突？
 }

@@ -11,6 +11,7 @@
     //外部js文件无法使用django模板
     $("html").attr("data-dic-pk",-2);
     $("html").attr("data-first-query","{{ query }}");
+    $("#mdict-group-list").hide();
     document.title = "全文搜索";
 	$("link[rel='shortcut icon']").attr('href', '/static/mdict/img/shortcut_es.png');
 	init_es()

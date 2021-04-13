@@ -1017,6 +1017,10 @@ function get_mdict_list(container, es_icon_enable, es_page_enable){//载入词�
 			var dic_pk=$("html").attr("data-dic-pk");
 			if(dic_pk==-2){
                 get_index_status();
+		    }else{
+		        if($("#scroll_list").length==0){
+		            get_index_status();
+		        }
 		    }
 		},
 		error:function(jqXHR,textStatus,errorThrown){
