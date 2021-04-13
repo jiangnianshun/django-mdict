@@ -1086,18 +1086,24 @@ function get_header(container){
 			var d=$.parseJSON(data);
 			var header=d['header'];
 			var num=d['num_entrys'];
+			var mdx_path=d['mdx_path'];
+			var mdd_path=d['mdd_path'];
 			
-			var h_line="<div style='width:100%; border:1px solid gray;margin-top:1em;margin-bottom:1em;'></div>";
+			var h_line="<div style='width:100%;height:1px;border:0;margin-top:1em;margin-bottom:1em;background-color:gray;'></div>";
 			var title="";
 			var description="";
-			var num_entrys="共有词条"+thousands(num)+'条';
+			var num_entrys="词条数量："+thousands(num);
 			var other_attributes="";
 			for(var key in header){
 				if(key!="StyleSheet"&&header[key].length>0){//不显示StyleSheet属性和空属性
 					if(key=="Title"){
-						title=`<div>${header[key]}</div>`;
+						if(header[key]!=''){
+						    title=`<div style="font-size:22px;color:brown;">${header[key]}</div>`;
+						}
 					}else if(key=="Description"){
-						description=`<div>${header[key]}</div>`;
+						if(header[key]!=''){
+						    description=`<div>${header[key]}</div>`;
+						}
 					}else{
 						other_attributes+=`<div>${key}：${header[key]}</div>`;
 					}
@@ -1105,12 +1111,24 @@ function get_header(container){
 				}
 			}
 
-			description=description.replace('height="100%"','').replace("heigth='100%'",'');
+			var file_info=`<div>${mdx_path}</div><div>${mdd_path}</div>`
 
+//			description=description.replace('height="100%"','').replace("heigth='100%'",'');
 			
 			var style="<style>html,body{margin:0;padding:0;}img{max-width:100%;}</style>";
-			
-			var html=style+title+description+h_line+num_entrys+h_line+other_attributes+script;
+
+			if(title==''){
+			    var html=style;
+			}else{
+			    var html=style+title;
+			}
+
+			if(description==''){
+			    html+=h_line+num_entrys;
+			}else{
+			    html+=h_line+num_entrys+h_line+description;
+			}
+			html+=h_line+file_info+h_line+other_attributes+script;
 			
 			var iframe = document.createElement('iframe');
 			iframe.width="100%";
@@ -1126,7 +1144,7 @@ function get_header(container){
                 log:false,
                 checkOrigin:false,
                 resizeFrom:'child',
-                heightCalculationMethod:'lowestElement',
+                heightCalculationMethod:'documentElementOffset',
                 warningTimeout:0,
             },iframe);
 			

@@ -539,6 +539,7 @@ python3 manage.py migrate mdict
 1. 加入新的词典没有显示
 
 重启django-mdict，只有启动时才会检查文件夹变动。
+如果重启无效，尝试手动删除根目录下的.Windows.cache，.Windows.dat，.Linux.cache，.Linex.dat文件后再重启。
 
 2. 部署在wsl上，前端的js、css等无法更新。
 

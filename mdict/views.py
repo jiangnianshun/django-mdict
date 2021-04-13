@@ -759,6 +759,9 @@ def search_mdd(request, *args):
 
     if len(dics) > 0:
         res_name = unquote(args[1]).replace('/', '\\')
+        flag = res_name.rfind('?path=')
+        if flag > -1:
+            res_name = res_name[:flag]
 
         dic = dics[0]
         dic_name = dic.mdict_file
@@ -767,12 +770,10 @@ def search_mdd(request, *args):
             mdx = item.mdx
             mdd_list = item.mdd_list
             res_content, mime_type = SearchObject(mdx, mdd_list, dic, res_name).search_mdd()
-
         if res_content == '':
             if res_name[0] == '\\' or res_name[0] == '/':
                 res_name = res_name[1:]
             file_path = os.path.join(mdict_root_path, path, res_name)
-            # mime_type = mimetypes.guess_type(file_path)[0]
             if os.path.exists(file_path):
                 with open(file_path, 'rb') as f:
                     res_content = f.read()
@@ -814,7 +815,12 @@ class get_dic_info_object(inner_object):
             o = SearchObject(mdx, mdd_list, dic, '')
             header = o.get_header()
             num_entrys = o.get_len()
-            self.inner_dict = {'header': header, 'num_entrys': num_entrys}
+            mdx_path = mdx.get_fpath().replace('\\', '/')
+            mdd_path_list = []
+            for mdd in mdd_list:
+                mdd_path_list.append(mdd.get_fpath())
+            mdd_path = '<br>'.join(mdd_path_list).replace('\\', '/')
+            self.inner_dict = {'header': header, 'num_entrys': num_entrys, 'mdx_path': mdx_path, 'mdd_path': mdd_path}
             self.break_tag = True
 
 
