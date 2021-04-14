@@ -21,13 +21,6 @@ pip install elasticsearch
 pip install elasticsearch-dsl
 ```
 
-linux下是
-
-```
-pip3 install elasticsearch
-pip3 install elasticsearch-dsl
-```
-
 2. 下载elasticsearch并解压，版本7.10.2或7.10.1。
 
 [https://www.elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/elasticsearch)
@@ -144,7 +137,7 @@ curl -X DELETE localhost:9200/_all
 
 es设置文件为config/elasticsearch.yml
 
-1. 设置use_real_memory为false有助于减少CircuitBreakingException Data too large的发生。
+1. 设置use_real_memory为false有助于减少CircuitBreakingException Data too large的发生，但是可能导致es崩溃。
 
 ```
 indices.breaker.total.use_real_memory: false
@@ -167,11 +160,13 @@ discovery.type: single-node
 
 * 创建索引或查询时出现429错误。
 
-1. 尝试增大es分配内存，比如es分配内存为2g，索引时改为4g，索引完成后再改为2g。
+1. 增大es分配内存。
+
+2. 尝试重启es，清除缓存
+
+3. 减小运行的索引数量，将部分索引关闭。
   
-2. 尝试每次只对少量词典创建索引。
-   
-3. 尝试重启es，清除缓存。
+4. 尝试每次只对少量词典创建索引。
 
 * 大量词典创建索引时，卡住不动，cpu占用0%，无报错。
 
