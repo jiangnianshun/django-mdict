@@ -5,7 +5,12 @@
             <div class="input-group">
                 <input autocomplete="off" class="btn btn-outline-secondary" id="query" type="text">
                 <i id="mdict-query-clear" class="bi bi-x input-group-text mdict-icon"></i>
-                <i id="mdict-query" class="bi bi-search btn mdict-icon"></i>
+                {% if type == 'index' or type == 'dic' %}
+                    <i id="mdict-query" class="bi bi-search btn mdict-icon"></i>
+                {% endif %}
+                {% if type == 'es' or type == 'esdic' %}
+                    <i id="mdict-query" class="bi bi-binoculars-fill btn mdict-icon"></i>
+                {% endif %}
             </div>
         </div>
 
