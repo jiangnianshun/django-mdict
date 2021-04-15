@@ -10,7 +10,7 @@ online demo：[http://81.68.207.87/mdict/](http://81.68.207.87/mdict/)
 
 1. install python3。
 
-2. install Visual Studio (check C++ components), or install Microsoft C++ Build Tools (check C++ components).
+2. install Visual Studio (including C++ development components), or install Microsoft C++ Build Tools (including C++ development components).
 
 Visual Studio：
 

@@ -143,7 +143,7 @@ es设置文件为config/elasticsearch.yml
 indices.breaker.total.use_real_memory: false
 ```
 
-2. 禁止内存交换会提高查询效率，但是当内存不足时可能导致崩溃，不建议开启。
+2. 禁止内存交换会提高查询效率，但是当内存不足时可能导致崩溃。
 
 ```
 bootstrap.memory_lock: true
@@ -164,7 +164,7 @@ discovery.type: single-node
 
 2. 尝试重启es，清除缓存
 
-3. 减小运行的索引数量，将部分索引关闭。
+3. 将部分索引关闭，减小同时运行的索引数量。
   
 4. 尝试每次只对少量词典创建索引。
 
