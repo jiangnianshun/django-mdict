@@ -172,6 +172,10 @@ discovery.type: single-node
 
 1. 原因未知，尝试在命令行窗口内选择一段文字，右键复制，可能恢复运行。
 
+* 显示connectionError
+
+es连接失败，确认es已开启且url和端口设置正确。
+
 ### 索引性能测试
 
 ```
