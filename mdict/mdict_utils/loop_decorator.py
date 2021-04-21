@@ -2,33 +2,12 @@ import collections
 import functools
 import time
 from abc import abstractmethod
-from django.db.utils import OperationalError
 
 from mdict.models import MdictDic
 from .data_utils import get_or_create_dic
 from .init_utils import init_vars
 
 values_list = init_vars.mdict_odict.values()
-
-
-def search_exception(default_value=[]):
-    def decorator(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            try:
-                return func(*args, **kwargs)
-            except FileNotFoundError as e:
-                print(e)
-            except OperationalError as e:
-                print(e)
-            except AttributeError as e:
-                print(e)
-
-            return default_value
-
-        return wrapper
-
-    return decorator
 
 
 def loop_mdict_list(return_type=0, timer=False, digit=5):
@@ -84,7 +63,7 @@ def loop_mdict_list(return_type=0, timer=False, digit=5):
     return decorator
 
 
-class inner_object():
+class innerObject:
     def __init__(self, params={}):
         """
 

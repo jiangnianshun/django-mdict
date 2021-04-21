@@ -1,7 +1,7 @@
 from multiprocessing.pool import ThreadPool
 from base.base_func import print_log_info
 from .data_utils import get_or_create_dic
-from .decorator import loop_mdict_list, inner_object
+from .loop_decorator import loop_mdict_list, innerObject
 from .init_utils import init_vars
 from .mdict_config import get_cpunum
 from .multibase import multi_search_mdx
@@ -37,7 +37,7 @@ def check_threadpool_recreate(threadpool):
 
 
 @loop_mdict_list()
-class loop_create_model_object(inner_object):
+class loop_create_model_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         get_or_create_dic(dict_file)
 

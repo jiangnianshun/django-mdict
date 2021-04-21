@@ -22,7 +22,7 @@ except AppRegistryNotReady:
 from .entry_object import EntryObject
 from .init_utils import init_vars
 from .mdict_func import replace_res_name, is_local, get_m_path
-from .decorator import search_exception
+from .exception_decorator import search_exception
 from base.base_func import guess_mime
 
 # 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64，mailto:开头是邮件,javascript:脚本，#开头可能是锚点，www.开头可能是网址，这两个当在mdd中查询不存在时不处理。

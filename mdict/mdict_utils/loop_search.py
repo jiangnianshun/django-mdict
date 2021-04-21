@@ -1,11 +1,11 @@
-from .decorator import loop_mdict_list, inner_object
+from .loop_decorator import loop_mdict_list, innerObject
 from .search_object import SearchObject
 from .mdict_func import get_dic_attrs
 from mdict.models import MdictDicGroup
 
 
 @loop_mdict_list()
-class loop_search_mdx_object(inner_object):
+class loop_search_mdx_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.mdict_enable:  # 词典启用的情况下才会查询
             entry_list = []
@@ -29,7 +29,7 @@ def loop_search_mdx(record_list, query, group):
 
 
 @loop_mdict_list()
-class loop_search_sug_object(inner_object):
+class loop_search_sug_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if self.target_pk != -1:  # 只查询一个词典
             if dic.pk == self.target_pk:

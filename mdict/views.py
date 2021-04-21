@@ -25,7 +25,7 @@ from base.base_func3 import t2s, s2t
 from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
 from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
-from mdict.mdict_utils.decorator import loop_mdict_list, inner_object
+from mdict.mdict_utils.loop_decorator import loop_mdict_list, innerObject
 from mdict.mdict_utils.init_utils import init_vars, sound_list, init_mdict_list
 from mdict.mdict_utils.mdict_config import *
 from mdict.mdict_utils.search_object import SearchObject
@@ -633,7 +633,7 @@ hc = HanziChaizi()
 
 
 @loop_mdict_list(return_type=1)
-class search_mdx_key_object(inner_object):
+class search_mdx_key_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
             result_list = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '').search_key(self.query)
@@ -689,7 +689,7 @@ def search_mdx_key(request):
 
 
 @loop_mdict_list()
-class search_mdx_record_object(inner_object):
+class search_mdx_record_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
             record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id).search_record(self.start, self.end)
@@ -716,7 +716,7 @@ def search_mdx_record(request):
 
 
 @loop_mdict_list(return_type=2)
-class get_mdict_list_object(inner_object):
+class get_mdict_list_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         file = mdx.get_fname()
         m_path = get_m_path(mdx)
@@ -811,7 +811,7 @@ def search_mdd(request, *args):
 
 
 @loop_mdict_list(return_type=1)
-class mdict_all_entrys_object(inner_object):
+class mdict_all_entrys_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
             entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '') \
@@ -838,7 +838,7 @@ def mdict_all_entrys(request):
 
 
 @loop_mdict_list(return_type=1)
-class get_dic_info_object(inner_object):
+class get_dic_info_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
             o = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '')
