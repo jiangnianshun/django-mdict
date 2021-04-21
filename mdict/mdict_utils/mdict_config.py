@@ -2,8 +2,7 @@ import configparser
 import os
 import psutil
 
-from base.base_func import is_number
-from mysite.settings import BASE_DIR
+from base.base_func import is_number, ROOT_DIR
 
 cpu_num = psutil.cpu_count(False)
 
@@ -27,7 +26,7 @@ def get_cpunum():
     return cpu_num
 
 
-user_config_path = os.path.join(BASE_DIR, 'config.ini')
+user_config_path = os.path.join(ROOT_DIR, 'config.ini')
 
 default_config = {
     'COMMON': {

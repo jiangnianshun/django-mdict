@@ -216,7 +216,7 @@ def download_history(request):
 
     for file in file_list:
         try:
-            file_path = os.path.join(BASE_DIR, file)
+            file_path = os.path.join(ROOT_DIR, file)
             with open(file_path, 'r', encoding='utf-8') as f:
                 results = f.readlines()
             for result in results:
@@ -882,7 +882,7 @@ def getwordlist(request):
     word_dict = {}
     for file in file_list:
         try:
-            file_path = os.path.join(BASE_DIR, file)
+            file_path = os.path.join(ROOT_DIR, file)
             with open(file_path, 'r', encoding='utf-8') as f:
                 results = f.readlines()
             for result in results:

@@ -9,7 +9,7 @@ import django
 
 django.setup()
 
-from mysite.settings import BASE_DIR
+from base.base_func import ROOT_DIR
 from mdict.mdict_utils.search_utils import get_mdict_content
 from mdict.models import MyMdictEntry
 
@@ -33,12 +33,12 @@ builtin_dic_prefix = '''
 static_list = [r'static\bootstrap\css\bootstrap.min.css', r'mdict\static\mdict\css\mdict.css']
 # r'mdict\static\mdict\MathJax-master'
 
-export_txt_root_path = os.path.join(BASE_DIR, 'export')
-export_txt_path = os.path.join(BASE_DIR, 'export', 'export.txt')
+export_txt_root_path = os.path.join(ROOT_DIR, 'export')
+export_txt_path = os.path.join(ROOT_DIR, 'export', 'export.txt')
 
 export_data_root_path = os.path.join(export_txt_root_path, 'data')
 
-uploads_path = os.path.join(BASE_DIR, '../media', 'uploads')
+uploads_path = os.path.join(ROOT_DIR, '../media', 'uploads')
 export_uploads_path = os.path.join(export_data_root_path, '../media', 'uploads')
 
 
@@ -67,7 +67,7 @@ def export_to_txt():
     os.chmod(export_txt_path, 0o777)
 
     for s in static_list:
-        data_path = os.path.join(BASE_DIR, s)
+        data_path = os.path.join(ROOT_DIR, s)
         if os.path.isfile(data_path):
             s_name = os.path.basename(data_path)
             target_path = os.path.join(export_data_root_path, s_name)

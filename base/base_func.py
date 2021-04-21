@@ -7,6 +7,8 @@ import re
 from django.http.request import QueryDict
 from base.base_constant import regp
 
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def get_log_header(mod_name, debug_level, start=-1, end=-1):
     dl = ''

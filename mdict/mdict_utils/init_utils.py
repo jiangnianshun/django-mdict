@@ -3,8 +3,7 @@ import pickle
 import time
 import os
 
-from mysite.settings import BASE_DIR
-from base.base_func import print_log_info, guess_mime
+from base.base_func import print_log_info, guess_mime, ROOT_DIR
 from base.sys_utils import get_sys_name
 from .mdict_config import set_cpunum, get_cpunum
 from .mdict_func import rename_history
@@ -24,8 +23,8 @@ except ImportError as e:
 
 from .mdict_func import mdict_root_path, audio_path
 
-pickle_file_path = os.path.join(BASE_DIR, '.' + get_sys_name() + '.cache')
-change_file_path = os.path.join(BASE_DIR, '.' + get_sys_name() + '.dat')
+pickle_file_path = os.path.join(ROOT_DIR, '.' + get_sys_name() + '.cache')
+change_file_path = os.path.join(ROOT_DIR, '.' + get_sys_name() + '.dat')
 
 
 # 这里使用init_vars包裹mdit_list是因为，当其他模块引入mdict_list后，再修改mdict_list，其他模块引入的mdict_list没有改变，因此需要用类包裹。

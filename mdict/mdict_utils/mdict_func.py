@@ -5,20 +5,19 @@ import time
 from urllib.parse import quote
 
 from base.sys_utils import split_os_path, find_os_path
-from base.base_func import is_number
-from mysite.settings import BASE_DIR
+from base.base_func import is_number, ROOT_DIR
 
 mdict_path = os.path.join('media', 'mdict', 'doc')
-mdict_root_path = os.path.join(BASE_DIR, mdict_path)
+mdict_root_path = os.path.join(ROOT_DIR, mdict_path)
 
-history_path = os.path.join(BASE_DIR, 'history.dat')
+history_path = os.path.join(ROOT_DIR, 'history.dat')
 
-audio_path = os.path.join(BASE_DIR, 'media', 'mdict', 'audio')
+audio_path = os.path.join(ROOT_DIR, 'media', 'mdict', 'audio')
 
 mdict_path_list = []
 audio_path_list = []
 
-mdict_path_json = os.path.join(BASE_DIR, 'mdict_path.json')
+mdict_path_json = os.path.join(ROOT_DIR, 'mdict_path.json')
 
 if os.path.exists(mdict_path_json):
     with open(mdict_path_json, 'r', encoding='utf-8') as f:
@@ -84,7 +83,7 @@ is_local = False
 def is_mdict_media_local():
     global is_local
     path1_dict = split_os_path(mdict_root_path)
-    local_mdict_media = os.path.join(BASE_DIR, 'media', 'mdict', 'doc')
+    local_mdict_media = os.path.join(ROOT_DIR, 'media', 'mdict', 'doc')
     path2_dict = split_os_path(local_mdict_media)
 
     ab1 = path1_dict['absolute']
@@ -149,12 +148,12 @@ def write_to_history(query):
 
 def get_history_file():
     file_list = []
-    for file in os.listdir(BASE_DIR):
+    for file in os.listdir(ROOT_DIR):
         if file.startswith('history.dat') and file != 'history.dat':
             file_list.append(file)
 
     file_list.sort(key=lambda x: int(x.split('.')[2]))
-    if os.path.exists(os.path.join(BASE_DIR, 'history.dat')):
+    if os.path.exists(os.path.join(ROOT_DIR, 'history.dat')):
         file_list.append('history.dat')
     return file_list
 
@@ -163,7 +162,7 @@ def rename_history():
     if os.path.exists(history_path) and os.path.getsize(history_path) / (1024 * 1024) > 1:
         try:
             max_num = 0
-            for file in os.listdir(BASE_DIR):
+            for file in os.listdir(ROOT_DIR):
                 if file.startswith('history.dat') and file != 'history.dat':
                     file_split = file.split('.')
                     if len(file_split) == 3:

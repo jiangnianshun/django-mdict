@@ -15,11 +15,11 @@ from nltk.data import path as nltk_path
 from nltk.stem import WordNetLemmatizer
 from spellchecker import SpellChecker
 
+from base.base_func import ROOT_DIR
 from base.base_constant import builtin_dic_prefix, regp
 from base.sys_utils import check_system
 from mdict.models import MyMdictEntry, MyMdictItem
 from .entry_object import EntryObject
-from mysite.settings import BASE_DIR
 from .loop_search import loop_search_sug
 from .mdict_config import get_config_con, get_cpunum
 
@@ -30,7 +30,7 @@ else:
     from .multithread_search import thpool, multithread_search_mdx, multithread_search_sug, \
         check_threadpool_recreate, loop_create_thread_model
 
-nltk_path.append(BASE_DIR + os.sep + 'media' + os.sep + 'nltk_data')
+nltk_path.append(os.path.join(ROOT_DIR, 'media', 'nltk_data'))
 lemmatizer = WordNetLemmatizer()
 lemmatizer.lemmatize('a')
 # WordNetLemmatizer()第一次运行lemmatize()慢，需要初始化，将本地语料库调入内存，耗时1秒多，因此这里要预加载。
