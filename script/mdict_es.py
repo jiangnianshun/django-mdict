@@ -18,6 +18,7 @@ django.setup()
 from mdict.mdict_utils.search_object import SearchObject
 from mdict.models import MdictDic
 from mdict.mdict_utils.init_utils import init_vars
+from mdict.mdict_utils.mdict_func import get_dic_attrs
 
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import parallel_bulk
@@ -82,7 +83,7 @@ class MdictEntry(Document):
 
 
 def get_list(dic, mdx, p1, p2, num, direction=1):
-    s_obj = SearchObject(mdx, None, dic, '')
+    s_obj = SearchObject(mdx, None, get_dic_attrs(dic), '')
     entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = s_obj.search_key_list(p1, p2, num, direction)
 
     return {'entry_list': entry_list, 's_p1': r_s_p1, 's_p2': r_s_p2, 'e_p1': r_e_p1, 'e_p2': r_e_p2,
@@ -171,7 +172,7 @@ def get_content(dic, mdx, entry_list):
         e = entry[2]
         p_list.append((s, e))
 
-    record_list = SearchObject(mdx, None, dic, '').search_record_list(p_list, raw=True)
+    record_list = SearchObject(mdx, None, get_dic_attrs(dic), '').search_record_list(p_list, raw=True)
 
     index_name = get_index_name_with_pk(dic.pk)
 

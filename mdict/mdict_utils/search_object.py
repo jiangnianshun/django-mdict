@@ -16,10 +16,10 @@ from django.core.exceptions import AppRegistryNotReady
 
 try:
     from mdict.models import MdictDic
-    from .entry_object import EntryObject
 except AppRegistryNotReady:
     pass
 
+from .entry_object import EntryObject
 from .init_utils import init_vars
 from .mdict_func import replace_res_name, is_local, get_m_path
 from .decorator import search_exception
@@ -51,11 +51,10 @@ caches_dict = {}
 
 class SearchObject:
     def __init__(self, mdx, mdd_list, dic, required, **extra):
-        self.dic = dic
-        self.dic_id = dic.pk
-        self.dic_name = dic.mdict_name
-        self.dic_file = dic.mdict_file
-        self.prior = dic.mdict_priority
+        self.dic_id = dic[0]
+        self.dic_name = dic[1]
+        self.dic_file = dic[2]
+        self.prior = dic[3]
 
         if isinstance(required, list):
             self.query_list = required
@@ -265,7 +264,7 @@ class SearchObject:
     def search_entry_list(self):
         # 查询一组词
         result_dict = self.mdx.look_up_list(self.query_list, self.f_mdx)
-        self.f_pk = self.dic.pk
+        self.f_pk = self.dic_id
         r_list = []
         t_list = []
         for key in result_dict.keys():
@@ -280,7 +279,7 @@ class SearchObject:
                     # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
                     t_list.append((self.f_p1, self.f_p2))
                     r_list.append(
-                        EntryObject(self.dic_name, rt[4], record, self.prior, self.dic.pk, self.f_pk, self.f_p1,
+                        EntryObject(self.dic_name, rt[4], record, self.prior, self.dic_id, self.f_pk, self.f_p1,
                                     self.f_p2))
         self.close_all()
         return r_list
@@ -292,7 +291,7 @@ class SearchObject:
         self.result_list = result_list
         # result_list 0:start,1:end,2:r_p1,3:r_p2:4:entry,5:record
 
-        self.f_pk = self.dic.pk
+        self.f_pk = self.dic_id
         r_list = []
         for rt in result_list:
             self.f_p1 = rt[2]
@@ -302,7 +301,7 @@ class SearchObject:
             if record != '':
                 # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
                 r_list.append(
-                    EntryObject(self.dic_name, rt[4], record, self.prior, self.dic.pk, self.f_pk, self.f_p1, self.f_p2))
+                    EntryObject(self.dic_name, rt[4], record, self.prior, self.dic_id, self.f_pk, self.f_p1, self.f_p2))
 
         # 英文维基part3查back substitution结果是@@@LINK=Triangular matrixForward and back substitution，
         # LINK指向词条不存在时原样返回

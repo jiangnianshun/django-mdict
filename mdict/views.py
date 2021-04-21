@@ -22,7 +22,7 @@ from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
-from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time
+from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
 from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
 from mdict.mdict_utils.decorator import loop_mdict_list, inner_object
@@ -528,7 +528,7 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
             if not dic.mdict_es_enable:
                 dic.mdict_es_enable = True
                 dic.save()
-            record = SearchObject(mdx, mdd_list, dic, '').substitute_record(hit['content'])
+            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '').substitute_record(hit['content'])
 
             # 去重
             duplication_dict.update({hit['entry'].strip(): [dic.pk]})
@@ -636,7 +636,7 @@ hc = HanziChaizi()
 class search_mdx_key_object(inner_object):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            result_list = SearchObject(mdx, mdd_list, dic, '').search_key(self.query)
+            result_list = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '').search_key(self.query)
             s = -1
             e = -1
             r_p1 = -1
@@ -692,7 +692,7 @@ def search_mdx_key(request):
 class search_mdx_record_object(inner_object):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            record = SearchObject(mdx, mdd_list, dic, self.query, g_id=g_id).search_record(self.start, self.end)
+            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id).search_record(self.start, self.end)
             self.inner_list = [
                 {'mdx_name': dic.mdict_name, 'mdx_entry': self.query, 'mdx_record': record, 'pk': dic.pk}]
             self.break_tag = True
@@ -798,7 +798,7 @@ def search_mdd(request, *args):
             item = init_vars.mdict_odict[dic_name]
             mdx = item.mdx
             mdd_list = item.mdd_list
-            res_content, mime_type = SearchObject(mdx, mdd_list, dic, res_name).search_mdd()
+            res_content, mime_type = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name).search_mdd()
         if res_content == '':
             if res_name[0] == '\\' or res_name[0] == '/':
                 res_name = res_name[1:]
@@ -814,7 +814,7 @@ def search_mdd(request, *args):
 class mdict_all_entrys_object(inner_object):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = SearchObject(mdx, mdd_list, dic, '') \
+            entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '') \
                 .search_key_list(self.p1, self.p2, self.num, self.direction)
             self.inner_dict = {'entry_list': entry_list, 's_p1': r_s_p1, 's_p2': r_s_p2, 'e_p1': r_e_p1, 'e_p2': r_e_p2}
             self.break_tag = True
@@ -841,7 +841,7 @@ def mdict_all_entrys(request):
 class get_dic_info_object(inner_object):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            o = SearchObject(mdx, mdd_list, dic, '')
+            o = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '')
             header = o.get_header()
             num_entrys = o.get_len()
             mdx_path = mdx.get_fpath().replace('\\', '/')

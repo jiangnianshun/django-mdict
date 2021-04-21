@@ -171,7 +171,7 @@ def rename_history():
                             tmp_num = int(file_split[2])
                             if tmp_num > max_num:
                                 max_num = tmp_num
-            os.rename(history_path, history_path + '.' + str(max_num+1))
+            os.rename(history_path, history_path + '.' + str(max_num + 1))
         except Exception as e:
             print(e)
 
@@ -183,3 +183,7 @@ def compare_time(time1, time2):
         return int(s_time) - int(e_time)
     except Exception as e:
         return 0
+
+
+def get_dic_attrs(dic):
+    return dic.pk, dic.mdict_name, dic.mdict_file, dic.mdict_priority
