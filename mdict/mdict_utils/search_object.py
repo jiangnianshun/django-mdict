@@ -18,6 +18,8 @@ try:
     from mdict.models import MdictDic
 except AppRegistryNotReady:
     pass
+except Exception as e:
+    print(e)
 
 from .entry_object import EntryObject
 from .init_utils import init_vars
@@ -50,18 +52,18 @@ caches_dict = {}
 
 
 class SearchObject:
-    def __init__(self, mdx, mdd_list, dic, required, **extra):
+    def __init__(self, mdx, mdd_list, dic, query_list, **extra):
         self.dic_id = dic[0]
         self.dic_name = dic[1]
         self.dic_file = dic[2]
         self.prior = dic[3]
 
-        if isinstance(required, list):
-            self.query_list = required
-            self.query = required[0]
-        elif isinstance(required, str):
-            self.query_list = []
-            self.query = required
+        if isinstance(query_list, list):
+            self.query_list = query_list
+            self.query = query_list[0]
+        elif isinstance(query_list, str):
+            self.query_list = [query_list]
+            self.query = query_list
         else:
             raise Exception('error query type')
 

@@ -7,8 +7,8 @@ from .mdict_config import get_cpunum
 from .multi_base import multi_search_mdx
 
 
-def multithread_search_sug(n, query, group):
-    return multi_search_mdx(n, query, group, is_mdx=False)
+def multithread_search_sug(n, query_list, group):
+    return multi_search_mdx(n, query_list, group, is_mdx=False)
 
 
 def multithread_search_mdx(n, query, group):

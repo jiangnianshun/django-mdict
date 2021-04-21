@@ -46,15 +46,15 @@ spell = SpellChecker(distance=1)
 builtin_dic_name = '内置词典'
 
 
-def search(required, group):
+def search(query_list, group):
     record_list = []
 
-    record_list = search_mdx_dic(required, record_list, group)
+    record_list = search_mdx_dic(query_list, record_list, group)
 
     builtin_dic_enable = get_config_con('builtin_dic_enable')
 
     if builtin_dic_enable:
-        record_list = search_bultin_dic(required, record_list)
+        record_list = search_bultin_dic(query_list, record_list)
 
     return record_list
 
@@ -286,13 +286,13 @@ def mdx_callback(request, result):
     mdx_temp_list.extend(result)
 
 
-def search_mdx_dic(required, record_list, group):
+def search_mdx_dic(query_list, record_list, group):
     global prpool, thpool
     # 查询mdx词典
     cnum = get_cpunum()
     if check_system() == 0:
         # prpool = check_pool_recreate(pool)
-        q_list = ((i, required, group) for i in range(cnum))
+        q_list = ((i, query_list, group) for i in range(cnum))
         a_list = prpool.starmap(multiprocess_search_mdx, q_list)
         for a in a_list:
             record_list.extend(a)
@@ -301,7 +301,7 @@ def search_mdx_dic(required, record_list, group):
         # record_list = loop_search_mdx(record_list, query, group)#for循环查询
 
         # thpool = check_threadpool_recreate(thpool)
-        q_list = ((i, required, group) for i in range(cnum))
+        q_list = ((i, query_list, group) for i in range(cnum))
         a_list = thpool.starmap(multithread_search_mdx, q_list)
         for a in a_list:
             record_list.extend(a)
