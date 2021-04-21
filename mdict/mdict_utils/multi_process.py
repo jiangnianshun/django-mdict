@@ -4,20 +4,20 @@ from base.base_func import print_log_info
 from .data_utils import get_or_create_dic
 from .loop_decorator import loop_mdict_list, innerObject
 from .init_utils import init_vars
-from .mdict_config import get_cpunum
+from .mdict_config import get_cpu_num
 from .multi_base import multi_search_mdx
 
 
-def multiprocess_search_sug(n, required, group):
-    return multi_search_mdx(n, required, group, is_mdx=False)
+def multiprocess_search_sug(n, query_list, group):
+    return multi_search_mdx(n, query_list, group, is_mdx=False)
 
 
-def multiprocess_search_mdx(n, required, group):
-    return multi_search_mdx(n, required, group)
+def multiprocess_search_mdx(n, query_list, group):
+    return multi_search_mdx(n, query_list, group)
 
 
 def create_process_pool():
-    cnum = get_cpunum()
+    cnum = get_cpu_num()
     print_log_info(['creating multiprocessing pool. process number is ', cnum, '.'])
     return multiprocessing.Pool(processes=cnum)
 

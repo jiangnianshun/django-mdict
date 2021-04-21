@@ -19,9 +19,9 @@ try:
 except AppRegistryNotReady:
     pass
 except Exception as e:
-    print(e)
+    pass
 
-from .entry_object import EntryObject
+from .entry_object import entryObject
 from .init_utils import init_vars
 from .mdict_func import replace_res_name, is_local, get_m_path
 from .exception_decorator import search_exception
@@ -281,7 +281,7 @@ class SearchObject:
                     # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
                     t_list.append((self.f_p1, self.f_p2))
                     r_list.append(
-                        EntryObject(self.dic_name, rt[4], record, self.prior, self.dic_id, self.f_pk, self.f_p1,
+                        entryObject(self.dic_name, rt[4], record, self.prior, self.dic_id, self.f_pk, self.f_p1,
                                     self.f_p2))
         self.close_all()
         return r_list
@@ -303,7 +303,7 @@ class SearchObject:
             if record != '':
                 # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
                 r_list.append(
-                    EntryObject(self.dic_name, rt[4], record, self.prior, self.dic_id, self.f_pk, self.f_p1, self.f_p2))
+                    entryObject(self.dic_name, rt[4], record, self.prior, self.dic_id, self.f_pk, self.f_p1, self.f_p2))
 
         # 英文维基part3查back substitution结果是@@@LINK=Triangular matrixForward and back substitution，
         # LINK指向词条不存在时原样返回

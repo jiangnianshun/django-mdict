@@ -19,9 +19,9 @@ from base.base_func import ROOT_DIR
 from base.base_constant import builtin_dic_prefix, regp
 from base.sys_utils import check_system
 from mdict.models import MyMdictEntry, MyMdictItem
-from .entry_object import EntryObject
+from .entry_object import entryObject
 from .loop_search import loop_search_sug
-from .mdict_config import get_config_con, get_cpunum
+from .mdict_config import get_config_con, get_cpu_num
 
 from .multi_process import create_process_pool, multiprocess_search_mdx, multiprocess_search_sug
 from .multi_thread import create_thread_pool, multithread_search_mdx, multithread_search_sug
@@ -81,7 +81,7 @@ def search_revise(query, record_list, is_en):
             for c in c_list:
                 mdict.append('<div><span class="badge bg-secondary">拼写检查</span><a href="entry://' + c + '">'
                              + c + '</a></div>')
-        record_list.append(EntryObject(builtin_dic_name, query, ''.join(mdict), 0, -1, -1, -1, -1))
+        record_list.append(entryObject(builtin_dic_name, query, ''.join(mdict), 0, -1, -1, -1, -1))
     return record_list
 
 
@@ -137,7 +137,7 @@ def sug_callback(request, result):
 
 def search_mdx_sug(dic_pk, required, group, flag):
     global prpool, thpool
-    cnum = get_cpunum()
+    cnum = get_cpu_num()
     sug = []
     if check_system() == 0 and dic_pk == -1:
         # prpool = check_pool_recreate(pool)
@@ -225,7 +225,7 @@ def extract_bultin_dic_all(r_list):
         mdx_entry.append('【' + str(len(r_list)) + '】')
 
     if r_list_len > 0:
-        return EntryObject(builtin_dic_name, ''.join(mdx_entry), ''.join(mdict), 0, -1, -1, -1, -1)
+        return entryObject(builtin_dic_name, ''.join(mdx_entry), ''.join(mdict), 0, -1, -1, -1, -1)
     else:
         return None
 
@@ -289,7 +289,7 @@ def mdx_callback(request, result):
 def search_mdx_dic(query_list, record_list, group):
     global prpool, thpool
     # 查询mdx词典
-    cnum = get_cpunum()
+    cnum = get_cpu_num()
     if check_system() == 0:
         # prpool = check_pool_recreate(pool)
         q_list = ((i, query_list, group) for i in range(cnum))

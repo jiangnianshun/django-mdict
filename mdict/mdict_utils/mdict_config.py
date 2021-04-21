@@ -5,12 +5,10 @@ import psutil
 from base.base_func import is_number, ROOT_DIR
 
 cpu_num = psutil.cpu_count(False)
-
-
 # cpu的物理核心数
 
 
-def set_cpunum(t_list_len):
+def set_cpu_num(t_list_len):
     global cpu_num
     cnum = round(t_list_len / 10)
 
@@ -21,7 +19,7 @@ def set_cpunum(t_list_len):
         cpu_num = 1
 
 
-def get_cpunum():
+def get_cpu_num():
     global cpu_num
     return cpu_num
 

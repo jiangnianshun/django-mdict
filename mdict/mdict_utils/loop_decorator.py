@@ -3,7 +3,11 @@ import functools
 import time
 from abc import abstractmethod
 
-from mdict.models import MdictDic
+try:
+    from mdict.models import MdictDic
+except Exception as e:
+    pass
+
 from .data_utils import get_or_create_dic
 from .init_utils import init_vars
 

@@ -5,7 +5,7 @@ import os
 
 from base.base_func import print_log_info, guess_mime, ROOT_DIR
 from base.sys_utils import get_sys_name
-from .mdict_config import set_cpunum, get_cpunum
+from .mdict_config import set_cpu_num, get_cpu_num
 from .mdict_func import rename_history
 
 print_log_info(['system is', get_sys_name(), '.'])
@@ -30,6 +30,7 @@ change_file_path = os.path.join(ROOT_DIR, '.' + get_sys_name() + '.dat')
 # 这里使用init_vars包裹mdit_list是因为，当其他模块引入mdict_list后，再修改mdict_list，其他模块引入的mdict_list没有改变，因此需要用类包裹。
 class initVars:
     mdict_odict = collections.OrderedDict()
+    indicator = []
     need_recreate = False
 
 
@@ -153,20 +154,21 @@ def load_cache():
         if len(init_vars.mdict_odict) > 0:
             write_cache()
 
-    init_vars.mdict_odict = sort_mdict_list(init_vars.mdict_odict)  # 生成indicator
+    init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)  # 生成indicator
 
 
 def write_cache():
     write_pickle_file(pickle_file_path)
 
 
-indicator = []
+# indicator = []
 
 
 def sort_mdict_list(t_list):
     sorted(t_list.items(), key=lambda k: k[1].num)
-    set_cpunum(len(t_list))
-    cnum = get_cpunum()
+    indicator = []
+    set_cpu_num(len(t_list))
+    cnum = get_cpu_num()
 
     for i in range(cnum):
         indicator.append(list())
@@ -188,7 +190,7 @@ def sort_mdict_list(t_list):
             inc = True
             n = 0
 
-    return t_list
+    return t_list, indicator
 
 
 def read_change():
@@ -266,7 +268,7 @@ def init_mdict_list(rewrite_cache):
 
         init_vars.mdict_odict.clear()
         init_vars.mdict_odict = get_mdict_list()
-        init_vars.mdict_odict = sort_mdict_list(init_vars.mdict_odict)
+        init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
         t2 = time.perf_counter()
         print_log_info('initializing mdict_list', 0, t1, t2)
         write_cache()

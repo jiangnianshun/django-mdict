@@ -1,25 +1,44 @@
+import os
 import html
 from django.core.exceptions import AppRegistryNotReady
 from django.db.utils import OperationalError as DjangoError
 from sqlite3 import OperationalError as Sqlite3Error
 from mdict.mdict_utils.init_utils import init_vars
+from base.base_func import read_from_sqlite, ROOT_DIR
+
+is_django = True
 
 try:
     from mdict.models import MdictDic
 except AppRegistryNotReady as e:
     print(e)
+except Exception as e:
+    is_django = False
+    pass
 
+sql3_path = os.path.join(ROOT_DIR, 'db.sqlite3')
 
 def get_all_dic():
-    return MdictDic.objects.all()
+    if is_django:
+        return MdictDic.objects.all()
+    else:
+        dics_dict = {}
+        all_dics = read_from_sqlite(sql3_path, 'select * from mdict_mdictdic')
+        for tdic in all_dics:
+            if tdic[2] not in dics_dict.keys():
+                dics_dict.update({tdic[2]: tdic})
+        return dics_dict
 
 
 def get_or_create_dic(dict_file):
-    dics = MdictDic.objects.filter(mdict_file=dict_file)
-    if len(dics) == 0:
-        dic = MdictDic.objects.create(mdict_name=dict_file, mdict_file=dict_file)
+    if is_django:
+        dics = MdictDic.objects.filter(mdict_file=dict_file)
+        if len(dics) == 0:
+            dic = MdictDic.objects.create(mdict_name=dict_file, mdict_file=dict_file)
+        else:
+            dic = dics[0]
     else:
-        dic = dics[0]
+        dic = None
 
     return dic
 

@@ -31,7 +31,7 @@ from mdict.mdict_utils.mdict_config import *
 from mdict.mdict_utils.search_object import SearchObject
 from mdict.mdict_utils.search_utils import search, clear_duplication, search_bultin_dic_sug, search_mdx_sug, \
     search_revise
-from .mdict_utils.entry_object import EntryObject
+from .mdict_utils.entry_object import entryObject
 
 from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
@@ -517,7 +517,7 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
                 dic_pk = 1
             record = hit['content']
             result.append(
-                EntryObject(rd['name'], hit['entry'], record, 1, dic_pk, 1, 1, 1, extra=highlight_content_text))
+                entryObject(rd['name'], hit['entry'], record, 1, dic_pk, 1, 1, 1, extra=highlight_content_text))
             continue
 
         mdx = item.mdx
@@ -542,7 +542,7 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
                 else:
                     duplication_dict.update({link2entry: [dic.pk]})
 
-            result.append(EntryObject(rd['name'], hit['entry'], record, 1, dic.pk, 1, 1, 1, extra=highlight_content_text))
+            result.append(entryObject(rd['name'], hit['entry'], record, 1, dic.pk, 1, 1, 1, extra=highlight_content_text))
         else:
             print(index_name, 'not exists in database.')
 

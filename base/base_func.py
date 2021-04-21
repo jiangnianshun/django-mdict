@@ -3,6 +3,7 @@ import json
 import mimetypes
 import os
 import re
+import sqlite3
 
 from django.http.request import QueryDict
 from base.base_constant import regp
@@ -207,3 +208,12 @@ def kh2f(words):
         else:
             trans_words += w
     return trans_words
+
+
+def read_from_sqlite(db_path, exec_cmd):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    conn.row_factory = sqlite3.Row
+    cursor.execute(exec_cmd)
+    rows = cursor.fetchall()
+    return rows
