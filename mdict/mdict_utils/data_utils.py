@@ -6,14 +6,14 @@ from sqlite3 import OperationalError as Sqlite3Error
 from mdict.mdict_utils.init_utils import init_vars
 from base.base_func import read_from_sqlite, ROOT_DIR
 
-is_django = True
+is_django = False
 
 try:
     from mdict.models import MdictDic
+    is_django = True
 except AppRegistryNotReady as e:
     print(e)
 except Exception as e:
-    is_django = False
     pass
 
 sql3_path = os.path.join(ROOT_DIR, 'db.sqlite3')

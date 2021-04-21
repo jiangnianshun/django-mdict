@@ -114,7 +114,8 @@ def multi_search_mdx(n, query_list, group, is_mdx=True):
         if dic.mdict_enable:
             if group == 0:  # 默认查询全部词典
                 if is_mdx:
-                    r_list.extend(SearchObject(mdx, mdd_list, get_dic_attrs(dic), query_list, g_id=g_id).search_entry_list())
+                    r_list.extend(
+                        SearchObject(mdx, mdd_list, get_dic_attrs(dic), query_list, g_id=g_id).search_entry_list())
                 else:
                     r_list.extend(SearchObject(mdx, mdd_list, get_dic_attrs(dic), query_list).search_sug_list(3))
             else:  # 查询某个词典分组下的词典

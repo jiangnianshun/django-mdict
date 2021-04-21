@@ -22,6 +22,7 @@ from mdict.models import MyMdictEntry, MyMdictItem
 from .entry_object import entryObject
 from .loop_search import loop_search_sug
 from .mdict_config import get_config_con, get_cpu_num
+from .ws_client import ws_search
 
 from .multi_process import create_process_pool, multiprocess_search_mdx, multiprocess_search_sug
 from .multi_thread import create_thread_pool, multithread_search_mdx, multithread_search_sug
@@ -298,13 +299,16 @@ def search_mdx_dic(query_list, record_list, group):
             record_list.extend(a)
 
     else:
-        # record_list = loop_search_mdx(record_list, query, group)#for循环查询
+        if group == 0:
+            record_list.extend(ws_search(query_list))
+        else:
+            # record_list = loop_search_mdx(record_list, query, group)#for循环查询
 
-        # thpool = check_threadpool_recreate(thpool)
-        q_list = ((i, query_list, group) for i in range(cnum))
-        a_list = thpool.starmap(multithread_search_mdx, q_list)
-        for a in a_list:
-            record_list.extend(a)
+            # thpool = check_threadpool_recreate(thpool)
+            q_list = ((i, query_list, group) for i in range(cnum))
+            a_list = thpool.starmap(multithread_search_mdx, q_list)
+            for a in a_list:
+                record_list.extend(a)
 
     return record_list
 
