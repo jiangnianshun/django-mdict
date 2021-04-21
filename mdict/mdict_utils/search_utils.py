@@ -23,12 +23,16 @@ from .entry_object import EntryObject
 from .loop_search import loop_search_sug
 from .mdict_config import get_config_con, get_cpunum
 
+from .multi_process import create_process_pool, multiprocess_search_mdx, multiprocess_search_sug
+from .multi_thread import create_thread_pool, multithread_search_mdx, multithread_search_sug
+
+prpool = None
+thpool = None
+
 if check_system() == 0:
-    from .multiprocess_search import pool, multiprocess_search_mdx, multiprocess_search_sug, check_pool_recreate, \
-        loop_create_model
+    prpool = create_process_pool()
 else:
-    from .multithread_search import thpool, multithread_search_mdx, multithread_search_sug, \
-        check_threadpool_recreate, loop_create_thread_model
+    thpool = create_thread_pool()
 
 nltk_path.append(os.path.join(ROOT_DIR, 'media', 'nltk_data'))
 lemmatizer = WordNetLemmatizer()
@@ -132,20 +136,20 @@ def sug_callback(request, result):
 
 
 def search_mdx_sug(dic_pk, required, group, flag):
-    global pool, thpool
+    global prpool, thpool
     cnum = get_cpunum()
     sug = []
     if check_system() == 0 and dic_pk == -1:
-        pool = check_pool_recreate(pool)
+        # prpool = check_pool_recreate(pool)
 
         q_list = ((i, required, group) for i in range(cnum))
-        record_list = pool.starmap(multiprocess_search_sug, q_list)
+        record_list = prpool.starmap(multiprocess_search_sug, q_list)
         for r in record_list:
             sug.extend(r)
     elif check_system() == 1 and dic_pk == -1:
         # sug.extend(loop_search_sug(dic_pk, query, flag, group))#for循环查询
 
-        thpool = check_threadpool_recreate(thpool)
+        # thpool = check_threadpool_recreate(thpool)
 
         q_list = ((i, required, group) for i in range(cnum))
         record_list = thpool.starmap(multithread_search_sug, q_list)
@@ -283,20 +287,20 @@ def mdx_callback(request, result):
 
 
 def search_mdx_dic(required, record_list, group):
-    global pool, thpool
+    global prpool, thpool
     # 查询mdx词典
     cnum = get_cpunum()
     if check_system() == 0:
-        pool = check_pool_recreate(pool)
+        # prpool = check_pool_recreate(pool)
         q_list = ((i, required, group) for i in range(cnum))
-        a_list = pool.starmap(multiprocess_search_mdx, q_list)
+        a_list = prpool.starmap(multiprocess_search_mdx, q_list)
         for a in a_list:
             record_list.extend(a)
 
     else:
         # record_list = loop_search_mdx(record_list, query, group)#for循环查询
 
-        thpool = check_threadpool_recreate(thpool)
+        # thpool = check_threadpool_recreate(thpool)
         q_list = ((i, required, group) for i in range(cnum))
         a_list = thpool.starmap(multithread_search_mdx, q_list)
         for a in a_list:

@@ -4,7 +4,7 @@ from .data_utils import get_or_create_dic
 from .loop_decorator import loop_mdict_list, innerObject
 from .init_utils import init_vars
 from .mdict_config import get_cpunum
-from .multibase import multi_search_mdx
+from .multi_base import multi_search_mdx
 
 
 def multithread_search_sug(n, query, group):
@@ -15,7 +15,7 @@ def multithread_search_mdx(n, query, group):
     return multi_search_mdx(n, query, group)
 
 
-def create_threadpool():
+def create_thread_pool():
     cnum = get_cpunum()
     print_log_info(['creating multithreading pool. thread number is ', cnum, '.'])
     return ThreadPool(cnum)
@@ -30,7 +30,7 @@ def check_threadpool_recreate(threadpool):
     # 重建进程池
     if init_vars.need_recreate:
         terminate_threadpool(threadpool)
-        threadpool = create_threadpool()
+        threadpool = create_thread_pool()
         print_log_info('recreating multithreading pool success.')
         init_vars.need_recreate = False
     return threadpool
@@ -46,7 +46,7 @@ def loop_create_thread_model():
     global thpool
     terminate_threadpool(thpool)
     loop_create_model_object({})
-    thpool = create_threadpool()
+    thpool = create_thread_pool()
 
 
-thpool = create_threadpool()
+# thpool = create_thread_pool()

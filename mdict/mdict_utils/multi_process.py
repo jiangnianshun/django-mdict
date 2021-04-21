@@ -5,7 +5,7 @@ from .data_utils import get_or_create_dic
 from .loop_decorator import loop_mdict_list, innerObject
 from .init_utils import init_vars
 from .mdict_config import get_cpunum
-from .multibase import multi_search_mdx
+from .multi_base import multi_search_mdx
 
 
 def multiprocess_search_sug(n, required, group):
@@ -16,7 +16,7 @@ def multiprocess_search_mdx(n, required, group):
     return multi_search_mdx(n, required, group)
 
 
-def create_pool():
+def create_process_pool():
     cnum = get_cpunum()
     print_log_info(['creating multiprocessing pool. process number is ', cnum, '.'])
     return multiprocessing.Pool(processes=cnum)
@@ -32,7 +32,7 @@ def check_pool_recreate(pool):
     # 重建进程池
     if init_vars.need_recreate:
         terminate_pool(pool)
-        pool = create_pool()
+        pool = create_process_pool()
         print_log_info('recreating multiprocessing pool success.')
         init_vars.need_recreate = False
     return pool
@@ -48,7 +48,7 @@ def loop_create_model():
     global pool
     terminate_pool(pool)
     loop_create_model_object({})
-    pool = create_pool()
+    pool = create_process_pool()
 
 
-pool = create_pool()
+# pool = create_process_pool()
