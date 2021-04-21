@@ -18,7 +18,7 @@ from spellchecker import SpellChecker
 from base.base_constant import builtin_dic_prefix, regp
 from base.sys_utils import check_system
 from mdict.models import MyMdictEntry, MyMdictItem
-from mdict.serializers import mdxentry
+from .entry_object import EntryObject
 from mysite.settings import BASE_DIR
 from .loop_search import loop_search_sug
 from .mdict_config import get_config_con, get_cpunum
@@ -77,7 +77,7 @@ def search_revise(query, record_list, is_en):
             for c in c_list:
                 mdict.append('<div><span class="badge bg-secondary">拼写检查</span><a href="entry://' + c + '">'
                              + c + '</a></div>')
-        record_list.append(mdxentry(builtin_dic_name, query, ''.join(mdict), 0, -1, -1, -1, -1))
+        record_list.append(EntryObject(builtin_dic_name, query, ''.join(mdict), 0, -1, -1, -1, -1))
     return record_list
 
 
@@ -221,7 +221,7 @@ def extract_bultin_dic_all(r_list):
         mdx_entry.append('【' + str(len(r_list)) + '】')
 
     if r_list_len > 0:
-        return mdxentry(builtin_dic_name, ''.join(mdx_entry), ''.join(mdict), 0, -1, -1, -1, -1)
+        return EntryObject(builtin_dic_name, ''.join(mdx_entry), ''.join(mdict), 0, -1, -1, -1, -1)
     else:
         return None
 

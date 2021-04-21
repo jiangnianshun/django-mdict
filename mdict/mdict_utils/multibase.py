@@ -3,7 +3,7 @@ from .data_utils import get_or_create_dic, get_all_dic
 from .init_utils import init_vars, indicator
 from .search_object import SearchObject
 
-from mdict.serializers import mdxentry
+from .entry_object import EntryObject
 from mdict.models import MdictDicGroup
 
 values_dict = init_vars.mdict_odict
@@ -52,7 +52,7 @@ def merge_record(record_list):
         else:
             if counter > 1:
                 entry = entry[1:] + '【' + str(counter) + '】'
-                t_list.append(mdxentry(name, entry, record, pror, old_mdx_pk, -1, -1, -1))
+                t_list.append(EntryObject(name, entry, record, pror, old_mdx_pk, -1, -1, -1))
                 del_list.append(del_item.copy())
 
             name = mdx_name
@@ -67,7 +67,7 @@ def merge_record(record_list):
         if i == 0:
             if counter > 1:
                 entry = entry[1:] + '【' + str(counter) + '】'
-                t_list.append(mdxentry(name, entry, record, pror, old_mdx_pk, -1, -1, -1))
+                t_list.append(EntryObject(name, entry, record, pror, old_mdx_pk, -1, -1, -1))
                 del_list.append(del_item.copy())
 
     for item in del_list:
