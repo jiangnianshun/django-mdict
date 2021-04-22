@@ -494,6 +494,12 @@ ws.run "wsl -d ubuntu -u root /etc/init.d/apache2 start", vbhid
 
 * 如果不需要保存旧数据，重新git clone，并清除浏览器缓存（不需要清cookie）。
 
+如果requirements1.txt中有新增的依赖，需要安装依赖。
+
+```
+pip install -r requirements1.txt
+```
+
 如果需要转移保存的查询历史，将旧的django-mdict根目录下所有history开头的dat文件移动到新的django-mdict根目录。
 
 * 如果需要保存旧数据，运行git pull更新项目，然后清除浏览器缓存（不需要清cookie）。

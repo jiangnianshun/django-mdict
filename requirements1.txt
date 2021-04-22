@@ -1,6 +1,7 @@
 django
 djangorestframework
 django-ckeditor
+websockets
 elasticsearch
 elasticsearch_dsl
 nltk
