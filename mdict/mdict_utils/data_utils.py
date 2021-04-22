@@ -12,7 +12,7 @@ try:
     from mdict.models import MdictDic
     is_django = True
 except AppRegistryNotReady as e:
-    print(e)
+    pass
 except Exception as e:
     pass
 

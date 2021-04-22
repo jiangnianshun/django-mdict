@@ -136,14 +136,14 @@ def sug_callback(request, result):
     sug_temp_list.extend(result)
 
 
-def search_mdx_sug(dic_pk, required, group, flag):
+def search_mdx_sug(dic_pk, sug_list, group, flag):
     global prpool, thpool
     cnum = get_cpu_num()
     sug = []
     if check_system() == 0 and dic_pk == -1:
         # prpool = check_pool_recreate(pool)
 
-        q_list = ((i, required, group) for i in range(cnum))
+        q_list = ((i, sug_list, group) for i in range(cnum))
         record_list = prpool.starmap(multiprocess_search_sug, q_list)
         for r in record_list:
             sug.extend(r)
@@ -151,13 +151,22 @@ def search_mdx_sug(dic_pk, required, group, flag):
         # sug.extend(loop_search_sug(dic_pk, query, flag, group))#for循环查询
 
         # thpool = check_threadpool_recreate(thpool)
-
-        q_list = ((i, required, group) for i in range(cnum))
-        record_list = thpool.starmap(multithread_search_sug, q_list)
-        for r in record_list:
-            sug.extend(r)
+        if group == 0:
+            try:
+                sug.extend(ws_search(sug_list, 'sug'))
+            except Exception as e:
+                print(e)
+                q_list = ((i, sug_list, group) for i in range(cnum))
+                record_list = thpool.starmap(multithread_search_sug, q_list)
+                for r in record_list:
+                    sug.extend(r)
+        else:
+            q_list = ((i, sug_list, group) for i in range(cnum))
+            record_list = thpool.starmap(multithread_search_sug, q_list)
+            for r in record_list:
+                sug.extend(r)
     else:  # 单个词典的查询提示
-        sug.extend(loop_search_sug(dic_pk, required, flag, group))
+        sug.extend(loop_search_sug(dic_pk, sug_list, flag, group))
 
     return sug
 
@@ -300,7 +309,14 @@ def search_mdx_dic(query_list, record_list, group):
 
     else:
         if group == 0:
-            record_list.extend(ws_search(query_list))
+            try:
+                record_list.extend(ws_search(query_list, 'dic'))
+            except Exception as e:
+                print(e)
+                q_list = ((i, query_list, group) for i in range(cnum))
+                a_list = thpool.starmap(multithread_search_mdx, q_list)
+                for a in a_list:
+                    record_list.extend(a)
         else:
             # record_list = loop_search_mdx(record_list, query, group)#for循环查询
 

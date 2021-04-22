@@ -8,7 +8,8 @@ import websockets
 root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(root_path)
 
-from mdict.mdict_utils.multi_process import multiprocess_search_mdx, create_process_pool, get_cpu_num
+from mdict.mdict_utils.multi_process import multiprocess_search_mdx, multiprocess_search_sug, create_process_pool, \
+    get_cpu_num
 from mdict.mdict_utils.object_coder import objectEncoder
 from mdict.mdict_utils.init_utils import init_mdict_list
 
@@ -18,18 +19,32 @@ cnum = 1
 
 
 async def ws_search(websocket, path):
-    query_list = json.loads(await websocket.recv())
+    params = json.loads(await websocket.recv())
+    query_list = params['query_list']
+    if 'group' in params.keys():
+        group = params['group']
+    else:
+        group = 0
+    if 'query_type' in params.keys():
+        query_type = params['query_type']
+    else:
+        query_type = 'dic'
 
-    record_list = []
-
-    group = 0
+    result_list = []
 
     q_list = ((i, query_list, group) for i in range(cnum))
-    a_list = prpool.starmap(multiprocess_search_mdx, q_list)
-    for a in a_list:
-        record_list.extend(a)
+    if query_type == 'dic':
+        r_list = prpool.starmap(multiprocess_search_mdx, q_list)
+    else:
+        r_list = prpool.starmap(multiprocess_search_sug, q_list)
+    for ri in r_list:
+        result_list.extend(ri)
 
-    result = json.dumps(record_list, cls=objectEncoder)
+    if query_type == 'dic':
+        result = json.dumps(result_list, cls=objectEncoder)
+    else:
+        result = json.dumps(result_list)
+
     await websocket.send(result)
 
 

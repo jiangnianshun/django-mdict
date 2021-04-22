@@ -8,8 +8,8 @@ from .mdict_config import get_cpu_num
 from .multi_base import multi_search_mdx
 
 
-def multiprocess_search_sug(n, query_list, group):
-    return multi_search_mdx(n, query_list, group, is_mdx=False)
+def multiprocess_search_sug(n, sug_list, group):
+    return multi_search_mdx(n, sug_list, group, is_mdx=False)
 
 
 def multiprocess_search_mdx(n, query_list, group):
