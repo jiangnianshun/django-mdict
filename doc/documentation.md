@@ -38,7 +38,7 @@
 ### PWA支持
 
 在本地浏览器上打开时，点击主页面、查询页面或者全文搜索页面地址栏上的安装按钮，可以安装为PWA应用，默认打开页面是查询页面。
-1：如果django-mdict页面没有设置为主页或收藏，需要手动输入url打开页面，安装为PWA后只需要点击图标打开。
+1：如果django-mdict页面没有设置为主页，需要手动输入url打开页面，安装为PWA后只需要点击图标打开。
 2：安装为PWA后窗口没有地址栏。
 
 在安卓chrome浏览器上，PWA安装需要https支持，否则只能选择添加到主屏幕，和普通网页添加到主屏幕相比，没有地址栏。
@@ -67,7 +67,7 @@
 
 3. 不支持IE浏览器。
 
-4. 不支持mdx文件名重复。
+4. 不支持mdx文件名重复，只会载入重名mdx的其中一个。
 
 ### admin操作
 
@@ -192,9 +192,9 @@ WFG博客：[https://fgwang.blogspot.com/](https://fgwang.blogspot.com/)
 
 pdawiki部件检索和全宋体：[https://www.pdawiki.com/forum/forum.php?mod=viewthread&tid=23133&highlight=%E9%83%A8%E4%BB%B6%E6%A3%80%E7%B4%A2](https://www.pdawiki.com/forum/forum.php?mod=viewthread&tid=23133&highlight=%E9%83%A8%E4%BB%B6%E6%A3%80%E7%B4%A2)
 
-集成了部件检索和全宋体，由于chrome不支持大于30MB的字体，因此将FSung-2.ttf拆成FSung-2-1.ttf和FSung-2-2.ttf。
+集成了部件检索和全宋体，由于chrome不支持大于30MB的字体，因此将FSung-2.ttf和FSung-F.ttf进行了拆分。
 
-建议部署到apache，并设置浏览器文件缓存时长（expires_module模块），这样只有第一次需要下载字体，全宋体大小95.5MB。
+建议部署到apache，并设置浏览器文件缓存时长（expires_module模块），这样只有第一次需要下载字体，全宋体大小126MB。
 
 部件检索相比于拆字反查更准确，比如输入山鸟，得到嶋、嶌和㠀。
 
@@ -206,7 +206,7 @@ pdawiki部件检索和全宋体：[https://www.pdawiki.com/forum/forum.php?mod=v
 
 部分pdf复制的字符是全角字符，查询时会全角查询一遍，转化为半角再查询一遍。
 
-日文平假名和片假名自动转换，半角平假名会转换为全角片假名。
+日文平假名和片假名自动转换，半角片假名会转换为全角片假名。
 
 ### 同名加载
 
@@ -411,7 +411,7 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 
 ### 在wsl上运行测试服务器
 
-windows下django无法调用多进程，建议部署到wsl，建议使用wsl1。
+windows下建议部署到wsl1。
 
 1. 安装wsl，系统ubuntu，建议使用18.04。
 
@@ -448,7 +448,7 @@ bash run_server.sh
 
 ### 部署到wsl apache
 
-windows下django无法调用多进程，建议部署到wsl，建议使用wsl1。
+windows下建议部署到wsl1。
 
 1. 安装wsl，系统ubuntu，建议使用18.04。
 
