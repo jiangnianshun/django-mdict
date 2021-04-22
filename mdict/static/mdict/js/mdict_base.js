@@ -364,14 +364,14 @@ function init_online_dic_var(){
 
 common_config={'force-refresh':'强制刷新','st-enable':'繁简转化','kana-enable':'假名转化','chaizi-enable':'拆字反查','fh-char-enable':'英文全角转半角',
 'link-new-label':'跳转新标签页','force-font':'强制使用全宋体','card-show':'展开多个词典','select-btn-enable':'启用查询菜单','disable-iframe-click':'屏蔽默认点击',
-'new-label-link':'新标签页正查'}
+'new-label-link':'新标签页正查','compute-every-element':'精确计算高度'}
 
 function init_common_config(){//这里后面改成从后台取数据
     var c_parent=$('#function-checkbox');
     var row_ele='<div class="row"><div id="config-col-1" class="col"></div><div id="config-col-2" class="col"></div></div>';
     c_parent.append(row_ele)
     var i=1;
-    var col_num=5;
+    var col_num=6;
 
     for(var key in common_config){
         var c_id="config-"+key;
@@ -391,17 +391,11 @@ function init_common_config(){//这里后面改成从后台取数据
     }
 
     retrieveconfig(true,function(config){
-        $('#config-force-refresh').prop("checked",config['force_refresh']);
-        $('#config-link-new-label').prop("checked",config['link_new_label']);
-        $('#config-force-font').prop("checked",config['force_font']);
-        $('#config-card-show').prop("checked",config['card_show']);
-        $('#config-select-btn-enable').prop("checked",config['select_btn_enable']);
-        $('#config-disable-iframe-click').prop("checked",config['disable_iframe_click']);
-        $('#config-fh-char-enable').prop("checked",config['fh_char_enable']);
-        $('#config-st-enable').prop("checked",config['st_enable']);
-        $('#config-chaizi-enable').prop("checked",config['chaizi_enable']);
-        $('#config-kana-enable').prop("checked",config['kana_enable']);
-        $('#config-new-label-link').prop("checked",config['new_label_link']);
+        for(var key in common_config){
+            config_id='#config-'+key;
+            config_param=key.replace(/-/g,'_');
+            $(config_id).prop("checked",config[config_param]);
+        }
     })
 
 }
@@ -482,26 +476,17 @@ function init_modal_config(){
 }
 
 function update_config(){
-    var force_refresh=$('#config-force-refresh').prop("checked");
-    var link_new_label=$('#config-link-new-label').prop("checked");
-    var force_font=$('#config-force-font').prop("checked");
-    var card_show=$('#config-card-show').prop("checked");
-    var select_btn_enable=$('#config-select-btn-enable').prop("checked");
-    var disable_iframe_click=$('#config-disable-iframe-click').prop("checked");
-    var fh_char_enable=$('#config-fh-char-enable').prop("checked");
-    var st_enable=$('#config-st-enable').prop("checked");
-    var chaizi_enable=$('#config-chaizi-enable').prop("checked");
-    var kana_enable=$('#config-kana-enable').prop("checked");
-    var new_label_link=$('#config-new-label-link').prop("checked");
-
-
     var group_name=$('#dic-group').val();
     var default_group=$('#dic-group').find('option:contains('+group_name+')').attr('data-pk');
 
-    var data={"force_refresh":force_refresh,"link_new_label":link_new_label,
-    "force_font":force_font,"card_show":card_show,"select_btn_enable":select_btn_enable,"default_group":default_group,
-    "disable_iframe_click":disable_iframe_click,"fh_char_enable":fh_char_enable,"st_enable":st_enable,
-    "chaizi_enable":chaizi_enable,"kana_enable":kana_enable};
+    var data={"default_group":default_group};
+    var data={};
+    for(var key in common_config){
+        config_id='#config-'+key;
+        config_param=key.replace(/-/g,'_');
+        config_checked=$(config_id).prop("checked");
+        data[config_param]=config_checked;
+    }
     $.ajax({
             url:"/mdict/saveconfig",
             contentType:'json',

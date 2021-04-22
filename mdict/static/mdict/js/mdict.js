@@ -163,7 +163,7 @@ function create_html(mdx_pk,mdx_name,mdx_record){
             <meta name="referrer" content="never">
             ${header}
         </head>
-            <body data-pk="${mdx_pk}">
+        <body data-pk="${mdx_pk}">
             ${mdx_record}
         </body>
     </html>
@@ -220,13 +220,19 @@ function bind_card(iframe,html){
     card.on('shown.bs.collapse',function(){
         //shown.bs.collapse是collapse展开完成事件
         var iframe_content=$(iframe).contents();
+        var compute_every_element=$('#config-compute-every-element').prop("checked");
+        if(compute_every_element){
+            var width_calculation_method='lowestElement';
+        }else{
+            var width_calculation_method='documentElementOffset';
+        }
         if($(iframe).attr('data-content-fill')!='true'){
             if(iframe_content.find('html').css('writing-mode')=='vertical-rl'||iframe_content.find('body').css('writing-mode')=='vertical-rl'){
                 //处理日文从右往左的竖排排版
                 iFrameResize({
                     log:false,
                     checkOrigin:false,
-                    widthCalculationMethod:'documentElementOffset',
+                    widthCalculationMethod:width_calculation_method,
                     minHeight:550,
                     warningTimeout:0,
                     scrolling:true,
@@ -241,7 +247,7 @@ function bind_card(iframe,html){
                 iFrameResize({
                     log:false,
                     checkOrigin:false,
-                    heightCalculationMethod:'documentElementOffset',
+                    heightCalculationMethod:width_calculation_method,
                     warningTimeout:0,
                     scrolling:true,
 //							onInit: function(iframe_a){
