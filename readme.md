@@ -69,6 +69,14 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 
 不建议使用pypy，有时候查询快，有时候反而更慢。
 
+linux下需要先转换脚本格式
+
+```
+apt-get update
+apt-get install dos2unix
+dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readmdict/pyx/build.sh
+```
+
 ### 说明文档
 
 [说明文档](doc/documentation.md)

@@ -105,6 +105,8 @@
 <br />Mdict词典页面，勾选ID前的复选框，选择第一页所有的词典，点击执行按钮右边的选中所有的XXX个Mdict词典，选择动作下拉框中的EnableAllDics/DisableAllDics，最后点击执行按钮。
 ### 依赖
 
+默认用的是清华源，如果需要修改，修改init_server.bat和init_server.sh中pip命令的-i参数。
+
 1. requirements1.txt：必需依赖
 
 django版本需要不小于3.0
