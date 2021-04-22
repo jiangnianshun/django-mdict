@@ -67,12 +67,6 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 
 目前windows仅在查询全部词典时使用多进程，速度与linux下相近，但分组查询时速度仍远慢于linux，需要改进。windows下建议部署到wsl1。
 
-需要安装websockets。
-
-```
-pip install websockets
-```
-
 不建议使用pypy，有时候查询快，有时候反而更慢。
 
 ### 说明文档

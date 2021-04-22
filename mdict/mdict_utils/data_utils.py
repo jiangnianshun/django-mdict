@@ -5,12 +5,10 @@ from django.db.utils import OperationalError as DjangoError
 from sqlite3 import OperationalError as Sqlite3Error
 from mdict.mdict_utils.init_utils import init_vars
 from base.base_func import read_from_sqlite, ROOT_DIR
-
-is_django = False
+from base.sys_utils import check_module_import
 
 try:
     from mdict.models import MdictDic
-    is_django = True
 except AppRegistryNotReady as e:
     pass
 except Exception as e:
@@ -18,8 +16,9 @@ except Exception as e:
 
 sql3_path = os.path.join(ROOT_DIR, 'db.sqlite3')
 
+
 def get_all_dic():
-    if is_django:
+    if check_module_import('mdict.models'):
         return MdictDic.objects.all()
     else:
         dics_dict = {}
@@ -31,14 +30,11 @@ def get_all_dic():
 
 
 def get_or_create_dic(dict_file):
-    if is_django:
-        dics = MdictDic.objects.filter(mdict_file=dict_file)
-        if len(dics) == 0:
-            dic = MdictDic.objects.create(mdict_name=dict_file, mdict_file=dict_file)
-        else:
-            dic = dics[0]
+    dics = MdictDic.objects.filter(mdict_file=dict_file)
+    if len(dics) == 0:
+        dic = MdictDic.objects.create(mdict_name=dict_file, mdict_file=dict_file)
     else:
-        dic = None
+        dic = dics[0]
 
     return dic
 
@@ -67,3 +63,5 @@ def init_database():
         print(e)
     except DjangoError as e:
         print(e)
+    except NameError as e:
+        pass

@@ -26,7 +26,7 @@ from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, com
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
 from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
 from mdict.mdict_utils.loop_decorator import loop_mdict_list, innerObject
-from mdict.mdict_utils.init_utils import init_vars, sound_list, init_mdict_list
+from mdict.mdict_utils.init_utils import init_vars, sound_list
 from mdict.mdict_utils.mdict_config import *
 from mdict.mdict_utils.search_object import SearchObject
 from mdict.mdict_utils.search_utils import search, clear_duplication, search_bultin_dic_sug, search_mdx_sug, \
@@ -542,7 +542,8 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
                 else:
                     duplication_dict.update({link2entry: [dic.pk]})
 
-            result.append(entryObject(rd['name'], hit['entry'], record, 1, dic.pk, 1, 1, 1, extra=highlight_content_text))
+            result.append(
+                entryObject(rd['name'], hit['entry'], record, 1, dic.pk, 1, 1, 1, extra=highlight_content_text))
         else:
             print(index_name, 'not exists in database.')
 
@@ -692,7 +693,8 @@ def search_mdx_key(request):
 class search_mdx_record_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id).search_record(self.start, self.end)
+            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id).search_record(self.start,
+                                                                                                          self.end)
             self.inner_list = [
                 {'mdx_name': dic.mdict_name, 'mdx_entry': self.query, 'mdx_record': record, 'pk': dic.pk}]
             self.break_tag = True

@@ -1,4 +1,5 @@
 import re
+import sys
 import platform
 
 reg1 = r'^[a-zA-Z]:[/\\]'
@@ -70,4 +71,8 @@ def check_system():
         return 1
 
 
-
+def check_module_import(mod_name):
+    if mod_name in sys.modules:
+        return True
+    else:
+        return False

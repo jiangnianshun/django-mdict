@@ -11,7 +11,5 @@ python3 init_mdict_path.py -a $audio_path
 fi
 fi
 file="db.sqlite3"
-if [ ! -f $file ]; then
 source init_server.sh
-fi
 python3 manage.py runserver 0.0.0.0:8000

@@ -102,6 +102,8 @@ def multi_search_mdx(n, query_list, group, is_mdx=True):
         dict_file = mdx.get_fname()
 
         if isinstance(all_dics, dict):
+            if k not in all_dics.keys():
+                continue
             dic_tuple = all_dics[k]
             dic = dicObject(*dic_tuple)
         else:
