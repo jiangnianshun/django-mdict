@@ -232,6 +232,7 @@ function bind_card(iframe,html){
                 iFrameResize({
                     log:false,
                     checkOrigin:false,
+                    resizeFrom:'child',
                     widthCalculationMethod:width_calculation_method,
                     minHeight:550,
                     warningTimeout:0,
@@ -247,6 +248,7 @@ function bind_card(iframe,html){
                 iFrameResize({
                     log:false,
                     checkOrigin:false,
+                    resizeFrom:'child',
                     heightCalculationMethod:width_calculation_method,
                     warningTimeout:0,
                     scrolling:true,
@@ -272,6 +274,7 @@ function bind_card(iframe,html){
         或者设置了固定约束距底边的距离，position="fixed",bottom="45px"，导致高度获取出问题。
         card展开关闭一段时间后再展开，高度0，需要手动点击一下高度才恢复正常。
         resizeFrom:'child'设置当iframe变化时更新状态，默认是parent窗口变化时更新状态。
+        当设置lowestElement时，card collapse后如果页面发生变化，导致重新计算iframe的高度，导致card再打开后高度是错误。
         在modal-mdict需要设置为child，否则不会显示。
         warningTimeout:0,抑制iframeresizer的警告信息
         第二个参数是iframe的dom对象，如果不设置，则对全部的iframe都生效。
