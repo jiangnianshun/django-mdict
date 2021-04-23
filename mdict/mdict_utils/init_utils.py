@@ -223,17 +223,24 @@ def check_dir_change():
         print_log_info('mdict_root_path not exists.')
         return True
 
+    files_total_num = 1
     for root, dirs, files in os.walk(mdict_root_path):
         for file in files:
-            if file.lower().endswith('.mdx'):
-                mdx_path = os.path.join(root, file)
-                mtime = os.path.getmtime(mdx_path)
-                if mdx_path not in old_dir.keys():
+            if file.lower().endswith('.mdx') or file.lower().endswith('.mdd'):
+                mdict_path = os.path.join(root, file)
+                mtime = os.path.getmtime(mdict_path)
+                files_total_num += 1
+                if mdict_path not in old_dir.keys():
                     print_log_info('dir change founded.')
                     return True
-                if old_dir[mdx_path] < mtime:
+                if old_dir[mdict_path] < mtime:
                     print_log_info('dir change founded.')
                     return True
+
+    if files_total_num != len(old_dir):
+        print_log_info('dir change founded.')
+        return True
+
     print_log_info('no dir change founded.')
     return False
 
@@ -243,10 +250,10 @@ def write_dir_change():
     new_dir.update({'root_dir': mdict_root_path})
     for root, dirs, files in os.walk(mdict_root_path):
         for file in files:
-            if file.lower().endswith('.mdx'):
-                mdx_path = os.path.join(root, file)
-                mtime = os.path.getmtime(mdx_path)
-                new_dir.update({mdx_path: mtime})
+            if file.lower().endswith('.mdx') or file.lower().endswith('.mdd'):
+                mdict_path = os.path.join(root, file)
+                mtime = os.path.getmtime(mdict_path)
+                new_dir.update({mdict_path: mtime})
     write_change(new_dir)
 
 
