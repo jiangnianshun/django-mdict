@@ -345,7 +345,8 @@ function init_online_dic_var(){
                     <label class="form-check-label" for="${o_id}">
                         <span class='badge badge-light text-dark'>${o_pror}</span>
                         ${o_name}
-                        <a class='badge badge-primary badge-light text-dark' href="${o_url_host}" target="_blank" style="text-decoration:none;">打开</a>
+                        <a class='badge badge-primary badge-light text-dark' href="${o_url_host}" target="_blank" style="text-decoration:none;">
+                        <i class="bi bi-box-arrow-up-right"></i></a>
                     </label>
                 </div><br />
                 `
