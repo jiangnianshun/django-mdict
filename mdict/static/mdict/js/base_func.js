@@ -95,7 +95,9 @@ function html_unescape(text){
     if(text==null){
 		return "";
 	}else{
-        text = decodeURIComponent(text.replace('%', '%25'));
+        //text = decodeURIComponent(text.replace('%', '%25'));
+        //韦氏高阶双解anemones词条义项2是sea%20anemone，这里%20需要替换。其他是否有%需要保留的情况？？？
+        text = decodeURIComponent(text);
         return decodeHTMLEntities(text);
 	}
 }
