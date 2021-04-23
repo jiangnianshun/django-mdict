@@ -77,7 +77,7 @@ apt-get install dos2unix
 dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readmdict/pyx/build.sh
 ```
 
-更新后未避免出问题，需要手动清除浏览器缓存（不需要清cookies）。
+更新后为了避免出问题，需要手动清除浏览器缓存（不需要清cookies）。
 
 ### 说明文档
 
