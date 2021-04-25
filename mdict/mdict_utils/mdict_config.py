@@ -42,7 +42,7 @@ default_config = {
         'force_refresh': False,  # 强制刷新
         'select_btn_enable': True,  # 是否启用选择文字弹出框
         'disable_iframe_click': True,  # 屏蔽iframe中的默认点击事件
-        'history_enable': True,  # 保存查询历史
+        'history_enable': False,  # 保存查询历史
         'suggestion_num': 30,  # 查询提示显示的数目
         'link_new_label': False,
         'force_font': False,  # 强制使用全宋体

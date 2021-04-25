@@ -12,6 +12,8 @@
 
 使用外置的elasticsearch实现全文搜索。
 
+硬件需求：多核CPU、大内存、固态硬盘
+
 ### windows下的安装
 
 1. 安装依赖
@@ -36,7 +38,6 @@ pip install elasticsearch-dsl
 5. 运行elasticsearch/bin/elasticsearch.bat启动es。
 
 6. 进入django-mdict的admin，将需要索引的词典设置为启用es索引，然后单击下面的保存。
-   对于反查词典和进行了词组提取的词典（比如搜韵诗词全文检索.mdx、英汉•汉英(专业•科技)词典.mdx），全文索引会有很多重复词条，不建议创建全文索引。
 
 7. 进入django-mdict的admin，勾选要创建索引的词典，选择动作下拉框中的创建es索引，然后单击执行，开始创建索引。
    创建索引进度在run_server脚本的命令行窗口和es的命令行窗口中查看。
