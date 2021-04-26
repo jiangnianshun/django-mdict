@@ -9,6 +9,7 @@ import cv2
 import numpy as np
 from pynput.keyboard import Key, Listener as KeyboardListener
 from pynput.mouse import Button, Listener as MouseListener
+import tkinter as tk
 
 import pyperclip
 
@@ -33,6 +34,8 @@ class Huaci:
         self.start_y = 0
         self.end_x = 0
         self.end_y = 0
+
+        self.create_mask()
 
         self.master = None
 
@@ -62,6 +65,32 @@ class Huaci:
         self.thread_keyboard = None
 
         self.max_text_length = 40
+
+    def create_mask(self):
+        self.mask = tk.Toplevel()
+        self.mask.attributes('-fullscreen', True)
+        self.mask.attributes("-alpha", 0.5)
+        self.mask.protocol('WM_DELETE_WINDOW', self.mask.withdraw)
+        self.create_canvas()
+        self.mask.withdraw()
+
+    def show_mask(self):
+        self.mask.deiconify()
+
+    def hide_mask(self):
+        self.mask.withdraw()
+
+    def create_canvas(self):
+        self.canvas = tk.Canvas(self.mask)
+        self.canvas.pack(anchor='nw')
+        self.canvas.pack(fill=tk.BOTH, expand=True)
+
+    def create_rectangle(self, x1, y1, x2, y2):
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill='green')
+
+    def clear_rectangle(self):
+        if self.canvas is not None:
+            self.canvas.delete("all")
 
     def translate_picture(self, img):
         # 图片二值化
@@ -108,32 +137,57 @@ class Huaci:
 
                     if self.end_x == self.start_x or self.end_y == self.start_y:
                         self.flag -= 1
-                        print('duplicated click')
+                        # print('duplicated click')
                         return
 
                     if 0 < self.t2 - self.t1 <= 5:
                         if self.start_x < self.end_x and self.start_y < self.end_y:
                             im = pyscreenshot.grab(bbox=(self.start_x, self.start_y, self.end_x, self.end_y))
+                            self.clear_rectangle()
+                            self.hide_mask()
                             self.translate_picture(im)
                         elif self.start_x < self.end_x and self.start_y > self.end_y:
                             im = pyscreenshot.grab(bbox=(self.start_x, self.end_y, self.end_x, self.start_y))
+                            self.clear_rectangle()
+                            self.hide_mask()
                             self.translate_picture(im)
 
                         elif self.start_x > self.end_x and self.start_y < self.end_y:
                             im = pyscreenshot.grab(bbox=(self.end_x, self.start_y, self.start_x, self.end_y))
+                            self.clear_rectangle()
+                            self.hide_mask()
                             self.translate_picture(im)
 
                         elif self.start_x > self.end_x and self.start_y > self.end_y:
                             im = pyscreenshot.grab(bbox=(self.end_x, self.end_y, self.start_x, self.start_y))
+                            self.clear_rectangle()
+                            self.hide_mask()
                             self.translate_picture(im)
                     else:
                         self.init_vars()
-                        print('exceed limit of time', self.t2 - self.t1)
+                        # print('exceed limit of time', self.t2 - self.t1)
         else:
             self.init_vars()
 
     def on_scroll(self, x, y, dx, dy):
         self.init_vars()
+
+    def on_move(self, x, y):
+        if self.start_flag == 1 and self.huaci_mode == 'ocr':
+            self.show_mask()
+            self.clear_rectangle()
+            if self.flag % 2 is 1:
+                tx1 = self.start_x
+                tx2 = x
+                ty1 = self.start_y
+                ty2 = y
+                if x < self.start_x:
+                    tx1 = x
+                    tx2 = self.start_x
+                if y < self.start_y:
+                    ty1 = y
+                    ty2 = self.start_y
+                self.create_rectangle(tx1, ty1, tx2, ty2)
 
     def clear_timestamp(self):
         self.timestamp = 0
@@ -174,7 +228,7 @@ class Huaci:
             self.clear_timestamp()
 
     def thread_mouse_fun(self):
-        with MouseListener(on_click=self.on_click, on_scroll=self.on_scroll) as mouse_listener:
+        with MouseListener(on_click=self.on_click, on_scroll=self.on_scroll, on_move=self.on_move) as mouse_listener:
             mouse_listener.join()
 
     def mouse_monitor(self):
@@ -211,7 +265,6 @@ class Huaci:
             if self.root_url != self.old_root_url:
                 self.master.init_param()
                 url = self.root_url.replace('%WORD%', query)
-                print(11111, url)
                 browser.LoadUrl(url)
                 self.old_root_url = self.root_url
             else:
