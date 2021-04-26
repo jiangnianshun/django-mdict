@@ -9,7 +9,6 @@ import cv2
 import numpy as np
 from pynput.keyboard import Key, Listener as KeyboardListener
 from pynput.mouse import Button, Listener as MouseListener
-import tkinter as tk
 
 import pyperclip
 
@@ -27,7 +26,7 @@ regp = re.compile(reg)
 
 
 class Huaci:
-    def __init__(self):
+    def __init__(self, master):
         self.start_flag = 0
         self.flag = 0
         self.start_x = 0
@@ -35,7 +34,7 @@ class Huaci:
         self.end_x = 0
         self.end_y = 0
 
-        self.create_mask()
+        self.master = master
 
         self.master = None
 
@@ -66,32 +65,6 @@ class Huaci:
 
         self.max_text_length = 40
 
-    def create_mask(self):
-        self.mask = tk.Toplevel()
-        self.mask.attributes('-fullscreen', True)
-        self.mask.attributes("-alpha", 0.5)
-        self.mask.protocol('WM_DELETE_WINDOW', self.mask.withdraw)
-        self.create_canvas()
-        self.mask.withdraw()
-
-    def show_mask(self):
-        self.mask.deiconify()
-
-    def hide_mask(self):
-        self.mask.withdraw()
-
-    def create_canvas(self):
-        self.canvas = tk.Canvas(self.mask)
-        self.canvas.pack(anchor='nw')
-        self.canvas.pack(fill=tk.BOTH, expand=True)
-
-    def create_rectangle(self, x1, y1, x2, y2):
-        self.canvas.create_rectangle(x1, y1, x2, y2, fill='green')
-
-    def clear_rectangle(self):
-        if self.canvas is not None:
-            self.canvas.delete("all")
-
     def translate_picture(self, img):
         # 图片二值化
         gray = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2GRAY)
@@ -120,7 +93,8 @@ class Huaci:
             print(e)
 
     def on_click(self, x, y, button, pressed):  # button：鼠标键，pressed：是按下还是抬起
-        if self.start_flag == 1:
+
+        if self.start_flag == 1 and self.huaci_mode == 'ocr':
 
             if button == Button.left and pressed:
 
@@ -143,25 +117,25 @@ class Huaci:
                     if 0 < self.t2 - self.t1 <= 5:
                         if self.start_x < self.end_x and self.start_y < self.end_y:
                             im = pyscreenshot.grab(bbox=(self.start_x, self.start_y, self.end_x, self.end_y))
-                            self.clear_rectangle()
-                            self.hide_mask()
+                            self.master.clear_rectangle()
+                            self.master.hide_mask()
                             self.translate_picture(im)
                         elif self.start_x < self.end_x and self.start_y > self.end_y:
                             im = pyscreenshot.grab(bbox=(self.start_x, self.end_y, self.end_x, self.start_y))
-                            self.clear_rectangle()
-                            self.hide_mask()
+                            self.master.clear_rectangle()
+                            self.master.hide_mask()
                             self.translate_picture(im)
 
                         elif self.start_x > self.end_x and self.start_y < self.end_y:
                             im = pyscreenshot.grab(bbox=(self.end_x, self.start_y, self.start_x, self.end_y))
-                            self.clear_rectangle()
-                            self.hide_mask()
+                            self.master.clear_rectangle()
+                            self.master.hide_mask()
                             self.translate_picture(im)
 
                         elif self.start_x > self.end_x and self.start_y > self.end_y:
                             im = pyscreenshot.grab(bbox=(self.end_x, self.end_y, self.start_x, self.start_y))
-                            self.clear_rectangle()
-                            self.hide_mask()
+                            self.master.clear_rectangle()
+                            self.master.hide_mask()
                             self.translate_picture(im)
                     else:
                         self.init_vars()
@@ -172,10 +146,10 @@ class Huaci:
     def on_scroll(self, x, y, dx, dy):
         self.init_vars()
 
-    def on_move(self, x, y):
+    def set_mask(self, x, y):
         if self.start_flag == 1 and self.huaci_mode == 'ocr':
-            self.show_mask()
-            self.clear_rectangle()
+            self.master.show_mask()
+            self.master.clear_rectangle()
             if self.flag % 2 is 1:
                 tx1 = self.start_x
                 tx2 = x
@@ -187,7 +161,10 @@ class Huaci:
                 if y < self.start_y:
                     ty1 = y
                     ty2 = self.start_y
-                self.create_rectangle(tx1, ty1, tx2, ty2)
+                self.master.create_rectangle(tx1, ty1, tx2, ty2)
+
+    def on_move(self, x, y):
+        self.set_mask(x, y)
 
     def clear_timestamp(self):
         self.timestamp = 0
@@ -221,7 +198,8 @@ class Huaci:
                         if self.huaci_mode == 'copy':
                             self.translate_clipboard()
                         elif self.huaci_mode == 'ocr':
-                            self.mouse_monitor()
+                            # self.set_mask(0, 0)
+                            pass
                         return
         except AttributeError as e:
             # 非字母的键没有char这个属性sq
@@ -278,3 +256,5 @@ class Huaci:
             self.thread_keyboard = threading.Thread(target=self.thread_keyboard_fun)
             self.thread_keyboard.daemon = True
             self.thread_keyboard.start()
+        if self.thread_mouse is None:
+            self.mouse_monitor()

@@ -56,7 +56,8 @@ class MainWindow:
 
         self.root.attributes('-topmost', True)
         # 永久窗口置顶，而lift()是暂时置顶。
-        self.huaci = Huaci()
+        self.create_mask()
+        self.huaci = Huaci(self.root)
         self.huaci.run_huaci('copy')
         self.init_param()
 
@@ -143,9 +144,37 @@ class MainWindow:
         self.root.withdraw()
         self.create_systray()
 
+    def create_mask(self):
+        self.mask = tk.Toplevel()
+        self.mask.attributes('-topmost', True)
+        self.mask.attributes('-fullscreen', True)
+        self.mask.attributes("-alpha", 0.5)
+        self.mask.protocol('WM_DELETE_WINDOW', self.mask.withdraw)
+        self.create_canvas()
+        self.mask.withdraw()
+
+    def show_mask(self):
+        self.icon.stop()
+        # 需要先停止托盘
+        self.mask.after(0, self.mask.deiconify)
+
+    def hide_mask(self):
+        self.mask.withdraw()
+
+    def create_canvas(self):
+        self.canvas = tk.Canvas(self.mask)
+        self.canvas.pack(anchor='nw')
+        self.canvas.pack(fill=tk.BOTH, expand=True)
+
+    def create_rectangle(self, x1, y1, x2, y2):
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill='green')
+
+    def clear_rectangle(self):
+        if self.canvas is not None:
+            self.canvas.delete("all")
+
 
 class MainFrame(tk.Frame):
-
     def __init__(self, main):
         self.browser_frame = None
         self.navigation_bar = None
