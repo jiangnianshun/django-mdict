@@ -62,7 +62,7 @@ class MainWindow:
         self.huaci.run_huaci('copy')
         self.init_param()
 
-        self.root.protocol('WM_DELETE_WINDOW', self.withdraw_window)
+        self.root.protocol('WM_DELETE_WINDOW', self.hide_window)
 
         tkwidth = cef_config['tkwidth']
         tkheight = cef_config['tkheight']
@@ -140,7 +140,7 @@ class MainWindow:
             self.huaci.set_master(self)
         self.icon.run()
 
-    def withdraw_window(self):
+    def hide_window(self):
         # 隐藏窗口
         self.root.withdraw()
         self.create_systray()
@@ -168,7 +168,7 @@ class MainWindow:
         self.canvas.pack(fill=tk.BOTH, expand=True)
 
     def create_rectangle(self, x1, y1, x2, y2):
-        self.canvas.create_rectangle(x1, y1, x2, y2, fill='green')
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill='gray')
 
     def clear_rectangle(self):
         if self.canvas is not None:

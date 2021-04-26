@@ -20,7 +20,7 @@ class ConfigWindow:
         self.root = tk.Toplevel()
         self.root.title('设置')
         self.root.attributes('-topmost', True)
-        self.root.protocol('WM_DELETE_WINDOW', self.withdraw_window)
+        self.root.protocol('WM_DELETE_WINDOW', self.hide_window)
         self.root.withdraw()
         self.main = main
         self.huaci = self.main.huaci
@@ -32,7 +32,7 @@ class ConfigWindow:
 
         Widget1(self.root, self.huaci)
 
-    def withdraw_window(self):
+    def hide_window(self):
         self.root.withdraw()
 
     def show_window(self):
