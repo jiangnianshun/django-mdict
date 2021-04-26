@@ -16,14 +16,14 @@ except Exception:
 
 
 class ConfigWindow:
-    def __init__(self, huaci):
+    def __init__(self, main):
         self.root = tk.Toplevel()
         self.root.title('设置')
         self.root.attributes('-topmost', True)
         self.root.protocol('WM_DELETE_WINDOW', self.withdraw_window)
         self.root.withdraw()
-
-        self.huaci = huaci
+        self.main = main
+        self.huaci = self.main.huaci
 
         set_icon(self.root)
 

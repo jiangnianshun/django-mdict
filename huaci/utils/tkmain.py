@@ -46,6 +46,7 @@ windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 huaci_config = get_huaci_config()
 cef_config = huaci_config['cef']
 
+
 class MainWindow:
     def __init__(self):
         assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
@@ -193,7 +194,7 @@ class MainFrame(tk.Frame):
         self.bind("<Configure>", self.on_configure)
 
         # NavigationBar
-        self.navigation_bar = NavigationBar(self, self.main)
+        self.navigation_bar = NavigationBar(self)
         self.navigation_bar.grid(row=0, column=0,
                                  sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=0)
@@ -396,14 +397,14 @@ class LifespanHandler():
 
 class NavigationBar(tk.Frame):
 
-    def __init__(self, master, main):
+    def __init__(self, master):
         self.back_state = tk.NONE
         self.forward_state = tk.NONE
         self.back_image = None
         self.forward_image = None
         self.reload_image = None
-        self.main = main
-        self.setting = ConfigWindow(self.main.huaci)
+        self.main = master.main
+        self.setting = ConfigWindow(self.main)
 
         tk.Frame.__init__(self, master)
         resources = os.path.join(os.path.dirname(__file__), "resources")

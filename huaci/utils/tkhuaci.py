@@ -213,7 +213,6 @@ class Huaci:
         self.thread_mouse = threading.Thread(target=self.thread_mouse_fun)
         self.thread_mouse.daemon = True
         self.thread_mouse.start()
-        print('thread_mouse has started')
 
     def thread_keyboard_fun(self):
         with KeyboardListener(on_press=self.on_press) as keyboard_listener:
