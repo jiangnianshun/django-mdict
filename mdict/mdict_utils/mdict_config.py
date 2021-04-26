@@ -90,7 +90,12 @@ def get_config_con(con_name):
                 if is_number(value.split('.')[0]):
                     return int(value)
                 else:
-                    return value
+                    if value == 'True':
+                        return True
+                    elif value == 'False':
+                        return False
+                    else:
+                        return value
 
     # config.ini中没有时查询默认值
     for section in default_config:
