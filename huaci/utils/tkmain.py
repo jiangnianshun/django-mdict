@@ -149,7 +149,7 @@ class MainWindow:
         self.mask = tk.Toplevel()
         self.mask.attributes('-topmost', True)
         self.mask.attributes('-fullscreen', True)
-        self.mask.attributes("-alpha", 0.5)
+        self.mask.attributes("-alpha", 0.3)
         self.mask.protocol('WM_DELETE_WINDOW', self.mask.withdraw)
         self.create_canvas()
         self.mask.withdraw()
@@ -163,12 +163,12 @@ class MainWindow:
         self.mask.withdraw()
 
     def create_canvas(self):
-        self.canvas = tk.Canvas(self.mask)
+        self.canvas = tk.Canvas(self.mask, bg='gray')
         self.canvas.pack(anchor='nw')
         self.canvas.pack(fill=tk.BOTH, expand=True)
 
     def create_rectangle(self, x1, y1, x2, y2):
-        self.canvas.create_rectangle(x1, y1, x2, y2, fill='gray')
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill='white')
 
     def clear_rectangle(self):
         if self.canvas is not None:
