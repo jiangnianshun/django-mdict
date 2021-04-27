@@ -14,7 +14,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search
+from elasticsearch_dsl import Search, Index
 from elasticsearch_dsl.query import MultiMatch
 from elasticsearch.exceptions import ConnectionError, TransportError
 
@@ -129,6 +129,39 @@ class MdictEntryViewSet(viewsets.ViewSet):
         return record_list
 
 
+def get_tokens(query):
+    es_host = get_config_con('es_host')
+    client = Elasticsearch(hosts=es_host)
+    if not meta_dict:
+        init_meta_list(client)
+    index_name = ''
+    for ind in meta_dict:
+        if is_index_open(client, ind):
+            index_name = ind
+            break
+    if index_name == '':
+        return []
+
+    tokenizer = 'standard'
+    plugins_str = client.cat.plugins()
+    if 'analysis-ik' in plugins_str:
+        tokenizer = 'ik_smart'
+
+    index = Index(index_name, using=client)
+    tokens = index.analyze(
+        body={
+            "analyzer": tokenizer,
+            "text": query
+        }
+    )
+
+    token_list = []
+    for tk in tokens['tokens']:
+        token_list.append(tk['token'])
+
+    return token_list
+
+
 @api_view(['GET', 'POST', ])
 @permission_classes([])
 @authentication_classes([])
@@ -163,6 +196,8 @@ def es_search(request):
 
     group = int(request.GET.get('dic_group', 0))
 
+    tokens = get_tokens(query)
+
     result, total_count = get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, es_phrase,
                                          es_entry, es_content,
                                          es_and)
@@ -179,6 +214,7 @@ def es_search(request):
         "total_page": int(total_count / result_num),  # 一共有多少页
         "current_page": result_page,  # 当前页数
         "data": serializer.data,
+        "tokens": tokens
     }
 
     if result_page == 1:

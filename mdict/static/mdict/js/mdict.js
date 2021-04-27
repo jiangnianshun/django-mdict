@@ -172,7 +172,7 @@ function create_html(mdx_pk,mdx_name,mdx_record){
     return html;
 }
 
-function bind_card(iframe,html){
+function bind_card(iframe,html,tokens){
     var card_link=$(iframe).parents(".card").find(".card-link");
     var card=$(iframe).parents(".card");
     card.on('hidden.bs.collapse',function(){
@@ -298,22 +298,23 @@ function bind_card(iframe,html){
         if(highlight_content){
             var query=$.trim($('#query').val());
             if(query!=''){
-                var pattern=/[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|《》（）？！，。“”‘’：；]/g;
-                var tmp_query = query.split(pattern);
+//                var pattern=/[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|《》（）？！，。“”‘’：；]/g;
+//                var tmp_query = query.split(pattern);
                 //去符号
-                for(var tmp of tmp_query){
+                for(var tmp of tokens){
                     if(tmp!=''){
                         var context = $(iframe).contents().find('body')[0];
                         var instance = new Mark(context);
-                        if(/[a-zA-Z]+/.test(tmp)){
-                            instance.mark(tmp);
-                        }else{
-                            tmp = [].filter.call(tmp,function(s,i,o){return o.indexOf(s)==i;}).join('');
-                            //去重
-                            for(var j=0;j<tmp.length;j++){
-                                instance.mark(tmp[j]);
-                            }
-                        }
+                        instance.mark(tmp);
+//                        if(/[a-zA-Z]+/.test(tmp)){
+//                            instance.mark(tmp);
+//                        }else{
+//                            tmp = [].filter.call(tmp,function(s,i,o){return o.indexOf(s)==i;}).join('');
+//                            //去重
+//                            for(var j=0;j<tmp.length;j++){
+//                                instance.mark(tmp[j]);
+//                            }
+//                        }
                     }
                 }
             }
@@ -341,6 +342,8 @@ function add_iframes(data,container,need_clear,is_list){
 			var d=data;
 		}else{
 			var d=data['data'];
+			var tokens=data['tokens'];
+			if(typeof(tokens)=="undefined"){tokens=[];}
 			var page_size=data['page_size'];
 			var total_count=data['total_count'];
 			var total_page=data['total_page'];
@@ -401,7 +404,7 @@ function add_iframes(data,container,need_clear,is_list){
             }
 			
 			(function(iframe,html){//通过闭包来避免for循环事件绑定中的赋值问题
-				bind_card(iframe,html);
+				bind_card(iframe,html,tokens);
 			})(iframe,html);
 		}
 		return [current_page,total_page,d.length]
