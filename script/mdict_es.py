@@ -263,7 +263,7 @@ def create_cache(dic, mdx):
             if t_size == 0:
                 chunk_size = 1000
             else:
-                chunk_size = int(cpu_num * 35 * t_len / t_size)
+                chunk_size = int(cpu_num * 30 * t_len / t_size)
             if chunk_size < cpu_num:
                 chunk_size = cpu_num
 
