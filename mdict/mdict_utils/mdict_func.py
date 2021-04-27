@@ -39,9 +39,9 @@ mdict_path_list.append(mdict_root_path)
 def set_mdict_path():
     global mdict_root_path, mdict_path_list, audio_path_list, audio_path
     for p in mdict_path_list:
+        t = False
         if os.path.exists(p):
             for root, dirs, files in os.walk(p):
-                t = False
                 for file in files:
                     if file.lower().endswith('mdx'):
                         mdict_root_path = p
@@ -49,10 +49,12 @@ def set_mdict_path():
                         break
                 if t:
                     break
+        if t:
+            break
     for p in audio_path_list:
+        t = False
         if os.path.exists(p):
             for root, dirs, files in os.walk(p):
-                t = False
                 for file in files:
                     if file.lower().endswith('mdd'):
                         audio_path = p
@@ -60,6 +62,8 @@ def set_mdict_path():
                         break
                 if t:
                     break
+        if t:
+            break
 
 
 set_mdict_path()

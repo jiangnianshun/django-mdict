@@ -57,16 +57,15 @@ def process_list(path_list):
 
 
 if os.path.exists(json_file):
-    temp = ''
     with open(json_file, 'r', encoding='utf-8') as f:
         temp = f.read()
     try:
         data = json.loads(temp)
-        mdict_path_list = process_list(data['mdict_path'])
-        audio_path_list = process_list(data['audio_path'])
+        mdict_path_list = process_list(config['mdict_path'])
+        audio_path_list = process_list(config['audio_path'])
 
-        mdict_path_list.extend(process_list(config['mdict_path']))
-        audio_path_list.extend(process_list(config['audio_path']))
+        mdict_path_list.extend(process_list(data['mdict_path']))
+        audio_path_list.extend(process_list(data['audio_path']))
 
         new_data = {'mdict_path': mdict_path_list, 'audio_path': audio_path_list}
         write_json_file(new_data, json_file)
