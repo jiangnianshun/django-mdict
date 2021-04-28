@@ -272,11 +272,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 1. 下载安装tesseract-OCR.exe，并将tesseract.exe的路径添加到系统的环境变量Path中。
 
-2. 添加tesseract训练数据
-
-[https://tesseract-ocr.github.io/tessdoc/Data-Files.html](https://tesseract-ocr.github.io/tessdoc/Data-Files.html)
-
-3. 打开划词工具的设置界面，选择OCR查词。按ctrl+c+c，鼠标点击两次，框选OCR的范围。
+2. 打开划词工具的设置界面，选择OCR查词。按ctrl+c+c，鼠标点击两次，框选OCR的范围。
 
 如果划词工具显示混乱，尝试删除huaci/huaci.cache缓存文件夹。
 

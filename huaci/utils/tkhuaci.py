@@ -14,8 +14,10 @@ import pyperclip
 
 try:
     from .tkini import get_huaci_config
+    from .tkbase import data_path
 except Exception:
     from tkini import get_huaci_config
+    from tkbase import data_path
 
 # tesseract-OCR训练数据
 # https://tesseract-ocr.github.io/tessdoc/Data-Files.html
@@ -76,7 +78,11 @@ class Huaci:
         img = cv2.adaptiveThreshold(cv2.medianBlur(img, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                     cv2.THRESH_BINARY, 31, 2)
 
-        text = pytesseract.image_to_string(img, lang=self.lang_con, config='--psm 6 -c page_separator=""')
+        tess_cmd = '--psm 6 -c page_separator=""'
+        if data_path != '':
+            tess_cmd += ' --tessdata-dir ' + data_path
+
+        text = pytesseract.image_to_string(img, lang=self.lang_con, config=tess_cmd)
         # psm设置布局，小段文本6或7比较好，6可用于横向和竖向文字，7只能用于横向文字，文字方向转90度的用5。
         # tesseract会在末尾加form feed分页符，unicode码000c。
         # -c page_separator=""设置分页符为空
