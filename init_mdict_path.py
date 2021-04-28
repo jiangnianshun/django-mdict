@@ -67,6 +67,14 @@ if os.path.exists(json_file):
         mdict_path_list.extend(process_list(data['mdict_path']))
         audio_path_list.extend(process_list(data['audio_path']))
 
+        for i in range(len(mdict_path_list) - 1, -1, -1):
+            if i > 0 and mdict_path_list[i] in mdict_path_list[:i]:
+                del mdict_path_list[i]
+
+        for i in range(len(audio_path_list) - 1, -1, -1):
+            if i > 0 and audio_path_list[i] in audio_path_list[:i]:
+                del audio_path_list[i]
+
         new_data = {'mdict_path': mdict_path_list, 'audio_path': audio_path_list}
         write_json_file(new_data, json_file)
     except:
