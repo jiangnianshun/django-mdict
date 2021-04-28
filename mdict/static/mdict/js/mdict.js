@@ -36,6 +36,7 @@ html,body{
 	font-style:normal !important;
 }
 mark{
+    background: yellow !important;
     color:red !important;
 }
 </style>
@@ -296,8 +297,8 @@ function bind_card(iframe,html,tokens){
         //正文高亮
         var highlight_content=$('#highlight-content').prop("checked");
         if(highlight_content){
-            var query=$.trim($('#query').val());
-            if(query!=''){
+//            var query=$.trim($('#query').val());
+//            if(query!=''){
 //                var pattern=/[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|《》（）？！，。“”‘’：；]/g;
 //                var tmp_query = query.split(pattern);
                 //去符号
@@ -317,7 +318,7 @@ function bind_card(iframe,html,tokens){
 //                        }
                     }
                 }
-            }
+//            }
         }
     });
 
