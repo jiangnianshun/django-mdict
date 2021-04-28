@@ -68,15 +68,18 @@ class Huaci:
         self.max_text_length = 40
 
     def translate_picture(self, img):
-        # 图片二值化
-        img = cv2.resize(np.asarray(img), None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
+        img = np.asarray(img)
+        shape = img.shape
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        if shape[0] < 40 or shape[1] < 40:
+            # 图片放大
+            img = cv2.resize(np.asarray(img), None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
 
-        kernel = np.ones((1, 1), np.uint8)
-        img = cv2.dilate(img, kernel, iterations=1)
-        img = cv2.erode(img, kernel, iterations=1)
-        img = cv2.adaptiveThreshold(cv2.medianBlur(img, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                    cv2.THRESH_BINARY, 31, 2)
+            # kernel = np.ones((1, 1), np.uint8)
+            # img = cv2.dilate(img, kernel, iterations=1)
+            # img = cv2.erode(img, kernel, iterations=1)
+            # img = cv2.adaptiveThreshold(cv2.medianBlur(img, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+            #                             cv2.THRESH_BINARY, 31, 2)
 
         tess_cmd = '--psm 6 -c page_separator=""'
         if data_path != '':
