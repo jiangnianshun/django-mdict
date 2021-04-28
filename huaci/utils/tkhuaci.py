@@ -67,11 +67,16 @@ class Huaci:
 
     def translate_picture(self, img):
         # 图片二值化
-        gray = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2GRAY)
-        thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-        invert = 255 - thresh
+        img = cv2.resize(np.asarray(img), None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        text = pytesseract.image_to_string(invert, lang=self.lang_con, config='--psm 6 -c page_separator=""')
+        kernel = np.ones((1, 1), np.uint8)
+        img = cv2.dilate(img, kernel, iterations=1)
+        img = cv2.erode(img, kernel, iterations=1)
+        img = cv2.adaptiveThreshold(cv2.medianBlur(img, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                    cv2.THRESH_BINARY, 31, 2)
+
+        text = pytesseract.image_to_string(img, lang=self.lang_con, config='--psm 6 -c page_separator=""')
         # psm设置布局，小段文本6或7比较好，6可用于横向和竖向文字，7只能用于横向文字，文字方向转90度的用5。
         # tesseract会在末尾加form feed分页符，unicode码000c。
         # -c page_separator=""设置分页符为空
