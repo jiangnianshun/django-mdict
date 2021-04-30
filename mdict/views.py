@@ -817,6 +817,36 @@ def search_audio(request):
     return HttpResponse(res_content, content_type=mime_type)
 
 
+@loop_mdict_list()
+class search_zim_dic_object(innerObject):
+    def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
+        if dic.pk == self.target_pk:
+            r_list = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id).search_entry_list()
+            if len(r_list) > 0:
+                record = r_list[0].mdx_record
+            else:
+                record = ''
+            self.inner_list = [
+                {'mdx_name': dic.mdict_name, 'mdx_entry': self.query, 'mdx_record': record, 'pk': dic.pk}]
+            self.break_tag = True
+
+
+def search_zim_dic(request):
+    query = request.GET.get('entry', '')
+    dic_pk = int(request.GET.get('dic_pk', -1))
+
+    if dic_pk == -1:
+        return_list = []
+    else:
+        return_list = search_zim_dic_object({'query': query, 'target_pk': dic_pk})
+
+    history_enable = get_config_con('history_enable')
+    if history_enable:
+        write_to_history(query)
+
+    return HttpResponse(json.dumps(return_list))
+
+
 def search_zim(request, *args):
     res_name = '/' + '/'.join(args[1:])
     res_name = unquote(res_name)
@@ -1012,7 +1042,8 @@ def mdict_dic(request):
     item = init_vars.mdict_odict[dic.mdict_file]
     mdx = item.mdx
     if isinstance(mdx, ZIMFile):
-        return render(request, 'mdict/zim.html', {'dic_pk': dic_pk, 'name': dic_name, 'query': '', 'type': 'zim', 'is_mobile': is_mb})
+        return render(request, 'mdict/zim.html',
+                      {'dic_pk': dic_pk, 'name': dic_name, 'query': '', 'type': 'zim', 'is_mobile': is_mb})
     else:
         return render(request, 'mdict/dic.html',
                       {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'dic', 'is_mobile': is_mb})

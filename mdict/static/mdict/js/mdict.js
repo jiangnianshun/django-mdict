@@ -540,6 +540,29 @@ function query_es(query,container,page,need_clear,is_over){
 	});
 }
 
+function query_zim(container,entry,dic_pk){
+	var data={"entry":entry,"dic_pk":dic_pk};
+	$.ajax({
+		url:"/mdict/zim/",
+		contentType:'json',
+		type:'GET',
+		data:data,
+		success:function(data){
+			var d=$.parseJSON(data);
+			clear_card();
+			clear_parent_card(container);
+			//query_record在iframe外调用一次，在iframe内调用一次，因此这里用两个清除函数。;
+            add_iframes(d,container,true,true);
+			show_first_card();
+            change_title_and_url(entry);
+            add_to_history(entry,1);
+		},
+		error:function(jqXHR,textStatus,errorThrown){
+			alert(jqXHR.responseText);
+		},
+	});
+}
+
 function query_mdict(query,container,page,need_clear,is_over){
 	var dic_group=$('#dic-group option:selected').attr('data-pk');
 

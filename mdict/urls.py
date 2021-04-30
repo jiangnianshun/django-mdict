@@ -34,6 +34,7 @@ urlpatterns = [
     path('wordcloud/', views.wordcloud),
     path('getwordlist/', views.getwordlist),
     path('esdic/', views.es_dic),
+    url(r'^zim/', views.search_zim_dic),
     url(r'^zim/(\d+)/(-)/(.+)', views.search_zim),
     url(r'^zim/(\d+)/(-)/([a-zA-Z])/(.+)', views.search_zim),
     url(r'^zim/(\d+)/([a-zA-Z])/(.+)', views.search_zim),

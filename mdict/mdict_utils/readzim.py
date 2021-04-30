@@ -634,7 +634,7 @@ class ZIMFile:
             # (i.e. not a photo, etc.)
             is_article = (namespace == "A")
         if article is None:
-            return ''
+            return None
         if is_article:
             result = article.data  # we have an actual article
             # decode its contents into a string using its encoding
