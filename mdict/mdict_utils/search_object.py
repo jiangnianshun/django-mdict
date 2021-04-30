@@ -33,6 +33,10 @@ from .readzim import ZIMFile
 reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'
 regp = re.compile(reg, re.IGNORECASE)
 
+regz = r'([ <\n])((src=("| )*)|(href=("| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^">]+)([" >])'
+regpz = re.compile(regz, re.IGNORECASE)
+# zim中src有单引号，Flag_of_the_People's_Republic_of_China.svg.png.webp
+
 # reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!data:)([^"\'\(\)]+)(["|\']*\))'
 reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!www\.)(?!#)(?!data:)([^"\'\(\)]+)(["|\']*\))'
 reg2p = re.compile(reg2)
@@ -276,7 +280,9 @@ class SearchObject:
                 flag = self.query.rfind('/')
                 self.query = self.query[:flag + 1] + 'A/' + self.query[flag + 1:]
             record = self.mdx.search_article(self.f_mdx, self.mdx, self.query)
-            record = regp.sub(self.substitute_hyper_link, record)
+            if record is None:
+                return r_list
+            record = regpz.sub(self.substitute_hyper_link, record)
             r_list.append(entryObject(self.dic_name, self.query, record, self.prior, self.dic_id, self.f_pk, self.f_p1,
                                       self.f_p2))
         else:
