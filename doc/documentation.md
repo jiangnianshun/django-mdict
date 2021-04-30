@@ -9,6 +9,7 @@
   * [admin操作](#admin操作)
   * [依赖](#依赖)
   * [mdict解析](#mdict解析)
+  * [zim解析](#zim解析)
   * [内置词典](#内置词典)
   * [原形推测和拼写检查](#原形推测和拼写检查)
   * [拆字反查](#拆字反查)
@@ -47,6 +48,8 @@
 
 仅测试最新版chrome、firefox、edge浏览器。
 
+格式：支持mdx,mdd和zim
+
 音频：
 * mp3,spx,ogg 支持
 * wav chrome支持，firefox不支持
@@ -57,7 +60,7 @@
 字体：
 * chrome不支持大于30MB的字体
 
-图片词典建议使用双栏版，因为手机浏览器可以双指缩放，双栏版不影响阅读，使用单栏版，在手机浏览器上正常显示，在电脑浏览器上页面特别长。
+图片词典建议使用双栏版或切图版，因为手机浏览器可以双指缩放，双栏版不影响阅读，使用单栏版，在手机浏览器上正常显示，在电脑浏览器上页面特别长。
 
 ### 不支持
 
@@ -68,6 +71,8 @@
 3. 不支持IE浏览器。
 
 4. 不支持mdx文件名重复，只会载入重名mdx的其中一个。
+
+5. 正查不支持模糊查找和正则查找。
 
 ### 常用操作
 
@@ -161,6 +166,16 @@ github mdict-analysis：[https://github.com/csarron/mdict-analysis/blob/master/r
 /django-mdict/mdict/readmdict/source/readmdict_search.py功能是对mdict进行查找。
 
 /django-mdict/mdict/readmdict/pyx/readmdict_search.pyx是readmdict_seach.py的cython版本，运行build.bat或build.sh进行编译，编译后的库文件会复制到/django-mdict/mdict/readmdict/lib/。
+
+### zim解析
+
+github ZIMply： [https://github.com/kimbauters/ZIMply](https://github.com/kimbauters/ZIMply)
+
+/django-mdict/mdict/mdict-utils/readzim.py修改自zimply.py。
+
+zim是离线维基百科格式，下载地址：
+
+[https://wiki.kiwix.org/wiki/Content_in_all_languages](https://wiki.kiwix.org/wiki/Content_in_all_languages)
 
 ### 内置词典
 

@@ -349,21 +349,22 @@ def create_es_with_pk(dic_pk):
         if dic.mdict_file in odict.keys():
             item = odict[dic.mdict_file]
             mdx = item.mdx
-            md5 = get_md5_with_pk(dic.pk)
-            index_name = get_index_name(md5)
-            index = Index(index_name)
+            if not check_zim(mdx):
+                md5 = get_md5_with_pk(dic.pk)
+                index_name = get_index_name(md5)
+                index = Index(index_name)
 
-            if index.exists():
-                print('index already exists', dic.mdict_name, index_name)
-                return
+                if index.exists():
+                    print('index already exists', dic.mdict_name, index_name)
+                    return
 
-            if not dic.mdict_es_enable:
-                print('mdict_es_enable is False, index will not be created.', dic.mdict_name, index_name)
-                return
+                if not dic.mdict_es_enable:
+                    print('mdict_es_enable is False, index will not be created.', dic.mdict_name, index_name)
+                    return
 
-            create_es(dic, mdx, md5)
-            t2 = time.perf_counter()
-            print(t2 - t1, mdx.get_fname(), mdx.get_len())
+                create_es(dic, mdx, md5)
+                t2 = time.perf_counter()
+                print(t2 - t1, mdx.get_fname(), mdx.get_len())
         else:
             print(dic.pk, dic.mdict_name, 'not exists in cache. maybe the mdict root path is not correct.')
     else:
@@ -378,6 +379,15 @@ def create_es(dic, mdx, md5):
         write_exception_error(mdx, dic.pk, e)
 
 
+def check_zim(mdx):
+    mdx_path = mdx.get_fpath()
+    if mdx_path.endswith('.zim'):
+        print('not support zim', mdx.get_fname())
+        return True
+    else:
+        return False
+
+
 def create_all_es(pk_list=[]):
     t0 = time.perf_counter()
     odict = init_vars.mdict_odict
@@ -386,6 +396,8 @@ def create_all_es(pk_list=[]):
     for k in odict.keys():
         item = odict[k]
         mdx = item.mdx
+        if check_zim(mdx):
+            continue
         md5 = get_md5(mdx)
         dics = MdictDic.objects.filter(mdict_md5=md5)
 
