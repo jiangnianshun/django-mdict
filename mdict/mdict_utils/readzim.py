@@ -583,7 +583,8 @@ class ZIMFile:
                 # turn the key to lowercase as per Kiwix standards
                 m_name = entry['url'].lower()
                 # get the data, which is encoded as an article
-                metadata[m_name] = self._get_article_by_index(file, i)[0]
+                meta_body = self._get_article_by_index(file, i)[0]
+                metadata[m_name] = meta_body.decode('utf-8')
             else:  # stop as soon as we are no longer looking at metadata
                 break
         return metadata

@@ -149,7 +149,10 @@ class SearchObject:
         return entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2
 
     def get_len(self):
-        return self.mdx.get_len()
+        if self.is_zim:
+            return len(self.mdx)
+        else:
+            return self.mdx.get_len()
 
     @search_exception()
     def search_key(self, entry):
