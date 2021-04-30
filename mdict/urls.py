@@ -7,9 +7,9 @@ app_name = 'mdict'
 urlpatterns = [
     path('', views.mdict_index),
     path('sug/', views.search_suggestion),
-    url('(\d+)/(.+)', views.search_mdd),
-    url('dic/(\d+)/(.+)', views.search_mdd),
-    url('es/(\d+)/(.+)', views.search_mdd),
+    url(r'^(\d+)/(.+)/', views.search_mdd),
+    url(r'^dic/(\d+)/(.+)/', views.search_mdd),
+    url(r'^es/(\d+)/(.+)/', views.search_mdd),
     path('exfile/', views.get_external_file),
     url('exfile/(.+)', views.get_external_file),
     path('es/exfile/', views.get_external_file),
@@ -34,4 +34,7 @@ urlpatterns = [
     path('wordcloud/', views.wordcloud),
     path('getwordlist/', views.getwordlist),
     path('esdic/', views.es_dic),
+    url(r'^zim/(\d+)/(-)/(.+)', views.search_zim),
+    url(r'^zim/(\d+)/(-)/([a-zA-Z])/(.+)', views.search_zim),
+    url(r'^zim/(\d+)/([a-zA-Z])/(.+)', views.search_zim),
 ]

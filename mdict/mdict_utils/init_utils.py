@@ -7,6 +7,7 @@ from base.base_func import print_log_info, guess_mime, ROOT_DIR
 from base.sys_utils import get_sys_name
 from .mdict_config import set_cpu_num, get_cpu_num
 from .mdict_func import rename_history
+from .readzim import ZIMFile
 
 print_log_info(['system is', get_sys_name(), '.'])
 
@@ -105,6 +106,13 @@ def get_mdict_list():
                     print_log_info([f_name, 'mdx loading failed', e])
 
                 g_id += 1
+            elif file.lower().endswith('.zim'):
+                f_name = file[:file.rfind('.')]
+
+                zim_path = os.path.join(root, file)
+                zim = ZIMFile(zim_path, encoding='utf-8')
+                a = {f_name: MdictItem(zim, [], -1, 'none', len(zim))}
+                m_list.update(a)
 
     return m_list
 
@@ -226,7 +234,7 @@ def check_dir_change():
     files_total_num = 1
     for root, dirs, files in os.walk(mdict_root_path):
         for file in files:
-            if file.lower().endswith('.mdx') or file.lower().endswith('.mdd'):
+            if file.lower().endswith('.mdx') or file.lower().endswith('.mdd') or file.lower().endswith('.zim'):
                 mdict_path = os.path.join(root, file)
                 mtime = os.path.getmtime(mdict_path)
                 files_total_num += 1

@@ -43,7 +43,7 @@ def set_mdict_path():
         if os.path.exists(p):
             for root, dirs, files in os.walk(p):
                 for file in files:
-                    if file.lower().endswith('mdx'):
+                    if file.lower().endswith('.mdx') or file.lower().endswith('.zim'):
                         mdict_root_path = p
                         t = True
                         break
@@ -56,7 +56,7 @@ def set_mdict_path():
         if os.path.exists(p):
             for root, dirs, files in os.walk(p):
                 for file in files:
-                    if file.lower().endswith('mdd'):
+                    if file.lower().endswith('.mdd'):
                         audio_path = p
                         t = True
                         break
@@ -78,6 +78,14 @@ def replace_res_name(res_name):
     if res_name[0] != '/' and res_name[0] != '\\':
         res_name = '/' + res_name
     res_name = res_name.replace('/', '\\')
+    return res_name
+
+
+def replace_res_name2(res_name):
+    if res_name.startswith('../'):
+        res_name = res_name[3:]
+    elif res_name.startswith('/'):
+        res_name = res_name[1:]
     return res_name
 
 

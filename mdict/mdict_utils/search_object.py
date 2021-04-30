@@ -23,13 +23,14 @@ except Exception as e:
 
 from .entry_object import entryObject
 from .init_utils import init_vars
-from .mdict_func import replace_res_name, is_local, get_m_path
+from .mdict_func import replace_res_name, is_local, get_m_path, replace_res_name2
 from .exception_decorator import search_exception
 from base.base_func import guess_mime
+from .readzim import ZIMFile
 
 # 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64，mailto:开头是邮件,javascript:脚本，#开头可能是锚点，www.开头可能是网址，这两个当在mdd中查询不存在时不处理。
 # reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'
-reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'
+reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'
 regp = re.compile(reg, re.IGNORECASE)
 
 # reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!data:)([^"\'\(\)]+)(["|\']*\))'
@@ -66,6 +67,10 @@ class SearchObject:
             self.query = query_list
         else:
             raise Exception('error query type')
+
+        self.is_zim = False
+        if isinstance(mdx, ZIMFile):
+            self.is_zim = True
 
         self.mdx = mdx
         self.mdd = mdd_list
@@ -265,24 +270,33 @@ class SearchObject:
     @search_exception()
     def search_entry_list(self):
         # 查询一组词
-        result_dict = self.mdx.look_up_list(self.query_list, self.f_mdx)
-        self.f_pk = self.dic_id
         r_list = []
-        t_list = []
-        for key in result_dict.keys():
-            self.query = key
-            self.result_list = result_dict[key]
-            for rt in self.result_list:
-                self.f_p1 = rt[2]
-                self.f_p2 = rt[3]
-                self.cmp.clear()
-                record = self.substitute_record(rt[5])
-                if record != '' and (self.f_p1, self.f_p2) not in t_list:
-                    # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
-                    t_list.append((self.f_p1, self.f_p2))
-                    r_list.append(
-                        entryObject(self.dic_name, rt[4], record, self.prior, self.dic_id, self.f_pk, self.f_p1,
-                                    self.f_p2))
+        if self.is_zim:
+            if self.query.rfind('A/') == -1:
+                flag = self.query.rfind('/')
+                self.query = self.query[:flag + 1] + 'A/' + self.query[flag + 1:]
+            record = self.mdx.search_article(self.f_mdx, self.mdx, self.query)
+            record = regp.sub(self.substitute_hyper_link, record)
+            r_list.append(entryObject(self.dic_name, self.query, record, self.prior, self.dic_id, self.f_pk, self.f_p1,
+                                      self.f_p2))
+        else:
+            result_dict = self.mdx.look_up_list(self.query_list, self.f_mdx)
+            self.f_pk = self.dic_id
+            t_list = []
+            for key in result_dict.keys():
+                self.query = key
+                self.result_list = result_dict[key]
+                for rt in self.result_list:
+                    self.f_p1 = rt[2]
+                    self.f_p2 = rt[3]
+                    self.cmp.clear()
+                    record = self.substitute_record(rt[5])
+                    if record != '' and (self.f_p1, self.f_p2) not in t_list:
+                        # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
+                        t_list.append((self.f_p1, self.f_p2))
+                        r_list.append(
+                            entryObject(self.dic_name, rt[4], record, self.prior, self.dic_id, self.f_pk, self.f_p1,
+                                        self.f_p2))
         self.close_all()
         return r_list
 
@@ -332,42 +346,46 @@ class SearchObject:
 
     @search_exception(('', ''))
     def search_mdd(self):
-        res_content, mime_type = self.get_mdd_cache()
+        if self.is_zim:
+            mime_type = guess_mime(self.query)
+            res_content = self.mdx.search_article(self.f_mdx, self.mdx, self.query)
+        else:
+            res_content, mime_type = self.get_mdd_cache()
 
-        if res_content != '':
-            return res_content, mime_type
+            if res_content != '':
+                return res_content, mime_type
 
-        for i in range(len(self.mdd)):
-            mdd = self.mdd[i]
-            f = self.f_mdd_list[i]
-            r_list = mdd.look_up(self.query, f)
-            if len(r_list) > 0:
-                res_content = r_list[0][5]
-                f_name = r_list[0][4]
-                mime_type = guess_mime(f_name)
-                break
-        if self.query.endswith('.spx'):
-            mime_type = 'audio/speex'
+            for i in range(len(self.mdd)):
+                mdd = self.mdd[i]
+                f = self.f_mdd_list[i]
+                r_list = mdd.look_up(self.query, f)
+                if len(r_list) > 0:
+                    res_content = r_list[0][5]
+                    f_name = r_list[0][4]
+                    mime_type = guess_mime(f_name)
+                    break
+            if self.query.endswith('.spx'):
+                mime_type = 'audio/speex'
 
-        if mime_type is not None and res_content != '':
-            if 'css' in mime_type:
-                res_content = reg2p.sub(self.substitute_css_link,
-                                        res_content.decode(self.mdx.get_encoding(), errors='replace'))
+            if mime_type is not None and res_content != '':
+                if 'css' in mime_type:
+                    res_content = reg2p.sub(self.substitute_css_link,
+                                            res_content.decode(self.mdx.get_encoding(), errors='replace'))
 
-            if mime_type.startswith('image/'):
-                # 判断图片真实类型
-                img_type = imghdr.what(None, res_content)
-                if img_type is not None:
-                    mime_type = 'image/' + img_type
+                if mime_type.startswith('image/'):
+                    # 判断图片真实类型
+                    img_type = imghdr.what(None, res_content)
+                    if img_type is not None:
+                        mime_type = 'image/' + img_type
 
-            if mime_type == 'image/tiff':
-                # tiff转png
-                im = Image.open(BytesIO(res_content))
-                temp = BytesIO()
-                im.save(temp, format="png")
-                res_content = temp.getvalue()
-        self.close_all()
-        self.set_mdd_cache(res_content)
+                if mime_type == 'image/tiff':
+                    # tiff转png
+                    im = Image.open(BytesIO(res_content))
+                    temp = BytesIO()
+                    im.save(temp, format="png")
+                    res_content = temp.getvalue()
+            self.close_all()
+            self.set_mdd_cache(res_content)
         return res_content, mime_type
 
     def check_external_css(self, record):
@@ -502,11 +520,17 @@ class SearchObject:
     def substitute_hyper_link(self, matched):  # 处理html词条，获取图片和css
         # 需不需要返回www.开头但没有http和https前缀的匹配
         matched_text = matched.group(0)
-        if matched_text.find('.') == -1:
-            return matched_text
+        flag = matched_text.find('.')
+        if not self.is_zim:
+
+            if flag == -1:
+                return matched_text
         # 对于没有扩展名的不作处理，vocabulary2020查artefact有800多隐藏的连接，全部替换耗时6秒。
 
-        res_name = replace_res_name(matched.group(8))
+        if self.is_zim:
+            res_name = replace_res_name2(matched.group(8))
+        else:
+            res_name = replace_res_name(matched.group(8))
 
         temp_1 = matched.group(4)
         temp_2 = matched.group(6)
@@ -550,6 +574,13 @@ class SearchObject:
 
         # return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
         #        str(self.dic_id) + '/' + quote(str(res_name)) + '?path=' + self.m_path + delimiter_r
-
-        return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
-               str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
+        if self.is_zim:
+            if flag == -1:
+                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
+                       'entry://' + str(res_name) + delimiter_r
+            else:
+                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
+                       'zim' + '/' + str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
+        else:
+            return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
+                   str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r

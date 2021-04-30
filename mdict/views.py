@@ -817,6 +817,26 @@ def search_audio(request):
     return HttpResponse(res_content, content_type=mime_type)
 
 
+def search_zim(request, *args):
+    res_name = '/' + '/'.join(args[1:])
+    res_name = unquote(res_name)
+    dic_id = args[0]
+    dics = MdictDic.objects.filter(pk=dic_id)
+    res_content = ''
+    mime_type = ''
+
+    if len(dics) > 0:
+        dic = dics[0]
+        dic_name = dic.mdict_file
+        if dic_name in init_vars.mdict_odict.keys():
+            item = init_vars.mdict_odict[dic_name]
+            mdx = item.mdx
+            mdd_list = item.mdd_list
+            res_content, mime_type = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name).search_mdd()
+
+    return HttpResponse(res_content, content_type=mime_type)
+
+
 def search_mdd(request, *args):
     # path = request.GET.get('path', '')
     # if path == '' and len(args) > 0:
