@@ -824,10 +824,11 @@ class search_zim_dic_object(innerObject):
             r_list = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id).search_entry_list()
             if len(r_list) > 0:
                 record = r_list[0].mdx_record
+                self.inner_list = [
+                    {'mdx_name': dic.mdict_name, 'mdx_entry': self.query, 'mdx_record': record, 'pk': dic.pk}]
             else:
-                record = ''
-            self.inner_list = [
-                {'mdx_name': dic.mdict_name, 'mdx_entry': self.query, 'mdx_record': record, 'pk': dic.pk}]
+                self.inner_list = []
+
             self.break_tag = True
 
 

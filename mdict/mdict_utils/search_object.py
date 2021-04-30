@@ -138,7 +138,11 @@ class SearchObject:
 
     @search_exception()
     def search_sug(self, num):
-        sug = self.mdx.look_up_sug(self.query, num, self.f_mdx)
+        if self.is_zim:
+            self.process_zim_query()
+            sug = self.mdx.search_sugs(self.f_mdx, self.mdx, self.query, num)
+        else:
+            sug = self.mdx.look_up_sug(self.query, num, self.f_mdx)
         self.close_all()
         return sug
 
@@ -282,6 +286,7 @@ class SearchObject:
         return record
 
     def process_zim_query(self):
+        self.query = self.query.replace(' ', '_')
         if self.query.rfind('A/') == -1 and self.query.rfind('a/') == -1:
             if self.query == 'main.html':
                 # 主页
