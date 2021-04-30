@@ -551,8 +551,8 @@ class ZIMFile:
         for i in range(sug_num):
             entry = self.read_directory_entry_by_index(file, found_num+i)
             found_title = full_url(entry['namespace'], entry['url'])
-            if found_title.startswith('A/') or found_title.startswith('a/'):
-                found_title = found_title[found_title.find('/')+1:]
+            if entry['namespace'] == "A":
+                found_title = found_title[2:]
             sug_list.append(found_title)
         return sug_list
 
