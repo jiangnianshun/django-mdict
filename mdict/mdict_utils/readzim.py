@@ -549,7 +549,7 @@ class ZIMFile:
                     found_num = end
         sug_list = []
         for i in range(sug_num):
-            entry = self.read_directory_entry_by_index(file, found_num+i)
+            entry = self.read_directory_entry_by_index(file, found_num + i)
             found_title = full_url(entry['namespace'], entry['url'])
             if entry['namespace'] == "A":
                 found_title = found_title[2:]
@@ -618,16 +618,19 @@ class ZIMFile:
         else:
             # The location is given as domain.com/namespace/url/parts/ ,
             # as used in the ZIM link or, alternatively, as domain.com/page.htm
-            _, namespace, *url_parts = location.split("/")
+            # _, namespace, *url_parts = location.split("/")
 
             # are we dealing with an address bar request, eg. /article_name.htm
+
+            if location.startswith('/'):
+                location = location[1:]
+            namespace, *url_parts = location.split("/")
             if len(namespace) > 1:
                 url = namespace  # the namespace is then the URL
                 namespace = "A"  # and the namespace is an article
             else:
-                # combine all the url parts together again
                 url = "/".join(url_parts)
-            # get the desired article
+                # combine all the url parts together again
 
             article = zim.get_article_by_url(file, namespace, url)
             # we have an article when the namespace is A
@@ -647,4 +650,3 @@ class ZIMFile:
     @staticmethod
     def search_sugs(file, zim, location, sug_num):
         return zim._get_sug_by_url(file, location, sug_num)
-

@@ -285,10 +285,12 @@ class SearchObject:
         if self.query.rfind('A/') == -1 and self.query.rfind('a/') == -1:
             if self.query == 'main.html':
                 # 主页
-                self.query = '/'+self.query
+                self.query = '/' + self.query
             else:
-                flag = self.query.rfind('/')
-                self.query = self.query[:flag + 1] + 'A/' + self.query[flag + 1:]
+                if self.query[0] == '/':
+                    self.query = 'A' + self.query
+                else:
+                    self.query = 'A/' + self.query
 
     @search_exception()
     def search_entry_list(self):
@@ -595,7 +597,13 @@ class SearchObject:
         # return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
         #        str(self.dic_id) + '/' + quote(str(res_name)) + '?path=' + self.m_path + delimiter_r
         if self.is_zim:
+            is_entry = False
             if flag == -1:
+                is_entry = True
+            else:
+                if res_name[flag + 1:].strip() == 'html':
+                    is_entry = True
+            if is_entry:
                 return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
                        'entry://' + str(res_name) + delimiter_r
             else:
