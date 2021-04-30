@@ -37,4 +37,7 @@ urlpatterns = [
     url(r'^zim/(\d+)/(-)/(.+)', views.search_zim),
     url(r'^zim/(\d+)/(-)/([a-zA-Z])/(.+)', views.search_zim),
     url(r'^zim/(\d+)/([a-zA-Z])/(.+)', views.search_zim),
+    url(r'^dic/zim/(\d+)/(-)/(.+)', views.search_zim),
+    url(r'^dic/zim/(\d+)/(-)/([a-zA-Z])/(.+)', views.search_zim),
+    url(r'^dic/zim/(\d+)/([a-zA-Z])/(.+)', views.search_zim),
 ]

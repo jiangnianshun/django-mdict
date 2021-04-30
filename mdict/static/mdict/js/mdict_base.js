@@ -245,12 +245,16 @@ function add_click_event(){
 			dic_search=true;
 			dic_back=false;
 			var container=$("#card-container");
-			if($("#scroll_list").length>0){
+			if($("html").attr("data-type")=='dic'){
 			    query_key(container,query);
-			}else{
+			}else if($("html").attr("data-type")=='esdic'){
 			    $("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
 			    $("#result_time").attr("data-isover",false);
 			    query_es(query,$("#card-container"),1,true,false)
+			}else if($("html").attr("data-type")=='zim'){
+			    $("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
+                $("#result_time").attr("data-isover",false);
+                query_mdict(query,$("#card-container"),1,true,false);
 			}
 		}
         if($('html').data('data-pushstate')){
@@ -749,4 +753,23 @@ function init_es_dic(){
     })
 
     first_query();//第一次查询会不会和初始化的0位置查询冲突？
+}
+
+function get_main_page(){
+	var first_query="main.html";
+
+	if(first_query!=''){
+		$('#query').val(html_unescape(first_query));
+		$('#mdict-query').trigger("click");
+	}
+}
+
+function init_zim_dic(){
+    get_header($("#modal-container-brief .modal-body"));
+
+    init_common();
+
+    get_mdict_list($("#mdict-list-content"),false,false);
+
+    get_main_page();
 }

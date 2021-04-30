@@ -2,9 +2,6 @@
 
 {% block content %}
 {% include "mdict/mdict-navbar.html" %}
-<div id="scroll_list" style="height:250px;overflow:auto;">
-    <ul id="display_list"></ul>
-</div>
 <div id="alert-box"></div>
 <div id="temp-data"></div>
 <div id="card-container">
@@ -25,6 +22,7 @@
     $("#result_num").hide();
     $("#result_time").hide();
     $("#sound-speaker").hide();
+    $("#mdict-group-list").hide();
+    init_zim_dic();
 </script>
-<script src="/static/mdict/js/init_dic.js"></script>
 {% endblock %}

@@ -36,8 +36,8 @@ from .mdict_utils.entry_object import entryObject
 from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
 from .mdict_utils.mdict_func import mdict_root_path, is_local, get_m_path
-
 from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator, es_paginator
+from .mdict_utils.readzim import ZIMFile
 
 init_database()
 
@@ -1004,11 +1004,18 @@ def mdict_dic(request):
         dics = MdictDic.objects.all().order_by('mdict_priority')
         if len(dics) > 0:
             dic_pk = dics[0].pk
-    dic_name = MdictDic.objects.get(pk=dic_pk).mdict_name
+    dic = MdictDic.objects.get(pk=dic_pk)
+    dic_name = dic.mdict_name
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
-    return render(request, 'mdict/dic.html',
-                  {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'dic', 'is_mobile': is_mb})
+
+    item = init_vars.mdict_odict[dic.mdict_file]
+    mdx = item.mdx
+    if isinstance(mdx, ZIMFile):
+        return render(request, 'mdict/zim.html', {'dic_pk': dic_pk, 'name': dic_name, 'query': '', 'type': 'zim', 'is_mobile': is_mb})
+    else:
+        return render(request, 'mdict/dic.html',
+                      {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'dic', 'is_mobile': is_mb})
 
 
 def es_dic(request):

@@ -1031,7 +1031,7 @@ function get_mdict_list(container, es_icon_enable, es_page_enable){//载入词�
 			if(dic_pk==-2){
                 get_index_status();
 		    }else{
-		        if(dic_pk>0&&$("#scroll_list").length==0){
+		        if($("html").attr("data-type")=='esdic'){
 		            get_index_status();
 		        }
 		    }

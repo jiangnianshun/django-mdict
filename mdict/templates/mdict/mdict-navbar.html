@@ -5,7 +5,7 @@
             <div class="input-group">
                 <input autocomplete="off" class="btn btn-outline-secondary" id="query" type="text">
                 <i id="mdict-query-clear" class="bi bi-x input-group-text mdict-icon"></i>
-                {% if type == 'index' or type == 'dic' %}
+                {% if type == 'index' or type == 'dic' or type == 'zim' %}
                     <i id="mdict-query" class="bi bi-search btn mdict-icon"></i>
                 {% endif %}
                 {% if type == 'es' or type == 'esdic' %}
@@ -28,7 +28,7 @@
                     <div id="result_time" style="font-size:12px;color:gray;"></div>
                 </div>
             {% endif %}
-            {% if type == 'dic' or type == 'esdic' %}
+            {% if type == 'dic' or type == 'esdic' or type == 'zim' %}
             <div class="input-group float-end">
                 <a class="btn" data-bs-toggle="modal" data-bs-target="#modal-container-brief" id="modal-brief">
                 {{ name }}</a>
@@ -37,13 +37,13 @@
         </div>
         <div class="d-flex float-end">
             <div class="input-group">
-                {% if type == 'index' or type == 'dic' or type == 'esdic' %}
+                {% if type == 'index' or type == 'dic' or type == 'esdic' or type == 'zim' %}
                     <span class="btn mdict-icon" id="btn-es">全</span>
                 {% endif %}
                 <span class="btn mdict-icon" id="btn-bujian">部</span>
                 <i class="bi bi-journal-bookmark-fill btn mdict-icon" id="modal-mdict" data-bs-toggle="modal" data-bs-target="#modal-container-mdict"></i>
                 <i class="bi bi-gear-fill btn mdict-icon" id="modal-config" data-bs-toggle="modal" data-bs-target="#modal-container-config"></i>
-                {% if type == 'es' or type == 'dic' or type == 'esdic' %}
+                {% if type == 'es' or type == 'dic' or type == 'esdic' or type == 'zim' %}
                     <i class="bi bi-house-door-fill btn mdict-icon" id="btn-home"></i>
                 {% endif %}
                 {% if type == 'index' %}

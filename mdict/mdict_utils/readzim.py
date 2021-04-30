@@ -614,7 +614,7 @@ class ZIMFile:
         if location in ["/", "/index.htm", "/index.html",
                         "/main.htm", "/main.html"]:
             # ... return the main page as the article
-            article = zim.get_main_page()
+            article = zim.get_main_page(file)
         else:
             # The location is given as domain.com/namespace/url/parts/ ,
             # as used in the ZIM link or, alternatively, as domain.com/page.htm
@@ -633,6 +633,8 @@ class ZIMFile:
             # we have an article when the namespace is A
             # (i.e. not a photo, etc.)
             is_article = (namespace == "A")
+        if article is None:
+            return ''
         if is_article:
             result = article.data  # we have an actual article
             # decode its contents into a string using its encoding

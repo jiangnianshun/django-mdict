@@ -144,7 +144,10 @@ class SearchObject:
 
     @search_exception()
     def search_key_list(self, p1, p2, num, direction):
-        entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = self.mdx.look_up_key_list(p1, p2, num, direction, self.f_mdx)
+        if self.is_zim:
+            entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = [], 0, 0, 0, 0
+        else:
+            entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = self.mdx.look_up_key_list(p1, p2, num, direction, self.f_mdx)
         self.close_all()
         return entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2
 
@@ -280,8 +283,12 @@ class SearchObject:
 
     def process_zim_query(self):
         if self.query.rfind('A/') == -1 and self.query.rfind('a/') == -1:
-            flag = self.query.rfind('/')
-            self.query = self.query[:flag + 1] + 'A/' + self.query[flag + 1:]
+            if self.query == 'main.html':
+                # 主页
+                self.query = '/'+self.query
+            else:
+                flag = self.query.rfind('/')
+                self.query = self.query[:flag + 1] + 'A/' + self.query[flag + 1:]
 
     @search_exception()
     def search_entry_list(self):
