@@ -81,11 +81,19 @@ def replace_res_name(res_name):
     return res_name
 
 
-def replace_res_name2(res_name):
+def replace_res_name21(res_name):
     if res_name.startswith('../'):
         res_name = res_name[3:]
     elif res_name.startswith('/'):
         res_name = res_name[1:]
+    return res_name
+
+
+def replace_res_name2(res_name):
+    while True:
+        res_name = replace_res_name21(res_name)
+        if not res_name.startswith('../'):
+            break
     return res_name
 
 

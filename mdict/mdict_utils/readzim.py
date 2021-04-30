@@ -520,6 +520,42 @@ class ZIMFile:
                 return self.read_directory_entry_by_index(file, middle), middle
             return None, None
 
+    def _get_sug_by_url(self, file, location, sug_num):
+        front = middle = 0
+        end = len(self)
+        title = location
+
+        found = False
+        found_num = 0
+        # continue as long as the boundaries don't cross and
+        # we haven't found it
+        while front <= end and not found:
+            middle = floor((front + end) / 2)  # determine the middle index
+            entry = self.read_directory_entry_by_index(file, middle)
+            found_title = full_url(entry['namespace'], entry['url'])
+            if found_title == title:
+                found = True
+                found_num = middle  # flag it if the item is found
+            else:
+                if found_title < title:  # if the middle is too early ...
+                    # move the front index to middle
+                    # (+ 1 to ensure boundaries can be crossed)
+                    front = middle + 1
+                    found_num = front
+                else:  # if the middle falls too late ...
+                    # move the end index to middle
+                    # (- 1 to ensure boundaries can be crossed)
+                    end = middle - 1
+                    found_num = end
+        sug_list = []
+        for i in range(sug_num):
+            entry = self.read_directory_entry_by_index(file, found_num+i)
+            found_title = full_url(entry['namespace'], entry['url'])
+            if found_title.startswith('A/') or found_title.startswith('a/'):
+                found_title = found_title[found_title.find('/')+1:]
+            sug_list.append(found_title)
+        return sug_list
+
     def get_article_by_url(self, file, namespace, url, follow_redirect=True):
         entry, idx = self._get_entry_by_url(file, namespace, url)  # get the entry
         if idx:  # we found an index and return the article at that index
@@ -572,7 +608,7 @@ class ZIMFile:
         return r_list
 
     @staticmethod
-    def search_article(file, zim, location):
+    def search_articles(file, zim, location):
         is_article = True  # assume an article is requested, for now
         if location in ["/", "/index.htm", "/index.html",
                         "/main.htm", "/main.html"]:
@@ -604,3 +640,8 @@ class ZIMFile:
             # just a binary blob, so use it as such
             result = article.data
         return result
+
+    @staticmethod
+    def search_sugs(file, zim, location, sug_num):
+        return zim._get_sug_by_url(file, location, sug_num)
+

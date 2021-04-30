@@ -128,7 +128,11 @@ class SearchObject:
 
     @search_exception()
     def search_sug_list(self, num):
-        sug = self.mdx.look_up_sug_list(self.query_list, num, self.f_mdx)
+        if self.is_zim:
+            self.process_zim_query()
+            sug = self.mdx.search_sugs(self.f_mdx, self.mdx, self.query, num)
+        else:
+            sug = self.mdx.look_up_sug_list(self.query_list, num, self.f_mdx)
         self.close_all()
         return sug
 
@@ -271,15 +275,18 @@ class SearchObject:
 
         return record
 
+    def process_zim_query(self):
+        if self.query.rfind('A/') == -1 and self.query.rfind('a/') == -1:
+            flag = self.query.rfind('/')
+            self.query = self.query[:flag + 1] + 'A/' + self.query[flag + 1:]
+
     @search_exception()
     def search_entry_list(self):
         # 查询一组词
         r_list = []
         if self.is_zim:
-            if self.query.rfind('A/') == -1:
-                flag = self.query.rfind('/')
-                self.query = self.query[:flag + 1] + 'A/' + self.query[flag + 1:]
-            record = self.mdx.search_article(self.f_mdx, self.mdx, self.query)
+            self.process_zim_query()
+            record = self.mdx.search_articles(self.f_mdx, self.mdx, self.query)
             if record is None:
                 return r_list
             record = regpz.sub(self.substitute_hyper_link, record)
@@ -354,7 +361,7 @@ class SearchObject:
     def search_mdd(self):
         if self.is_zim:
             mime_type = guess_mime(self.query)
-            res_content = self.mdx.search_article(self.f_mdx, self.mdx, self.query)
+            res_content = self.mdx.search_articles(self.f_mdx, self.mdx, self.query)
         else:
             res_content, mime_type = self.get_mdd_cache()
 
@@ -524,19 +531,16 @@ class SearchObject:
                str(matched.group(3))
 
     def substitute_hyper_link(self, matched):  # 处理html词条，获取图片和css
-        # 需不需要返回www.开头但没有http和https前缀的匹配
-        matched_text = matched.group(0)
-        flag = matched_text.find('.')
-        if not self.is_zim:
-
-            if flag == -1:
-                return matched_text
-        # 对于没有扩展名的不作处理，vocabulary2020查artefact有800多隐藏的连接，全部替换耗时6秒。
-
         if self.is_zim:
             res_name = replace_res_name2(matched.group(8))
         else:
             res_name = replace_res_name(matched.group(8))
+
+        flag = res_name.find('.')
+        if not self.is_zim:
+            if flag == -1:
+                # 对于没有扩展名的不作处理，vocabulary2020查artefact有800多隐藏的连接，全部替换耗时6秒。
+                return matched.group(0)
 
         temp_1 = matched.group(4)
         temp_2 = matched.group(6)
