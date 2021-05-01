@@ -636,6 +636,8 @@ class ZIMFile:
             # we have an article when the namespace is A
             # (i.e. not a photo, etc.)
             is_article = (namespace == "A")
+            if url.endswith('.js') or url.endswith('.css'):
+                is_article = True
         if article is None:
             return None
         if is_article:
