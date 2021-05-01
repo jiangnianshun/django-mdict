@@ -379,6 +379,8 @@ class SearchObject:
         if self.is_zim:
             mime_type = guess_mime(self.query)
             res_content = self.mdx.search_articles(self.f_mdx, self.mdx, self.query)
+            if res_content is None:
+                return '', mime_type
         else:
             res_content, mime_type = self.get_mdd_cache()
 
