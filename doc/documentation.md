@@ -169,9 +169,13 @@ github mdict-analysis：[https://github.com/csarron/mdict-analysis/blob/master/r
 
 ### zim解析
 
+ZIM file format: [https://openzim.org/wiki/ZIM_file_format](https://openzim.org/wiki/ZIM_file_format)
+
 github ZIMply： [https://github.com/kimbauters/ZIMply](https://github.com/kimbauters/ZIMply)
 
 /django-mdict/mdict/mdict-utils/readzim.py修改自zimply.py。
+
+目前不支持zim的模糊搜索和全文搜索。
 
 zim是离线维基百科格式，下载地址：
 

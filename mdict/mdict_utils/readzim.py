@@ -479,6 +479,49 @@ class ZIMFile:
         else:
             return None
 
+    def _get_metadata_by_url(self, file):
+        front = middle = 0
+        end = len(self)
+
+        found_ind = -1
+
+        while front <= end:
+            middle = floor((front + end) / 2)
+            entry = self.read_directory_entry_by_index(file, middle)
+            found_title = entry['namespace']
+            if found_title == 'M':
+                found_ind = middle
+                break
+            else:
+                if found_title < 'M':
+                    front = middle + 1
+                else:
+                    end = middle - 1
+        ind_list = []
+        if found_ind > -1:
+            ind_list.append((self.read_directory_entry_by_index(file, middle), middle))
+            tmp_ind = found_ind
+            while tmp_ind >= 0:
+                tmp_ind -= 1
+                entry = self.read_directory_entry_by_index(file, tmp_ind)
+                found_title = entry['namespace']
+                if found_title == 'M':
+                    ind_list.append((self.read_directory_entry_by_index(file, tmp_ind), tmp_ind))
+                else:
+                    break
+            ind_list.reverse()
+            tmp_ind = found_ind
+            while tmp_ind <= len(self):
+                tmp_ind += 1
+                entry = self.read_directory_entry_by_index(file, tmp_ind)
+                found_title = entry['namespace']
+                if found_title == 'M':
+                    ind_list.append((self.read_directory_entry_by_index(file, tmp_ind), tmp_ind))
+                else:
+                    break
+
+        return ind_list
+
     def _get_entry_by_url(self, file, namespace, url, linear=False):
         if linear:  # if we are performing a linear search ...
             # ... simply iterate over all articles
@@ -556,6 +599,14 @@ class ZIMFile:
             sug_list.append(found_title)
         return sug_list
 
+    def get_metadata_by_url(self, file):
+        ind_list = self._get_metadata_by_url(file)  # get the entry
+        metadata_dict = {}
+        if ind_list:  # we found an index and return the article at that index
+            for entry, idx in ind_list:
+                metadata_dict.update({entry['url']: self._get_article_by_index(file, idx)[0].decode('utf-8')})
+        return metadata_dict
+
     def get_article_by_url(self, file, namespace, url, follow_redirect=True):
         entry, idx = self._get_entry_by_url(file, namespace, url)  # get the entry
         if idx:  # we found an index and return the article at that index
@@ -571,23 +622,7 @@ class ZIMFile:
             return main_page
 
     def metadata(self, file):
-        """
-        Retrieve the metadata attached to the ZIM file.
-        :return: a dict with the entry url as key and the metadata as value
-        """
-        metadata = {}
-        # iterate backwards over the entries
-        for i in range(self.header_fields['articleCount'] - 1, -1, -1):
-            entry = self.read_directory_entry_by_index(file, i)  # get the entry
-            if entry['namespace'] == 'M':  # check that it is still metadata
-                # turn the key to lowercase as per Kiwix standards
-                m_name = entry['url'].lower()
-                # get the data, which is encoded as an article
-                meta_body = self._get_article_by_index(file, i)[0]
-                metadata[m_name] = meta_body.decode('utf-8')
-            else:  # stop as soon as we are no longer looking at metadata
-                break
-        return metadata
+        return self.get_metadata_by_url(file)
 
     def __len__(self):  # retrieve the number of articles in the ZIM file
         return self.header_fields['articleCount']

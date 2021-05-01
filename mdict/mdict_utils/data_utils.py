@@ -53,9 +53,6 @@ def init_database():
                     mdict_name = html.unescape(header['Title'].strip())
                     if not mdict_name or mdict_name == 'Title (No HTML code allowed)':
                         mdict_name = k
-                elif 'title' in header:
-                    # zim是title
-                    mdict_name = html.unescape(header['title'].strip())
                 print(k, mdict_name)
                 obj = MdictDic(mdict_name=mdict_name, mdict_file=k)
                 update_list.append(obj)
