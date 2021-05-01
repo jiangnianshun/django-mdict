@@ -8,6 +8,7 @@ import os
 import re
 import copy
 import imghdr
+import random
 from PIL import Image
 from io import BytesIO
 from urllib.parse import quote
@@ -125,6 +126,30 @@ class SearchObject:
         for f in self.f_mdd_list:
             if not f.closed:
                 f.close()
+
+    @search_exception()
+    def random_search(self):
+        count = 0
+        random_entry = ''
+        while count < 10:
+            if self.is_zim:
+                random_id = random.randint(0, self.mdx.header_fields['articleCount'] - 1)
+                entry = self.mdx.read_directory_entry_by_index(self.f_mdx, random_id)
+                if entry['namespace'] == 'A':
+                    random_entry = entry['url']
+                    break
+            else:
+                random_id = random.randint(0, len(self.mdx._key_list) - 1)
+                random_id2 = random.randint(0, 5)
+                r_v = self.mdx.look_up_key_list(random_id, random_id2, 1000, 1, self.f_mdx)
+                if len(r_v[0]) > 0:
+                    random_id = random.randint(0, len(r_v[0])-1)
+                    random_entry = r_v[0][random_id][0]
+                    break
+            count += 1
+
+        self.close_all()
+        return random_entry
 
     @search_exception()
     def search_sug_list(self, num):

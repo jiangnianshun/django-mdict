@@ -3,6 +3,7 @@ import mimetypes
 import re
 import time
 import csv
+import random
 from urllib.parse import quote, unquote
 
 from django.http import HttpResponse
@@ -866,6 +867,18 @@ def search_zim(request, *args):
             res_content, mime_type = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name).search_mdd()
 
     return HttpResponse(res_content, content_type=mime_type)
+
+
+def random_search(request, *args):
+    mdict_odict_keys = list(init_vars.mdict_odict.keys())
+    random_key = random.sample(mdict_odict_keys, 1)[0]
+    random_mdict = init_vars.mdict_odict[random_key]
+    dic = get_or_create_dic(random_key)
+    mdx = random_mdict.mdx
+    mdd_list = random_mdict.mdd_list
+    g_id = random_mdict.g_id
+    random_entry = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '', g_id=g_id).random_search()
+    return HttpResponse(random_entry)
 
 
 def search_mdd(request, *args):

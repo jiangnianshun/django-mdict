@@ -462,6 +462,20 @@ function init_other_config(){
             rotate_content(this);
         });
 	});
+	$('#random-search').click(function(){
+	    $.ajax({
+            url:"/mdict/randomsearch/",
+            contentType:'json',
+            type:'GET',
+            success:function(data){
+                $('#query').val(html_unescape(data));
+		        $('#mdict-query').trigger("click");
+            },
+            error:function(jqXHR,textStatus,errorThrown){
+                alert(jqXHR.responseText);
+            },
+        });
+	});
 }
 
 function init_modal_config(){

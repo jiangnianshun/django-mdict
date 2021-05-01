@@ -41,4 +41,5 @@ urlpatterns = [
     url(r'^dic/zim/(\d+)/(.+)', views.search_zim),
     url(r'^dic/zim/(\d+)/(.+)', views.search_zim),
     url(r'^zim/$', views.search_zim_dic),
+    path('randomsearch/', views.random_search),
 ]

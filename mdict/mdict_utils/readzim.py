@@ -511,7 +511,7 @@ class ZIMFile:
                     break
             ind_list.reverse()
             tmp_ind = found_ind
-            while tmp_ind <= len(self):
+            while tmp_ind < len(self):
                 tmp_ind += 1
                 entry = self.read_directory_entry_by_index(file, tmp_ind)
                 found_title = entry['namespace']
