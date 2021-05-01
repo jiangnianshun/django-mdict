@@ -175,7 +175,7 @@ github ZIMply： [https://github.com/kimbauters/ZIMply](https://github.com/kimba
 
 /django-mdict/mdict/mdict-utils/readzim.py修改自zimply.py。
 
-目前不支持zim的模糊搜索和全文搜索。
+目前不支持zim的模糊搜索和全文搜索，在手机浏览器上，可能需要手指下滑两次才能向下滑动，两次之间手指要离开屏幕。
 
 zim是离线维基百科格式，下载地址：
 
