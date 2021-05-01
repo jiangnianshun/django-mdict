@@ -11,3 +11,4 @@ cython
 pillow
 psutil
 python-Levenshtein
+zstandard
