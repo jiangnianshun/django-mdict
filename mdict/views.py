@@ -1119,7 +1119,7 @@ def search_suggestion(request):
                 if s.lower().strip() not in return_sug:
                     return_sug.append(s.lower().strip())
             return_sug.sort()
-            f = -1
+            tf = -1
 
             for i in range(0, len(return_sug)):
                 temp_str = return_sug[i].lower()
@@ -1129,19 +1129,19 @@ def search_suggestion(request):
                 if temp_str.find(query.lower()) == 0 or temp_str.find(q2b.lower()) == 0 \
                         or temp_str.find(query.lower().replace(' ', '').replace('　', '')) == 0 \
                         or temp_str.find(regp.sub('', query.lower())) == 0:
-                    f = i
+                    tf = i
                     break
                 elif not is_en_func(query):
                     q_s = t2s.convert(query)
                     q_t = s2t.convert(query)
-                    if temp_str.find(q_s) == 0 or temp_str.find(q_t) == 0:
-                        f = i
+                    if temp_str.startswith(q_s[0]) or temp_str.startswith(q_t[0]):
+                        tf = i
                         break
 
-            if f == -1:
+            if tf == -1:
                 t_list = return_sug[:sug_num]
             else:
-                t_list = (return_sug[f:] + return_sug[:f])[:sug_num]
+                t_list = (return_sug[tf:] + return_sug[:tf])[:sug_num]
 
         sug_cache.put(query, group, dic_pk, t_list)
 
