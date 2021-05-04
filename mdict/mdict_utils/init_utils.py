@@ -258,7 +258,7 @@ def write_dir_change():
     new_dir.update({'root_dir': mdict_root_path})
     for root, dirs, files in os.walk(mdict_root_path):
         for file in files:
-            if file.lower().endswith('.mdx') or file.lower().endswith('.mdd'):
+            if file.lower().endswith('.mdx') or file.lower().endswith('.mdd') or file.lower().endswith('.zim'):
                 mdict_path = os.path.join(root, file)
                 mtime = os.path.getmtime(mdict_path)
                 new_dir.update({mdict_path: mtime})
