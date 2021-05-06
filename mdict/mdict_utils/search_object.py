@@ -332,9 +332,11 @@ class SearchObject:
             for i in range(len(tqlist2)):
                 tqlist2[i] = tqlist2[i].capitalize()
 
-            self.query_list.append('_'.join(tqlist))
-            tquery = '_'.join(tqlist2)
-            if tquery != self.query_list[0]:
+            tquery = 'A/'+'_'.join(tqlist)
+            if tquery not in self.query_list:
+                self.query_list.append(tquery)
+            tquery = 'A/'+'_'.join(tqlist2)
+            if tquery not in self.query_list:
                 self.query_list.append(tquery)
 
     @search_exception()
