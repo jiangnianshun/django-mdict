@@ -678,7 +678,7 @@ hc = HanziChaizi()
 class search_mdx_key_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            result_list = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '').search_key(self.query)
+            result_list = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '', is_dic=True).search_key(self.query)
             s = -1
             e = -1
             r_p1 = -1
@@ -734,7 +734,7 @@ def search_mdx_key(request):
 class search_mdx_record_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id).search_record(self.start,
+            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id, is_dic=True).search_record(self.start,
                                                                                                           self.end)
             self.inner_list = [
                 {'mdx_name': dic.mdict_name, 'mdx_entry': self.query, 'mdx_record': record, 'pk': dic.pk}]
@@ -822,7 +822,7 @@ def search_audio(request):
 class search_zim_dic_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            r_list = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id).search_entry_list()
+            r_list = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id, is_dic=True).search_entry_list()
             if len(r_list) > 0:
                 record = r_list[0].mdx_record
                 self.inner_list = [
@@ -864,7 +864,7 @@ def search_zim(request, *args):
             item = init_vars.mdict_odict[dic_name]
             mdx = item.mdx
             mdd_list = item.mdd_list
-            res_content, mime_type = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name).search_mdd()
+            res_content, mime_type = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name, is_dic=True).search_mdd()
 
     return HttpResponse(res_content, content_type=mime_type)
 
@@ -906,7 +906,7 @@ def search_mdd(request, *args):
             if mdx.get_fpath().find('.mdx') > -1:
                 res_name = res_name.replace('/', '\\')
             mdd_list = item.mdd_list
-            sobj = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name)
+            sobj = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name, is_dic=True)
             res_content, mime_type = sobj.search_mdd()
             if sobj.is_zim:
                 if mime_type is not None:

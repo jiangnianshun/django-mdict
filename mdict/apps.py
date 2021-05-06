@@ -25,5 +25,5 @@ class MdictConfig(AppConfig):
 
     def ready(self):
         init_mdict_list(False)
-        if check_system() == 1:
-            init_ws_server()
+        # if check_system() == 1:
+        #     init_ws_server()

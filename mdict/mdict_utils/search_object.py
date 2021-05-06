@@ -76,13 +76,15 @@ class SearchObject:
         self.is_zim = False
         if isinstance(mdx, ZIMFile):
             self.is_zim = True
-            self.query_list.clear()
             self.process_zim_query()
 
         self.mdx = mdx
         self.mdd = mdd_list
         self.mdd_exist = False
         self.g_id = extra.get('g_id')
+        self.is_dic = False
+        if 'is_dic' in extra.keys():
+            self.is_dic = extra.get('is_dic')
 
         try:
             self.f_mdx = open(self.mdx.get_fpath(), 'rb')
@@ -672,9 +674,14 @@ class SearchObject:
                 return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
                        'entry://' + str(res_name) + delimiter_r
             else:
-                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + quote(str(res_name)) + delimiter_r
-                # return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
-                #        'zim' + '/' + str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
+                if self.is_dic:
+                    return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + quote(str(res_name)) + delimiter_r
+                else:
+                    return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
+                           'zim' + '/' + str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
         else:
-            return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
-                   str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
+            if self.is_dic:
+                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + quote(str(res_name)) + delimiter_r
+            else:
+                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
+                       str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
