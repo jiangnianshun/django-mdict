@@ -138,6 +138,21 @@ function ihyperlink(e){
                 //新标签页打开zim的非entry的html页面
                 window.open(query);
             }
+            //pdf文件和epub文件点击下载
+            var mark=query.indexOf('.pdf');
+            if(mark>0&&query.length==mark+4){
+                var link = document.createElement('a');
+                link.download = html_unescape(query);
+                link.href = query;
+                link.click();
+            }
+            var mark=query.indexOf('.epub');
+            if(mark>0&&query.length==mark+5){
+                var link = document.createElement('a');
+                link.download = html_unescape(query);
+                link.href = query;
+                link.click();
+            }
         }
     }
 
