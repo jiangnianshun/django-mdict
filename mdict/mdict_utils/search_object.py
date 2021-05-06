@@ -438,7 +438,7 @@ class SearchObject:
             if mime_type is not None:
                 if 'javascript' in mime_type:
                     # 临时性修复gutenberg.zim新增script的src重定向
-                    res_content = res_content.replace('../', 'zim/'+str(self.dic_id) + '/')
+                    res_content = res_content.replace('../', '')
         else:
             res_content, mime_type = self.get_mdd_cache()
 
@@ -672,8 +672,9 @@ class SearchObject:
                 return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
                        'entry://' + str(res_name) + delimiter_r
             else:
-                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
-                       'zim' + '/' + str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
+                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + quote(str(res_name)) + delimiter_r
+                # return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
+                #        'zim' + '/' + str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
         else:
             return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
                    str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r

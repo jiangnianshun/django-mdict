@@ -1043,7 +1043,7 @@ function get_mdict_list(container, es_icon_enable, es_page_enable){//载入词�
                 <div class="card-header">${checkbox_html}${es_icon}
                     <img class="dic-icon" src="${html_escape(dic_icon,false)}"></img>
                     <span class="badge badge-light text-dark">${dic_pror}</span>
-                    <a class="mdict-list-mark" href="/mdict/${es_page}/?dic_pk=${dic_pk}" data-file=${html_escape(dic_file)}>
+                    <a class="mdict-list-mark" href="/mdict/${es_page}/${dic_pk}/" data-file=${html_escape(dic_file)}>
                         ${html_escape(dic_name)}
                     </a>
                 </div>

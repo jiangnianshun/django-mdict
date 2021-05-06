@@ -893,7 +893,7 @@ def search_mdd(request, *args):
     mime_type = ''
 
     if len(dics) > 0:
-        res_name = unquote(args[1]).replace('/', '\\')
+        res_name = unquote(args[1])
         # flag = res_name.rfind('?path=')
         # if flag > -1:
         #     res_name = res_name[:flag]
@@ -903,8 +903,17 @@ def search_mdd(request, *args):
         if dic_name in init_vars.mdict_odict.keys():
             item = init_vars.mdict_odict[dic_name]
             mdx = item.mdx
+            if mdx.get_fpath().find('.mdx') > -1:
+                res_name = res_name.replace('/', '\\')
             mdd_list = item.mdd_list
-            res_content, mime_type = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name).search_mdd()
+            sobj = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name)
+            res_content, mime_type = sobj.search_mdd()
+            if sobj.is_zim:
+                if mime_type is not None:
+                    from .mdict_utils.search_object import regpz
+                    if 'html' in mime_type:
+                        res_content = regpz.sub(sobj.substitute_hyper_link, res_content)
+
         if res_content == '':
             if res_name[0] == '\\' or res_name[0] == '/':
                 res_name = res_name[1:]
@@ -1042,8 +1051,10 @@ def es_index(request):
     return render(request, 'mdict/es-index.html', {'query': query, 'type': 'es', 'is_mobile': is_mb})
 
 
-def mdict_dic(request):
-    dic_pk = int(request.GET.get('dic_pk', -1))
+def mdict_dic(request, *args):
+    # dic_pk = int(request.GET.get('dic_pk', -1))
+    dic_pk = args[0]
+
     if dic_pk == -1:
         dics = MdictDic.objects.all().order_by('mdict_priority')
         if len(dics) > 0:
