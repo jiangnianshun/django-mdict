@@ -565,7 +565,11 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
             if not dic.mdict_es_enable:
                 dic.mdict_es_enable = True
                 dic.save()
-            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '').substitute_record(hit['content'])
+            if dic_pk > -1:
+                is_dic = True
+            else:
+                is_dic = False
+            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '', is_dic=is_dic).substitute_record(hit['content'])
 
             # 去重
             if hit['content'].startswith('@@@LINK='):
@@ -1074,8 +1078,9 @@ def mdict_dic(request, *args):
                       {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'dic', 'is_mobile': is_mb})
 
 
-def es_dic(request):
-    dic_pk = int(request.GET.get('dic_pk', -1))
+def es_dic(request, *args):
+    # dic_pk = int(request.GET.get('dic_pk', -1))
+    dic_pk = args[0]
     if dic_pk == -1:
         dics = MdictDic.objects.all().order_by('mdict_priority')
         if len(dics) > 0:

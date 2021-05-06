@@ -34,7 +34,7 @@ urlpatterns = [
     path('downloadhistory/', views.download_history),
     path('wordcloud/', views.wordcloud),
     path('getwordlist/', views.getwordlist),
-    path('esdic/', views.es_dic),
+    url(r'^esdic/(\d+)/$', views.es_dic),
     url(r'^zim/(\d+)/(.+)', views.search_zim),
     url(r'^zim/(\d+)/(.+)', views.search_zim),
     url(r'^zim/(\d+)/(.+)', views.search_zim),
