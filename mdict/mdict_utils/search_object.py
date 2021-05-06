@@ -76,6 +76,8 @@ class SearchObject:
         self.is_zim = False
         if isinstance(mdx, ZIMFile):
             self.is_zim = True
+            self.query_list.clear()
+            self.process_zim_query()
 
         self.mdx = mdx
         self.mdd = mdd_list
@@ -155,7 +157,6 @@ class SearchObject:
     def search_sug_list(self, num):
         sug = []
         if self.is_zim:
-            self.process_zim_query()
             for query in self.query_list:
                 sug.extend(self.mdx.search_sugs(self.f_mdx, self.mdx, query, num))
         else:
@@ -167,7 +168,6 @@ class SearchObject:
     def search_sug(self, num):
         sug = []
         if self.is_zim:
-            self.process_zim_query()
             for query in self.query_list:
                 sug.extend(self.mdx.search_sugs(self.f_mdx, self.mdx, query, num))
         else:
@@ -332,19 +332,29 @@ class SearchObject:
             for i in range(len(tqlist2)):
                 tqlist2[i] = tqlist2[i].capitalize()
 
-            tquery = 'A/'+'_'.join(tqlist)
+            tquery = 'A/' + '_'.join(tqlist2)
             if tquery not in self.query_list:
                 self.query_list.append(tquery)
-            tquery = 'A/'+'_'.join(tqlist2)
+
+            if not tquery.endswith('.html'):
+                tquery += '.html'
+                if tquery not in self.query_list:
+                    self.query_list.append(tquery)
+
+            tquery = 'A/' + '_'.join(tqlist)
             if tquery not in self.query_list:
                 self.query_list.append(tquery)
+
+            if not tquery.endswith('.html'):
+                tquery += '.html'
+                if tquery not in self.query_list:
+                    self.query_list.append(tquery)
 
     @search_exception()
     def search_entry_list(self):
         # 查询一组词
         r_list = []
         if self.is_zim:
-            self.process_zim_query()
             for query in self.query_list:
                 record = self.mdx.search_articles(self.f_mdx, self.mdx, query)
                 if record is None:
