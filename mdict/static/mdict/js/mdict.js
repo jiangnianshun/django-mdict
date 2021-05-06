@@ -556,7 +556,7 @@ function query_zim(container,entry,dic_pk){
 			//query_record在iframe外调用一次，在iframe内调用一次，因此这里用两个清除函数。;
             add_iframes(d,container,true,true);
 			show_first_card();
-            change_title_and_url(entry);
+            //change_title_and_url(entry);
             add_to_history(entry,1);
 		},
 		error:function(jqXHR,textStatus,errorThrown){
@@ -885,7 +885,7 @@ function query_record(container,entry,dic_pk,start,end){
 			//query_record在iframe外调用一次，在iframe内调用一次，因此这里用两个清除函数。;
             add_iframes(d,container,true,true);
 			show_first_card();
-            change_title_and_url(entry);
+            //change_title_and_url(entry);
             add_to_history(entry,1);
 		},
 		error:function(jqXHR,textStatus,errorThrown){
