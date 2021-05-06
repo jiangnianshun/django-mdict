@@ -419,9 +419,11 @@ class ZIMFile:
         """
 
         file.seek(offset)  # move to the desired offset
-
+        data = file.read(2)
+        if data == b'':
+            return None
         # retrieve the mimetype to determine the type of block
-        fields = unpack("<H", file.read(2))
+        fields = unpack("<H", data)
 
         # get block class
         if fields[0] == 0xffff:
@@ -442,9 +444,12 @@ class ZIMFile:
         if offset is not None:
             # read the entry at that offset
             directory_values = self._read_directory_entry(file, offset)
+            if directory_values is None:
+                return None
             # set the index in the list of values
             directory_values["index"] = index
             return directory_values  # and return all these directory values
+        return None
 
     def _read_blob(self, file, cluster_index, blob_index):
         # get the cluster offset
@@ -575,6 +580,9 @@ class ZIMFile:
         while front <= end and not found:
             middle = floor((front + end) / 2)  # determine the middle index
             entry = self.read_directory_entry_by_index(file, middle)
+            if entry is None:
+                found_num = 0
+                break
             found_title = full_url(entry['namespace'], entry['url'])
             if found_title == title:
                 found = True
@@ -593,10 +601,10 @@ class ZIMFile:
         sug_list = []
         for i in range(sug_num):
             entry = self.read_directory_entry_by_index(file, found_num + i)
-            found_title = full_url(entry['namespace'], entry['url'])
+            if entry is None:
+                break
             if entry['namespace'] == "A":
-                found_title = found_title[2:]
-                sug_list.append(found_title)
+                sug_list.append(entry['url'])
         return sug_list
 
     def get_metadata_by_url(self, file):
