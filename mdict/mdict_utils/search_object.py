@@ -143,7 +143,7 @@ class SearchObject:
                 random_id2 = random.randint(0, 5)
                 r_v = self.mdx.look_up_key_list(random_id, random_id2, 1000, 1, self.f_mdx)
                 if len(r_v[0]) > 0:
-                    random_id = random.randint(0, len(r_v[0])-1)
+                    random_id = random.randint(0, len(r_v[0]) - 1)
                     random_entry = r_v[0][random_id][0]
                     break
             count += 1
@@ -153,9 +153,11 @@ class SearchObject:
 
     @search_exception()
     def search_sug_list(self, num):
+        sug = []
         if self.is_zim:
             self.process_zim_query()
-            sug = self.mdx.search_sugs(self.f_mdx, self.mdx, self.query, num)
+            for query in self.query_list:
+                sug.extend(self.mdx.search_sugs(self.f_mdx, self.mdx, query, num))
         else:
             sug = self.mdx.look_up_sug_list(self.query_list, num, self.f_mdx)
         self.close_all()
@@ -163,9 +165,11 @@ class SearchObject:
 
     @search_exception()
     def search_sug(self, num):
+        sug = []
         if self.is_zim:
             self.process_zim_query()
-            sug = self.mdx.search_sugs(self.f_mdx, self.mdx, self.query, num)
+            for query in self.query_list:
+                sug.extend(self.mdx.search_sugs(self.f_mdx, self.mdx, query, num))
         else:
             sug = self.mdx.look_up_sug(self.query, num, self.f_mdx)
         self.close_all()
@@ -311,16 +315,27 @@ class SearchObject:
         return record
 
     def process_zim_query(self):
-        self.query = self.query.replace(' ', '_')
-        if self.query.rfind('A/') == -1 and self.query.rfind('a/') == -1:
-            if self.query == 'main.html':
-                # 主页
-                self.query = '/' + self.query
+        if self.query == 'main.html':
+            self.query_list.append('/main.html')
+        else:
+            if self.query.find('A/') == 0:
+                tquery = self.query[2:]
+            elif self.query.find('/') == 0:
+                tquery = self.query[1:]
             else:
-                if self.query[0] == '/':
-                    self.query = 'A' + self.query
-                else:
-                    self.query = 'A/' + self.query
+                tquery = self.query
+
+            tqlist = tquery.split(' ')
+            tqlist2 = copy.copy(tqlist)
+            for i in range(len(tqlist)):
+                tqlist[i] = tqlist[i].lower()
+            for i in range(len(tqlist2)):
+                tqlist2[i] = tqlist2[i].capitalize()
+
+            self.query_list.append('_'.join(tqlist))
+            tquery = '_'.join(tqlist2)
+            if tquery != self.query_list[0]:
+                self.query_list.append(tquery)
 
     @search_exception()
     def search_entry_list(self):
@@ -328,12 +343,14 @@ class SearchObject:
         r_list = []
         if self.is_zim:
             self.process_zim_query()
-            record = self.mdx.search_articles(self.f_mdx, self.mdx, self.query)
-            if record is None:
-                return r_list
-            record = regpz.sub(self.substitute_hyper_link, record)
-            r_list.append(entryObject(self.dic_name, self.query, record, self.prior, self.dic_id, self.f_pk, self.f_p1,
-                                      self.f_p2))
+            for query in self.query_list:
+                record = self.mdx.search_articles(self.f_mdx, self.mdx, query)
+                if record is None:
+                    continue
+                record = regpz.sub(self.substitute_hyper_link, record)
+                r_list.append(entryObject(self.dic_name, query, record, self.prior, self.dic_id, self.f_pk, self.f_p1,
+                                          self.f_p2))
+                break
         else:
             result_dict = self.mdx.look_up_list(self.query_list, self.f_mdx)
             self.f_pk = self.dic_id

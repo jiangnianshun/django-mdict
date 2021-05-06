@@ -596,7 +596,7 @@ class ZIMFile:
             found_title = full_url(entry['namespace'], entry['url'])
             if entry['namespace'] == "A":
                 found_title = found_title[2:]
-            sug_list.append(found_title)
+                sug_list.append(found_title)
         return sug_list
 
     def get_metadata_by_url(self, file):
