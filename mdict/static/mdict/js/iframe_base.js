@@ -45,7 +45,7 @@ function in_page_jump(ob,entry){//页内跳转
 
 	var e=entry;
     var frame_element=window.frameElement
-	if(frame_element==null){return;}
+	if(frame_element==null){$('html,body').animate({scrollTop:0},'fast');return;}
 	var id=frame_element.id;
 	var y=0;
 
