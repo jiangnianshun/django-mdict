@@ -960,7 +960,7 @@ def mdict_all_entrys(request):
 class get_dic_info_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            o = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '')
+            o = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '', is_dic=True)
             header = o.get_header()
             num_entrys = o.get_len()
             mdx_path = mdx.get_fpath().replace('\\', '/')
