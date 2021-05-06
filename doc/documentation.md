@@ -19,7 +19,6 @@
   * [查询历史](#查询历史)
   * [全文搜索](#全文搜索)
   * [划词](#划词)
-  * [修改词典库地址](#修改词典库地址)
   * [设置](#设置)
   * [配置文件](#配置文件)
   * [在windows上运行测试服务器](#在windows上运行测试服务器)
@@ -75,6 +74,31 @@
 5. 正查不支持模糊查找和正则查找。
 
 ### 常用操作
+
+#### 修改词典库路径
+
+1. 重新运行init_mdict_path.py，选择路径，新选择的路径将插入到最前面。
+
+2. 或者手动修改mdict_path.json的路径，格式如下，mdict_path是词典库路径，audio_path是发音库路径。
+
+第一个含有mdx的路径会被设置为词典库路径，第一个含有mdd的路径会被设置为发音库路径。
+
+如果mdict_path.json为空，词典库地址设置为/django-mdict/media/mdict/doc/，发音库地址设置为/django-mdict/media/mdict/audio/。
+
+windows下的d盘在wsl下为/mnt/d/。 注意输入规范的路径，用双引号并且用反斜杠或者双斜杠作为路径分隔符。
+
+```
+{
+    "mdict_path": [
+        "D:/media/mdict/doc",
+        "/mnt/d/media/mdict/doc"
+    ],
+    "audio_path": [
+        "D:/media/mdict/audio",
+        "/mnt/d/media/mdict/audio"
+    ]
+}
+```
 
 #### 缩放
 
@@ -297,30 +321,6 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 页面缩放比例，设置huaci/utils/huaci.ini中auto_zooming，-1.0是75%;0.0是100%;1.0是125%;2.0是150%。
 
-### 修改词典库地址
-
-1. 重新运行init_mdict_path.py，选择路径。
-
-2. 或者手动修改mdict_path.json的路径，样式如下，mdict_path是词典库路径，audio_path是发音库路径。
-
-第一个含有mdx的路径会被设置为词典库路径，第一个含有mdd的路径会被设置为发音库路径。
-
-如果mdict_path.json为空，词典库地址设置为/django-mdict/media/mdict/doc/，发音库地址设置为/django-mdict/media/mdict/audio/。
-
-windows下的d盘在wsl下为/mnt/d/。 注意输入规范的路径，用双引号并且用反斜杠或者双斜杠作为路径分隔符。
-
-```
-{
-    "mdict_path": [
-        "D:/media/mdict/doc",
-        "/mnt/d/media/mdict/doc"
-    ],
-    "audio_path": [
-        "D:/media/mdict/audio",
-        "/mnt/d/media/mdict/audio"
-    ]
-}
-```
 
 ### 设置
 
