@@ -569,7 +569,8 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
                 is_dic = True
             else:
                 is_dic = False
-            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '', is_dic=is_dic).substitute_record(hit['content'])
+            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '', is_dic=is_dic).substitute_record(
+                hit['content'])
 
             # 去重
             if hit['content'].startswith('@@@LINK='):
@@ -738,8 +739,9 @@ def search_mdx_key(request):
 class search_mdx_record_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id, is_dic=True).search_record(self.start,
-                                                                                                          self.end)
+            record = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id, is_dic=True).search_record(
+                self.start,
+                self.end)
             self.inner_list = [
                 {'mdx_name': dic.mdict_name, 'mdx_entry': self.query, 'mdx_record': record, 'pk': dic.pk}]
             self.break_tag = True
@@ -826,7 +828,8 @@ def search_audio(request):
 class search_zim_dic_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            r_list = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id, is_dic=True).search_entry_list()
+            r_list = SearchObject(mdx, mdd_list, get_dic_attrs(dic), self.query, g_id=g_id,
+                                  is_dic=True).search_entry_list()
             if len(r_list) > 0:
                 record = r_list[0].mdx_record
                 self.inner_list = [
@@ -885,6 +888,36 @@ def random_search(request, *args):
     return HttpResponse(random_entry)
 
 
+zim_script = '''
+<style>
+.mdict-tooltip{
+	background-color:gray !important;
+	color:#EEEEEE !important;
+	border-radius:5px !important;
+	font-size:1.1em !important;
+	z-index:999 !important;
+}
+.mdict-tooltip span{
+	white-space:nowrap !important;
+	margin:5px !important;
+}
+.mdict-tooltip span a{
+	background-color:gray !important;
+	text-decoration:none !important;
+	color:#EEEEEE !important;
+	font-style:normal !important;
+}
+</style>
+<script src="/static/jquery/jquery.min.js"></script>
+<script src="/static/mdict/js/base_func.js"></script>
+<script src="/static/mdict/js/mdict_base.js"></script>
+<script src="/static/mdict/js/iframe_base.js"></script>
+<script>
+$(document).ready(function(){init_iframe()});
+</script>
+'''
+
+
 def search_mdd(request, *args):
     # path = request.GET.get('path', '')
     # if path == '' and len(args) > 0:
@@ -916,7 +949,9 @@ def search_mdd(request, *args):
                 if mime_type is not None:
                     from .mdict_utils.search_object import regpz
                     if 'html' in mime_type:
+                        # zim跳转的而非查询的.html页面需要插入脚本
                         res_content = regpz.sub(sobj.substitute_hyper_link, res_content)
+                        res_content = zim_script + res_content
 
         if res_content == '':
             if res_name[0] == '\\' or res_name[0] == '/':

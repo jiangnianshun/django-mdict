@@ -44,7 +44,9 @@ function in_page_jump(ob,entry){//页内跳转
 	//ob锚点所在的元素，entry要跳转的锚点的名称
 
 	var e=entry;
-	var id=window.frameElement.id;
+    var frame_element=window.frameElement
+	if(frame_element==null){return;}
+	var id=frame_element.id;
 	var y=0;
 
 	//计算滚动距离
@@ -112,7 +114,7 @@ function ihyperlink(e){
 
 
             }
-        }else if(query.indexOf("http")==0){
+        }else if(query.indexOf("http")==0||query.indexOf("www.")==0){
             window.open(query);
         }else if(query.indexOf("sound")==0){//处理sound超链接，常见spx，mp3,wav格式
             var audio=query.substring(8);
@@ -130,6 +132,12 @@ function ihyperlink(e){
             }
         }else if(query.indexOf("#")==0){
             in_page_jump(ob,query.substring("1"));
+        }else{
+            var mark=query.indexOf('.html');
+            if(mark>0&&query.length==mark+5){
+                //新标签页打开zim的非entry的html页面
+                window.open(query);
+            }
         }
     }
 
@@ -203,13 +211,16 @@ function create_tooltip(e){
 
         var dic_pk=$("html",parent.document).attr("data-dic-pk");
         var dic_name=$("html",parent.document).attr("data-dic-name");
-
+        var is_page=false;
+        if(typeof(dic_pk)=="undefined"){
+            dic_pk=-1;
+            is_page=true;
+        }
         var href=window.location.href;
         var mark=href.indexOf('?');
         if(mark>-1){
             href=href.substring(0,mark-1);
         }
-
 
         var url=href+'?query='+select_words;
 
@@ -217,13 +228,14 @@ function create_tooltip(e){
             url+='&dic_pk='+dic_pk;
         }
         //url+='&token='+ new Date().getTime();
-
-        if($('#config-new-label-link',parent.document).prop("checked")){
+        var new_label_link=$('#config-new-label-link',parent.document);
+        if(new_label_link.length==0||new_label_link.prop("checked")){
             href=window.location.href;
             mark=href.indexOf('mdict');
             if(mark>-1){
                 href=href.substring(0,mark);
             }
+
             url=href+'mdict?query='+select_words;
         }
 
@@ -232,7 +244,11 @@ function create_tooltip(e){
         var t_new_search="<span id='t_new_search'><a href='"+url+"' target='_blank'>新窗口查询</a></span>";
 
         //tooltip的样式在style变量中设置
-        var tooltip = "<div id='tooltip' class='mdict-tooltip'>"+t_copy+t_search+t_new_search+"</div>";
+        if(is_page){
+            var tooltip = "<div id='tooltip' class='mdict-tooltip'>"+t_copy+t_new_search+"</div>";
+        }else{
+            var tooltip = "<div id='tooltip' class='mdict-tooltip'>"+t_copy+t_search+t_new_search+"</div>";
+        }
         $("body").append(tooltip);
         $("#tooltip").css({
             "top": target_y + "px",
@@ -331,7 +347,8 @@ function init_night_mode(){
 
 function init_iframe(){
 	init_hyperlink();
-	if($('#config-select-btn-enable',parent.document).prop("checked")){
+    var select_btn_enable=$('#config-select-btn-enable',parent.document);
+	if(select_btn_enable.length==0||select_btn_enable.prop("checked")){
 	    init_tooltip();
 	}
 	fix_chrome_bug();
