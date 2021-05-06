@@ -707,7 +707,6 @@ function init_index(){//载入词典列表
 		type:'GET',
 		data:data,
 		success:function(data){
-		    console.log(data)
 		    $("#init-index-spinner").hide();
 		    if(data.indexOf("success")>-1){
 		        $("#live-toast-body").text("启停索引已完成。");

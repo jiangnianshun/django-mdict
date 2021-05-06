@@ -435,6 +435,10 @@ class SearchObject:
             res_content = self.mdx.search_articles(self.f_mdx, self.mdx, self.query)
             if res_content is None:
                 return '', mime_type
+            if mime_type is not None:
+                if 'javascript' in mime_type:
+                    # 临时性修复gutenberg.zim新增script的src重定向
+                    res_content = res_content.replace('../-', str(self.dic_id) + '/-')
         else:
             res_content, mime_type = self.get_mdd_cache()
 
