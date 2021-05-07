@@ -201,9 +201,26 @@ github ZIMply： [https://github.com/kimbauters/ZIMply](https://github.com/kimba
 
 目前不支持zim的模糊搜索和全文搜索，会有部分词条无法查询到，在手机浏览器上，可能需要手指下滑两次才能向下滑动，两次之间手指要离开屏幕。
 
+要使用zim的全部功能，用kiwix或goldendict浏览。
+
 phet.zim需要开启固定高度才能正常显示。
 
-zim是离线维基格式，下载地址：
+zim是离线维基格式：
+
+wikipedia-维基百科
+wikibooks-维基教科书
+wikinews-维基新闻
+wikiquote-维基语录
+wikisource-维基文库
+wikivoyage-维基导游
+wikiversity-维基学院
+wikispecies-维基物种
+gutenberg-古登堡计划
+phet-HTML5仿真模拟实验
+vikida-面向儿童的百科
+stackexchange-问答网站stackexchange的离线网页
+
+zim下载地址：
 
 [https://wiki.kiwix.org/wiki/Content_in_all_languages](https://wiki.kiwix.org/wiki/Content_in_all_languages)
 
