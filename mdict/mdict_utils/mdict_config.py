@@ -5,6 +5,8 @@ import psutil
 from base.base_func import is_number, ROOT_DIR
 
 cpu_num = psutil.cpu_count(False)
+
+
 # cpu的物理核心数
 
 
@@ -49,7 +51,8 @@ default_config = {
         'card_show': False,  # 允许一次展开多个词典
         'default_group': 0,
         'new_label_link': True,  # 新标签页查询，True打开正查，False打开当前页查询。
-        'compute_every_element': True  # 计算iframe的每一个元素来计算总高度
+        'compute_every_element': True,  # 计算iframe的每一个元素来计算总高度
+        'fixed_height': False  # iframe固定高度
     }
 }
 

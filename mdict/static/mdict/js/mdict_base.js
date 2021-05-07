@@ -367,7 +367,7 @@ function init_online_dic_var(){
 
 common_config={'force-refresh':'强制刷新','st-enable':'繁简转化','kana-enable':'假名转化','chaizi-enable':'拆字反查','fh-char-enable':'英文全角转半角',
 'link-new-label':'跳转新标签页','force-font':'强制使用全宋体','card-show':'展开多个词典','select-btn-enable':'启用查询菜单','disable-iframe-click':'屏蔽默认点击',
-'new-label-link':'新标签页正查','compute-every-element':'精确计算高度'}
+'new-label-link':'新标签页正查','compute-every-element':'精确计算高度','fixed-height':'固定高度'}
 
 function init_common_config(){//这里后面改成从后台取数据
     var c_parent=$('#function-checkbox');

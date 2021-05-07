@@ -222,44 +222,51 @@ function bind_card(iframe,html,tokens){
         //shown.bs.collapse是collapse展开完成事件
         var iframe_content=$(iframe).contents();
         var compute_every_element=$('#config-compute-every-element').prop("checked");
+        var fixed_height=$('#config-fixed-height').prop("checked");
         if(compute_every_element){
             var width_calculation_method='lowestElement';
         }else{
             var width_calculation_method='documentElementOffset';
         }
-        if($(iframe).attr('data-content-fill')!='true'){
-            if(iframe_content.find('html').css('writing-mode')=='vertical-rl'||iframe_content.find('body').css('writing-mode')=='vertical-rl'){
-                //处理日文从右往左的竖排排版
-                iFrameResize({
-                    log:false,
-                    checkOrigin:false,
-                    resizeFrom:'child',
-                    widthCalculationMethod:width_calculation_method,
-                    minHeight:550,
-                    warningTimeout:0,
-                    scrolling:true,
-//							onInit: function(iframe_a){
-//							},
-//							onResized: function(messageData) {
-//							},
-                },iframe);
-                iframe_content.find('html').css('overflow-y','visible');
-                iframe_content.find('body').css('overflow-y','visible');
-            }else{
-                iFrameResize({
-                    log:false,
-                    checkOrigin:false,
-                    resizeFrom:'child',
-                    heightCalculationMethod:width_calculation_method,
-                    warningTimeout:0,
-                    scrolling:true,
-//							onInit: function(iframe_a){
-//							},
-//							onResized: function(messageData) {
-//							},
-                },iframe);
+        if(fixed_height){
+            iframe.height='750px';
+            $(iframe).contents().find('html').css('overflow-y','auto');
+            $(iframe).contents().find('body').css('overflow-y','auto');
+        }else{
+            if($(iframe).attr('data-content-fill')!='true'){
+                if(iframe_content.find('html').css('writing-mode')=='vertical-rl'||iframe_content.find('body').css('writing-mode')=='vertical-rl'){
+                    //处理日文从右往左的竖排排版
+                    iFrameResize({
+                        log:false,
+                        checkOrigin:false,
+                        resizeFrom:'child',
+                        widthCalculationMethod:width_calculation_method,
+                        minHeight:550,
+                        warningTimeout:0,
+                        scrolling:true,
+    //							onInit: function(iframe_a){
+    //							},
+    //							onResized: function(messageData) {
+    //							},
+                    },iframe);
+                    iframe_content.find('html').css('overflow-y','visible');
+                    iframe_content.find('body').css('overflow-y','visible');
+                }else{
+                    iFrameResize({
+                        log:false,
+                        checkOrigin:false,
+                        resizeFrom:'child',
+                        heightCalculationMethod:width_calculation_method,
+                        warningTimeout:0,
+                        scrolling:true,
+    //							onInit: function(iframe_a){
+    //							},
+    //							onResized: function(messageData) {
+    //							},
+                    },iframe);
+                }
+                $(iframe).attr('data-content-fill','true');
             }
-            $(iframe).attr('data-content-fill','true');
         }
 
         /*
