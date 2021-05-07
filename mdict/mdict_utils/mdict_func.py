@@ -74,6 +74,10 @@ regp = re.compile(reg)
 
 def replace_res_name(res_name):
     res_name = regp.sub('', res_name)
+    if res_name[0] == "'" or res_name[0] == "'":
+        res_name = res_name[1:]
+    if res_name[-1] == "'" or res_name[-1] == "'":
+        res_name = res_name[:-1]
     # 在html中href是用/，在mdd中文件名用\，因此这里要替换。
     if res_name[0] != '/' and res_name[0] != '\\':
         res_name = '/' + res_name
@@ -82,6 +86,10 @@ def replace_res_name(res_name):
 
 
 def replace_res_name21(res_name):
+    if res_name[0] == "'" or res_name[0] == "'":
+        res_name = res_name[1:]
+    if res_name[-1] == "'" or res_name[-1] == "'":
+        res_name = res_name[:-1]
     if res_name.startswith('../'):
         res_name = res_name[3:]
     elif res_name.startswith('/'):
