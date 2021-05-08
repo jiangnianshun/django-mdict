@@ -16,7 +16,7 @@ var style=`
 <style>
 html,body{
 	padding:0;
-	overflow-y:hidden;
+	overflow-y:hidden !important;
 }
 .mdict-tooltip{
 	background-color:gray !important;

@@ -199,7 +199,7 @@ github ZIMply： [https://github.com/kimbauters/ZIMply](https://github.com/kimba
 
 /django-mdict/mdict/mdict-utils/readzim.py修改自zimply.py。
 
-目前不支持zim的模糊搜索和全文搜索，会有部分词条无法查询到，在手机浏览器上，可能需要手指下滑两次才能向下滑动，两次之间手指要离开屏幕。
+目前不支持zim的模糊搜索和全文搜索，会有部分词条无法查询到。
 
 要使用zim的全部功能，用kiwix或goldendict浏览。
 
@@ -343,6 +343,8 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ### 设置
 
+以下功能大多需要下一次查询生效，即开启后重新查询生成页面。
+
 * 键盘的enter键绑定查询按钮，上下方向键绑定展开上一词条和展开下一词条按钮，直接按上下键或者按ctrl+上下键都行，直接按上下键会同时触发浏览器自身的滚动，全键盘单手建议按右ctrl+上下键比较方便。
 
 * 强制刷新：后台会缓存最近查询过的内容，调试时为了显示查询结果的变化，需要开启强制刷新，下一次查询生效。
@@ -361,7 +363,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 * 精确计算高度：计算iframe中每一个元素的高度来获取总高度，展开速度会稍慢一些，目的是解决某些词典使用absolute定位导致高度获取不正确，下一次查询生效。
 
-* 固定高度：设置iframe的高度固定，为了解决如phet.zim这样自定义高度下显示不正常的问题，下一次查询生效。
+* 固定高度：设置iframe的高度固定，为了解决如phet.zim这样自定义高度下显示不正常的问题，开启后精确计算高度将会无效，下一次查询生效。
 
 * 保存为默认值：如果没有保存为默认值，则页面刷新后，设置恢复默认。
 
