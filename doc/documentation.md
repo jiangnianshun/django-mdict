@@ -100,7 +100,7 @@ windows下的d盘在wsl下为/mnt/d/。 注意输入规范的路径，用双引�
 }
 ```
 
-#### 缩放
+#### 内容缩放
 
 整个页面的缩放，使用浏览器的缩放进行设置。
 
@@ -110,7 +110,19 @@ windows下的d盘在wsl下为/mnt/d/。 注意输入规范的路径，用双引�
 
 #### 页内查询
 
-使用浏览器自带的ctrl+F进行页内查询。
+使用浏览器自带的ctrl+F进行页内查询，只能查询展开的词条。
+
+#### 同名词条合并
+
+修改配置文件/django-mdict/config.ini中的merge_entry_max_length项。
+
+默认值为1000，当同一词典对同一个查询有多个查询结果时，长度（字符串的长度，包含html标签）小于1000的词条会被合并显示。如果需要完全不合并，设置为0。
+
+#### 修改服务器端口
+
+测试服务器修改run_server.bat和run_server.sh中的0.0.0.0:8000。
+
+apache修改配置文件django-mdict.conf中的VirtualHost *:80。
 
 ### admin操作
 
@@ -216,7 +228,7 @@ wikivoyage-维基导游
 wikiversity-维基学院
 wikispecies-维基物种
 gutenberg-古登堡计划
-phet-HTML5仿真模拟实验
+phet-互动仿真程序的离线网页
 vikida-面向儿童的百科
 stackexchange-问答网站stackexchange的离线网页
 
@@ -463,7 +475,7 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 
 ### 在wsl上运行测试服务器
 
-windows下建议部署到wsl1。
+windows下建议部署到wsl1，如果词典库存放在windows上且数量多，通过wsl2读取要慢于wsl1。
 
 1. 安装wsl，系统ubuntu，建议使用18.04。
 
@@ -500,7 +512,7 @@ bash run_server.sh
 
 ### 部署到wsl apache
 
-windows下建议部署到wsl1。
+windows下建议部署到wsl1，如果词典库存放在windows上且数量多，通过wsl2读取要慢于wsl1。
 
 1. 安装wsl，系统ubuntu，建议使用18.04。
 
