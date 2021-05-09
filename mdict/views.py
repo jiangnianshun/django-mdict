@@ -1170,40 +1170,51 @@ def search_suggestion(request):
                 if s.lower().strip() not in return_sug:
                     return_sug.append(s.lower().strip())
             return_sug.sort()
-            tf = -1
+            tf1 = -1
             tf2 = -1
+            tf3 = -1
+
+            is_eng = is_en_func(query)
 
             for i in range(0, len(return_sug)):
                 temp_str = return_sug[i].lower()
                 # 对查询提示进行重排，将和query相等的词条设置位置第一
                 # 1相等，2半角转化后相等，3去掉全角和半角空格后相等, 4stripkey后相等
                 # 5繁简转化后相等
-                if is_en_func(query):
-                    if temp_str.find(query.lower()) == 0 or temp_str.find(q2b.lower()) == 0 \
-                            or temp_str.find(query.lower().replace(' ', '').replace('　', '')) == 0 \
-                            or temp_str.find(regp.sub('', query.lower())) == 0:
-                        tf = i
+                if is_eng:
+                    if temp_str.startswith(query.lower()):
+                        tf1 = i
                         break
-                    elif temp_str.startswith(query.lower()[0]):
+                    elif temp_str.find(query.lower()) > 0 \
+                            or temp_str.find(q2b.lower()) > 0 \
+                            or temp_str.find(query.lower().replace(' ', '').replace('　', '')) > 0 \
+                            or temp_str.find(regp.sub('', query.lower())) > 0:
                         if tf2 == -1:
                             tf2 = i
+                    elif temp_str.startswith(query.lower()[0]) or temp_str.startswith(q2b.lower()[0]):
+                        if tf3 == -1:
+                            tf3 = i
                 else:
                     q_s = t2s.convert(query)
                     q_t = s2t.convert(query)
-                    if temp_str.find(q_s) > -1 or temp_str.find(q_t) > -1:
-                        tf = i
+                    if temp_str.startswith(query.lower()):
+                        tf1 = i
                         break
-                    elif temp_str.startswith(q_s[0]) or temp_str.startswith(q_t[0]):
+                    if temp_str.find(q_s) > 0 or temp_str.find(q_t) > 0:
                         if tf2 == -1:
                             tf2 = i
+                    elif temp_str.startswith(q_s[0]) or temp_str.startswith(q_t[0]):
+                        if tf3 == -1:
+                            tf3 = i
+            if tf2 == -1:
+                tf2 = tf3
+            if tf1 == -1:
+                tf1 = tf2
 
-            if tf == -1:
-                tf = tf2
-
-            if tf == -1:
+            if tf1 == -1:
                 t_list = return_sug[:sug_num]
             else:
-                t_list = (return_sug[tf:] + return_sug[:tf])[:sug_num]
+                t_list = (return_sug[tf1:] + return_sug[:tf1])[:sug_num]
 
         sug_cache.put(query, group, dic_pk, t_list)
 
