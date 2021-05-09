@@ -230,8 +230,9 @@ function bind_card(iframe,html,tokens){
         }
         if(fixed_height){
             iframe.height='750px';
-            $(iframe).contents().find('html').css('overflow-y','auto');
-            $(iframe).contents().find('body').css('overflow-y','auto');
+            $(iframe).contents().find('html').attr('style','overflow-y:auto!important');
+            $(iframe).contents().find('body').attr('style','overflow-y:auto!important');
+            //css()无法覆盖!important
         }else{
             if($(iframe).attr('data-content-fill')!='true'){
                 if(iframe_content.find('html').css('writing-mode')=='vertical-rl'||iframe_content.find('body').css('writing-mode')=='vertical-rl'){
