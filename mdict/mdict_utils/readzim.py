@@ -37,6 +37,7 @@
 import io
 import lzma
 import zstandard
+import os
 
 from collections import namedtuple
 from functools import partial
@@ -290,6 +291,8 @@ class ClusterData(object):
         buffer = self._source_buffer()  # get the buffer for this cluster
         # calculate the size of the blob
         blob_size = self._offsets[blob_index + 1] - self._offsets[blob_index]
+        if blob_size < 0:
+            blob_size = -blob_size
         # move to the position of the blob relative to current position
         buffer.seek(self._offsets[blob_index], 1)
         return buffer.read(blob_size)
@@ -369,18 +372,32 @@ class ZIMFile:
         self._enc = encoding
         self.filename = filename
         # open the file as a binary file
-        file = open(filename, "rb")
+        zim_file = open(filename, "rb")
         # retrieve the header fields
-        self.header_fields = HeaderBlock(self._enc).unpack_from_file(file)
+        self.header_fields = HeaderBlock(self._enc).unpack_from_file(zim_file)
         self.mimetype_list = MimeTypeListBlock(self._enc).unpack_from_file(
-            file, self.header_fields["mimeListPos"])
-        self.header = self.metadata(file)
+            zim_file, self.header_fields["mimeListPos"])
+        self.header = self.metadata(zim_file)
+
+        self.index_list = self._get_index_by_url(zim_file)
+
+        self.full_index_path = ''
+        self.title_index_path = ''
+        for url, index in self.index_list:
+            url = url.replace('/', '_')
+            idx_name = self.get_fname() + '_' + url + '.idx'
+            idx_path = os.path.join(os.path.dirname(self.get_fpath()), idx_name)
+            if 'fulltext' in url:
+                self.full_index_path = idx_path
+            elif 'title' in url:
+                self.title_index_path = idx_path
+
         # create the object once for easy access
         # self.redirectEntryBlock = RedirectEntryBlock(self._enc)
 
         # self.articleEntryBlock = ArticleEntryBlock(self._enc)
         # self.clusterFormat = ClusterBlock(self._enc)
-        file.close()
+        zim_file.close()
 
     def get_fname(self):
         slash = self.filename.rfind('/')
@@ -522,6 +539,49 @@ class ZIMFile:
                 found_title = entry['namespace']
                 if found_title == 'M':
                     ind_list.append((self.read_directory_entry_by_index(file, tmp_ind), tmp_ind))
+                else:
+                    break
+
+        return ind_list
+
+    def _get_index_by_url(self, file):
+        front = middle = 0
+        end = len(self)
+
+        found_ind = -1
+
+        while front <= end:
+            middle = floor((front + end) / 2)
+            entry = self.read_directory_entry_by_index(file, middle)
+            found_title = entry['namespace']
+            if found_title == 'X':
+                found_ind = middle
+                break
+            else:
+                if found_title < 'X':
+                    front = middle + 1
+                else:
+                    end = middle - 1
+        ind_list = []
+        if found_ind > -1:
+            ind_list.append((entry['url'], entry['index']))
+            tmp_ind = found_ind
+            while tmp_ind >= 0:
+                tmp_ind -= 1
+                entry = self.read_directory_entry_by_index(file, tmp_ind)
+                found_title = entry['namespace']
+                if found_title == 'X':
+                    ind_list.append((entry['url'], entry['index']))
+                else:
+                    break
+            ind_list.reverse()
+            tmp_ind = found_ind
+            while tmp_ind < len(self):
+                tmp_ind += 1
+                entry = self.read_directory_entry_by_index(file, tmp_ind)
+                found_title = entry['namespace']
+                if found_title == 'X':
+                    ind_list.append((entry['url'], entry['index']))
                 else:
                     break
 

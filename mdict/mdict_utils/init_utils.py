@@ -108,13 +108,27 @@ def get_mdict_list():
                 g_id += 1
             elif file.lower().endswith('.zim'):
                 f_name = file[:file.rfind('.')]
-
                 zim_path = os.path.join(root, file)
                 zim = ZIMFile(zim_path, encoding='utf-8')
-                a = {f_name: MdictItem(zim, [], -1, 'none', len(zim))}
-                m_list.update(a)
+                m_list.update({f_name: MdictItem(zim, [], -1, 'none', len(zim))})
+
+                extract_index_from_zim(root, zim)
 
     return m_list
+
+
+def extract_index_from_zim(root, zim):
+    for url, index in zim.index_list:
+        url = url.replace('/', '_')
+        idx_name = zim.get_fname() + '_' + url + '.idx'
+        idx_path = os.path.join(root, idx_name)
+        if not os.path.exists(idx_path):
+            zim_file = open(zim.get_fpath(), 'rb')
+            idx_data = zim._get_article_by_index(zim_file, index)[0]
+            zim_file.close()
+            with open(idx_path, 'wb') as f:
+                f.write(idx_data)
+            print_log_info(['index extracting completed', idx_name])
 
 
 def get_sound_list():
