@@ -46,6 +46,9 @@ init_database()
 reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
 regp = re.compile(reg)
 
+reght = r'<[^>]+>'
+reghtml = re.compile(reght, re.S)
+
 meta_dict = {}
 
 
@@ -210,7 +213,7 @@ def es_search(request):
             temp_object = init_vars.mdict_odict[dic_file]
             mdx = temp_object.mdx
             if mdx.get_fpath().endswith('.zim'):
-                result, total_count = get_zim_results(query, dic, mdx, result_page, result_num, es_entry, es_content)
+                result, total_count = get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entry, es_content)
                 enable_es_search = False
 
     if enable_es_search:
@@ -241,7 +244,7 @@ def es_search(request):
     return Response(ret)
 
 
-def get_zim_results(query, dic, mdx, result_page, result_num, es_entry, es_content):
+def get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entry, es_content):
     result = []
 
     if es_content:
@@ -264,7 +267,11 @@ def get_zim_results(query, dic, mdx, result_page, result_num, es_entry, es_conte
     for match in matches:
         url = match.document.get_data().decode('utf-8')
         sobj = SearchObject(mdx, [], get_dic_attrs(dic), url, is_dic=True)
-        result.extend(sobj.search_entry_list())
+        entryobj = sobj.search_entry_list()[0]
+        entryobj.extra = matches.snippet(reghtml.sub('', entryobj.mdx_record), frag_size, xapian.Stem('english'), 1,
+                                         '<b style="background-color:yellow;color:red;font-size:0.8rem;">',
+                                         '</b>', '...').decode('utf-8')
+        result.append(entryobj)
     zim_file.close()
 
     return result, total_num
