@@ -214,3 +214,14 @@ def compare_time(time1, time2):
 
 def get_dic_attrs(dic):
     return dic.pk, dic.mdict_name, dic.mdict_file, dic.mdict_priority
+
+
+def check_xapian():
+    # 是否已安装xapian
+    try:
+        import xapian
+        database = xapian.Database()
+    except Exception:
+        return False
+
+    return True

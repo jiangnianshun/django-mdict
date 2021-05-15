@@ -4,6 +4,7 @@ import re
 import time
 import csv
 import random
+import xapian
 from urllib.parse import quote, unquote
 
 from django.http import HttpResponse
@@ -23,7 +24,7 @@ from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
-from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs
+from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs, check_xapian
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
 from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
 from mdict.mdict_utils.loop_decorator import loop_mdict_list, innerObject
@@ -199,9 +200,23 @@ def es_search(request):
 
     tokens = get_tokens(query)
 
-    result, total_count = get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, es_phrase,
-                                         es_entry, es_content,
-                                         es_and)
+    enable_es_search = True
+
+    if dic_pk > -1 and check_xapian():
+        dics = MdictDic.objects.filter(pk=dic_pk)
+        if len(dics) > 0:
+            dic = dics[0]
+            dic_file = dic.mdict_file
+            temp_object = init_vars.mdict_odict[dic_file]
+            mdx = temp_object.mdx
+            if mdx.get_fpath().endswith('.zim'):
+                result, total_count = get_zim_results(query, dic, mdx, result_page, result_num, es_entry, es_content)
+                enable_es_search = False
+
+    if enable_es_search:
+        result, total_count = get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, es_phrase,
+                                             es_entry, es_content,
+                                             es_and)
 
     result = search_revise(query, result, is_en)
 
@@ -224,6 +239,35 @@ def es_search(request):
             write_to_history(query)
 
     return Response(ret)
+
+
+def get_zim_results(query, dic, mdx, result_page, result_num, es_entry, es_content):
+    result = []
+
+    if es_content:
+        index_path = mdx.full_index_path
+    else:
+        index_path = mdx.title_index_path
+    database = xapian.Database(index_path)
+    enquire = xapian.Enquire(database)
+    query_string = query
+
+    qp = xapian.QueryParser()
+    qp.set_database(database)
+    qp.set_stemming_strategy(xapian.QueryParser.STEM_SOME)
+    query = qp.parse_query(query_string)
+    enquire.set_query(query)
+    matches = enquire.get_mset((result_page - 1) * result_num, result_page * result_num)
+    total_num = matches.get_matches_estimated()
+
+    zim_file = open(mdx.get_fpath(), 'rb')
+    for match in matches:
+        url = match.document.get_data().decode('utf-8')
+        sobj = SearchObject(mdx, [], get_dic_attrs(dic), url, is_dic=True)
+        result.extend(sobj.search_entry_list())
+    zim_file.close()
+
+    return result, total_num
 
 
 def init_index(request):

@@ -1,7 +1,7 @@
 #!/bin/bash
 #!/usr/bin/env python3
 cd `dirname  $0`
-apt-get install -y python3 python3-pip apache2 libapache2-mod-wsgi-py3 zlib1g-dev liblzo2-dev
+apt-get install -y python3 python3-pip apache2 libapache2-mod-wsgi-py3
 cd ..
 chmod -R 777 django-mdict
 cd django-mdict
