@@ -4,7 +4,6 @@ import re
 import time
 import csv
 import random
-import xapian
 from urllib.parse import quote, unquote
 
 from django.http import HttpResponse
@@ -40,6 +39,11 @@ from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnli
 from .mdict_utils.mdict_func import mdict_root_path, is_local, get_m_path
 from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator, es_paginator
 from .mdict_utils.readzim import ZIMFile
+
+if check_xapian():
+    import xapian
+else:
+    xapian = None
 
 init_database()
 
@@ -213,7 +217,8 @@ def es_search(request):
             temp_object = init_vars.mdict_odict[dic_file]
             mdx = temp_object.mdx
             if mdx.get_fpath().endswith('.zim'):
-                result, total_count = get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entry, es_content)
+                result, total_count = get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entry,
+                                                      es_content)
                 enable_es_search = False
 
     if enable_es_search:
