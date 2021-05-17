@@ -216,15 +216,26 @@ class ClusterBlock(Block):
     def __init__(self, encoding):
         super().__init__(CLUSTER, encoding)
 
+    def unpack(self, buffer, offset=0):
+        values = self._compiled.unpack_from(buffer, offset)
+        rpack = {field.field_name: value for value, field in zip(values, self._structure)}
+        if values[0] == 17:
+            extendType = True
+        else:
+            extendType = False
+        rpack.update({'extendType': extendType})
+        # 时候扩展，如果扩展，偏移量用8位表示，否则用4位表示
+        return rpack
+
 
 class ClusterData(object):
     def __init__(self, file, offset, encoding):
         self.file = file  # store the file
         self.offset = offset  # store the offset
-        cluster_info = ClusterBlock(encoding).unpack_from_file(
+        self.cluster_info = ClusterBlock(encoding).unpack_from_file(
             self.file, self.offset)  # Get the cluster fields.
         # Verify whether the cluster has compression
-        self.compression = {4: "lzma", 5: "zstd"}.get(cluster_info['compressionType'], False)
+        self.compression = {4: "lzma", 5: "zstd"}.get(self.cluster_info['compressionType'], False)
         # at the moment, we don't have any uncompressed data
         self.uncompressed = None
         self._decompress()  # decompress the contents as needed
@@ -271,17 +282,24 @@ class ClusterData(object):
         return buffer
 
     def _read_offsets(self):
+        extend_type = self.cluster_info['extendType']
+        if extend_type:
+            tlength = 8
+            tformat = '<Q'
+        else:
+            tlength = 4
+            tformat = '<I'
         # get the buffer for this cluster
         buffer = self._source_buffer()
         # read the offset for the first blob
-        offset0 = unpack("<I", buffer.read(4))[0]
+        offset0 = unpack(tformat, buffer.read(tlength))[0]
         # store this one in the list of offsets
         self._offsets.append(offset0)
         # calculate the number of blobs by dividing the first blob by 4
-        number_of_blobs = int(offset0 / 4)
+        number_of_blobs = int(offset0 / tlength)
         for idx in range(number_of_blobs - 1):
             # store the offsets to all other blobs
-            self._offsets.append(unpack("<I", buffer.read(4))[0])
+            self._offsets.append(unpack(tformat, buffer.read(tlength))[0])
 
     def read_blob(self, blob_index):
         # check if the blob falls within the range
@@ -291,8 +309,6 @@ class ClusterData(object):
         buffer = self._source_buffer()  # get the buffer for this cluster
         # calculate the size of the blob
         blob_size = self._offsets[blob_index + 1] - self._offsets[blob_index]
-        if blob_size < 0:
-            blob_size = -blob_size
         # move to the position of the blob relative to current position
         buffer.seek(self._offsets[blob_index], 1)
         return buffer.read(blob_size)
