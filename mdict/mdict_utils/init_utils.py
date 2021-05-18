@@ -140,6 +140,8 @@ def extract_index_from_zim(root, zim):
             zim_file = open(zim.get_fpath(), 'rb')
             idx_data = zim._get_article_by_index(zim_file, index)[0]
             zim_file.close()
+            if idx_data is None:
+                continue
             with open(idx_path, 'wb') as f:
                 f.write(idx_data)
             print_log_info(['index extracting', idx_name])

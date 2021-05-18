@@ -565,6 +565,7 @@ class ZIMFile:
         end = len(self)
 
         found_ind = -1
+        ind_list = []
 
         while front <= end:
             middle = floor((front + end) / 2)
@@ -578,13 +579,15 @@ class ZIMFile:
                     front = middle + 1
                 else:
                     end = middle - 1
-        ind_list = []
+
         if found_ind > -1:
             ind_list.append((entry['url'], entry['index']))
             tmp_ind = found_ind
             while tmp_ind >= 0:
                 tmp_ind -= 1
                 entry = self.read_directory_entry_by_index(file, tmp_ind)
+                if entry is None:
+                    break
                 found_title = entry['namespace']
                 if found_title == 'X':
                     ind_list.append((entry['url'], entry['index']))
@@ -595,6 +598,8 @@ class ZIMFile:
             while tmp_ind < len(self):
                 tmp_ind += 1
                 entry = self.read_directory_entry_by_index(file, tmp_ind)
+                if entry is None:
+                    break
                 found_title = entry['namespace']
                 if found_title == 'X':
                     ind_list.append((entry['url'], entry['index']))
