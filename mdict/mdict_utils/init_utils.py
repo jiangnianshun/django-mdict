@@ -137,6 +137,7 @@ def extract_index_from_zim(root, zim):
         idx_name = zim.get_fname() + '_' + url + '.idx'
         idx_path = os.path.join(root, idx_name)
         if not os.path.exists(idx_path):
+            t1 = time.perf_counter()
             zim_file = open(zim.get_fpath(), 'rb')
             idx_data = zim._get_article_by_index(zim_file, index)[0]
             zim_file.close()
@@ -144,7 +145,8 @@ def extract_index_from_zim(root, zim):
                 continue
             with open(idx_path, 'wb') as f:
                 f.write(idx_data)
-            print_log_info(['index extracting', idx_name])
+            t2 = time.perf_counter()
+            print_log_info(['index extracting', idx_name], start=t1, end=t2)
 
 
 def get_sound_list():

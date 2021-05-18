@@ -269,7 +269,9 @@ def get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entr
         index_path = mdx.title_index_path
     if index_path == '':
         return [], 0
-    
+    if not os.path.exists(index_path):
+        return [], 0
+
     database = xapian.Database(index_path)
     enquire = xapian.Enquire(database)
     query_string = query
