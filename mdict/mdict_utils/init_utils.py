@@ -1,12 +1,13 @@
 import collections
 import pickle
+import threading
 import time
 import os
 
 from base.base_func import print_log_info, guess_mime, ROOT_DIR
 from base.sys_utils import get_sys_name
 from .mdict_config import set_cpu_num, get_cpu_num
-from .mdict_func import rename_history
+from .mdict_func import rename_history, check_xapian
 from .readzim import ZIMFile
 
 print_log_info(['system is', get_sys_name(), '.'])
@@ -52,11 +53,11 @@ class MdictItem:
 img_type = ['jpg', 'jpeg', 'png', 'webp', 'gif']
 
 
-def get_mdict_list():
+def get_mdict_dict():
     g_id = 0
 
-    m_list = collections.OrderedDict()
-
+    m_dict = collections.OrderedDict()
+    idx_list = []
     # 词典结尾是mdx或MDX
     # ntfs下文件名不区分大小写，但ext4下区分大小写
 
@@ -82,7 +83,7 @@ def get_mdict_list():
                             print_log_info([f_name, 'mdd loading failed', e])
 
                 if mdx_path.find('.part') != -1:
-                    for item in m_list.values():
+                    for item in m_dict.values():
                         x = item.mdx
                         g = item.g_id
                         if x.get_fpath().find('.part'):
@@ -101,7 +102,7 @@ def get_mdict_list():
                                 break
                 try:
                     mdx = MDX(mdx_path)
-                    m_list.update({f_name: MdictItem(mdx, tuple(mdd_list), g_id, icon, mdx.get_len())})
+                    m_dict.update({f_name: MdictItem(mdx, tuple(mdd_list), g_id, icon, mdx.get_len())})
                 except Exception as e:
                     print_log_info([f_name, 'mdx loading failed', e])
 
@@ -110,11 +111,24 @@ def get_mdict_list():
                 f_name = file[:file.rfind('.')]
                 zim_path = os.path.join(root, file)
                 zim = ZIMFile(zim_path, encoding='utf-8')
-                m_list.update({f_name: MdictItem(zim, [], -1, 'none', len(zim))})
+                m_dict.update({f_name: MdictItem(zim, [], -1, 'none', len(zim))})
 
-                extract_index_from_zim(root, zim)
+                idx_list.append((root, zim))
 
-    return m_list
+    if idx_list and check_xapian():
+        # 抽取zim内置索引
+        tdx = threading.Thread(target=extract_index, args=(idx_list,))
+        tdx.start()
+
+    return m_dict
+
+
+def extract_index(idx_list):
+    t1 = time.perf_counter()
+    for root, zim in idx_list:
+        extract_index_from_zim(root, zim)
+    t2 = time.perf_counter()
+    print_log_info('all indexes extracting completed.', start=t1, end=t2)
 
 
 def extract_index_from_zim(root, zim):
@@ -128,7 +142,7 @@ def extract_index_from_zim(root, zim):
             zim_file.close()
             with open(idx_path, 'wb') as f:
                 f.write(idx_data)
-            print_log_info(['index extracting completed', idx_name])
+            print_log_info(['index extracting', idx_name])
 
 
 def get_sound_list():
@@ -146,7 +160,7 @@ def read_pickle_file(path):
         try:
             pickle_list = pickle.load(f)
         except Exception:
-            pickle_list = get_mdict_list()
+            pickle_list = get_mdict_dict()
             write_pickle_file(path)
     return pickle_list
 
@@ -172,7 +186,7 @@ def load_cache():
         r = True
 
     if r:
-        init_vars.mdict_odict = get_mdict_list()
+        init_vars.mdict_odict = get_mdict_dict()
         if len(init_vars.mdict_odict) > 0:
             write_cache()
 
@@ -296,7 +310,7 @@ def init_mdict_list(rewrite_cache):
         get_sound_list()
 
         init_vars.mdict_odict.clear()
-        init_vars.mdict_odict = get_mdict_list()
+        init_vars.mdict_odict = get_mdict_dict()
         init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
         t2 = time.perf_counter()
         print_log_info('initializing mdict_list', 0, t1, t2)
