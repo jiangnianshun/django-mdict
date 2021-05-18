@@ -576,7 +576,12 @@ function get_dic_group(container){//载入词典列表
 
 function init_navbar_link(){
     $("#btn-es").click(function(){
-        window.location.href="/mdict/es";
+        if($("html").attr("data-type")=='dic'|$("html").attr("data-type")=='zim'){
+            var dic_pk=$("html").attr("data-dic-pk");
+            window.location.href="/mdict/esdic/"+dic_pk;
+        }else{
+            window.location.href="/mdict/es";
+        }
     });
     $("#btn-bujian").click(function(){
         window.open("/mdict/bujian");

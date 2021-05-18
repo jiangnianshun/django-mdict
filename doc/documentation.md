@@ -73,6 +73,8 @@
 
 5. 正查不支持模糊查找和正则查找。
 
+6. 目前不支持通配符查找
+
 ### 常用操作
 
 #### 修改词典库路径
@@ -127,6 +129,10 @@ apache修改配置文件django-mdict.conf中的VirtualHost *:80。
 ### wsl下的路径
 
 windows下的c盘对于wsl下的/mnt/c/
+
+### 修改主页内容
+
+主页位于django-mdict/templates/index.html
 
 ### admin操作
 
