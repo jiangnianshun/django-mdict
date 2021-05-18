@@ -51,7 +51,11 @@ reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t]'
 regp = re.compile(reg)
 
 reght = r'<[^>]+>'
-reghtml = re.compile(reght, re.S)
+reghtml = re.compile(reght)
+reght2 = r'<script[^>]+/script>'
+reghtml2 = re.compile(reght)
+reght3 = r'<style[^>]+/style>'
+reghtml3 = re.compile(reght)
 
 meta_dict = {}
 
@@ -289,13 +293,20 @@ def get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entr
         url = match.document.get_data().decode('utf-8')
         sobj = SearchObject(mdx, [], get_dic_attrs(dic), url, is_dic=True)
         entryobj = sobj.search_entry_list()[0]
-        entryobj.extra = matches.snippet(reghtml.sub('', entryobj.mdx_record), frag_size, xapian.Stem('english'), 1,
+        entryobj.extra = matches.snippet(remove_html_tags(entryobj.mdx_record), frag_size, xapian.Stem('english'), 1,
                                          '<b style="background-color:yellow;color:red;font-size:0.8rem;">',
                                          '</b>', '...').decode('utf-8')
         result.append(entryobj)
     zim_file.close()
 
     return result, total_num
+
+
+def remove_html_tags(content):
+    content = content.replace('\n', '').replace('\r', '').replace(' ', '')
+    content = reghtml2.sub('', content)
+    content = reghtml3.sub('', content)
+    return reghtml.sub('', content)
 
 
 def init_index(request):
