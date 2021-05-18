@@ -124,6 +124,10 @@ windows下的d盘在wsl下为/mnt/d/。 注意输入规范的路径，用双引�
 
 apache修改配置文件django-mdict.conf中的VirtualHost *:80。
 
+### wsl下的路径
+
+windows下的c盘对于wsl下的/mnt/c/
+
 ### admin操作
 
 进入后台admin界面
@@ -211,9 +215,13 @@ github ZIMply： [https://github.com/kimbauters/ZIMply](https://github.com/kimba
 
 /django-mdict/mdict/mdict-utils/readzim.py修改自zimply.py。
 
-目前不支持zim的模糊搜索和全文搜索，会有部分词条无法查询到。
+正查会有部分词条无法查询到，需要用全文搜索。全文搜索需要安装xapian，windows下需要手动编译。
+django-mdict运行后会抽取zim的内置索引保存为idx文件，抽取索引类似文件复制，速度取决于硬盘的最大读写速度。
 
 要使用zim的全部功能，用kiwix或goldendict浏览。
+
+kiwix下载地址：
+[https://www.kiwix.org/download/](https://www.kiwix.org/download/)
 
 phet.zim需要开启固定高度才能正常显示。
 
@@ -233,7 +241,6 @@ vikida-面向儿童的百科
 stackexchange-问答网站stackexchange的离线网页
 
 zim下载地址：
-
 [https://wiki.kiwix.org/wiki/Content_in_all_languages](https://wiki.kiwix.org/wiki/Content_in_all_languages)
 
 ### 内置词典
@@ -550,6 +557,17 @@ windows下运行shell:startup，建立脚本文件ubuntu.vbs，内容为
 ```
 Set ws = CreateObject("Wscript.Shell")
 ws.run "wsl -d ubuntu -u root /etc/init.d/apache2 start", vbhid
+```
+
+7. apache常用命令
+
+```
+启动apache
+sudo service apache2 start
+重启apache
+sudo service apache2 restart
+停止apache
+sudo service apache2 stop
 ```
 
 其中ubuntu是发行版名称，具体名称用命令wsl -list来查看。
