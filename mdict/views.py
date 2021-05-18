@@ -174,7 +174,7 @@ def get_tokens(query):
 @api_view(['GET', 'POST', ])
 @permission_classes([])
 @authentication_classes([])
-def es_search(request):
+def fulltext_search(request):
     query = request.GET.get('query', '')
     # force_refresh = json.loads(request.GET.get('force_refresh', False))
 
@@ -205,9 +205,11 @@ def es_search(request):
 
     group = int(request.GET.get('dic_group', 0))
 
-    tokens = get_tokens(query)
-
     enable_es_search = True
+
+    result = []
+    total_count = 0
+    tokens = []
 
     if dic_pk > -1 and check_xapian():
         dics = MdictDic.objects.filter(pk=dic_pk)
@@ -217,20 +219,19 @@ def es_search(request):
             temp_object = init_vars.mdict_odict[dic_file]
             mdx = temp_object.mdx
             if mdx.get_fpath().endswith('.zim'):
-                result, total_count = get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entry,
-                                                      es_content)
                 enable_es_search = False
+                tokens = query.split(' ')
+                result, total_count = get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entry,
+                                                      es_content, es_and, es_phrase)
 
     if enable_es_search:
-        result, total_count = get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, es_phrase,
-                                             es_entry, es_content,
-                                             es_and)
+        tokens = get_tokens(query)
+        result, total_count = get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
+                                             es_entry, es_content, es_and, es_phrase)
 
     result = search_revise(query, result, is_en)
 
     serializer = MdictEntrySerializer(result, many=True)
-
-    # total_count = 2000
 
     ret = {
         "page_size": len(result),  # 每页显示
@@ -249,8 +250,18 @@ def es_search(request):
     return Response(ret)
 
 
-def get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entry, es_content):
+def get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entry, es_content,
+                    es_and, es_phrase):
     result = []
+
+    if es_phrase:
+        query = '"' + query.replace('"', '') + '"'
+    else:
+        tquery_list = query.split(' ')
+        if es_and:
+            query = ' AND '.join(tquery_list)
+        else:
+            query = ' OR '.join(tquery_list)
 
     if es_content:
         index_path = mdx.full_index_path
@@ -445,8 +456,8 @@ def sub_highlight(matched):
     return '<b style="background-color:yellow;color:red;font-size:0.8rem;">' + text + '</b>'
 
 
-def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, es_phrase, es_entry, es_content,
-                   es_and):
+def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, es_entry, es_content,
+                   es_and, es_phrase):
     global meta_dict
     es_host = get_config_con('es_host')
     client = Elasticsearch(hosts=es_host)

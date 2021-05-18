@@ -28,7 +28,7 @@ urlpatterns = [
     path('saveconfig/', views.save_config),
     path('bujian/', views.bujianjiansuo),
     path('es/', views.es_index),
-    path('essearch/', views.es_search),
+    path('essearch/', views.fulltext_search),
     path('initindex/', views.init_index),
     path('indexstatus/', views.get_index_status),
     path('downloadhistory/', views.download_history),
