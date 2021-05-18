@@ -258,10 +258,10 @@ def get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entr
                     es_and, es_phrase):
     result = []
 
+    tquery_list = query.split(' ')
     if es_phrase:
         query = '"' + query.replace('"', '') + '"'
     else:
-        tquery_list = query.split(' ')
         if es_and:
             query = ' AND '.join(tquery_list)
         else:
@@ -283,8 +283,8 @@ def get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entr
     qp = xapian.QueryParser()
     qp.set_database(database)
     qp.set_stemming_strategy(xapian.QueryParser.STEM_SOME)
-    query = qp.parse_query(query_string)
-    enquire.set_query(query)
+    query_obj = qp.parse_query(query_string)
+    enquire.set_query(query_obj)
     matches = enquire.get_mset((result_page - 1) * result_num, result_page * result_num)
     total_num = matches.get_matches_estimated()
 
@@ -293,7 +293,15 @@ def get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entr
         url = match.document.get_data().decode('utf-8')
         sobj = SearchObject(mdx, [], get_dic_attrs(dic), url, is_dic=True)
         entryobj = sobj.search_entry_list()[0]
-        entryobj.extra = matches.snippet(remove_html_tags(entryobj.mdx_record), frag_size, xapian.Stem('english'), 1,
+        content = remove_html_tags(entryobj.mdx_record)
+        high_mark = content.find(tquery_list[0])
+        if high_mark < 0:
+            high_mark = content.find(query[0])
+        if high_mark < 0:
+            high_mark = 0
+        if high_mark - 5 >= 0:
+            high_mark = high_mark - 5
+        entryobj.extra = matches.snippet(content[high_mark:], frag_size, xapian.Stem('english'), 1,
                                          '<b style="background-color:yellow;color:red;font-size:0.8rem;">',
                                          '</b>', '...').decode('utf-8')
         result.append(entryobj)
