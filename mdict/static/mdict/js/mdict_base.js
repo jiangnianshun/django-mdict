@@ -564,6 +564,7 @@ function get_pk_in_group(){
 		var mdict_list=$("#mdict-list-content .card-header");
 		if(pk_list.length==0){
 		    $(mdict_list).each(function(){$(this).show();});
+		    $("#dic_num").text($("#mdict-list-content .card-header input:visible").length);
 		}else{
             for(var i=0;i<mdict_list.length;i++){
                 var dic_pk=parseInt($(mdict_list[i]).find('input').attr('data-pk'));
@@ -574,6 +575,7 @@ function get_pk_in_group(){
                     $(mdict_list[i]).show();
                 }
             }
+		    $("#dic_num").text($("#mdict-list-content .card-header input:visible").length);
         }
 
 		},
