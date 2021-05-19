@@ -544,10 +544,43 @@ function init_dic_group(){
 	$( "#dic-group" ).selectmenu({
 	change: function( event, data ) {
 		init_autocomplete();//每次切换分组后，都要重置一下autocomplete()
+		get_pk_in_group();
 		}
 	});
 
 	get_dic_group();
+}
+
+function get_pk_in_group(){
+    var dic_group=$('#dic-group option:selected').attr('data-pk');
+    data={"dic_group":dic_group};
+    $.ajax({
+		url:"/mdict/getpkingroup/",
+		contentType:'json',
+		type:'GET',
+		data:data,
+		success:function(data){
+		var pk_list=$.parseJSON(data);
+		var mdict_list=$("#mdict-list-content .card-header");
+		if(pk_list.length==0){
+		    $(mdict_list).each(function(){$(this).show();});
+		}else{
+            for(var i=0;i<mdict_list.length;i++){
+                var dic_pk=parseInt($(mdict_list[i]).find('input').attr('data-pk'));
+                var pk_pos=$.inArray(dic_pk,pk_list);
+                if(pk_pos<0){
+                    $(mdict_list[i]).hide();
+                }else{
+                    $(mdict_list[i]).show();
+                }
+            }
+        }
+
+		},
+		error:function(jqXHR,textStatus,errorThrown){
+			alert(jqXHR.responseText);
+		},
+	});
 }
 
 function get_dic_group(container){//载入词典列表

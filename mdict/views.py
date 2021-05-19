@@ -1230,6 +1230,15 @@ def get_dic_group(request):
     return HttpResponse(json.dumps(r_list))
 
 
+def get_pk_in_group(request):
+    group_pk = int(request.GET.get('dic_group'))
+    group_list = MdictDicGroup.objects.filter(pk=group_pk)
+    pk_list = []
+    if len(group_list) > 0:
+        pk_list = list(group_list[0].mdict_group.values_list('pk', flat=True))
+    return HttpResponse(json.dumps(pk_list))
+
+
 def search_suggestion(request):
     query = request.GET.get('query', '').strip()
     dic_pk = int(request.GET.get('dic_pk', -1))
