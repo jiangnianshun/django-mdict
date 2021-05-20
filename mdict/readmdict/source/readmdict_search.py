@@ -1006,16 +1006,18 @@ class MDict(object):
             f_list, r_s_p2 = self.search_key_block_list(key_list, p2, math.floor(num / 2), False)
             b_list, r_e_p2 = self.search_key_block_list(key_list, p2, math.ceil(num / 2) + 1, True)
             # 这里加1，总数才是num，后面处理是否少了个+1
+            if f_list[-1][2] == -1 and len(b_list) > 1:
+                f_list[-1][2] = b_list[1][1]
             my_list.extend(f_list)
             my_list.extend(b_list[1:])
 
         my_list_len = len(my_list)
 
         if my_list_len == num:
-            if my_list[num - 1][2] == -1 and compressed_size_a != -1:
+            if my_list[-1][2] == -1 and compressed_size_a != -1:
                 key_block = self.get_key_block(f, compressed_size_a, decompressed_size_a, compressed_size,
                                                decompressed_size)
-                my_list[num - 1][2] = unpack(self._number_format, key_block[0:self._number_width])[0]
+                my_list[-1][2] = unpack(self._number_format, key_block[0:self._number_width])[0]
         elif my_list_len < num:
 
             if direction > 0:
@@ -1025,7 +1027,7 @@ class MDict(object):
                                                    decompressed_size)
                     key_list = self._split_key_block(key_block)
                     t_list, r_e_p2 = self.search_key_block_list(key_list, 0, num - my_list_len, True)
-                    my_list[my_list_len - 1][2] = t_list[0][2]
+                    my_list[-1][2] = t_list[0][1]
                     my_list.extend(t_list)
 
             elif direction < 0:
@@ -1040,7 +1042,7 @@ class MDict(object):
                     t_list, r_s_p2 = self.search_key_block_list(key_list, len(key_list) - 1, num - my_list_len,
                                                                 False)
 
-                    t_list[len(t_list) - 1][2] = my_list[0][2]
+                    t_list[-1][2] = my_list[0][1]
                     t_list.extend(my_list)
                     my_list = t_list
             elif direction == 0:
@@ -1056,7 +1058,7 @@ class MDict(object):
                         t_list, r_s_p2 = self.search_key_block_list(key_list, len(key_list) - 1,
                                                                     math.floor(num / 2) - len(f_list),
                                                                     False)
-                        t_list[len(t_list) - 1][2] = my_list[len(f_list)][2]
+                        t_list[-1][2] = my_list[len(f_list)][1]
                         t_list.extend(my_list)
                         my_list = t_list
                 if len(b_list) < math.ceil(num / 2):
@@ -1067,7 +1069,7 @@ class MDict(object):
                         key_list = self._split_key_block(key_block)
                         t_list, r_e_p2 = self.search_key_block_list(key_list, 0, math.ceil(num / 2) - len(b_list),
                                                                     True)
-                        my_list[my_list_len - 1][2] = t_list[0][2]
+                        my_list[-1][2] = t_list[0][1]
                         my_list.extend(t_list)
         myt_list.extend(my_list)
 
