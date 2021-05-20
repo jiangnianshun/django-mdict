@@ -572,6 +572,8 @@ class MDict(object):
 
         key_block_info_list = self._key_list
         length = len(key_block_info_list)
+        if p == -1:
+            p = length - 1
         if not p < length:
             return -1, -1, -1, -1, -1, -1, -1, -1
         if p - 1 >= 0:
@@ -777,6 +779,9 @@ class MDict(object):
         length = len(key_list)
         start = 0
         end = length - 1
+
+        if p == -1:
+            p = end
 
         if p - num > 0:
             start = p - num + 1

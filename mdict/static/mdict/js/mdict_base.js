@@ -814,11 +814,15 @@ function init_dic_range(){
 		    var item=$.parseJSON(data);
 		    var block_num=item['block_num'];
 		    var dic_range=$("#dic-range");
-		    dic_range.attr("max",block_num-1);
+		    dic_range.attr("max",block_num);
 		    dic_range.val(0);
             dic_range.on('input propertychange', (e) => {
-                block_num=$("#dic-range").val();
-                query_scroll(block_num,0,dic_entry_nums,0);
+                var block_num_val=$("#dic-range").val();
+                if(block_num_val==block_num){
+                    query_scroll(-1,-1,dic_entry_nums,0);
+                }else{
+                    query_scroll(block_num_val,0,dic_entry_nums,0);
+                }
             });
 		},
 		error:function(jqXHR,textStatus,errorThrown){
