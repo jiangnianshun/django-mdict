@@ -485,6 +485,12 @@ function init_modal_config(){
 
     init_online_dic_var();
 
+    var modal_container_mdict = document.getElementById('modal-container-mdict')
+
+    modal_container_mdict.addEventListener('shown.bs.modal', function () {
+        set_dic_num();
+    })
+
 //这里后面再处理
     $("#save_as_default").click(function(){
         update_config();
@@ -551,6 +557,10 @@ function init_dic_group(){
 	get_dic_group();
 }
 
+function set_dic_num(){
+    $("#dic_num").text($("#mdict-list-content .card-header input:visible").length);
+}
+
 function get_pk_in_group(){
     var dic_group=$('#dic-group option:selected').attr('data-pk');
     data={"dic_group":dic_group};
@@ -562,9 +572,9 @@ function get_pk_in_group(){
 		success:function(data){
 		var pk_list=$.parseJSON(data);
 		var mdict_list=$("#mdict-list-content .card-header");
-		if(pk_list.length==0){
+		if(pk_list.length==0&&dic_group<=0){
 		    $(mdict_list).each(function(){$(this).show();});
-		    $("#dic_num").text($("#mdict-list-content .card-header input:visible").length);
+		    set_dic_num()
 		}else{
             for(var i=0;i<mdict_list.length;i++){
                 var dic_pk=parseInt($(mdict_list[i]).find('input').attr('data-pk'));
@@ -575,7 +585,7 @@ function get_pk_in_group(){
                     $(mdict_list[i]).show();
                 }
             }
-		    $("#dic_num").text($("#mdict-list-content .card-header input:visible").length);
+		    set_dic_num()
         }
 
 		},
