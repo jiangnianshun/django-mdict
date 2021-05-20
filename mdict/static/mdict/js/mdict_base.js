@@ -787,8 +787,35 @@ function init_scroll_list(){
 	});
 }
 
+function init_dic_range(){
+    var dic_pk=$('html').attr('data-dic-pk');
+    data={"dic_pk":dic_pk};
+	$.ajax({
+		url:"/mdict/getlbocknum/",
+		contentType:'json',
+		type:'GET',
+		data:data,
+		success:function(data){
+		    var item=$.parseJSON(data);
+		    var block_num=item['block_num'];
+		    var dic_range=$("#dic-range");
+		    dic_range.attr("max",block_num-1);
+		    dic_range.val(0);
+            dic_range.on('input propertychange', (e) => {
+                block_num=$("#dic-range").val();
+                query_scroll(block_num,0,dic_entry_nums,0);
+            });
+		},
+		error:function(jqXHR,textStatus,errorThrown){
+			alert(jqXHR.responseText);
+		},
+	});
+}
+
 function init_single_dic(){
 	get_header($("#modal-container-brief .modal-body"));
+
+	init_dic_range();
 
 	init_scroll_list();
 

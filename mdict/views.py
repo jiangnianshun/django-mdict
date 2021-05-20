@@ -1082,6 +1082,20 @@ def mdict_all_entrys(request):
     return HttpResponse(json.dumps(return_dict))
 
 
+def get_block_num(request):
+    dic_pk = int(request.GET.get('dic_pk', -1))
+    dics = MdictDic.objects.filter(pk=dic_pk)
+    block_num = 0
+    if len(dics) > 0:
+        dic = dics[0]
+        if dic.mdict_file in init_vars.mdict_odict.keys():
+            item = init_vars.mdict_odict[dic.mdict_file]
+            mdx = item.mdx
+            if not mdx.get_fpath().endswith('.zim'):
+                block_num = len(mdx._key_list)
+    return HttpResponse(json.dumps({'block_num': block_num}))
+
+
 @loop_mdict_list(return_type=1)
 class get_dic_info_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):

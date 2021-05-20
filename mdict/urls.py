@@ -20,6 +20,7 @@ urlpatterns = [
     path('key/', views.search_mdx_key),
     path('record/', views.search_mdx_record),
     path('allentrys/', views.mdict_all_entrys),
+    path('getlbocknum/', views.get_block_num),
     path('mdictlist/', views.get_mdict_list),
     path('header/', views.get_dic_info),
     path('dicgroup/', views.get_dic_group),

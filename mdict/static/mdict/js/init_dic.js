@@ -27,7 +27,7 @@ function loadmore(obj1,obj2){
 		dic_back=true;
 		p1=$("#display_list").attr("data-end-p1");
 		p2=$("#display_list").attr("data-end-p2");
-		query_scroll(p1,p2,dic_entry_nums,0,dic_pk);
+		query_scroll(p1,p2,dic_entry_nums,0);
 	}else if(scrollTop==0){
 	//到达顶部
 	console.log("到达顶部");
@@ -36,7 +36,7 @@ function loadmore(obj1,obj2){
 		p2=$("#display_list").attr("data-start-p2");
 
 		if(!(p1==0&&p2==0)){
-			query_scroll(p1,p2,dic_entry_nums,0,dic_pk);
+			query_scroll(p1,p2,dic_entry_nums,0);
 		}
 
 	}
