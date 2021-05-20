@@ -213,9 +213,9 @@ django-mdict/mdict/media/readmdict_py3.zip/readmdict_py3.py对readmdict.py进行
 
 3. 源代码634行，修改tkinter的导入，使脚本能在python3下运行。
 
-django-mdict/mdict/readlib/src/readmdict_search.py功能是对mdict进行查找。
+django-mdict/mdict/readlib/src/readmdict.py功能是对mdict进行查找。
 
-django-mdict/mdict/readlib/pyx/readmdict_search.pyx是readmdict_seach.py的cython版本，运行build.bat或build.sh进行编译，编译后的库文件会复制到/django-mdict/mdict/readmdict/lib/。
+django-mdict/mdict/readlib/pyx/readmdict.pyx是readmdict_seach.py的cython版本，运行build.bat或build.sh进行编译，编译后的库文件会复制到/django-mdict/mdict/readmdict/lib/。
 
 ### zim解析
 
@@ -643,13 +643,13 @@ python manage.py migrate mdict
 
 因为django-mdict.conf里设置了expires_module，使得浏览器长期缓存文件，手动删除浏览器的缓存文件（不需要清cookie）。
 
-3. 显示\[INIT_UTILS WARNING\] loading readmdict_search lib failed!
+3. 显示\[INIT_UTILS WARNING\] loading readmdict lib failed!
 
 出现该提示说明没有进行cython编译。
 
 windows下运行django-mdict/mdict/readmdict/pyx/build.bat，linux下运行django-mdict/mdict/readmdict/pyx/build.sh。
 
-这将对readmdict_search.py进行编译，编译后的pyd或so运行库在django-mdict/mdict/readmdict/lib/下，编译后相比于没有编译，速度提升约1/3。
+这将对readmdict.py进行编译，编译后的pyd或so运行库在django-mdict/mdict/readmdict/lib/下，编译后相比于没有编译，速度提升约1/3。
 
 4. 403错误
 

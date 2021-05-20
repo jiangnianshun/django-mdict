@@ -112,6 +112,7 @@ def _decrypt_regcode_by_email(reg_code, email):
     encrypt_key = s20.encryptBytes(reg_code)
     return encrypt_key
 
+
 def _parse_header(header):
     """
     extract attributes from <Dict attr="value" ... >
@@ -985,6 +986,10 @@ class MDict(object):
             return [], -1, -1, -1, -1
 
         key_list = self._split_key_block(key_block)
+        if 0 < p2 < 1:
+            p2 = int(len(key_list)*p2 / 2)
+        else:
+            p2 = int(p2)
         r_s_p1 = p1
         r_s_p2 = p2
         r_e_p1 = p1

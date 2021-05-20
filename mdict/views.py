@@ -900,7 +900,7 @@ def search_audio(request):
     f_name = res_name[res_name.rfind('\\') + 1:]
     mime_type = guess_mime(f_name)
     audio_type_list = ['.spx', '.mp3', '.wav']
-    # 这里应该在readmdict_search中处理，比较时去掉不比较点和扩展名
+    # 这里应该在readmdict中处理，比较时去掉不比较点和扩展名
     bk = False
     for tp in audio_type_list:
         res_name = '\\' + res_name + tp
@@ -1072,10 +1072,9 @@ class mdict_all_entrys_object(innerObject):
 
 
 def mdict_all_entrys(request):
-    entry_list = []
     dic_pk = int(request.GET.get('dic_pk', -1))
     p1 = int(request.GET.get('p1', 0))
-    p2 = int(request.GET.get('p2', 0))
+    p2 = float(request.GET.get('p2', 0))
     num = int(request.GET.get('num', 15))
     direction = int(request.GET.get('direction', 0))
     # >0从p1,p2位置向后查num个词条，<0向前查，0向前后各查num/2个词条

@@ -178,7 +178,7 @@ class SearchObject:
         self.close_all()
         return sug
 
-    @search_exception()
+    # @search_exception()
     def search_key_list(self, p1, p2, num, direction):
         if self.is_zim:
             entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = [], 0, 0, 0, 0

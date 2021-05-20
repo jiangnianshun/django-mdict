@@ -818,10 +818,12 @@ function init_dic_range(){
 		    dic_range.val(0);
             dic_range.on('input propertychange', (e) => {
                 var block_num_val=$("#dic-range").val();
+                var block_num_val2=block_num_val-parseInt(block_num_val);
+                block_num_val=parseInt(block_num_val);
                 if(block_num_val==block_num){
                     query_scroll(-1,-1,dic_entry_nums,0);
                 }else{
-                    query_scroll(block_num_val,0,dic_entry_nums,0);
+                    query_scroll(block_num_val,block_num_val2,dic_entry_nums,0);
                 }
             });
 		},

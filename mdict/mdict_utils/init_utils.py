@@ -19,11 +19,11 @@ except ImportError as e:
     from mdict.readlib.src.readzim import ZIMFile
 
 try:
-    from mdict.readlib.lib.readmdict_search import MDX, MDD
+    from mdict.readlib.lib.readmdict import MDX, MDD
 except ImportError as e:
     print(e)
-    print_log_info('loading readmdict_search lib failed!', 1)
-    from mdict.readlib.src.readmdict_search import MDX, MDD
+    print_log_info('loading readmdict lib failed!', 1)
+    from mdict.readlib.src.readmdict import MDX, MDD
 
 from .mdict_func import mdict_root_path, audio_path
 

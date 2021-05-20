@@ -2,8 +2,8 @@ from distutils.core import setup
 
 from Cython.Build import cythonize
 
-setup(name='readmdict_search',
-      ext_modules=cythonize("readmdict_search.pyx", annotate=False, language_level="3")
+setup(name='readmdict',
+      ext_modules=cythonize("readmdict.pyx", annotate=False, language_level="3")
       )
 
 setup(name='ripemd128',
