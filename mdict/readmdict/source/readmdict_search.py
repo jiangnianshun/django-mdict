@@ -21,6 +21,7 @@ import math
 import operator
 import re
 import sys
+import random
 # zlib compression is used for engine version >=2.0
 import zlib
 from io import BytesIO
@@ -29,17 +30,13 @@ from struct import pack, unpack
 try:
     from mdict.readmdict.lib.pureSalsa20 import Salsa20
 except ImportError as e:
-    print(e)
-    print(
-        'loading pureSalsa20 lib failed! run build script to compile, this will speed up search.')
+    print(e, 'loading pureSalsa20 lib failed!')
     from mdict.readmdict.source.pureSalsa20 import Salsa20
 
 try:
     from mdict.readmdict.lib.ripemd128 import ripemd128
 except ImportError as e:
-    print(e)
-    print(
-        'loading ripemd128 lib failed! run build script to compile, this will speed up search.')
+    print(e, 'loading ripemd128 lib failed!')
     from mdict.readmdict.source.ripemd128 import ripemd128
 
 # from ripemd128 import ripemd128
@@ -930,6 +927,38 @@ class MDict(object):
                     my_sug.extend(m_a)
         return my_sug
 
+    def _decode_key_random(self, f):
+        random_p1 = random.randint(0, len(self._key_list) - 1)
+
+        # num_bytes = 0
+        if self._version >= 2.0:
+            num_bytes = 8 * 5
+        else:
+            num_bytes = 4 * 4
+
+        p = self._key_block_offset + num_bytes + self.key_block_info_size
+        if self._version >= 2.0:
+            p += 4
+
+        compressed_size, decompressed_size, compressed_size_b, decompressed_size_b, compressed_size_a, \
+        decompressed_size_a, compressed_size_b2, decompressed_size_b2 = \
+            self.get_key_block_size_list(random_p1)
+
+        if compressed_size == -1:
+            return [], -1, -1, -1, -1
+        p += compressed_size_b
+        f.seek(p)
+
+        key_block = self.get_key_block(f, compressed_size, decompressed_size, compressed_size_b,
+                                       decompressed_size_b)
+
+        if key_block == b'':
+            return [], -1, -1, -1, -1
+
+        key_list = self._split_key_block(key_block)
+        random_p2 = random.randint(0, len(key_list) - 1)
+        return key_list[random_p2][1].decode(self._encoding, errors='replace')
+
     def _decode_key_block_list(self, f, p1, p2, num, direction):
         # num_bytes = 0
         if self._version >= 2.0:
@@ -1024,7 +1053,6 @@ class MDict(object):
                                                decompressed_size)
                 my_list[-1][2] = unpack(self._number_format, key_block[0:self._number_width])[0]
         elif my_list_len < num:
-
             if direction > 0:
                 if compressed_size_a != -1:
                     r_e_p1 += 1
@@ -1478,3 +1506,6 @@ class MDX(MDict):
         self._sug_flag = -1
         entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = self._decode_key_block_list(f, p1, p2, num, direction)
         return entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2
+
+    def look_up_random_key(self, f):
+        return self._decode_key_random(f)

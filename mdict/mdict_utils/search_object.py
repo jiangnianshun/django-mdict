@@ -143,13 +143,8 @@ class SearchObject:
                     random_entry = entry['url']
                     break
             else:
-                random_id = random.randint(0, len(self.mdx._key_list) - 1)
-                random_id2 = random.randint(0, 5)
-                r_v = self.mdx.look_up_key_list(random_id, random_id2, 1000, 1, self.f_mdx)
-                if len(r_v[0]) > 0:
-                    random_id = random.randint(0, len(r_v[0]) - 1)
-                    random_entry = r_v[0][random_id][0]
-                    break
+                random_entry = self.mdx.look_up_random_key(self.f_mdx)
+                break
             count += 1
 
         self.close_all()

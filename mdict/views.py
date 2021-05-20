@@ -1074,8 +1074,8 @@ def mdict_all_entrys(request):
     direction = int(request.GET.get('direction', 0))
     # >0从p1,p2位置向后查num个词条，<0向前查，0向前后各查num/2个词条
 
-    if p1 == -1 or p2 == -1:
-        return HttpResponse(json.dumps(entry_list))
+    # if p1 == -1 or p2 == -1:
+    #     return HttpResponse(json.dumps(entry_list))
 
     return_dict = mdict_all_entrys_object(
         {'target_pk': dic_pk, 'p1': p1, 'p2': p2, 'num': num, 'direction': direction})
