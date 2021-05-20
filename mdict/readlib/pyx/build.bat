@@ -1,6 +1,6 @@
 cd /d %~dp0
 python setup.py build_ext --inplace
-cd mdict/readmdict/pyx
+cd mdict/readlib/pyx
 if not exist ../../../../lib (
 mkdir "../../../../lib"
 )

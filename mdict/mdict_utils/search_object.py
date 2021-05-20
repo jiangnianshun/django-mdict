@@ -26,8 +26,14 @@ from .entry_object import entryObject
 from .init_utils import init_vars
 from .mdict_func import replace_res_name, is_local, get_m_path, replace_res_name2
 from .exception_decorator import search_exception
-from base.base_func import guess_mime
-from .readzim import ZIMFile
+from base.base_func import guess_mime, print_log_info
+
+try:
+    from mdict.readlib.lib.readzim import ZIMFile
+except ImportError as e:
+    print(e)
+    print_log_info('loading readzim lib failed!', 1)
+    from mdict.readlib.src.readzim import ZIMFile
 
 # 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64，mailto:开头是邮件,javascript:脚本，#开头可能是锚点，www.开头可能是网址，这两个当在mdd中查询不存在时不处理。
 # reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'

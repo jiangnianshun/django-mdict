@@ -41,5 +41,5 @@ build/
 manga.md
 auto_tool.bat
 auto_tool.py
-/mdict/readmdict/source/readmdict-py3/
+/mdict/readlib/src/readmdict-py3/
 !/static/json/manifest.json

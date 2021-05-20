@@ -2,7 +2,7 @@
 #!/usr/bin/env python3
 cd `dirname  $0`
 python3 setup.py build_ext --inplace
-cd mdict/readmdict/pyx
+cd mdict/readlib/pyx
 file="../../../../lib"
 if [ ! -d $file ]; then
 echo "make dir lib"

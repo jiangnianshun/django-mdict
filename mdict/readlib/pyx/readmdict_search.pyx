@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# readmdict.py
+# readlib.py
 # Octopus MDict Dictionary File (.mdx) and Resource File (.mdd) Analyser
 #
 # Copyright (C) 2012, 2013, 2015 Xiaoqiang Wang <xiaoqiangwang AT gmail DOT com>
@@ -28,16 +28,16 @@ from io import BytesIO
 from struct import pack, unpack
 
 try:
-    from mdict.readmdict.lib.pureSalsa20 import Salsa20
+    from mdict.readlib.lib.pureSalsa20 import Salsa20
 except ImportError as e:
     print(e, 'loading pureSalsa20 lib failed!')
-    from mdict.readmdict.source.pureSalsa20 import Salsa20
+    from mdict.readlib.src.pureSalsa20 import Salsa20
 
 try:
-    from mdict.readmdict.lib.ripemd128 import ripemd128
+    from mdict.readlib.lib.ripemd128 import ripemd128
 except ImportError as e:
     print(e, 'loading ripemd128 lib failed!')
-    from mdict.readmdict.source.ripemd128 import ripemd128
+    from mdict.readlib.src.ripemd128 import ripemd128
 
 # from ripemd128 import ripemd128
 # from pureSalsa20 import Salsa20
@@ -112,6 +112,16 @@ def _decrypt_regcode_by_email(reg_code, email):
     encrypt_key = s20.encryptBytes(reg_code)
     return encrypt_key
 
+def _parse_header(header):
+    """
+    extract attributes from <Dict attr="value" ... >
+    """
+    taglist = re.findall(r'(\w+)="(.*?)"', header, re.DOTALL)
+    tagdict = {}
+    for key, value in taglist:
+        tagdict[key] = _unescape_entities(value)
+    return tagdict
+
 
 reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|]'
 regp = re.compile(reg)
@@ -159,17 +169,6 @@ class MDict(object):
 
     def _read_number(self, f):
         return unpack(self._number_format, f.read(self._number_width))[0]
-
-    @staticmethod
-    def _parse_header(header):
-        """
-        extract attributes from <Dict attr="value" ... >
-        """
-        taglist = re.findall(r'(\w+)="(.*?)"', header, re.DOTALL)
-        tagdict = {}
-        for key, value in taglist:
-            tagdict[key] = _unescape_entities(value)
-        return tagdict
 
     def compare_keys(self, key1, key2):
         """
@@ -1161,7 +1160,7 @@ class MDict(object):
 
         # header text in utf-16 encoding ending with '\x00\x00'
         header_text = header_bytes[:-2].decode('utf-16', errors='replace')
-        header_tag = self._parse_header(header_text)
+        header_tag = _parse_header(header_text)
         if not self._encoding:
             encoding = header_tag['Encoding']
             if sys.hexversion >= 0x03000000:

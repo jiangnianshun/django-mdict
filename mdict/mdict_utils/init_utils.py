@@ -8,20 +8,22 @@ from base.base_func import print_log_info, guess_mime, ROOT_DIR
 from base.sys_utils import get_sys_name
 from .mdict_config import set_cpu_num, get_cpu_num
 from .mdict_func import rename_history, check_xapian
-from .readzim import ZIMFile
 
 print_log_info(['system is', get_sys_name(), '.'])
 
 try:
-    from mdict.readmdict.lib.readmdict_search import MDX, MDD
-
-    print_log_info('loading readmdict_search lib.')
+    from mdict.readlib.lib.readzim import ZIMFile
 except ImportError as e:
     print(e)
-    print_log_info(
-        'loading readmdict_search lib failed! run /mdict/readmdict/pyx/build.sh or build.bat, this will speed up search.',
-        1)
-    from mdict.readmdict.source.readmdict_search import MDX, MDD
+    print_log_info('loading readzim lib failed!', 1)
+    from mdict.readlib.src.readzim import ZIMFile
+
+try:
+    from mdict.readlib.lib.readmdict_search import MDX, MDD
+except ImportError as e:
+    print(e)
+    print_log_info('loading readmdict_search lib failed!', 1)
+    from mdict.readlib.src.readmdict_search import MDX, MDD
 
 from .mdict_func import mdict_root_path, audio_path
 

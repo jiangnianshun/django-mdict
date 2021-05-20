@@ -19,7 +19,7 @@ from elasticsearch_dsl import Search, Index
 from elasticsearch_dsl.query import MultiMatch
 from elasticsearch.exceptions import ConnectionError, TransportError
 
-from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h, kh2f
+from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h, kh2f, print_log_info
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
@@ -37,8 +37,14 @@ from .mdict_utils.entry_object import entryObject
 from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
 from .mdict_utils.mdict_func import mdict_root_path, is_local, get_m_path
-from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator, es_paginator
-from .mdict_utils.readzim import ZIMFile
+from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
+
+try:
+    from mdict.readlib.lib.readzim import ZIMFile
+except ImportError as e:
+    print(e)
+    print_log_info('loading readzim lib failed!', 1)
+    from mdict.readlib.src.readzim import ZIMFile
 
 if check_xapian():
     import xapian
