@@ -863,6 +863,7 @@ function query_key(container,entry){
 			var new_entry=d["entry"];
 			if(s!=-1){
 				$("#alert-box").empty();
+				$("#dic-range").val(p1);
 				query_scroll(p1,p2,dic_entry_nums,0);
 				query_record(container,new_entry,dic_pk,s,e);
 			}else{

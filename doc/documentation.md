@@ -86,7 +86,7 @@
 
 第一个含有mdx的路径会被设置为词典库路径，第一个含有mdd的路径会被设置为发音库路径。
 
-如果mdict_path.json为空，词典库地址设置为/django-mdict/media/mdict/doc/，发音库地址设置为/django-mdict/media/mdict/audio/。
+如果mdict_path.json为空，词典库地址设置为django-mdict/media/mdict/doc/，发音库地址设置为/django-mdict/media/mdict/audio/。
 
 windows下的d盘在wsl下为/mnt/d/。 注意输入规范的路径，用双引号并且用反斜杠或者双斜杠作为路径分隔符。
 
@@ -117,7 +117,7 @@ windows下的d盘在wsl下为/mnt/d/。 注意输入规范的路径，用双引�
 
 #### 同名词条合并
 
-修改配置文件/django-mdict/config.ini中的merge_entry_max_length项。
+修改配置文件django-mdict/config.ini中的merge_entry_max_length项。
 
 默认值为1000，当同一词典对同一个查询有多个查询结果时，长度（字符串的长度，包含html标签）小于1000的词条会被合并显示。如果需要完全不合并，设置为0。
 
@@ -127,11 +127,11 @@ windows下的d盘在wsl下为/mnt/d/。 注意输入规范的路径，用双引�
 
 apache修改配置文件django-mdict.conf中的VirtualHost *:80。
 
-### wsl下的路径
+#### wsl下的路径
 
 windows下的c盘对于wsl下的/mnt/c/
 
-### 修改主页内容
+#### 修改主页内容
 
 主页位于django-mdict/templates/index.html
 
@@ -205,7 +205,7 @@ bitbucket mdict-analysis：[https://bitbucket.org/xwang/mdict-analysis](https://
 
 github mdict-analysis：[https://github.com/csarron/mdict-analysis/blob/master/readmdict.py](https://github.com/csarron/mdict-analysis/blob/master/readmdict.py)
 
-/django-mdict/mdict/readmdict/source/readmdict_py3.zip/readmdict_py3.py对readmdict.py进行了修改
+django-mdict/mdict/media/readmdict_py3.zip/readmdict_py3.py对readmdict.py进行了修改
 
 1. 源代码136行，增加compress == b'\x00\x00\x00\x00'的情况。
 
@@ -213,9 +213,9 @@ github mdict-analysis：[https://github.com/csarron/mdict-analysis/blob/master/r
 
 3. 源代码634行，修改tkinter的导入，使脚本能在python3下运行。
 
-/django-mdict/mdict/readmdict/source/readmdict_search.py功能是对mdict进行查找。
+django-mdict/mdict/readlib/src/readmdict_search.py功能是对mdict进行查找。
 
-/django-mdict/mdict/readmdict/pyx/readmdict_search.pyx是readmdict_seach.py的cython版本，运行build.bat或build.sh进行编译，编译后的库文件会复制到/django-mdict/mdict/readmdict/lib/。
+django-mdict/mdict/readlib/pyx/readmdict_search.pyx是readmdict_seach.py的cython版本，运行build.bat或build.sh进行编译，编译后的库文件会复制到/django-mdict/mdict/readmdict/lib/。
 
 ### zim解析
 
@@ -223,7 +223,7 @@ ZIM file format: [https://openzim.org/wiki/ZIM_file_format](https://openzim.org/
 
 github ZIMply： [https://github.com/kimbauters/ZIMply](https://github.com/kimbauters/ZIMply)
 
-/django-mdict/mdict/mdict-utils/readzim.py修改自zimply.py。
+django-mdict/mdict/mdict-utils/readzim.py修改自zimply.py。
 
 正查会有部分词条无法查询到，需要用全文搜索。全文搜索需要安装xapian，windows下需要手动编译。
 django-mdict运行后会抽取zim的内置索引保存为idx文件，抽取索引类似文件复制，速度取决于硬盘的最大读写速度。
@@ -274,7 +274,7 @@ zim下载地址：
 python export_builtin_dic.py
 ```
 
-内置词典导出到/django-mdict/export/，export.txt是导出的文本，data是导出的资源，导出后不支持mathjax，wrap脚本goldendict支持，mdict不支持。
+内置词典导出到django-mdict/export/，export.txt是导出的文本，data是导出的资源，导出后不支持mathjax，wrap脚本goldendict支持，mdict不支持。
 
 ### 原形推测和拼写检查
 
@@ -290,7 +290,7 @@ github chaizi：[https://github.com/kfcd/chaizi](https://github.com/kfcd/chaizi)
 
 开放词典网拆字字典：[http://kaifangcidian.com/han/chaizi](http://kaifangcidian.com/han/chaizi)
 
-/django-mdict/mdict/mdict_utils/chaizi_reverse.py对chaizi.py进行修改，使其可以进行反查。比如输入山鳥，得到嶋和嶌。
+django-mdict/mdict/mdict_utils/chaizi_reverse.py对chaizi.py进行修改，使其可以进行反查。比如输入山鳥，得到嶋和嶌。
 
 拆字反查仅支持常用字，查询功能集成了拆字反查，查询山鸟，会返回山鸟、嶋、嶌，查询王八，会返回王八、兲、玐。
 
@@ -348,7 +348,7 @@ mdx同名的js、css和字体文件会自动加载。
 pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
-2. 将/django-mdict/huaci/huaci.pyw发送到桌面快捷方式。
+2. 将django-mdict/huaci/huaci.pyw发送到桌面快捷方式。
 
 3. 双击运行，右下角出现托盘图标。
 
@@ -407,7 +407,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ### 配置文件
 
-/django-mdict/config.ini
+django-mdict/config.ini
 
 cache_num 查询提示缓存数目
 
@@ -643,13 +643,13 @@ python manage.py migrate mdict
 
 因为django-mdict.conf里设置了expires_module，使得浏览器长期缓存文件，手动删除浏览器的缓存文件（不需要清cookie）。
 
-3. 显示\[INIT_UTILS WARNING\] loading readmdict_search lib failed! run /mdict/readmdict/pyx/build.sh or build.bat, this will speed up search.
+3. 显示\[INIT_UTILS WARNING\] loading readmdict_search lib failed!
 
 出现该提示说明没有进行cython编译。
 
-windows下运行/django-mdict/mdict/readmdict/pyx/build.bat，linux下运行/django-mdict/mdict/readmdict/pyx/build.sh。
+windows下运行django-mdict/mdict/readmdict/pyx/build.bat，linux下运行django-mdict/mdict/readmdict/pyx/build.sh。
 
-这将对readmdict_search.py进行编译，编译后的pyd或so运行库在/django-mdict/mdict/readmdict/lib/下，编译后相比于没有编译，速度提升约1/3。
+这将对readmdict_search.py进行编译，编译后的pyd或so运行库在django-mdict/mdict/readmdict/lib/下，编译后相比于没有编译，速度提升约1/3。
 
 4. 403错误
 
