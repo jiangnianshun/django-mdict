@@ -343,9 +343,7 @@ function add_iframes(data,container,need_clear,is_list){
 	//need_clear，第一次需要清除card
 	//is_list，query_mdict传进来的字典，query_record传进来的是列表
 	if(data.length==0){
-		var t="<div id='no-found'>未查询到！</div>";
-		container.append(t);
-		return [-1,-1]
+		return [-1,-1,-1]
 	}else{
 		if(is_list){
 			var d=data;
@@ -455,6 +453,7 @@ function add_to_history(query,result_num){
 }
 
 function query_es(query,container,page,need_clear,is_over){
+	clear_alert_info();
 	var dic_group=$('#dic-group option:selected').attr('data-pk');
 	var es_phrase=$('#es-filter-phrase').prop("checked");
 	var es_entry=$('#es-filter-entry').prop("checked");
@@ -487,6 +486,7 @@ function query_es(query,container,page,need_clear,is_over){
 			//每次按钮点击后清理掉已有的显示的词条
             page=add_iframes(data,container,need_clear,false);
 			//page[0]是当前页码，page[1]是总页码
+			if(page[2]<=0){set_alert_info(query);}
 
 		    var s2=`
 			<div id='next-page' class='card card-header m-auto'>
@@ -551,6 +551,7 @@ function query_es(query,container,page,need_clear,is_over){
 }
 
 function query_zim(container,entry,dic_pk){
+	clear_alert_info();
 	var data={"entry":entry,"dic_pk":dic_pk};
 	$.ajax({
 		url:"/mdict/zim/",
@@ -562,7 +563,8 @@ function query_zim(container,entry,dic_pk){
 			clear_card();
 			clear_parent_card(container);
 			//query_record在iframe外调用一次，在iframe内调用一次，因此这里用两个清除函数。;
-            add_iframes(d,container,true,true);
+            page=add_iframes(d,container,true,true);
+            if(page[2]<=0){set_alert_info(entry);}
 			show_first_card();
             //change_title_and_url(entry);
             add_to_history(entry,1);
@@ -574,6 +576,7 @@ function query_zim(container,entry,dic_pk){
 }
 
 function query_mdict(query,container,page,need_clear,is_over){
+	clear_alert_info();
 	var dic_group=$('#dic-group option:selected').attr('data-pk');
 
 	var force_refresh=$('#config-force-refresh').prop('checked');
@@ -594,6 +597,7 @@ function query_mdict(query,container,page,need_clear,is_over){
 
 			//每次按钮点击后清理掉已有的显示的词条
             page=add_iframes(data,container,need_clear,false);
+            if(page[2]<=0){set_alert_info(query);}
 			//page[0]是当前页码，page[1]是总页码
 			if(page[0]<page[1]){
 				var next_page=page[0]+1;
@@ -862,14 +866,7 @@ function query_key(container,entry){
 				query_scroll(p1,p2,dic_entry_nums,0);
 				query_record(container,new_entry,dic_pk,s,e);
 			}else{
-				var alert_box=`
-				<div class="alert alert-danger alert-dismissable">
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-					未查询到${entry}，无法跳转！
-				</div>
-				`;
-				$("#alert-box").empty();
-				$("#alert-box").append(alert_box);
+				set_alert_info(entry);
 			}
 		},
 		error:function(jqXHR,textStatus,errorThrown){

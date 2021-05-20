@@ -1,3 +1,18 @@
+function set_alert_info(entry){
+    var alert_box=`
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        未查询到${entry}！
+    </div>
+    `;
+    $("#alert-box").empty();
+    $("#alert-box").append(alert_box);
+}
+
+function clear_alert_info(){
+    $("#alert-box").empty();
+}
+
 function scroll_display_list(){
     var des=parseInt(dic_entry_nums/2)-1;
     var r_s_p1=$("#display_list").attr("data-end-p1");
