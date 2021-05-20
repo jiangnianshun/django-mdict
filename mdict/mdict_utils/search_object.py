@@ -40,7 +40,7 @@ except ImportError as e:
 reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'
 regp = re.compile(reg, re.IGNORECASE)
 
-regz = r'([ <\n])((src=("| )*)|(href=("| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^">]+)([" >])'
+regz = r'([ <\n])((src[ ]*=[ ]*("| )*)|(href[ ]*=[ ]*("| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^">]+)([" >])'
 regpz = re.compile(regz, re.IGNORECASE)
 # zim中src有单引号，Flag_of_the_People's_Republic_of_China.svg.png.webp
 
@@ -178,7 +178,7 @@ class SearchObject:
         self.close_all()
         return sug
 
-    # @search_exception()
+    @search_exception()
     def search_key_list(self, p1, p2, num, direction):
         if self.is_zim:
             entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = [], 0, 0, 0, 0
