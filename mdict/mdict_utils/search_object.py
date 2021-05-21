@@ -43,6 +43,7 @@ regp = re.compile(reg, re.IGNORECASE)
 regz = r'([ <\n])((src[ ]*=[ ]*("| )*)|(href[ ]*=[ ]*("| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^">]+)([" >])'
 regpz = re.compile(regz, re.IGNORECASE)
 # zim中src有单引号，Flag_of_the_People's_Republic_of_China.svg.png.webp
+# Anime & Manga Stack Exchange.zim中src = "../I/favicon.png"，等号前后有空格。
 
 # reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!data:)([^"\'\(\)]+)(["|\']*\))'
 reg2 = r'(url\(["|\']*)(?!http://)(?!https://)(?!www\.)(?!#)(?!data:)([^"\'\(\)]+)(["|\']*\))'
