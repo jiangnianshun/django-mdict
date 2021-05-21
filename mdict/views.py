@@ -204,8 +204,8 @@ def fulltext_search(request):
     if is_en_func(query):
         is_en = True
 
-    if result_num > 1000:
-        result_num = 1000
+    if result_num > 500:
+        result_num = 500
 
     if frag_num > 15:
         frag_num = 15
@@ -217,25 +217,43 @@ def fulltext_search(request):
     result = []
     total_count = 0
     tokens = []
+    params = [query, dic_pk, result_num, result_page, frag_size, frag_num, es_entry, es_content, es_and, es_phrase]
 
-    tresult, ttotal_count, tokens = get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
-                                                    es_entry, es_content, es_and, es_phrase)
-    result.extend(tresult)
-    total_count += ttotal_count
-
-    tresult, ttotal_count, tokens = get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
-                                                   es_entry, es_content, es_and, es_phrase)
-    result.extend(tresult)
-    total_count += ttotal_count
+    if dic_pk > -1:
+        dics = MdictDic.objects.filter(pk=dic_pk)
+        if len(dics) > 0:
+            dic = dics[0]
+            dic_file = dic.mdict_file
+            temp_object = init_vars.mdict_odict[dic_file]
+            if temp_object.mdx.get_fpath().endswith('.zim'):
+                if check_xapian():
+                    result, total_count, tokens = get_zim_results(*params)
+            else:
+                result, total_count, tokens = get_es_results(*params)
+    else:
+        if check_xapian():
+            if len(init_vars.zim_list) > 30:
+                params[2] = 5
+            elif len(init_vars.zim_list) > 10:
+                params[2] = 10
+            else:
+                params[2] = 20
+            tresult, ttotal_count, tokens = get_zim_results(*params)
+            result.extend(tresult)
+            total_count += ttotal_count
+            params[2] = 30
+        tresult, ttotal_count, tokens = get_es_results(*params)
+        result.extend(tresult)
+        total_count += ttotal_count
 
     result = search_revise(query, result, is_en)
 
     serializer = MdictEntrySerializer(result, many=True)
 
     ret = {
-        "page_size": len(result),  # 每页显示
-        "total_count": total_count,  # 一共有多少数据
-        "total_page": int(total_count / result_num),  # 一共有多少页
+        "page_size": len(result),  # 每页数据量
+        "total_count": total_count,  # 总数据量
+        "total_page": int(total_count / result_num),  # 总页数
         "current_page": result_page,  # 当前页数
         "data": serializer.data,
         "tokens": tokens
@@ -264,8 +282,12 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
         else:
             return [], 0, []
     else:
-        zim_list = init_vars.zim_list
-
+        for zim in init_vars.zim_list:
+            dics = MdictDic.objects.filter(mdict_file=zim.get_fname())
+            if len(dics) > 0:
+                dic = dics[0]
+                if dic.mdict_enable:
+                    zim_list.append(zim)
     result = []
     total_num = 0
 
