@@ -172,6 +172,7 @@ function init_mdict_filter(){
                         }
                     }
                 }
+                set_dic_num();
             },500);
         }else{
            last =  event.timeStamp;
@@ -179,6 +180,7 @@ function init_mdict_filter(){
                for(var i=0;i<=mdict_list.length;i++){
                     $(mdict_list[i]).show();
                }
+               set_dic_num();
            },500);
         }
 

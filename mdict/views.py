@@ -242,9 +242,11 @@ def fulltext_search(request):
             result.extend(tresult)
             total_count += ttotal_count
             params[2] = 30
-        tresult, ttotal_count, tokens = get_es_results(*params)
+        tresult, ttotal_count, ttokens = get_es_results(*params)
         result.extend(tresult)
         total_count += ttotal_count
+        if ttokens:
+            tokens = ttokens
 
     result = search_revise(query, result, is_en)
 
