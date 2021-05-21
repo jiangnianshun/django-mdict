@@ -213,31 +213,20 @@ def fulltext_search(request):
     if frag_size > 200:
         frag_size = 200
 
-    group = int(request.GET.get('dic_group', 0))
-
-    enable_es_search = True
-
+    # group = int(request.GET.get('dic_group', 0))
     result = []
     total_count = 0
     tokens = []
 
-    if dic_pk > -1 and check_xapian():
-        dics = MdictDic.objects.filter(pk=dic_pk)
-        if len(dics) > 0:
-            dic = dics[0]
-            dic_file = dic.mdict_file
-            temp_object = init_vars.mdict_odict[dic_file]
-            mdx = temp_object.mdx
-            if mdx.get_fpath().endswith('.zim'):
-                enable_es_search = False
-                tokens = query.split(' ')
-                result, total_count = get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entry,
-                                                      es_content, es_and, es_phrase)
+    tresult, ttotal_count, tokens = get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
+                                                    es_entry, es_content, es_and, es_phrase)
+    result.extend(tresult)
+    total_count += ttotal_count
 
-    if enable_es_search:
-        tokens = get_tokens(query)
-        result, total_count = get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
-                                             es_entry, es_content, es_and, es_phrase)
+    tresult, ttotal_count, tokens = get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
+                                                   es_entry, es_content, es_and, es_phrase)
+    result.extend(tresult)
+    total_count += ttotal_count
 
     result = search_revise(query, result, is_en)
 
@@ -260,9 +249,25 @@ def fulltext_search(request):
     return Response(ret)
 
 
-def get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entry, es_content,
-                    es_and, es_phrase):
+def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
+                    es_entry, es_content, es_and, es_phrase):
+    tokens = query.split(' ')
+    zim_list = []
+
+    if dic_pk > -1:
+        dics = MdictDic.objects.filter(pk=dic_pk)
+        if len(dics) > 0:
+            dic = dics[0]
+            dic_file = dic.mdict_file
+            temp_object = init_vars.mdict_odict[dic_file]
+            zim_list.append(temp_object.mdx)
+        else:
+            return [], 0, []
+    else:
+        zim_list = init_vars.zim_list
+
     result = []
+    total_num = 0
 
     tquery_list = query.split(' ')
     if es_phrase:
@@ -273,47 +278,60 @@ def get_zim_results(query, dic, mdx, result_page, result_num, frag_size, es_entr
         else:
             query = ' OR '.join(tquery_list)
 
-    if es_content:
-        index_path = mdx.full_index_path
-    else:
-        index_path = mdx.title_index_path
-    if index_path == '':
-        return [], 0
-    if not os.path.exists(index_path):
-        return [], 0
+    for zim in zim_list:
+        if es_content:
+            index_path = zim.full_index_path
+        else:
+            index_path = zim.title_index_path
+        if index_path == '' or not os.path.exists(index_path):
+            return [], 0, []
 
-    database = xapian.Database(index_path)
-    enquire = xapian.Enquire(database)
-    query_string = query
+        dics = MdictDic.objects.filter(mdict_file=zim.get_fname())
+        if len(dics) > 0:
+            dic = dics[0]
+        else:
+            continue
 
-    qp = xapian.QueryParser()
-    qp.set_database(database)
-    qp.set_stemming_strategy(xapian.QueryParser.STEM_SOME)
-    query_obj = qp.parse_query(query_string)
-    enquire.set_query(query_obj)
-    matches = enquire.get_mset((result_page - 1) * result_num, result_page * result_num)
-    total_num = matches.get_matches_estimated()
+        database = xapian.Database(index_path)
+        # for index_path in zim_path:
+        #     tdata = xapian.Database(index_path)
+        #     database.add_database(tdata)
+        # 合并多个数据库查询，不知道查询结果来自哪个数据库。
+        enquire = xapian.Enquire(database)
+        query_string = query
 
-    zim_file = open(mdx.get_fpath(), 'rb')
-    for match in matches:
-        url = match.document.get_data().decode('utf-8')
-        sobj = SearchObject(mdx, [], get_dic_attrs(dic), url, is_dic=True)
-        entryobj = sobj.search_entry_list()[0]
-        content = remove_html_tags(entryobj.mdx_record)
-        high_mark = content.find(tquery_list[0])
-        if high_mark < 0:
-            high_mark = content.find(query[0])
-        if high_mark < 0:
-            high_mark = 0
-        if high_mark - 5 >= 0:
-            high_mark = high_mark - 5
-        entryobj.extra = matches.snippet(content[high_mark:], frag_size, xapian.Stem('english'), 1,
-                                         '<b style="background-color:yellow;color:red;font-size:0.8rem;">',
-                                         '</b>', '...').decode('utf-8')
-        result.append(entryobj)
-    zim_file.close()
+        qp = xapian.QueryParser()
+        qp.set_database(database)
+        qp.set_stemming_strategy(xapian.QueryParser.STEM_SOME)
+        query_obj = qp.parse_query(query_string)
+        enquire.set_query(query_obj)
+        matches = enquire.get_mset((result_page - 1) * result_num, result_page * result_num)
+        total_num += matches.get_matches_estimated()
 
-    return result, total_num
+        for match in matches:
+            url = match.document.get_data().decode('utf-8')
+            if dic_pk > -1:
+                sobj = SearchObject(zim, [], get_dic_attrs(dic), url, is_dic=True)
+            else:
+                sobj = SearchObject(zim, [], get_dic_attrs(dic), url, is_dic=False)
+            entry_list = sobj.search_entry_list()
+            if len(entry_list) == 0:
+                continue
+            entryobj = entry_list[0]
+            content = remove_html_tags(entryobj.mdx_record)
+            high_mark = content.find(tquery_list[0])
+            if high_mark < 0:
+                high_mark = content.find(query[0])
+            if high_mark < 0:
+                high_mark = 0
+            if high_mark - 5 >= 0:
+                high_mark = high_mark - 5
+            entryobj.extra = matches.snippet(content[high_mark:], frag_size, xapian.Stem('english'), 1,
+                                             '<b style="background-color:yellow;color:red;font-size:0.8rem;">',
+                                             '</b>', '...').decode('utf-8')
+            result.append(entryobj)
+
+    return result, total_num, tokens
 
 
 def remove_html_tags(content):
@@ -489,6 +507,8 @@ def sub_highlight(matched):
 def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, es_entry, es_content,
                    es_and, es_phrase):
     global meta_dict
+    tokens = get_tokens(query)
+
     es_host = get_config_con('es_host')
     client = Elasticsearch(hosts=es_host)
 
@@ -507,7 +527,7 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
         search_fields.append('content')
 
     if not search_fields:
-        return [], 0
+        return [], 0, []
 
     if es_phrase:
         if es_and:
@@ -539,11 +559,11 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
                 index_name = 'mdict-' + dic_md5
 
             if index_name == '':
-                return [], 0
+                return [], 0, []
             else:
                 s = Search(index=index_name).using(client).query(q)
         else:
-            return [], 0
+            return [], 0, []
     else:
         # 查询全部索引
         s = Search(index='mdict-*').using(client).query(q)
@@ -562,7 +582,7 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
         response = s.execute()
     except TransportError as e:
         print(e)
-        return [], 0
+        return [], 0, []
 
     total_count = response.hits.total.value
     # 结果总数，默认最大值是10000.
@@ -690,7 +710,7 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
         else:
             print(index_name, 'not exists in database.')
 
-    return result, total_count
+    return result, total_count, tokens
 
 
 def get_query_list(query, query_params={}):

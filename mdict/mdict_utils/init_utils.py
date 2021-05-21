@@ -34,6 +34,7 @@ change_file_path = os.path.join(ROOT_DIR, '.' + get_sys_name() + '.dat')
 # 这里使用init_vars包裹mdit_list是因为，当其他模块引入mdict_list后，再修改mdict_list，其他模块引入的mdict_list没有改变，因此需要用类包裹。
 class initVars:
     mdict_odict = collections.OrderedDict()
+    zim_list = []
     indicator = []
     need_recreate = False
 
@@ -60,6 +61,7 @@ def get_mdict_dict():
 
     m_dict = collections.OrderedDict()
     idx_list = []
+    zim_list = []
     # 词典结尾是mdx或MDX
     # ntfs下文件名不区分大小写，但ext4下区分大小写
 
@@ -114,6 +116,7 @@ def get_mdict_dict():
                 zim_path = os.path.join(root, file)
                 zim = ZIMFile(zim_path, encoding='utf-8')
                 m_dict.update({f_name: MdictItem(zim, [], -1, 'none', len(zim))})
+                zim_list.append(zim)
 
                 idx_list.append((root, zim))
 
@@ -122,7 +125,16 @@ def get_mdict_dict():
         tdx = threading.Thread(target=extract_index, args=(idx_list,))
         tdx.start()
 
-    return m_dict
+    return m_dict, zim_list
+
+
+def init_zim_list():
+    global init_vars
+    if not init_vars.zim_list:
+        for key in init_vars.mdict_odict.keys():
+            mdx = init_vars.mdict_odict[key].mdx
+            if mdx.get_fpath().endswith('.zim'):
+                init_vars.zim_list.append(mdx)
 
 
 def extract_index(idx_list):
@@ -166,7 +178,7 @@ def read_pickle_file(path):
         try:
             pickle_list = pickle.load(f)
         except Exception:
-            pickle_list = get_mdict_dict()
+            pickle_list, zim_list = get_mdict_dict()
             write_pickle_file(path)
     return pickle_list
 
@@ -192,7 +204,7 @@ def load_cache():
         r = True
 
     if r:
-        init_vars.mdict_odict = get_mdict_dict()
+        init_vars.mdict_odict, init_vars.zim_list = get_mdict_dict()
         if len(init_vars.mdict_odict) > 0:
             write_cache()
 
@@ -316,7 +328,7 @@ def init_mdict_list(rewrite_cache):
         get_sound_list()
 
         init_vars.mdict_odict.clear()
-        init_vars.mdict_odict = get_mdict_dict()
+        init_vars.mdict_odict, init_vars.zim_list = get_mdict_dict()
         init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
         t2 = time.perf_counter()
         print_log_info('initializing mdict_list', 0, t1, t2)
@@ -326,6 +338,7 @@ def init_mdict_list(rewrite_cache):
     else:
         get_sound_list()
         load_cache()
+        init_zim_list()
         print_log_info('reading from cache file', 0, t1, time.perf_counter())
 
     print_log_info(['dictionary counts', len(init_vars.mdict_odict)])
