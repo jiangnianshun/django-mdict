@@ -231,6 +231,7 @@ def fulltext_search(request):
             else:
                 result, total_count, tokens = get_es_results(*params)
     else:
+        tresult1 = []
         if check_xapian():
             if len(init_vars.zim_list) > 30:
                 params[2] = 5
@@ -238,13 +239,13 @@ def fulltext_search(request):
                 params[2] = 10
             else:
                 params[2] = 20
-            tresult, ttotal_count, tokens = get_zim_results(*params)
-            result.extend(tresult)
-            total_count += ttotal_count
+            tresult1, ttotal_count1, tokens = get_zim_results(*params)
+            total_count += ttotal_count1
             params[2] = 30
-        tresult, ttotal_count, ttokens = get_es_results(*params)
-        result.extend(tresult)
-        total_count += ttotal_count
+        tresult2, ttotal_count2, ttokens = get_es_results(*params)
+        result.extend(tresult2)
+        total_count += ttotal_count2
+        result.extend(tresult1)
         if ttokens:
             tokens = ttokens
 
