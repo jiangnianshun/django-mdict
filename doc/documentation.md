@@ -229,7 +229,6 @@ django-mdict/mdict/mdict-utils/readzim.py修改自zimply.py。
 
 正查会有部分词条无法查询到，需要用全文搜索。全文搜索需要安装xapian，windows下需要手动编译。
 django-mdict运行后会抽取zim的内置索引保存为idx文件，抽取索引类似文件复制，速度取决于硬盘的最大读写速度。
-目前zim全文搜索不支持多个zim的联合搜索，搜索结果也不会和es的搜索结果相加，只能对单个zim进行全文搜索。
 
 要使用zim的全部功能，用kiwix或goldendict浏览。
 

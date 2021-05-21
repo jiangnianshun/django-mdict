@@ -1,20 +1,21 @@
 - [全文搜索](#全文搜索)
   * [全文搜索](#全文搜索)
-  * [windows下的安装](#windows下的安装)
+  * [windows下安装es](#windows下安装es)
+  * [安装xapian](#安装xapian)
   * [筛选功能](#筛选功能)
   * [注意事项](#注意事项)
-  * [索引操作](#索引操作)
+  * [es索引操作](#es索引操作)
   * [es设置](#es设置)
   * [可能的问题](#可能的问题)
-  * [索引性能测试](#索引性能测试)
+  * [es索引性能测试](#es索引性能测试)
 
 ### 全文搜索
 
-使用外置的elasticsearch实现全文搜索。
+对于mdx文件使用外置的elasticsearch实现全文搜索，对于zim文件使用内置xapian索引实现全文搜索。
 
 硬件需求：多核CPU、大内存、固态硬盘
 
-### windows下的安装
+### windows下安装es
 
 1. 安装依赖
 
@@ -52,6 +53,18 @@ pip install elasticsearch-dsl
 
    在进行全文查询时，eselasticsearch.bat需要一直运行，否则查询无结果，如果需要一直开启，需设置开机启动。
 
+### 安装xapian
+
+* ubuntu下使用apt-get安装
+
+```
+apt-get install -y python3-xapian libxapian-dev
+```
+
+* windows下需要自己编译，建议在wsl1(ubuntu)上运行。
+
+[https://xapian.org/docs/install.html](https://xapian.org/docs/install.html)
+
 ### 筛选功能
 
 * 查询词头和查询内容设置要查询的字段
@@ -79,9 +92,7 @@ pip install elasticsearch-dsl
 
 * 从主查询界面打开词典列表的某个词典，对该词典进行顺序查询。从全文搜索页面打开词典列表的某个词典，对该词典进行全文搜索。
 
-* 目前不支持zim的全文搜索。
-
-### 索引操作
+### es索引操作
 
 * 创建索引
 
@@ -179,7 +190,7 @@ discovery.type: single-node
 
 es连接失败，确认es已开启且url和端口设置正确。
 
-### 索引性能测试
+### es索引性能测试
 
 ```
 设备A：
