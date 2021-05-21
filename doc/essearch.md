@@ -13,7 +13,7 @@
 
 对于mdx文件使用外置的elasticsearch实现全文搜索，对于zim文件使用内置xapian索引实现全文搜索。
 
-硬件需求：多核CPU、大内存、固态硬盘
+硬件需求：多核CPU、大内存、大容量固态硬盘
 
 ### windows下安装es
 

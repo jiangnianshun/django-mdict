@@ -668,7 +668,9 @@ class SearchObject:
         if self.is_zim:
             is_entry = False
             if flag == -1:
-                is_entry = True
+                if 'images' not in res_name:
+                    # Anime & Manga Stack Exchange.zim词条A/question/36588.html中一个图片连接不以扩展名结尾
+                    is_entry = True
             else:
                 if res_name[flag + 1:].strip() == 'html':
                     is_entry = True
