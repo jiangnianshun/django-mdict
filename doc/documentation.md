@@ -508,7 +508,7 @@ su root
 ```
 apt-get update
 apt-get install dos2unix
-dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readmdict/pyx/build.sh
+dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 
 4. 运行run_server.sh，默认端口8000，该脚本仅适用于ubuntu，不适用于centos。
@@ -545,7 +545,7 @@ su root
 ```
 apt-get update
 apt-get install dos2unix
-dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readmdict/pyx/build.sh
+dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 
 4. 运行init_wsl.sh，默认端口80，该脚本仅适用于ubuntu，不适用于centos。
@@ -646,9 +646,9 @@ python manage.py migrate mdict
 
 出现该提示说明没有进行cython编译。
 
-windows下运行django-mdict/mdict/readmdict/pyx/build.bat，linux下运行django-mdict/mdict/readmdict/pyx/build.sh。
+windows下运行django-mdict/mdict/readlib/pyx/build.bat，linux下运行django-mdict/mdict/readlib/pyx/build.sh。
 
-这将对readmdict.py进行编译，编译后的pyd或so运行库在django-mdict/mdict/readmdict/lib/下，编译后相比于没有编译，速度提升约1/3。
+这将对readmdict.py进行编译，编译后的pyd或so运行库在django-mdict/mdict/readlib/lib/下，编译后相比于没有编译，速度提升约1/3。
 
 4. 403错误
 

@@ -76,7 +76,7 @@ linux下可能需要转换脚本格式
 ```
 apt-get update
 apt-get install dos2unix
-dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readmdict/pyx/build.sh
+dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 
 更新后为了避免出问题，需要手动清除浏览器缓存（不需要清cookies）。
@@ -97,3 +97,5 @@ dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readmd
 
 ![图片4](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/img3.jpg)
 
+### bug反馈
+jiangnianshun@outlook.com
