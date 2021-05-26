@@ -21,10 +21,10 @@ async def search(params):
         return result_list
 
 
-def ws_search(query_list, query_type):
+def ws_search(query_list, group, query_type):
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     # 在django中调用时需要设置loop
-    params = {'query_list': query_list, 'query_type': query_type}
+    params = {'query_list': query_list, 'group': group, 'query_type': query_type}
     return asyncio.get_event_loop().run_until_complete(search(params))

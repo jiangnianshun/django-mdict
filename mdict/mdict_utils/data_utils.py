@@ -8,7 +8,7 @@ from base.base_func import read_from_sqlite, ROOT_DIR
 from base.sys_utils import check_module_import
 
 try:
-    from mdict.models import MdictDic
+    from mdict.models import MdictDic, MdictDicGroup
 except AppRegistryNotReady as e:
     pass
 except Exception as e:
@@ -17,7 +17,7 @@ except Exception as e:
 sql3_path = os.path.join(ROOT_DIR, 'db.sqlite3')
 
 
-def get_all_dic():
+def get_all_dics():
     if check_module_import('mdict.models'):
         return MdictDic.objects.all()
     else:
@@ -37,6 +37,27 @@ def get_or_create_dic(dict_file):
         dic = dics[0]
 
     return dic
+
+
+def check_dic_in_group(group_pk, dic_pk):
+    if check_module_import('mdict.models'):
+        group = MdictDicGroup.objects.filter(pk=group_pk)
+        if group.count() > 0:
+            dic_count = group[0].mdict_group.filter(pk=dic_pk).count()
+            if dic_count > 0:
+                return True
+            else:
+                return False
+        else:
+            return False
+    else:
+        dic_in_group = read_from_sqlite(sql3_path,
+                                        'select * from mdict_mdictdicgroup_mdict_group where mdictdicgroup_id='
+                                        + str(group_pk) + ' AND mdictdic_id=' + str(dic_pk))
+        if len(dic_in_group) > 0:
+            return True
+        else:
+            return False
 
 
 def init_database():

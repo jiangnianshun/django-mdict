@@ -492,7 +492,7 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 
 ### 在wsl上运行测试服务器
 
-windows下建议部署到wsl1，如果词典库存放在windows上且数量多，通过wsl2读取要慢于wsl1。
+windows下建议部署到wsl1(ubuntu)，wsl2读取windows文件要慢于wsl1，导致查询速度会慢大约1/20-1/10，此外还要解决ip的问题。
 
 1. 安装wsl，系统ubuntu，建议使用18.04。
 
@@ -529,7 +529,7 @@ bash run_server.sh
 
 ### 部署到wsl apache
 
-windows下建议部署到wsl1，如果词典库存放在windows上且数量多，通过wsl2读取要慢于wsl1。
+windows下建议部署到wsl1(ubuntu)。
 
 1. 安装wsl，系统ubuntu，建议使用18.04。
 

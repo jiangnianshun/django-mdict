@@ -141,26 +141,15 @@ def search_mdx_sug(dic_pk, sug_list, group, flag):
     cnum = get_cpu_num()
     sug = []
     if check_system() == 0 and dic_pk == -1:
-        # prpool = check_pool_recreate(pool)
-
         q_list = ((i, sug_list, group) for i in range(cnum))
         record_list = prpool.starmap(multiprocess_search_sug, q_list)
         for r in record_list:
             sug.extend(r)
     elif check_system() == 1 and dic_pk == -1:
-        # sug.extend(loop_search_sug(dic_pk, query, flag, group))#for循环查询
-
-        # thpool = check_threadpool_recreate(thpool)
-        if group == 0:
-            try:
-                sug.extend(ws_search(sug_list, 'sug'))
-            except Exception as e:
-                print(e)
-                q_list = ((i, sug_list, group) for i in range(cnum))
-                record_list = thpool.starmap(multithread_search_sug, q_list)
-                for r in record_list:
-                    sug.extend(r)
-        else:
+        try:
+            sug.extend(ws_search(sug_list, group, 'sug'))
+        except Exception as e:
+            print(e)
             q_list = ((i, sug_list, group) for i in range(cnum))
             record_list = thpool.starmap(multithread_search_sug, q_list)
             for r in record_list:
@@ -308,19 +297,10 @@ def search_mdx_dic(query_list, record_list, group):
             record_list.extend(a)
 
     else:
-        if group == 0:
-            try:
-                record_list.extend(ws_search(query_list, 'dic'))
-            except Exception as e:
-                print(e)
-                q_list = ((i, query_list, group) for i in range(cnum))
-                a_list = thpool.starmap(multithread_search_mdx, q_list)
-                for a in a_list:
-                    record_list.extend(a)
-        else:
-            # record_list = loop_search_mdx(record_list, query, group)#for循环查询
-
-            # thpool = check_threadpool_recreate(thpool)
+        try:
+            record_list.extend(ws_search(query_list, group, 'dic'))
+        except Exception as e:
+            print(e)
             q_list = ((i, query_list, group) for i in range(cnum))
             a_list = thpool.starmap(multithread_search_mdx, q_list)
             for a in a_list:

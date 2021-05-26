@@ -158,7 +158,7 @@ class SearchObject:
         return random_entry
 
     @search_exception()
-    def search_sug_list(self, num):
+    def search_sug_list(self, num=5):
         sug = []
         if self.is_zim:
             for query in self.query_list:
@@ -169,7 +169,7 @@ class SearchObject:
         return sug
 
     @search_exception()
-    def search_sug(self, num):
+    def search_sug(self, num=5):
         sug = []
         if self.is_zim:
             for query in self.query_list:

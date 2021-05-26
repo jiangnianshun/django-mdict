@@ -1,7 +1,7 @@
 import os
 from base.base_func import ROOT_DIR
 from .mdict_config import get_config_con
-from .data_utils import get_or_create_dic, get_all_dic
+from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
 from .init_utils import init_vars, sort_mdict_list, read_pickle_file
 from .search_object import SearchObject
 from .mdict_func import get_dic_attrs
@@ -14,7 +14,7 @@ try:
 except Exception as e:
     pass
 
-all_dics = get_all_dic()
+all_dics = get_all_dics()
 pickle_file_path = os.path.join(ROOT_DIR, '.Windows.cache')
 
 
@@ -85,7 +85,7 @@ def merge_record(record_list):
     return record_list
 
 
-def multi_search_mdx(n, query_list, group, is_mdx=True):
+def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
     r_list = []
 
     if not init_vars.mdict_odict:
@@ -114,23 +114,18 @@ def multi_search_mdx(n, query_list, group, is_mdx=True):
                 dic = dic_list[0]
 
         if dic.mdict_enable:
-            if group == 0:  # 默认查询全部词典
+            params = (mdx, mdd_list, get_dic_attrs(dic), query_list)
+            if group_pk == 0:  # 默认查询全部词典
                 if is_mdx:
-                    r_list.extend(
-                        SearchObject(mdx, mdd_list, get_dic_attrs(dic), query_list, g_id=g_id).search_entry_list())
+                    r_list.extend(SearchObject(*params, g_id=g_id).search_entry_list())
                 else:
-                    r_list.extend(SearchObject(mdx, mdd_list, get_dic_attrs(dic), query_list).search_sug_list(3))
+                    r_list.extend(SearchObject(*params).search_sug_list(3))
             else:  # 查询某个词典分组下的词典
-                group_list = MdictDicGroup.objects.filter(pk=group)
-                if len(group_list) > 0:
-                    temp = group_list[0].mdict_group.filter(pk=dic.pk)
-                    if len(temp) > 0:
-                        if is_mdx:
-                            r_list.extend(SearchObject(mdx, mdd_list, get_dic_attrs(dic), query_list,
-                                                       g_id=g_id).search_entry_list())
-                        else:
-                            r_list.extend(
-                                SearchObject(mdx, mdd_list, get_dic_attrs(dic), query_list).search_sug_list(3))
+                if check_dic_in_group(group_pk, dic.pk):
+                    if is_mdx:
+                        r_list.extend(SearchObject(*params, g_id=g_id).search_entry_list())
+                    else:
+                        r_list.extend(SearchObject(*params).search_sug_list(3))
 
     if is_mdx:
         r_list = merge_record(r_list)
