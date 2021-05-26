@@ -258,8 +258,9 @@ class MDict(object):
         if self._strip_key == 1:
             # key = re.sub(reg, '', key)
             key = regp.sub('', key)
-        # 这里要strip()，否则，[汉-汉] 家庭实用菜谱的mdd有问题。
-        return key.strip()
+        # 这里不能strip()
+        # return key.strip()
+        return key
 
     def _read_keys(self, f):
         # the following numbers could be encrypted
