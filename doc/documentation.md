@@ -217,7 +217,7 @@ django-mdict/mdict/media/readmdict_py3.zip/readmdict_py3.py对readmdict.py进行
 
 django-mdict/mdict/readlib/src/readmdict.py功能是对mdict进行查找。
 
-django-mdict/mdict/readlib/pyx/readmdict.pyx是readmdict_seach.py的cython版本，运行build.bat或build.sh进行编译，编译后的库文件会复制到/django-mdict/mdict/readmdict/lib/。
+django-mdict/mdict/readlib/pyx/readmdict.pyx是readmdict_seach.py的cython版本，运行build.bat或build.sh进行编译，编译后的库文件会复制到/django-mdict/mdict/readlib/lib/。
 
 ### zim解析
 
@@ -569,6 +569,8 @@ Set ws = CreateObject("Wscript.Shell")
 ws.run "wsl -d ubuntu -u root /etc/init.d/apache2 start", vbhid
 ```
 
+其中ubuntu是发行版名称，具体名称用命令wsl -list来查看。
+
 7. apache常用命令
 
 ```
@@ -579,8 +581,6 @@ sudo service apache2 restart
 停止apache
 sudo service apache2 stop
 ```
-
-其中ubuntu是发行版名称，具体名称用命令wsl -list来查看。
 
 ### 更新
 

@@ -855,7 +855,7 @@ class MDict(object):
                     elif result_list[len(result_list) - 1][1] == -1:
                         item = list(result_list[len(result_list) - 1])
                         item[1] = my_end
-                        result_list[len(result_list) - 1] = tuple(item)
+                        result_list[-1] = tuple(item)
 
         return result_list
 
@@ -988,7 +988,7 @@ class MDict(object):
 
         key_list = self._split_key_block(key_block)
         if 0 < p2 < 1:
-            p2 = int(len(key_list)*p2 / 2)
+            p2 = int(len(key_list) * p2 / 2)
         else:
             p2 = int(p2)
         r_s_p1 = p1
@@ -1007,6 +1007,8 @@ class MDict(object):
 
         while total_num + 1 > total_len:
             myt2_list, r_e_p2 = self.search_key_block_list(key_list, p2, len(key_list), True)
+            if myt_list[-1][2] == -1 and len(myt2_list) > 0:
+                myt2_list[-1][2] = myt2_list[0][1]
             myt_list.extend(myt2_list)
 
             num = num - len(key_list)

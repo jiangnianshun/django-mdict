@@ -81,6 +81,8 @@ dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readli
 
 更新后为了避免出问题，需要手动清除浏览器缓存（不需要清cookies）。
 
+建议每个物理核心分配30-50本词典，查询词典数=物理核心数*(30~50)，如果查询词典数大于这个数量，建议分组。
+
 ### 说明文档
 
 [说明文档](doc/documentation.md)
