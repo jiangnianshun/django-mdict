@@ -42,4 +42,5 @@ urlpatterns = [
     url(r'^zim/$', views.search_zim_dic),
     path('randomsearch/', views.random_search),
     path('getpkingroup/', views.get_pk_in_group),
+    path('shelf/', views.shelf),
 ]
