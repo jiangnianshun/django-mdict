@@ -911,6 +911,10 @@ class get_mdict_list_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         file = mdx.get_fname()
         m_path = get_m_path(mdx)
+        if mdx.get_fpath().endswith('.zim'):
+            m_type = 'zim'
+        else:
+            m_type = 'mdx'
         dic = get_or_create_dic(file)
         file = quote(file)
         if icon == 'none':
@@ -925,7 +929,7 @@ class get_mdict_list_object(innerObject):
                     t_path = m_path + '/' + file
                 dic_icon = '/mdict/exfile/?path=' + t_path + '.' + icon
         item = {'dic_name': dic.mdict_name, 'dic_file': file, 'dic_icon': dic_icon, 'dic_pror': dic.mdict_priority,
-                'dic_pk': dic.pk, 'dic_enable': dic.mdict_enable, 'dic_es_enable': dic.mdict_es_enable}
+                'dic_pk': dic.pk, 'dic_enable': dic.mdict_enable, 'dic_es_enable': dic.mdict_es_enable, 'dic_type': m_type}
         self.inner_odict.update({file: item})
 
 

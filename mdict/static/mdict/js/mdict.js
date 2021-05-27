@@ -1017,19 +1017,24 @@ function get_mdict_list(container, es_icon_enable, es_page_enable){//载入词�
 				var dic_pk=d[i]["dic_pk"];
 				var dic_enable=d[i]["dic_enable"];
 				var dic_es_enable=d[i]["dic_es_enable"]
+				var dic_type=d[i]["dic_type"];
 
 
 				var checked="";
 
 				if(dic_enable){checked="checked";}
 
-				if(dic_es_enable){
-				    var es_icon="<i class='bi bi-check' style='color:green;'></i>"
+                if(dic_type=='mdx'){
+                    if(dic_es_enable){
+                        var es_icon="<i class='bi bi-check' style='color:green;'></i>"
+                    }else{
+                        var es_icon="<i class='bi bi-x' style='color:red;'></i>"
+                    }
+                    es_icon+="<i class='bi bi-question index-status' style='color:gray;' data-pk="+dic_pk+"></i>"
 				}else{
-				    var es_icon="<i class='bi bi-x' style='color:red;'></i>"
+				    var es_icon="<i class='bi bi-x' style='visibility:hidden;'></i><i class='bi bi-question' style='visibility:hidden;'></i>"
 				}
 
-				es_icon+="<i class='bi bi-question index-status' style='color:gray;' data-pk="+dic_pk+"></i>"
 
 				var checkbox_html=`
                             <div class="form-checkbox" style="display:inline;">
