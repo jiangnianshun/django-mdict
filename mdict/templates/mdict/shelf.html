@@ -7,9 +7,7 @@
     <title>书架</title>
     <link rel="manifest" href="/static/json/manifest.json">
 	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <link href="/static/bootstrap/font/bootstrap-icons.css" rel="stylesheet">
-    <script src="/static/jquery/jquery.min.js"></script>
-	<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap/font/bootstrap-icons.css">
     <style>
         a{text-decoration:none;color:black;}
         .row{height:12rem;}
@@ -28,6 +26,16 @@
     </style>
 </head>
 <body class="bg-light">
+<div class="btn-group" style="position:fixed;top:1rem;right:2rem;z-index:99;">
+    <button type="button" class="btn btn-primary" id="dic-num"></button>
+    <input autocomplete="off" id="mdict-filter-input" class="form-control" type="text">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        分组
+    </button>
+    <ul class="dropdown-menu" id="dic-group">
+        <li onclick="start_dic_filter(0)"><span class="dropdown-item" data-pk=0>全部分组</span></li>
+    </ul>
+</div>
 <div class="container">
     <div class="row"></div>
 </div>
@@ -58,10 +66,15 @@
     </div>
 </div>
 </body>
+<script src="/static/jquery/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/static/mdict/iframe-resizer/js/iframeResizer.min.js"></script>
+<script src="/static/mdict/js/transform.js"></script>
 <script src="/static/mdict/js/base_func.js"></script>
 <script src="/static/mdict/js/shelf.js"></script>
 <script>
+init_mdict_filter();
+init_dropdown();
 get_items($('.container .row'));
 </script>
 </html>
