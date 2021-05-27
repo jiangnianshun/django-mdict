@@ -4,6 +4,7 @@ var script=`
 
 function start_modal(obj){
     var dic_pk=$(obj).attr('data-pk');
+    $("#modal-shelf-dic").attr('data-pk',dic_pk);
     var dic_name=$(obj).attr('data-name');
     get_header($("#modal-shelf-dic .modal-body"),dic_pk,dic_name);
 }
@@ -51,7 +52,7 @@ function get_header(container, dic_pk, dic_name){
 
 	$('#modal-shelf-dic-title').text(dic_name);
 
-	var data={"dic_pk":dic_pk};
+	var data={"dic_pk":dic_pk,"is_dic":false};
 	$.ajax({
 		url:"/mdict/header/",
 		contentType:'json',

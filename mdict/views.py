@@ -1155,7 +1155,7 @@ def get_block_num(request):
 class get_dic_info_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
-            o = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '', is_dic=True)
+            o = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '', is_dic=self.is_dic)
             header = o.get_header()
             num_entrys = o.get_len()
             mdx_path = mdx.get_fpath().replace('\\', '/')
@@ -1169,7 +1169,8 @@ class get_dic_info_object(innerObject):
 
 def get_dic_info(request):
     dic_pk = int(request.GET.get('dic_pk', -1))
-    return_dict = get_dic_info_object({'target_pk': dic_pk})
+    is_dic = json.loads(request.GET.get('is_dic', "true"))
+    return_dict = get_dic_info_object({'target_pk': dic_pk, 'is_dic': is_dic})
     return HttpResponse(json.dumps(return_dict))
 
 

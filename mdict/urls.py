@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^dic/(\d+)/(.+)', views.search_mdd),
     url(r'^es/(\d+)/(.+)', views.search_mdd),
     url(r'^esdic/(\d+)/(.+)', views.search_mdd),
+    url(r'^shelf/(\d+)/(.+)', views.search_mdd),
     path('exfile/', views.get_external_file),
     url('exfile/(.+)', views.get_external_file),
     path('es/exfile/', views.get_external_file),
