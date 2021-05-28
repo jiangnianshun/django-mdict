@@ -146,7 +146,7 @@ function shelf_dic_btn(type){
 }
 
 function set_dic_num(){
-    $("#dic-num").text($(".card,.shadow:visible").length);
+    $("#dic-num").text($(".col:visible").length);
 }
 
 function start_dic_filter(group_pk){
