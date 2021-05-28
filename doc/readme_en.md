@@ -53,15 +53,15 @@ recommend deploying to Ubuntu or wsl1 on Windows.
 
 ### Documentation
 
-[documentation](documentation.md)
+[documentation](doc_index.md)
 
 ### Style
 
-![pic1](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/structure.png)
+![图片1](doc/img/structure.png?raw=true)
 
-![pic2](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/img1.jpg)
+![图片2](doc/img/img1.jpg?raw=true)
 
-![pic3](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/img2.jpg)
+![图片3](doc/img/img2.jpg?raw=true)
 
-![pic4](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/img3.jpg)
+![图片4](doc/img/img3.jpg?raw=true)
 
