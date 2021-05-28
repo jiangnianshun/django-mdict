@@ -91,13 +91,13 @@ dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readli
 
 ### 样式
 
-![图片1](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/structure.png)
+![图片1](doc/img/structure.png?raw=true)
 
-![图片2](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/img1.jpg)
+![图片2](doc/img/img1.jpg?raw=true)
 
-![图片3](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/img2.jpg)
+![图片3](doc/img/img2.jpg?raw=true)
 
-![图片4](https://github.com/jiangnianshun/django-mdict/blob/master/doc/img/img3.jpg)
+![图片4](doc/img/img3.jpg?raw=true)
 
 ### bug反馈
 jiangnianshun@outlook.com

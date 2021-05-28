@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>文档</title>
+</head>
+<body>
+<div id="content"></div>
+</body>
+<script src="/static/jquery/jquery.min.js"></script>
+<script src="/static/mdict/marked/marked.min.js"></script>
+<script>
+function get_md(doc_path){
+    $.ajax({
+		url:"/mdict/doc/"+doc_path,
+		contentType:'json',
+		type:'GET',
+		success:function(data){
+		    document.getElementById('content').innerHTML=marked(data);
+		    $("a").click(ihyperlink);
+		    $('html,body').animate({scrollTop:0},'fast');
+		},
+		error:function(jqXHR,textStatus,errorThrown){
+			alert(jqXHR.responseText);
+		},
+	});
+}
+function ihyperlink(e){
+    var doc_path=$(this).attr("href")||null;
+    if(doc_path[0]!="#"){
+        e.preventDefault();
+        get_md(doc_path);
+    }
+}
+get_md("readme.md");
+</script>
+</html>

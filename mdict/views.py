@@ -1,5 +1,6 @@
 import json
 import mimetypes
+import os
 import re
 import time
 import csv
@@ -19,7 +20,8 @@ from elasticsearch_dsl import Search, Index
 from elasticsearch_dsl.query import MultiMatch
 from elasticsearch.exceptions import ConnectionError, TransportError
 
-from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h, kh2f, print_log_info
+from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h, kh2f, print_log_info, \
+    ROOT_DIR
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
@@ -1186,6 +1188,36 @@ def wordcloud(request):
 
 def shelf(request):
     return render(request, 'mdict/shelf.html')
+
+
+def doc(request):
+    return render(request, 'mdict/md.html')
+
+
+def read_doc(doc_path):
+    data = ''
+    mime_type = 'text/markdown'
+    if os.path.exists(doc_path):
+        if doc_path.endswith('.jpg') or doc_path.endswith('.png'):
+            with open(doc_path, 'rb') as f:
+                data = f.read()
+            mime_type = mimetypes.guess_type(doc_path)
+        else:
+            with open(doc_path, 'r', encoding='utf-8') as f:
+                data = f.read()
+    return data, mime_type
+
+
+def doc_md(request, *args):
+    doc_name = args[0]
+    flag = doc_name.find('?')
+    if flag > 0:
+        doc_name = doc_name[:flag + 1]
+    doc_path = os.path.join(ROOT_DIR, doc_name)
+    data, mime_type = read_doc(doc_path)
+    if data == '':
+        data, mime_type = read_doc(os.path.join(ROOT_DIR, 'doc', doc_name))
+    return HttpResponse(data, mime_type)
 
 
 def getwordlist(request):

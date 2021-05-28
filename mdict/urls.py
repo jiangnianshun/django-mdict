@@ -44,4 +44,6 @@ urlpatterns = [
     path('randomsearch/', views.random_search),
     path('getpkingroup/', views.get_pk_in_group),
     path('shelf/', views.shelf),
+    path('doc/', views.doc),
+    url('doc/(.+)', views.doc_md),
 ]
