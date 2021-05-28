@@ -60,10 +60,12 @@ regp = re.compile(reg)
 
 reght = r'<[^>]+>'
 reghtml = re.compile(reght)
-reght2 = r'<script[^>]+/script>'
+reght2 = r'<head[^>]+/head>'
 reghtml2 = re.compile(reght)
-reght3 = r'<style[^>]+/style>'
+reght3 = r'<script[^>]+/script>'
 reghtml3 = re.compile(reght)
+reght4 = r'<style[^>]+/style>'
+reghtml4 = re.compile(reght)
 
 meta_dict = {}
 
@@ -212,6 +214,9 @@ def fulltext_search(request):
     if frag_num > 15:
         frag_num = 15
 
+    if frag_size < 5:
+        frag_size = 5
+
     if frag_size > 200:
         frag_size = 200
 
@@ -346,30 +351,70 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
             if len(entry_list) == 0:
                 continue
             entryobj = entry_list[0]
-            entryobj.extra = get_highlight_frag(entryobj.mdx_record, query, tquery_list, frag_num, frag_size, matches)
+            entryobj.extra = get_highlight_frag(entryobj.mdx_record, tquery_list, frag_num, frag_size)
             result.append(entryobj)
 
     return result, total_num, tokens
 
 
-def get_highlight_frag(record, query, tquery_list, frag_num, frag_size, matches):
+def get_hight_mark(content, tquery_list, frag_size):
+    query = ' '.join(tquery_list)
+    start_mark = content.find(query)
+    if start_mark < 0:
+        tqi = 0
+        while tqi < len(tquery_list):
+            start_mark = content.find(tquery_list[tqi])
+            end_mark = start_mark + len(tquery_list[tqi])
+            if start_mark > -1:
+                break
+            tqi += 1
+    else:
+        end_mark = start_mark + len(query)
+    if start_mark < 0:
+        start_mark = 0
+        end_mark = 0
+
+    s_mark = start_mark
+    if start_mark - int(frag_size / 2) >= 0:
+        s_mark = start_mark - int(frag_size / 2)
+    if end_mark == 0:
+        e_mark = 0
+    else:
+        e_mark = end_mark + int(frag_size / 2)
+    if e_mark > len(content):
+        e_mark = len(content) - 1
+    frag_content = content[:e_mark + 1]
+    frag_content = frag_content[s_mark:start_mark] + '<b style="background-color:yellow;color:red;font-size:0.8rem;">' \
+                   + frag_content[start_mark:end_mark] + '</b>' + frag_content[end_mark + 1:e_mark]
+    content = content[e_mark + 1:]
+    return frag_content, content
+
+
+def get_highlight_frag(record, tquery_list, frag_num, frag_size):
     content = remove_html_tags(record)
-    high_mark = content.find(tquery_list[0])
-    if high_mark < 0:
-        high_mark = content.find(query[0])
-    if high_mark < 0:
-        high_mark = 0
-    if high_mark - 5 >= 0:
-        high_mark = high_mark - 5
-    return matches.snippet(content[high_mark:], frag_size, xapian.Stem('english'), 1,
-                                     '<b style="background-color:yellow;color:red;font-size:0.8rem;">',
-                                     '</b>', '...').decode('utf-8')
+    # content=content.replace('<','').replace('>','')
+    frag_content, content = get_hight_mark(content, tquery_list, frag_size)
+    frag_count = 1
+
+    while frag_count <= frag_num:
+        f_content, content = get_hight_mark(content, tquery_list, frag_size)
+        if f_content == '' or content == '':
+            break
+        frag_count += 1
+        frag_content += '<br>' + f_content
+        break
+    return frag_content
+
+    # return matches.snippet(content[high_mark:], frag_size, xapian.Stem('english'), 1,
+    #                                  '<b style="background-color:yellow;color:red;font-size:0.8rem;">',
+    #                                  '</b>', '...').decode('utf-8')
 
 
 def remove_html_tags(content):
     content = content.replace('\n', '').replace('\r', '').replace(' ', '')
     content = reghtml2.sub('', content)
     content = reghtml3.sub('', content)
+    content = reghtml4.sub('', content)
     return reghtml.sub('', content)
 
 
