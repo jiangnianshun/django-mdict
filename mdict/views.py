@@ -236,11 +236,11 @@ def fulltext_search(request):
         tresult1 = []
         if check_xapian():
             if len(init_vars.zim_list) > 30:
-                params[2] = 5
+                params[2] = 3
             elif len(init_vars.zim_list) > 10:
-                params[2] = 10
+                params[2] = 6
             else:
-                params[2] = 20
+                params[2] = 15
             tresult1, ttotal_count1, tokens = get_zim_results(*params)
             total_count += ttotal_count1
             params[2] = 30
@@ -274,6 +274,7 @@ def fulltext_search(request):
 
 def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
                     es_entry, es_content, es_and, es_phrase):
+    query = query.strip()
     tokens = query.split(' ')
     zim_list = []
 
@@ -298,7 +299,7 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
 
     tquery_list = query.split(' ')
     if es_phrase:
-        tokens = [query.strip()]
+        tokens = [query]
         query = '"' + query.replace('"', '') + '"'
     else:
         if es_and:

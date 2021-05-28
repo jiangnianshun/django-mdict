@@ -233,7 +233,7 @@ django-mdict运行后会抽取zim的内置索引保存为idx文件，抽取索�
 kiwix（官方阅读器）下载地址：
 [https://www.kiwix.org/download/](https://www.kiwix.org/download/)
 
-phet.zim需要开启固定高度才能正常显示。
+phet.zim以及wikisource.zim中部分竖排古文的高度无法确定，需要开启固定高度才能正常显示。
 
 zim是离线维基格式：
 
