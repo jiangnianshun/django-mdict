@@ -298,6 +298,7 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
 
     tquery_list = query.split(' ')
     if es_phrase:
+        tokens = [query.strip()]
         query = '"' + query.replace('"', '') + '"'
     else:
         if es_and:
@@ -325,12 +326,11 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
         #     database.add_database(tdata)
         # 合并多个数据库查询，不知道查询结果来自哪个数据库。
         enquire = xapian.Enquire(database)
-        query_string = query
 
         qp = xapian.QueryParser()
         qp.set_database(database)
         qp.set_stemming_strategy(xapian.QueryParser.STEM_SOME)
-        query_obj = qp.parse_query(query_string)
+        query_obj = qp.parse_query(query)
         enquire.set_query(query_obj)
         matches = enquire.get_mset((result_page - 1) * result_num, result_page * result_num)
         total_num += matches.get_matches_estimated()
@@ -345,20 +345,24 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
             if len(entry_list) == 0:
                 continue
             entryobj = entry_list[0]
-            content = remove_html_tags(entryobj.mdx_record)
-            high_mark = content.find(tquery_list[0])
-            if high_mark < 0:
-                high_mark = content.find(query[0])
-            if high_mark < 0:
-                high_mark = 0
-            if high_mark - 5 >= 0:
-                high_mark = high_mark - 5
-            entryobj.extra = matches.snippet(content[high_mark:], frag_size, xapian.Stem('english'), 1,
-                                             '<b style="background-color:yellow;color:red;font-size:0.8rem;">',
-                                             '</b>', '...').decode('utf-8')
+            entryobj.extra = get_highlight_frag(entryobj.mdx_record, query, tquery_list, frag_num, frag_size, matches)
             result.append(entryobj)
 
     return result, total_num, tokens
+
+
+def get_highlight_frag(record, query, tquery_list, frag_num, frag_size, matches):
+    content = remove_html_tags(record)
+    high_mark = content.find(tquery_list[0])
+    if high_mark < 0:
+        high_mark = content.find(query[0])
+    if high_mark < 0:
+        high_mark = 0
+    if high_mark - 5 >= 0:
+        high_mark = high_mark - 5
+    return matches.snippet(content[high_mark:], frag_size, xapian.Stem('english'), 1,
+                                     '<b style="background-color:yellow;color:red;font-size:0.8rem;">',
+                                     '</b>', '...').decode('utf-8')
 
 
 def remove_html_tags(content):

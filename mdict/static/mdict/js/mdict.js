@@ -310,22 +310,26 @@ function bind_card(iframe,html,tokens){
 //                var pattern=/[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|《》（）？！，。“”‘’：；]/g;
 //                var tmp_query = query.split(pattern);
                 //去符号
-                for(var tmp of tokens){
-                    if(tmp!=''){
-                        var context = $(iframe).contents().find('body')[0];
-                        var instance = new Mark(context);
-                        instance.mark(tmp);
-//                        if(/[a-zA-Z]+/.test(tmp)){
-//                            instance.mark(tmp);
-//                        }else{
-//                            tmp = [].filter.call(tmp,function(s,i,o){return o.indexOf(s)==i;}).join('');
-//                            //去重
-//                            for(var j=0;j<tmp.length;j++){
-//                                instance.mark(tmp[j]);
-//                            }
-//                        }
-                    }
-                }
+                var tmp=tokens.join(' ');
+                var context = $(iframe).contents().find('body')[0];
+                var instance = new Mark(context);
+                instance.mark(tmp);
+//                for(var tmp of tokens){
+//                    if(tmp!=''){
+//                        var context = $(iframe).contents().find('body')[0];
+//                        var instance = new Mark(context);
+//                        instance.mark(tmp);
+////                        if(/[a-zA-Z]+/.test(tmp)){
+////                            instance.mark(tmp);
+////                        }else{
+////                            tmp = [].filter.call(tmp,function(s,i,o){return o.indexOf(s)==i;}).join('');
+////                            //去重
+////                            for(var j=0;j<tmp.length;j++){
+////                                instance.mark(tmp[j]);
+////                            }
+////                        }
+//                    }
+//                }
 //            }
         }
     });
