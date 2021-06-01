@@ -54,3 +54,7 @@ chmod +x /bin/sleep
 10. windows下后台残留僵尸进程。
 
 注销系统后重新进入。
+
+11. run_server.sh: line 16: syntax error: unexpected end of file
+
+需要转换脚本格式
