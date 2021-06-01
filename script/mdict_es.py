@@ -65,13 +65,13 @@ if 'analysis-ik' in plugins_str:
 
 html_strip1 = analyzer('html_analyzer',
                        tokenizer=tokenizer,
-                       filter=["lowercase", "stop", "snowball", "stemmer"],
+                       filter=["lowercase", "stemmer"],
                        char_filter=["html_strip"]
                        )
-
+# stop停止词，去掉停止词会导致搜索词组出现问题
 html_strip2 = analyzer('html_analyzer2',
                        tokenizer=tokenizer,
-                       filter=["lowercase", "stop", "snowball", "stemmer"],
+                       filter=["lowercase", "stemmer"],
                        char_filter=["html_strip"],
                        stopwords=["上一页", "下一页", "上一葉", "下一葉", "目录", "封面", "索引", "前言"]
                        )
