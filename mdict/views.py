@@ -313,48 +313,64 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
             query = ' OR '.join(tquery_list)
 
     for zim in zim_list:
+        index_path_list = [zim.title_index_path]
         if es_content:
-            index_path = zim.full_index_path
-        else:
-            index_path = zim.title_index_path
-        if index_path == '' or not os.path.exists(index_path):
-            return [], 0, []
+            index_path_list.append(zim.full_index_path)
+        url_list = []
 
-        dics = MdictDic.objects.filter(mdict_file=zim.get_fname())
-        if len(dics) > 0:
-            dic = dics[0]
-        else:
-            continue
-
-        database = xapian.Database(index_path)
-        # for index_path in zim_path:
-        #     tdata = xapian.Database(index_path)
-        #     database.add_database(tdata)
-        # 合并多个数据库查询，不知道查询结果来自哪个数据库。
-        enquire = xapian.Enquire(database)
-
-        qp = xapian.QueryParser()
-        qp.set_database(database)
-        qp.set_stemming_strategy(xapian.QueryParser.STEM_SOME)
-        query_obj = qp.parse_query(query)
-        enquire.set_query(query_obj)
-        matches = enquire.get_mset((result_page - 1) * result_num, result_page * result_num)
-        total_num += matches.get_matches_estimated()
-
-        for match in matches:
-            url = match.document.get_data().decode('utf-8')
-            if dic_pk > -1:
-                sobj = SearchObject(zim, [], get_dic_attrs(dic), url, is_dic=True)
-            else:
-                sobj = SearchObject(zim, [], get_dic_attrs(dic), url, is_dic=False)
-            entry_list = sobj.search_entry_list()
-            if len(entry_list) == 0:
+        for index_path in index_path_list:
+            if index_path == '' or not os.path.exists(index_path):
                 continue
-            entryobj = entry_list[0]
-            entryobj.extra = get_highlight_frag(entryobj.mdx_record, tquery_list, frag_num, frag_size)
-            result.append(entryobj)
+            dics = MdictDic.objects.filter(mdict_file=zim.get_fname())
+            if len(dics) > 0:
+                dic = dics[0]
+            else:
+                continue
+            t_result, url_list = search_xapian(zim, index_path, query, dic, result_page, result_num, total_num,
+                                            tquery_list, frag_num, frag_size, url_list)
+            result.extend(t_result)
 
     return result, total_num, tokens
+
+
+def search_xapian(zim, index_path, query, dic, result_page, result_num, total_num,
+                                            tquery_list, frag_num, frag_size, url_list):
+    database = xapian.Database(index_path)
+    # for index_path in zim_path:
+    #     tdata = xapian.Database(index_path)
+    #     database.add_database(tdata)
+    # 合并多个数据库查询，不知道查询结果来自哪个数据库。
+    enquire = xapian.Enquire(database)
+
+    qp = xapian.QueryParser()
+    qp.set_database(database)
+    qp.set_stemming_strategy(xapian.QueryParser.STEM_SOME)
+    query_obj = qp.parse_query(query)
+    enquire.set_query(query_obj)
+    matches = enquire.get_mset((result_page - 1) * result_num, result_page * result_num)
+    total_num += matches.get_matches_estimated()
+
+    t_url_list = []
+    result = []
+    for match in matches:
+        url = match.document.get_data().decode('utf-8')
+        if url in url_list:
+            # 去重
+            continue
+        else:
+            t_url_list.append(url)
+        if dic.pk > -1:
+            sobj = SearchObject(zim, [], get_dic_attrs(dic), url, is_dic=True)
+        else:
+            sobj = SearchObject(zim, [], get_dic_attrs(dic), url, is_dic=False)
+        entry_list = sobj.search_entry_list()
+        if len(entry_list) == 0:
+            continue
+        entryobj = entry_list[0]
+        entryobj.extra = get_highlight_frag(entryobj.mdx_record, tquery_list, frag_num, frag_size)
+        result.append(entryobj)
+    database.close()
+    return result, t_url_list
 
 
 def get_hight_mark(content, tquery_list, frag_size):

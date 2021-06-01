@@ -81,7 +81,7 @@ class SearchObject:
             raise Exception('error query type')
 
         self.is_zim = False
-        if isinstance(mdx, ZIMFile):
+        if mdx.get_fpath().endswith('.zim'):
             self.is_zim = True
             self.process_zim_query()
 
