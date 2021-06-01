@@ -22,9 +22,14 @@ def cmp_md5(file1, file2):
 
 
 lib_list = ['ripemd128', 'pureSalsa20', 'readmdict', 'readzim']
+
 for libfile in lib_list:
     libfile1 = '../src/' + libfile + '.py'
     libfile2 = libfile + '.pyx'
     if not os.path.exists('mdict/readlib/pyx') or not cmp_md5(libfile1, libfile2):
         shutil.copy(libfile1, libfile2)
-        setup(name=libfile, ext_modules=cythonize(libfile2, annotate=False, language_level="3"))
+
+for libfile in lib_list:
+    libfile1 = '../src/' + libfile + '.py'
+    libfile2 = libfile + '.pyx'
+    setup(name=libfile, ext_modules=cythonize(libfile2, annotate=False, language_level="3"))
