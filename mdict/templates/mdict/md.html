@@ -28,7 +28,7 @@ function get_md(doc_path){
 }
 function ihyperlink(e){
     var doc_path=$(this).attr("href")||null;
-    if(doc_path[0]!="#"){
+    if(doc_path[0]!="#"&&doc_path.indexOf('http')!=0&&doc_path.substring(doc_path.length-4)!='.com'){
         e.preventDefault();
         get_md(doc_path);
     }

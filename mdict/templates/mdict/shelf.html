@@ -27,8 +27,7 @@
     </style>
 </head>
 <body class="bg-light">
-<div class="btn-group" style="position:fixed;top:1rem;right:2rem;z-index:99;">
-    <button type="button" class="btn btn-primary" id="dic-num"></button>
+<div class="btn-group" style="position:fixed;top:1rem;left:1.5rem;z-index:99;">
     <button type="button" class="btn btn-primary"><i class="bi bi-house-door" onclick="window.location.href='/';"></i></button>
     <input autocomplete="off" id="mdict-filter-input" class="form-control" type="text">
     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -37,6 +36,7 @@
     <ul class="dropdown-menu" id="dic-group">
         <li onclick="start_dic_filter(0)"><span class="dropdown-item" data-pk=0>全部分组</span></li>
     </ul>
+    <button type="button" class="btn btn-primary" id="dic-num"></button>
 </div>
 <div class="container">
     <div class="row"></div>
