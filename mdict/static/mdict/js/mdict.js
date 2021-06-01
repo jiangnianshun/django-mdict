@@ -463,6 +463,7 @@ function query_es(query,container,page,need_clear,is_over){
 	var es_entry=$('#es-filter-entry').prop("checked");
 	var es_content=$('#es-filter-content').prop("checked");
 	var es_and=$('#es-filter-and').prop("checked");
+	var search_zim=$('#search-zim').prop("checked");
 
 	var dic_pk=$("html").attr("data-dic-pk");
 
@@ -477,8 +478,8 @@ function query_es(query,container,page,need_clear,is_over){
 	}
 
 	var data={"query":query,"dic_group":dic_group,"result_page":page,"force_refresh":$('#config-force-refresh').prop('checked'),
-	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content,"es-and":es_and,"frag_num":frag_num,"frag_size":frag_size,
-	"dic_pk":dic_pk};
+	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content,"es-and":es_and,"frag-num":frag_num,"frag-size":frag_size,
+	"dic-pk":dic_pk,"search-zim":search_zim};
 	$.ajax({
 		url:"/mdict/essearch/",
 		contentType:'json',

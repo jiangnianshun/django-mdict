@@ -72,6 +72,7 @@ apt-get install -y python3-xapian libxapian-dev
 * 默认是OR（或）查询，每个词至少出现一次，开启按照AND（与）查询后要求所有词都要出现。
 
 * 开启按照词组查询会要求每个词都出现并满足相邻和顺序一致的要求，从默认查询到AND查询到词组查询，结果越来越精确，数量越来越少。
+zim的词组查询有问题，未避免影响，在词组查询时可关闭查询zim，不对其进行查询。
 
 ### 注意事项
 
@@ -189,6 +190,10 @@ discovery.type: single-node
 * 显示connectionError
 
 es连接失败，确认es已开启且url和端口设置正确。
+
+* 查询时报错org.elasticsearch.action.NoShardAvailableActionException: No shard available for
+
+等待es启动完成，窗口显示Cluster health status changed from [RED] to [GREEN]后可正常查询。
 
 ### es索引性能测试
 

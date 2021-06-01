@@ -192,16 +192,17 @@ def fulltext_search(request):
     query = request.GET.get('query', '')
     # force_refresh = json.loads(request.GET.get('force_refresh', False))
 
-    result_num = int(request.GET.get('result_num', 50))
-    result_page = int(request.GET.get('result_page', 1))
-    frag_size = int(request.GET.get('frag_size', 50))
-    frag_num = int(request.GET.get('frag_num', 3))
-    dic_pk = int(request.GET.get('dic_pk', -1))
+    result_num = int(request.GET.get('result-num', 50))
+    result_page = int(request.GET.get('result-page', 1))
+    frag_size = int(request.GET.get('frag-size', 50))
+    frag_num = int(request.GET.get('frag-num', 3))
+    dic_pk = int(request.GET.get('dic-pk', -1))
 
     es_phrase = json.loads(request.GET.get('es-phrase', 'false'))
     es_entry = json.loads(request.GET.get('es-entry', 'false'))
     es_content = json.loads(request.GET.get('es-content', 'false'))
     es_and = json.loads(request.GET.get('es-and', 'false'))
+    search_zim = json.loads(request.GET.get('search-zim', 'true'))
 
     is_en = False
 
@@ -239,7 +240,7 @@ def fulltext_search(request):
                 result, total_count, tokens = get_es_results(*params)
     else:
         tresult1 = []
-        if check_xapian():
+        if search_zim and check_xapian():
             if len(init_vars.zim_list) > 30:
                 params[2] = 3
             elif len(init_vars.zim_list) > 10:
