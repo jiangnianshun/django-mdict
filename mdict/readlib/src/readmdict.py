@@ -1007,7 +1007,7 @@ class MDict(object):
 
         while total_num + 1 > total_len:
             myt2_list, r_e_p2 = self.search_key_block_list(key_list, p2, len(key_list), True)
-            if myt_list[-1][2] == -1 and len(myt2_list) > 0:
+            if len(myt_list) > 0 and myt_list[-1][2] == -1 and len(myt2_list) > 0:
                 myt2_list[-1][2] = myt2_list[0][1]
             myt_list.extend(myt2_list)
 
