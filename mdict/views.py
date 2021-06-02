@@ -314,7 +314,9 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
             query = ' OR '.join(tquery_list)
 
     for zim in zim_list:
-        index_path_list = [zim.title_index_path]
+        index_path_list = []
+        if es_entry:
+            index_path_list.append(zim.title_index_path)
         if es_content:
             index_path_list.append(zim.full_index_path)
         url_list = []
