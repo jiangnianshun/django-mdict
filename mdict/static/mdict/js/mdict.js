@@ -491,7 +491,8 @@ function query_es(query,container,page,need_clear,is_over){
 			//每次按钮点击后清理掉已有的显示的词条
             page=add_iframes(data,container,need_clear,false);
 			//page[0]是当前页码，page[1]是总页码
-			if(page[2]<=0){set_alert_info(query);}
+
+			if(page[2]<=0&&$('#card-container .card').length==0){set_alert_info(query);}
 
 		    var s2=`
 			<div id='next-page' class='card card-header m-auto'>
@@ -501,8 +502,7 @@ function query_es(query,container,page,need_clear,is_over){
 			</div>
 			`;
 			$('#card-container #next-page').remove();
-
-			if(page[2]>0){
+			if(page[2]>0&&page[1]>=page[0]){
                 container.append(s2);
 
                 $('#card-container #next-page').on('click',function(){

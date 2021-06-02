@@ -1,4 +1,5 @@
 import json
+import math
 import mimetypes
 import os
 import re
@@ -225,6 +226,8 @@ def fulltext_search(request):
     result = []
     total_count = 0
     tokens = []
+    total_page_z = 0
+    total_page_e = 0
     params = [query, dic_pk, result_num, result_page, frag_size, frag_num, es_entry, es_content, es_and, es_phrase]
 
     if dic_pk > -1:
@@ -247,13 +250,14 @@ def fulltext_search(request):
                 params[2] = 6
             else:
                 params[2] = 15
-            tresult1, ttotal_count1, tokens = get_zim_results(*params)
+            tresult1, ttotal_count1, tokens, total_page_z = get_zim_results(*params)
             total_count += ttotal_count1
             params[2] = 30
         try:
             # 连接es成功后再关闭es，下一次查询报ConnectionError
             tresult2, ttotal_count2, ttokens = get_es_results(*params)
             result.extend(tresult2)
+            total_page_e = math.ceil(ttotal_count2 / params[2])
             total_count += ttotal_count2
             if ttokens:
                 tokens = ttokens
@@ -264,11 +268,15 @@ def fulltext_search(request):
     result = search_revise(query, result, is_en)
 
     serializer = MdictEntrySerializer(result, many=True)
+    if total_page_z >= total_page_e:
+        total_page = total_page_z
+    else:
+        total_page = total_page_e
 
     ret = {
         "page_size": len(result),  # 每页数据量
         "total_count": total_count,  # 总数据量
-        "total_page": int(total_count / result_num),  # 总页数
+        "total_page": total_page,  # 总页数
         "current_page": result_page,  # 当前页数
         "data": serializer.data,
         "tokens": tokens
@@ -316,6 +324,7 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
             query = ' AND '.join(tquery_list)
         else:
             query = ' OR '.join(tquery_list)
+    total_page_z = 0
 
     for zim in zim_list:
         index_path_list = []
@@ -333,15 +342,18 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
                 dic = dics[0]
             else:
                 continue
-            t_result, url_list, total_num = search_xapian(zim, index_path, query, dic_pk, dic, result_page, result_num, total_num,
-                                            tquery_list, frag_num, frag_size, url_list)
+            t_result, url_list, total_num, ttotal_page_z = search_xapian(zim, index_path, query, dic_pk, dic,
+                                                                         result_page, result_num, total_num,
+                                                                         tquery_list, frag_num, frag_size, url_list)
+            if ttotal_page_z > total_page_z:
+                total_page_z = ttotal_page_z
             result.extend(t_result)
 
-    return result, total_num, tokens
+    return result, total_num, tokens, total_page_z
 
 
 def search_xapian(zim, index_path, query, dic_pk, dic, result_page, result_num, total_num,
-                                            tquery_list, frag_num, frag_size, url_list):
+                  tquery_list, frag_num, frag_size, url_list):
     database = xapian.Database(index_path)
     # for index_path in zim_path:
     #     tdata = xapian.Database(index_path)
@@ -354,8 +366,11 @@ def search_xapian(zim, index_path, query, dic_pk, dic, result_page, result_num, 
     qp.set_stemming_strategy(xapian.QueryParser.STEM_SOME)
     query_obj = qp.parse_query(query)
     enquire.set_query(query_obj)
-    matches = enquire.get_mset((result_page - 1) * result_num, result_page * result_num)
+    matches = enquire.get_mset((result_page - 1) * result_num, result_num)
+    # 从参数1的位置取参数2个结果
     total_num += matches.get_matches_estimated()
+
+    ttotal_page_z = math.ceil(matches.get_matches_estimated() / result_num)
 
     t_url_list = []
     result = []
@@ -377,7 +392,7 @@ def search_xapian(zim, index_path, query, dic_pk, dic, result_page, result_num, 
         entryobj.extra = get_highlight_frag(entryobj.mdx_record, tquery_list, frag_num, frag_size)
         result.append(entryobj)
     database.close()
-    return result, t_url_list, total_num
+    return result, t_url_list, total_num, ttotal_page_z
 
 
 def get_hight_mark(content, tquery_list, frag_size):
