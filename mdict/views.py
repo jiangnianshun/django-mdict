@@ -333,7 +333,7 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
                 dic = dics[0]
             else:
                 continue
-            t_result, url_list = search_xapian(zim, index_path, query, dic_pk, dic, result_page, result_num, total_num,
+            t_result, url_list, total_num = search_xapian(zim, index_path, query, dic_pk, dic, result_page, result_num, total_num,
                                             tquery_list, frag_num, frag_size, url_list)
             result.extend(t_result)
 
@@ -377,7 +377,7 @@ def search_xapian(zim, index_path, query, dic_pk, dic, result_page, result_num, 
         entryobj.extra = get_highlight_frag(entryobj.mdx_record, tquery_list, frag_num, frag_size)
         result.append(entryobj)
     database.close()
-    return result, t_url_list
+    return result, t_url_list, total_num
 
 
 def get_hight_mark(content, tquery_list, frag_size):
