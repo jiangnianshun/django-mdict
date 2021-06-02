@@ -250,12 +250,16 @@ def fulltext_search(request):
             tresult1, ttotal_count1, tokens = get_zim_results(*params)
             total_count += ttotal_count1
             params[2] = 30
-        tresult2, ttotal_count2, ttokens = get_es_results(*params)
-        result.extend(tresult2)
-        total_count += ttotal_count2
+        try:
+            # 连接es成功后再关闭es，下一次查询报ConnectionError
+            tresult2, ttotal_count2, ttokens = get_es_results(*params)
+            result.extend(tresult2)
+            total_count += ttotal_count2
+            if ttokens:
+                tokens = ttokens
+        except ConnectionError:
+            pass
         result.extend(tresult1)
-        if ttokens:
-            tokens = ttokens
 
     result = search_revise(query, result, is_en)
 
