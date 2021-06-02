@@ -190,7 +190,7 @@ def get_tokens(query):
 @authentication_classes([])
 def fulltext_search(request):
     query = request.GET.get('query', '')
-    # force_refresh = json.loads(request.GET.get('force_refresh', False))
+    # force_refresh = json.loads(request.GET.get('force-refresh', False))
 
     result_num = int(request.GET.get('result-num', 50))
     result_page = int(request.GET.get('result-page', 1))
@@ -221,7 +221,7 @@ def fulltext_search(request):
     if frag_size > 200:
         frag_size = 200
 
-    # group = int(request.GET.get('dic_group', 0))
+    # group = int(request.GET.get('dic-group', 0))
     result = []
     total_count = 0
     tokens = []

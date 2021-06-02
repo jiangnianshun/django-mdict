@@ -477,7 +477,7 @@ function query_es(query,container,page,need_clear,is_over){
 	    return
 	}
 
-	var data={"query":query,"dic_group":dic_group,"result_page":page,"force_refresh":$('#config-force-refresh').prop('checked'),
+	var data={"query":query,"dic-group":dic_group,"result-page":page,"force-refresh":$('#config-force-refresh').prop('checked'),
 	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content,"es-and":es_and,"frag-num":frag_num,"frag-size":frag_size,
 	"dic-pk":dic_pk,"search-zim":search_zim};
 	$.ajax({
@@ -502,7 +502,7 @@ function query_es(query,container,page,need_clear,is_over){
 			`;
 			$('#card-container #next-page').remove();
 
-			if(page[2]>0&&page[1]>page[0]){
+			if(page[2]>0){
                 container.append(s2);
 
                 $('#card-container #next-page').on('click',function(){
