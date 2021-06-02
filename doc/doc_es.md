@@ -34,7 +34,7 @@ pip install elasticsearch-dsl
 
 [https://github.com/medcl/elasticsearch-analysis-ik/releases](https://github.com/medcl/elasticsearch-analysis-ik/releases)
 
-4. （可跳过）建议查询时es分配2g或以上内存，索引时分配4g或以上内存，修改config/jvm.options中的参数-Xms1g和-Xmx1g，将1改为2或4，重启es生效。
+4. （可跳过）建议查询和索引时es分配4g或以上内存，修改config/jvm.options中的参数-Xms1g和-Xmx1g，将1改为4，重启es生效。
 
 5. 运行elasticsearch/bin/elasticsearch.bat启动es。
 
@@ -191,9 +191,17 @@ discovery.type: single-node
 
 es连接失败，确认es已开启且url和端口设置正确。
 
-* 查询时报错org.elasticsearch.action.NoShardAvailableActionException: No shard available for
+* 查询时报错org.elasticsearch.action.NoShardAvailableActionException: No shard available for ...
 
 等待es启动完成，窗口显示Cluster health status changed from [RED] to [GREEN]后可正常查询。
+
+* es查询速度特别慢，且不断显示overhead, spent [1.1s] collecting in the last [1.1s]信息。
+
+词典过多，内存不足，需要关闭部分词典的索引或者分配更大的内存。
+
+* 查询时报错OutOfMemoryError
+
+同上
 
 ### es索引性能测试
 
