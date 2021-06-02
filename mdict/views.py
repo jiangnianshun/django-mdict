@@ -329,14 +329,14 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
                 dic = dics[0]
             else:
                 continue
-            t_result, url_list = search_xapian(zim, index_path, query, dic, result_page, result_num, total_num,
+            t_result, url_list = search_xapian(zim, index_path, query, dic_pk, dic, result_page, result_num, total_num,
                                             tquery_list, frag_num, frag_size, url_list)
             result.extend(t_result)
 
     return result, total_num, tokens
 
 
-def search_xapian(zim, index_path, query, dic, result_page, result_num, total_num,
+def search_xapian(zim, index_path, query, dic_pk, dic, result_page, result_num, total_num,
                                             tquery_list, frag_num, frag_size, url_list):
     database = xapian.Database(index_path)
     # for index_path in zim_path:
@@ -362,7 +362,7 @@ def search_xapian(zim, index_path, query, dic, result_page, result_num, total_nu
             continue
         else:
             t_url_list.append(url)
-        if dic.pk > -1:
+        if dic_pk > -1:
             sobj = SearchObject(zim, [], get_dic_attrs(dic), url, is_dic=True)
         else:
             sobj = SearchObject(zim, [], get_dic_attrs(dic), url, is_dic=False)
