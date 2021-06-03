@@ -176,8 +176,8 @@ class MDict(object):
         排序要求：
         header中KeyCaseSensitive表明排序时是否大小写不敏感,为No时要转化为小写字母比较。
         header中StripKey只对mdx有效，为No，则不分词，字母、空格、符号都参与排序，为Yes，则分词，仅字母参与排序，去掉空格、符号。
-        MDX的编码有utf-8,utf-16,gb18030(包括gbk，gb2313,gb18030),BIG5按照utf-8，utf-16按照utf-16be排序，其他按照各自编码排序。
-        MDD的编码为utf-16le,尽管utf-16默认也是utf-16le，但是会加前缀\xff\xfe，因此如果将传入的str转化为bytes再比较就会出错，如果都是在str下进行比较就没有影响。
+        MDX的编码有utf-8,utf-16,gb18030(包括gbk，gb2313,gb18030),BIG5,ISO8859-1。utf-16按照utf-16be排序，其他按照各自编码排序。
+        MDD的编码为utf-16le,尽管utf-16默认也是utf-16le，但是会加前缀\xff\xfe。
         @param key1: the key user input
         @param key2: the key from the file
         @return:
@@ -187,15 +187,15 @@ class MDict(object):
         #     key1 = key1.encode(self._encoding)
         # if type(key2) == str:
         #     key2 = key2.encode(self._encoding)
-            # Dictionary of Engineering的最后一个词条是b'\xc5ngstr\xf6m compensation pyrheliometer'，其中\xc5和\xf6解码报错，因此用replace。
+        # Dictionary of Engineering的最后一个词条是b'\xc5ngstr\xf6m compensation pyrheliometer'，其中\xc5和\xf6解码报错，因此用replace。
         key1 = self.process_str_keys(key1)
         key2 = self.process_str_keys(key2)
 
-        if operator.__lt__(key1,key2):
+        if operator.__lt__(key1, key2):
             return -1
-        elif operator.__eq__(key1,key2):
+        elif operator.__eq__(key1, key2):
             return 0
-        elif operator.__gt__(key1,key2):
+        elif operator.__gt__(key1, key2):
             return 1
 
         # if self.__class__.__name__ == 'MDX':
@@ -214,14 +214,14 @@ class MDict(object):
         #         elif operator.__gt__(key1.encode('utf-8'), key2.encode('utf-8')):
         #             return 1
         #     else:
-        #         if operator.__lt__(key1.encode(self._encoding, errors='replace'),
-        #                            key2.encode(self._encoding, errors='replace')):
+        #         if operator.__lt__(key1.encode(self._encoding, errors='ignore'),
+        #                            key2.encode(self._encoding, errors='ignore')):
         #             return -1
-        #         elif operator.__eq__(key1.encode(self._encoding, errors='replace'),
-        #                              key2.encode(self._encoding, errors='replace')):
+        #         elif operator.__eq__(key1.encode(self._encoding, errors='ignore'),
+        #                              key2.encode(self._encoding, errors='ignore')):
         #             return 0
-        #         elif operator.__gt__(key1.encode(self._encoding, errors='replace'),
-        #                              key2.encode(self._encoding, errors='replace')):
+        #         elif operator.__gt__(key1.encode(self._encoding, errors='ignore'),
+        #                              key2.encode(self._encoding, errors='ignore')):
         #             return 1
         # else:
         #     if operator.__lt__(key1.encode('utf-8'), key2.encode('utf-8')):
@@ -261,11 +261,12 @@ class MDict(object):
         if type(key) == str:
             if self.__class__.__name__ == 'MDX':
                 if self._encoding == 'UTF-16':
-                    key = key.encode('utf-16be')
+                    key = key.encode('utf-16be', errors='ignore')
                 else:
-                    key = key.encode(self._encoding)
+                    # ISO8859-1编码中文报错latin-1 UnicodeDecodeError
+                    key = key.encode(self._encoding, errors='ignore')
             else:
-                key = key.encode('utf-16le')
+                key = key.encode('utf-16le', errors='ignore')
         key = self.lower_str_keys(key)
 
         if self._strip_key == 1:
@@ -472,7 +473,7 @@ class MDict(object):
         if self.compare_keys(key, key_list[half][1]) == 0:
             k = self.process_str_keys(key_list[half][1])
 
-            m_a = [k.decode(self._encoding, errors='replace')]
+            m_a = [k.decode(self._encoding, errors='ignore')]
 
             lim = num
             if key_list_len - 1 - half < 6:
@@ -484,7 +485,7 @@ class MDict(object):
                 k = self.process_str_keys(key_list[half + j][1])
                 self._sug_flag = half + j + 1
                 if k not in m_a:
-                    m_a.append(k.decode(self._encoding, errors='replace'))
+                    m_a.append(k.decode(self._encoding, errors='ignore'))
                     i += 1
                 j += 1
             return m_a
@@ -631,14 +632,14 @@ class MDict(object):
                 if direction <= 0:
                     p_now = position
                     while p_now >= 0 and self.process_str_keys(key_list[p_now][1]) == '':
-                        if key == key_list[p_now][1].decode(self._encoding, errors='replace'):
+                        if key == key_list[p_now][1].decode(self._encoding, errors='ignore'):
                             my_start = key_list[p_now][0]
                             if p_now + 1 < key_list_length:
                                 my_end = key_list[p_now + 1][0]
                             else:
                                 my_end = -1
 
-                            entry = key_list[p_now][1].decode(self._encoding, errors='replace')
+                            entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
                             result_list.append((my_start, my_end, self.t_p1, p_now, entry))
                             return result_list
                         p_now -= 1
@@ -650,13 +651,13 @@ class MDict(object):
                         p_now = position
 
                     while p_now < key_list_length and self.process_str_keys(key_list[p_now][1]) == '':
-                        if key == key_list[p_now][1].decode(self._encoding, errors='replace'):
+                        if key == key_list[p_now][1].decode(self._encoding, errors='ignore'):
                             my_start = key_list[p_now][0]
                             if p_now + 1 < key_list_length:
                                 my_end = key_list[p_now + 1][0]
                             else:
                                 my_end = -1
-                            entry = key_list[p_now][1].decode(self._encoding, errors='replace')
+                            entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
                             result_list.append((my_start, my_end, self.t_p1, p_now, entry))
                             return result_list
                         p_now += 1
@@ -670,14 +671,14 @@ class MDict(object):
                     p_now = position
                     while p_now >= 0 and p_key == self.process_str_keys(key_list[p_now][1]):
                         if self.lower_str_keys(key).replace(' ', '') in self.lower_str_keys(
-                                key_list[p_now][1].decode(self._encoding, errors='replace')).replace(' ', ''):
+                                key_list[p_now][1].decode(self._encoding, errors='ignore')).replace(' ', ''):
                             my_start = key_list[p_now][0]
                             if p_now + 1 < key_list_length:
                                 my_end = key_list[p_now + 1][0]
                             else:
                                 my_end = -1
 
-                            entry = key_list[p_now][1].decode(self._encoding, errors='replace')
+                            entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
                             result_list.append((my_start, my_end, self.t_p1, p_now, entry))
 
                         p_now -= 1
@@ -690,13 +691,13 @@ class MDict(object):
 
                     while p_now < key_list_length and p_key == self.process_str_keys(key_list[p_now][1]):
                         if self.lower_str_keys(key).replace(' ', '') in self.lower_str_keys(
-                                key_list[p_now][1].decode(self._encoding, errors='replace')).replace(' ', ''):
+                                key_list[p_now][1].decode(self._encoding, errors='ignore')).replace(' ', ''):
                             my_start = key_list[p_now][0]
                             if p_now + 1 < key_list_length:
                                 my_end = key_list[p_now + 1][0]
                             else:
                                 my_end = -1
-                            entry = key_list[p_now][1].decode(self._encoding, errors='replace')
+                            entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
                             result_list.append((my_start, my_end, self.t_p1, p_now, entry))
 
                         p_now += 1
@@ -713,7 +714,7 @@ class MDict(object):
                     my_end = key_list[p_now + 1][0]
                 else:
                     my_end = -1
-                entry = key_list[p_now][1].decode(self._encoding, errors='replace')
+                entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
                 result_list.append((my_start, my_end, self.t_p1, p_now, entry))
                 p_now -= 1
 
@@ -729,7 +730,7 @@ class MDict(object):
                     my_end = key_list[p_now + 1][0]
                 else:
                     my_end = -1
-                entry = key_list[p_now][1].decode(self._encoding, errors='replace')
+                entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
 
                 result_list.append((my_start, my_end, self.t_p1, p_now, entry))
                 p_now += 1
@@ -763,7 +764,7 @@ class MDict(object):
         # key_list是一个key_block中的所有key的元组(key_id,key_text)组成的列表。
         # 这里<=0，因此<0时，应当提供第一词条
         if self.compare_keys(key, key_list[0][1]) <= 0:
-            my_sug.append(key_list[0][1].decode(self._encoding, errors='replace'))
+            my_sug.append(key_list[0][1].decode(self._encoding, errors='ignore'))
             if key_list_length > 1:
                 i = 1
                 j = 1
@@ -772,14 +773,14 @@ class MDict(object):
                     lim = key_list_length - 1
                 while j <= lim and j <= 8:
                     if not self.compare_keys(key, key_list[j][1]) == 0:
-                        k = key_list[j][1].decode(self._encoding, errors='replace')
+                        k = key_list[j][1].decode(self._encoding, errors='ignore')
                         if k not in my_sug:
                             my_sug.append(k)
                             i += 1
                     j += 1
 
         elif self.compare_keys(key, key_list[key_list_length - 1][1]) == 0:
-            my_sug.append(key_list[key_list_length - 1][1].decode(self._encoding, errors='replace'))
+            my_sug.append(key_list[key_list_length - 1][1].decode(self._encoding, errors='ignore'))
         else:
             my_sug.extend(self.reduce_key_block_sug(key_list, 0, key_list_length - 1, key, num))
 
@@ -801,7 +802,7 @@ class MDict(object):
 
         if start == end:
             r_p2 = start
-            my_list.append([key_list[start][1].decode(self._encoding, errors='replace'), start, start])
+            my_list.append([key_list[start][1].decode(self._encoding, errors='ignore'), start, start])
         elif back:
             r_p2 = end
             for i in range(p, end + 1):
@@ -810,7 +811,7 @@ class MDict(object):
                     e = key_list[i + 1][0]
                 else:
                     e = -1
-                my_list.append([key_list[i][1].decode(self._encoding, errors='replace'), s, e])
+                my_list.append([key_list[i][1].decode(self._encoding, errors='ignore'), s, e])
         else:
             r_p2 = start
             for i in range(start, p + 1):
@@ -819,7 +820,7 @@ class MDict(object):
                     e = key_list[i + 1][0]
                 else:
                     e = -1
-                my_list.append([key_list[i][1].decode(self._encoding, errors='replace'), s, e])
+                my_list.append([key_list[i][1].decode(self._encoding, errors='ignore'), s, e])
         return my_list, r_p2
 
     def _decode_key_block_search(self, key, f):
@@ -904,7 +905,7 @@ class MDict(object):
         # sug_flag标记的是key_list中没有找到key时的位置，从该位置向后查询近似的词。
         sug_flag = self._sug_flag
         if sug_flag != -1 and len(my_sug) < num:
-            k = key_list[sug_flag][1].decode(self._encoding, errors='replace')
+            k = key_list[sug_flag][1].decode(self._encoding, errors='ignore')
             if self.process_str_keys(key) != '':
                 if self.process_str_keys(k).find(self.process_str_keys(key)) == 0:
                     m_a = [k]
@@ -916,7 +917,7 @@ class MDict(object):
                     while sug_flag + j < key_list_length and j <= lim and not \
                             self.compare_keys(key, key_list[sug_flag + j][1]) == 0:
 
-                        k = key_list[sug_flag + j][1].decode(self._encoding, errors='replace')
+                        k = key_list[sug_flag + j][1].decode(self._encoding, errors='ignore')
                         if k not in m_a:
                             m_a.append(k)
                             i += 1
@@ -931,9 +932,9 @@ class MDict(object):
                     i = j = 1
 
                     while sug_flag + j < key_list_length and j <= lim and not key_list[sug_flag + j][1].decode(
-                            self._encoding, errors='replace').find(key) == 0:
+                            self._encoding, errors='ignore').find(key) == 0:
 
-                        k = key_list[sug_flag + j][1].decode(self._encoding, errors='replace')
+                        k = key_list[sug_flag + j][1].decode(self._encoding, errors='ignore')
                         if k not in m_a:
                             m_a.append(k)
                             i += 1
@@ -971,7 +972,7 @@ class MDict(object):
 
         key_list = self._split_key_block(key_block)
         random_p2 = random.randint(0, len(key_list) - 1)
-        return key_list[random_p2][1].decode(self._encoding, errors='replace')
+        return key_list[random_p2][1].decode(self._encoding, errors='ignore')
 
     def _decode_key_block_list(self, f, p1, p2, num, direction):
         # num_bytes = 0
@@ -1180,7 +1181,7 @@ class MDict(object):
         self._key_block_offset = f.tell()
 
         # header text in utf-16 encoding ending with '\x00\x00'
-        header_text = header_bytes[:-2].decode('utf-16', errors='replace')
+        header_text = header_bytes[:-2].decode('utf-16', errors='ignore')
         header_tag = _parse_header(header_text)
         if not self._encoding:
             encoding = header_tag['Encoding']
@@ -1456,7 +1457,7 @@ class MDX(MDict):
         @return:
         """
         record = self._decode_record_block(start, end, f)
-        record = record.decode(self._encoding, errors='replace').strip(u'\x00')
+        record = record.decode(self._encoding, errors='ignore').strip(u'\x00')
 
         # 21世纪英汉汉英双向词典 的header中没有Compact，但有Compat，此外是否要考虑可能有的词典header键的大小写不规范
         if 'Compact' in self.header:
