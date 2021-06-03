@@ -300,7 +300,7 @@ def search_mdx_dic(query_list, record_list, group):
         try:
             record_list.extend(ws_search(query_list, group, 'dic'))
         except Exception as e:
-            print(e)
+            print('ws server connection failed', e)
             q_list = ((i, query_list, group) for i in range(cnum))
             a_list = thpool.starmap(multithread_search_mdx, q_list)
             for a in a_list:

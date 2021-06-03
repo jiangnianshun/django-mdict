@@ -631,6 +631,8 @@ class ZIMFile:
             while front <= end and not found:
                 middle = floor((front + end) / 2)  # determine the middle index
                 entry = self.read_directory_entry_by_index(file, middle)
+                if entry is None:
+                    break
                 found_title = full_url(entry['namespace'], entry['url'])
                 if found_title == title:
                     found = True  # flag it if the item is found

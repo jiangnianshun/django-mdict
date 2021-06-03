@@ -124,7 +124,7 @@ def _parse_header(header):
     return tagdict
 
 
-reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|]'
+reg = rb'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|]'
 regp = re.compile(reg)
 
 
@@ -183,46 +183,53 @@ class MDict(object):
         @return:
         """
         # mdx和mdd中的key都是bytes，查询key是str，因此str转bytes要在lower()之后进行。
-        if type(key1) == bytes:
-            key1 = key1.decode(self._encoding, errors='replace')
-        if type(key2) == bytes:
-            key2 = key2.decode(self._encoding, errors='replace')
+        # if type(key1) == str:
+        #     key1 = key1.encode(self._encoding)
+        # if type(key2) == str:
+        #     key2 = key2.encode(self._encoding)
             # Dictionary of Engineering的最后一个词条是b'\xc5ngstr\xf6m compensation pyrheliometer'，其中\xc5和\xf6解码报错，因此用replace。
         key1 = self.process_str_keys(key1)
         key2 = self.process_str_keys(key2)
 
-        if self.__class__.__name__ == 'MDX':
-            if self._encoding == 'UTF-16':
-                if operator.__lt__(key1.encode('utf-16be'), key2.encode('utf-16be')):
-                    return -1
-                elif operator.__eq__(key1.encode('utf-16be'), key2.encode('utf-16be')):
-                    return 0
-                elif operator.__gt__(key1.encode('utf-16be'), key2.encode('utf-16be')):
-                    return 1
-            if self._encoding == 'BIG-5':
-                if operator.__lt__(key1.encode('utf-8'), key2.encode('utf-8')):
-                    return -1
-                elif operator.__eq__(key1.encode('utf-8'), key2.encode('utf-8')):
-                    return 0
-                elif operator.__gt__(key1.encode('utf-8'), key2.encode('utf-8')):
-                    return 1
-            else:
-                if operator.__lt__(key1.encode(self._encoding, errors='replace'),
-                                   key2.encode(self._encoding, errors='replace')):
-                    return -1
-                elif operator.__eq__(key1.encode(self._encoding, errors='replace'),
-                                     key2.encode(self._encoding, errors='replace')):
-                    return 0
-                elif operator.__gt__(key1.encode(self._encoding, errors='replace'),
-                                     key2.encode(self._encoding, errors='replace')):
-                    return 1
-        else:
-            if operator.__lt__(key1.encode('utf-8'), key2.encode('utf-8')):
-                return -1
-            elif operator.__eq__(key1.encode('utf-8'), key2.encode('utf-8')):
-                return 0
-            elif operator.__gt__(key1.encode('utf-8'), key2.encode('utf-8')):
-                return 1
+        if operator.__lt__(key1,key2):
+            return -1
+        elif operator.__eq__(key1,key2):
+            return 0
+        elif operator.__gt__(key1,key2):
+            return 1
+
+        # if self.__class__.__name__ == 'MDX':
+        #     if self._encoding == 'UTF-16':
+        #         if operator.__lt__(key1.encode('utf-16be'), key2.encode('utf-16be')):
+        #             return -1
+        #         elif operator.__eq__(key1.encode('utf-16be'), key2.encode('utf-16be')):
+        #             return 0
+        #         elif operator.__gt__(key1.encode('utf-16be'), key2.encode('utf-16be')):
+        #             return 1
+        #     if self._encoding == 'BIG-5':
+        #         if operator.__lt__(key1.encode('utf-8'), key2.encode('utf-8')):
+        #             return -1
+        #         elif operator.__eq__(key1.encode('utf-8'), key2.encode('utf-8')):
+        #             return 0
+        #         elif operator.__gt__(key1.encode('utf-8'), key2.encode('utf-8')):
+        #             return 1
+        #     else:
+        #         if operator.__lt__(key1.encode(self._encoding, errors='replace'),
+        #                            key2.encode(self._encoding, errors='replace')):
+        #             return -1
+        #         elif operator.__eq__(key1.encode(self._encoding, errors='replace'),
+        #                              key2.encode(self._encoding, errors='replace')):
+        #             return 0
+        #         elif operator.__gt__(key1.encode(self._encoding, errors='replace'),
+        #                              key2.encode(self._encoding, errors='replace')):
+        #             return 1
+        # else:
+        #     if operator.__lt__(key1.encode('utf-8'), key2.encode('utf-8')):
+        #         return -1
+        #     elif operator.__eq__(key1.encode('utf-8'), key2.encode('utf-8')):
+        #         return 0
+        #     elif operator.__gt__(key1.encode('utf-8'), key2.encode('utf-8')):
+        #         return 1
 
     def lower_str_keys(self, key):
         """
@@ -251,13 +258,19 @@ class MDict(object):
             self._strip_key = 0
 
     def process_str_keys(self, key):
-        if type(key) == bytes:
-            key = key.decode(self._encoding, errors='replace')
+        if type(key) == str:
+            if self.__class__.__name__ == 'MDX':
+                if self._encoding == 'UTF-16':
+                    key = key.encode('utf-16be')
+                else:
+                    key = key.encode(self._encoding)
+            else:
+                key = key.encode('utf-16le')
         key = self.lower_str_keys(key)
 
         if self._strip_key == 1:
             # key = re.sub(reg, '', key)
-            key = regp.sub('', key)
+            key = regp.sub(b'', key)
         # 这里不能strip()
         # return key.strip()
         return key
@@ -459,7 +472,7 @@ class MDict(object):
         if self.compare_keys(key, key_list[half][1]) == 0:
             k = self.process_str_keys(key_list[half][1])
 
-            m_a = [k]
+            m_a = [k.decode(self._encoding, errors='replace')]
 
             lim = num
             if key_list_len - 1 - half < 6:
@@ -471,7 +484,7 @@ class MDict(object):
                 k = self.process_str_keys(key_list[half + j][1])
                 self._sug_flag = half + j + 1
                 if k not in m_a:
-                    m_a.append(k)
+                    m_a.append(k.decode(self._encoding, errors='replace'))
                     i += 1
                 j += 1
             return m_a

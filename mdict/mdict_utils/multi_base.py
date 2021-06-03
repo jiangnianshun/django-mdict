@@ -1,3 +1,4 @@
+import copy
 import os
 from base.base_func import ROOT_DIR
 from .mdict_config import get_config_con
@@ -114,7 +115,8 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
                 dic = dic_list[0]
 
         if dic.mdict_enable:
-            params = (mdx, mdd_list, get_dic_attrs(dic), query_list)
+            params = (mdx, mdd_list, get_dic_attrs(dic), copy.copy(query_list))
+            # query_list需要浅拷贝
             if group_pk == 0:  # 默认查询全部词典
                 if is_mdx:
                     r_list.extend(SearchObject(*params, g_id=g_id).search_entry_list())
