@@ -1416,10 +1416,10 @@ class MDX(MDict):
             # self._stylesheet为空时，清除r'`\d+`'
             return re.sub(r'`\d+`', '', txt)
 
-    def look_up_list(self, required, f):
+    def look_up_list(self, key_list, f):
         rr_dict = {}
         t_list = []
-        for key in required:
+        for key in key_list:
             r_list = []
             key = key.strip()
             result_list = self.look_up_key(key, f)
@@ -1480,7 +1480,7 @@ class MDX(MDict):
 
         return record_list
 
-    def look_up_sug_list(self, required, num, f):
+    def look_up_sug_list(self, key_list, num, f):
         """
         search the suggestion of key
         @param key: entry to search
@@ -1489,7 +1489,7 @@ class MDX(MDict):
         """
 
         sug = []
-        for key in required:
+        for key in key_list:
 
             self._sug_flag = -1
             extra = self._decode_key_block_sug(key, f, num)

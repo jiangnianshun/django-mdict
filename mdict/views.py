@@ -1165,7 +1165,6 @@ def search_mdd(request, *args):
     dics = MdictDic.objects.filter(pk=dic_id)
     res_content = ''
     mime_type = ''
-    print(111111,request,args)
 
     if len(dics) > 0:
         res_name = unquote(args[1])
