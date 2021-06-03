@@ -123,7 +123,13 @@ function ihyperlink(e){
             }
             audio=html_escape(audio,true);
 
-            var url=$('body').attr('data-pk')+'/'+audio;
+            var dic_pk=$('body').attr('data-pk');
+
+            if($("html",parent.document).attr("data-type")=='dic'){
+                var url=audio;
+            }else{
+                var url=dic_pk+'/'+audio;
+            }
 
             if(ob.children("audio").length==0){
                 query_audio(ob,url,true,null);
