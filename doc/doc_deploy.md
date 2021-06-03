@@ -35,7 +35,7 @@ pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 4. 下载django-mdict
 
 ```
-git clone https://github.com/jiangnianshun/django-mdict.git
+git clone https://github.com/jiangnianshun/django-mdict.git --depth=1
 ```
 
 Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。

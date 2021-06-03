@@ -120,7 +120,7 @@ apache修改配置文件django-mdict.conf中的VirtualHost *:80。
 
 #### wsl下的路径
 
-windows下的c盘对于wsl下的/mnt/c/
+windows下的c盘对应wsl下的/mnt/c/
 
 #### 修改主页内容
 

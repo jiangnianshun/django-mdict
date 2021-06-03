@@ -1,28 +1,16 @@
-* 如果不需要保存旧数据，重新git clone，并清除浏览器缓存（不需要清cookie）。
-
-如果requirements1.txt中有新增的依赖，需要安装依赖。
-
-```
-pip install -r requirements1.txt
-```
+* 如果不需要保存旧数据（词典排序，词典分组，内置词条），重新git clone，并清除浏览器缓存（不需要清cookie）。
 
 如果需要转移保存的查询历史，将旧的django-mdict根目录下所有history开头的dat文件移动到新的django-mdict根目录。
 
-* 如果需要保存旧数据，运行git pull更新项目，然后清除浏览器缓存（不需要清cookie）。
+* 如果需要保存旧数据，运行git pull更新项目，并清除浏览器缓存（不需要清cookie）。
 
 ```
 git pull
 ```
 
-如果有pyx文件的修改，需要手动运行build.bat或build.sh编译pyx文件。
+删除根目录下的.cache和.dat缓存，然后运行一次run_server.bat或run_server.sh，这将安装新添加的依赖并重新cython编译。
 
-如果requirements1.text中有新增的依赖，需要安装依赖。
-
-```
-pip install -r requirements1.txt
-```
-
-如果有模型改动(models.py)，旧数据库可能无法正常使用，尝试运行
+* 如果旧数据库无法正常使用，尝试运行
 
 ```
 python manage.py makemigrations mdict
