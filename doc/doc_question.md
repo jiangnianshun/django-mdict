@@ -15,9 +15,17 @@ windows下运行django-mdict/mdict/readlib/pyx/build.bat，linux下运行django-
 
 这将对readmdict.py进行编译，编译后的pyd或so运行库在django-mdict/mdict/readlib/lib/下，编译后相比于没有编译，速度提升约1/3。
 
-4. 403错误
+4. 403错误和Operation not permitted
 
-权限问题，设置django-mdict文件夹及子文件的权限。
+权限问题，提升django-mdict文件夹及子文件的权限。
+
+```
+chmod -R 777 django-mdict
+```
+
+可能需要手动删除.Linux.cache和.Linux.dat等缓存文件。
+
+可能需要提升词典库中生成的idx文件的权限。
 
 5. Failed to enable APR_TCP_DEFER_ACCEPT
 
