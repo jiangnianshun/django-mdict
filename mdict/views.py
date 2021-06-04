@@ -238,9 +238,9 @@ def fulltext_search(request):
             temp_object = init_vars.mdict_odict[dic_file]
             if temp_object.mdx.get_fpath().endswith('.zim'):
                 if check_xapian():
-                    result, total_count, tokens = get_zim_results(*params)
+                    result, total_count, tokens, total_page_z = get_zim_results(*params)
             else:
-                result, total_count, tokens = get_es_results(*params)
+                result, total_count, tokens, total_page_z = get_es_results(*params)
     else:
         tresult1 = []
         if search_zim and check_xapian():

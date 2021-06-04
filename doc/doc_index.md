@@ -155,7 +155,7 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 
 ### admin操作和内置词典
 
-[admin操作](doc/doc_admin.md)
+[admin操作](doc_admin.md)
 
 ### 功能实现
 
