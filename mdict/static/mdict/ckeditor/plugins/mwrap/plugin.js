@@ -8,7 +8,7 @@
             }
         });
         editor.ui.addButton( 'mwrap', {
-            label: '插入wrap',
+            label: 'insert wrap',
             command: 'insertmwrap',
             toolbar: 'insert'
         });

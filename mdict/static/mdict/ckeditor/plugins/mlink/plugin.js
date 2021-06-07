@@ -8,7 +8,7 @@
             }
         });
         editor.ui.addButton( 'mlink', {
-            label: '插入link',
+            label: 'insert link',
             command: 'insertmlink',
             toolbar: 'insert'
         });
