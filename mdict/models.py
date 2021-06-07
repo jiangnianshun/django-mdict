@@ -120,6 +120,7 @@ ckeditor_ext_plugins = [
     ('mlink', '/static/mdict/ckeditor/plugins/mlink/', 'plugin.js',),
     ('mwrap', '/static/mdict/ckeditor/plugins/mwrap/', 'plugin.js',),
     ('mruby', '/static/mdict/ckeditor/plugins/mruby/', 'plugin.js',),
+    ('mbox', '/static/mdict/ckeditor/plugins/mbox/', 'plugin.js',),
     ('mathjax', '/static/mdict/ckeditor/plugins/mathjax/', 'plugin.js',),
 ]
 
