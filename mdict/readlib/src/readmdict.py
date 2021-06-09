@@ -1116,7 +1116,7 @@ class MDict(object):
                         t_list, r_s_p2 = self.search_key_block_list(key_list, len(key_list) - 1,
                                                                     math.floor(num / 2) - len(f_list),
                                                                     False)
-                        t_list[-1][2] = my_list[len(f_list)][1]
+                        t_list[-1][2] = my_list[0][1]
                         t_list.extend(my_list)
                         my_list = t_list
                 if len(b_list) < math.ceil(num / 2):
