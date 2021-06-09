@@ -1179,6 +1179,8 @@ def search_mdd(request, *args):
             mdx = item.mdx
             if mdx.get_fpath().find('.mdx') > -1:
                 res_name = res_name.replace('/', '\\')
+                if res_name[0] != '\\':
+                    res_name = '\\' + res_name
             mdd_list = item.mdd_list
             sobj = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name, is_dic=True)
             res_content, mime_type = sobj.search_mdd()
