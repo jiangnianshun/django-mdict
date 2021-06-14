@@ -23,14 +23,14 @@ function loadmore(obj1,obj2){
 	var dic_pk=$("html").attr("data-dic-pk");
 	if (obj1Height+scrollTop>=obj2Height-1) {
 	//到达底部
-	console.log("到达底部");
+	//console.log("到达底部");
 		dic_back=true;
 		p1=$("#display_list").attr("data-end-p1");
 		p2=$("#display_list").attr("data-end-p2");
 		query_scroll(p1,p2,dic_entry_nums,0);
 	}else if(scrollTop==0){
 	//到达顶部
-	console.log("到达顶部");
+	//console.log("到达顶部");
 		dic_back=false;
 		p1=$("#display_list").attr("data-start-p1");
 		p2=$("#display_list").attr("data-start-p2");
