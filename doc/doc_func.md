@@ -1,3 +1,4 @@
+  * [iframe显示](#iframe显示)
   * [mdict解析](#mdict解析)
   * [zim解析](#zim解析)
   * [原形推测和拼写检查](#原形推测和拼写检查)
@@ -7,6 +8,15 @@
   * [同名加载](#同名加载)
   * [查询历史](#查询历史)
   
+### iframe显示
+
+iframe-resizer：[https://github.com/davidjbradshaw/iframe-resizer](https://github.com/davidjbradshaw/iframe-resizer)
+
+词条使用iframe显示，高度使用iframe-resizer设置。
+
+优点：词条间完全隔离，js和css不会相互影响。
+
+缺点：1.效率低；2.高度有时候不正确。
 
 ### mdict解析
 
