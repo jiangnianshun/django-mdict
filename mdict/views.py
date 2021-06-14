@@ -1481,10 +1481,10 @@ def search_suggestion(request):
                     if temp_str.startswith(query.lower()):
                         tf1 = i
                         break
-                    elif temp_str.find(query.lower()) > 0 \
-                            or temp_str.find(q2b.lower()) > 0 \
-                            or temp_str.find(query.lower().replace(' ', '').replace('　', '')) > 0 \
-                            or temp_str.find(regp.sub('', query.lower())) > 0:
+                    elif temp_str.startswith(query.lower()) > 0 \
+                            or temp_str.startswith(q2b.lower()) > 0 \
+                            or temp_str.startswith(query.lower().replace(' ', '').replace('　', '')) > 0 \
+                            or temp_str.startswith(regp.sub('', query.lower())) > 0:
                         if tf2 == -1:
                             tf2 = i
                     elif temp_str.startswith(query.lower()[0]) or temp_str.startswith(q2b.lower()[0]):
@@ -1496,7 +1496,7 @@ def search_suggestion(request):
                     if temp_str.startswith(query.lower()):
                         tf1 = i
                         break
-                    if temp_str.find(q_s) > 0 or temp_str.find(q_t) > 0:
+                    if temp_str.startswith(q_s) > 0 or temp_str.startswith(q_t) > 0:
                         if tf2 == -1:
                             tf2 = i
                     elif temp_str.startswith(q_s[0]) or temp_str.startswith(q_t[0]):

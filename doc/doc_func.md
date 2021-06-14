@@ -56,6 +56,7 @@ zim是离线维基格式：
 
 wikipedia-维基百科
 wikibooks-维基教科书
+wiktionary-维基词典
 wikinews-维基新闻
 wikiquote-维基语录
 wikisource-维基文库
