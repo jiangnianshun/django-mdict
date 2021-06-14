@@ -1,17 +1,35 @@
-﻿CKEDITOR.plugins.add( 'mbox', {
-    icons: 'mbox',
+﻿CKEDITOR.plugins.add( 'mruby', {
+    icons: 'mruby',
     init: function( editor ) {
-        editor.addCommand( 'insertmbox', {
+        editor.addCommand( 'insertmruby', {
             exec: function( editor ) {
                 var text=editor.getSelection().getNative().toString();
-                var html_str="<span style='border:1px solid black !important'>"+text+"</span> ";
-                //末尾空格避免后面输入的文字也被加入span中
+                var item_group=text.split(/[\]」]/g);
+                var html_str="";
+
+                item_group.forEach(function(item){
+                    if(item!=""){
+                        var lmark = item.indexOf('[');
+                        if(lmark<0){
+                            lmark = item.indexOf('「');
+                        }
+                        if(lmark<0){
+                            html_str+=item;
+                        }else{
+                            var kanji=item.substring(0,lmark);
+                            var kana=item.substring(lmark+1);
+                            var rubyText="<ruby><rb>"+kanji+"</rb><rt>"+kana+"</rt><rp>("+kana+")</rp></ruby>";
+                            html_str+=rubyText;
+                        }
+                    }
+                })
+
                 editor.insertHtml(html_str);
             }
         });
-        editor.ui.addButton( 'mbox', {
-            label: 'insert box',
-            command: 'insertmbox',
+        editor.ui.addButton( 'mruby', {
+            label: 'convert to ruby tag',
+            command: 'insertmruby',
             toolbar: 'insert'
         });
     }
