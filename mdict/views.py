@@ -240,7 +240,8 @@ def fulltext_search(request):
                 if check_xapian():
                     result, total_count, tokens, total_page_z = get_zim_results(*params)
             else:
-                result, total_count, tokens, total_page_z = get_es_results(*params)
+                result, total_count, tokens = get_es_results(*params)
+                total_page_z = 0
     else:
         tresult1 = []
         if search_zim and check_xapian():
