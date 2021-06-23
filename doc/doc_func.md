@@ -16,7 +16,7 @@ iframe-resizer：[https://github.com/davidjbradshaw/iframe-resizer](https://gith
 
 优点：词条间完全隔离，js和css不会相互影响。
 
-缺点：1.效率低；2.高度有时候不正确。
+缺点：1.效率低；2.高度有时候不正确；3.部分在线网址不支持在iframe中显示。
 
 ### mdict解析
 

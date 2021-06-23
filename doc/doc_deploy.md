@@ -142,3 +142,5 @@ sudo service apache2 restart
 停止apache
 sudo service apache2 stop
 ```
+
+ubuntu上apache错误日志的位置/var/log/apache2/error.log
