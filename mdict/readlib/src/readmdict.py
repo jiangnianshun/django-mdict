@@ -123,6 +123,7 @@ def _parse_header(header):
         tagdict[key] = _unescape_entities(value)
     return tagdict
 
+
 reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|]'
 regp = re.compile(reg)
 
@@ -535,6 +536,8 @@ class MDict(object):
         # decompressed_size_b = -1  # 之前块的累计解压大小
         compressed_size_a = -1  # 之后块的累计压缩大小
         decompressed_size_a = -1  # 之后块的累计解压大小
+        compressed_size_b2 = -1  # 之前第2块的累计压缩大小
+        decompressed_size_b2 = -1  # 之前第2块的累计解压大小
 
         key = self.process_str_keys(key)
 
@@ -546,7 +549,7 @@ class MDict(object):
         #     return -1, -1, -1, -1, -1, -1
         if self.compare_keys(key, key_block_info_list[0][0]) < 0 or \
                 self.compare_keys(key, key_block_info_list[length - 1][1]) > 0:
-            return -1, -1, -1, -1, -1, -1
+            return -1, -1, -1, -1, -1, -1, -1, -1
 
         if length == 1:  # collins词典mdd的第一个key_block长度1，只有css文件。
             compressed_size = key_block_info_list[length - 1][2]
@@ -573,8 +576,17 @@ class MDict(object):
             compressed_size, decompressed_size, compressed_size_b, decompressed_size_b, compressed_size_a, \
             decompressed_size_a, r_p1 = self.reduce_key_info(0, length - 1, key)
         self.t_p1 = r_p1
+
+        if r_p1 - 2 >= 0:
+            compressed_size_b2 = key_block_info_list[r_p1 - 2][2]
+            decompressed_size_b2 = key_block_info_list[r_p1 - 2][3]
+        else:
+            if compressed_size_b != 0:
+                compressed_size_b2 = 0
+                decompressed_size_b2 = 0
+
         return compressed_size, decompressed_size, compressed_size_b, decompressed_size_b, compressed_size_a, \
-               decompressed_size_a
+               decompressed_size_a, compressed_size_b2, decompressed_size_b2
 
     def get_key_block_size_list(self, p):
         # compressed_size = -1  # 累计压缩大小
@@ -644,7 +656,7 @@ class MDict(object):
                                 my_end = -1
 
                             entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
-                            result_list.append((my_start, my_end, self.t_p1, p_now, entry))
+                            result_list.append([my_start, my_end, self.t_p1, p_now, entry])
                             return result_list
                         p_now -= 1
 
@@ -662,7 +674,7 @@ class MDict(object):
                             else:
                                 my_end = -1
                             entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
-                            result_list.append((my_start, my_end, self.t_p1, p_now, entry))
+                            result_list.append([my_start, my_end, self.t_p1, p_now, entry])
                             return result_list
                         p_now += 1
                 return result_list  # 没有查到返回空
@@ -683,7 +695,7 @@ class MDict(object):
                                 my_end = -1
 
                             entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
-                            result_list.append((my_start, my_end, self.t_p1, p_now, entry))
+                            result_list.append([my_start, my_end, self.t_p1, p_now, entry])
 
                         p_now -= 1
 
@@ -702,7 +714,7 @@ class MDict(object):
                             else:
                                 my_end = -1
                             entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
-                            result_list.append((my_start, my_end, self.t_p1, p_now, entry))
+                            result_list.append([my_start, my_end, self.t_p1, p_now, entry])
 
                         p_now += 1
 
@@ -719,7 +731,7 @@ class MDict(object):
                 else:
                     my_end = -1
                 entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
-                result_list.append((my_start, my_end, self.t_p1, p_now, entry))
+                result_list.append([my_start, my_end, self.t_p1, p_now, entry])
                 p_now -= 1
 
         if direction >= 0:  # 向后查找
@@ -736,7 +748,7 @@ class MDict(object):
                     my_end = -1
                 entry = key_list[p_now][1].decode(self._encoding, errors='ignore')
 
-                result_list.append((my_start, my_end, self.t_p1, p_now, entry))
+                result_list.append([my_start, my_end, self.t_p1, p_now, entry])
                 p_now += 1
 
         return result_list
@@ -840,7 +852,7 @@ class MDict(object):
 
         # 获取key_t所在块和之前及之后块的累积压缩和解压缩大小
         compressed_size, decompressed_size, compressed_size_b, decompressed_size_b, compressed_size_a, \
-        decompressed_size_a = self.get_block_size(key)
+        decompressed_size_a, compressed_size_b2, decompressed_size_b2 = self.get_block_size(key)
 
         if compressed_size == -1:
             # 未查询到
@@ -858,6 +870,21 @@ class MDict(object):
 
         result_list = self.search_key_block_position(key, key_list)
 
+        # 在stripkey下存个多个结果，前一个块也可能有结果，比如LDOCE6++ En-Cn V3.0查spring-training。
+        if self.compare_keys(key, key_list[0][1]) == 0 and compressed_size_b2 != -1:
+            self.t_p1 -= 1
+
+            p -= (compressed_size_b - compressed_size_b2)
+            f.seek(p)
+            key_block = self.get_key_block(f, compressed_size_b, decompressed_size_b, compressed_size_b2,
+                                           decompressed_size_b2)
+            key_list = self._split_key_block(key_block)
+            tresult_list = self.search_key_block_position(key, key_list)
+            if len(tresult_list) > 0:
+                tresult_list[-1][1] = result_list[0][0]
+                tresult_list.extend(result_list)
+                result_list = tresult_list
+
         # 由于存在一个key_block对应多个record_block的情况，因此当my_end==-1时，提取下一个块第一个词条的位置赋值给my_end。
 
         if len(result_list) > 0:
@@ -867,13 +894,13 @@ class MDict(object):
                                                    decompressed_size)
                     my_end = unpack(self._number_format, key_block[0:self._number_width])[0]
                     if result_list[0][1] == -1:
-                        item = list(result_list[0])
+                        item = result_list[0]
                         item[1] = my_end
-                        result_list[0] = tuple(item)
+                        result_list[0] = item
                     elif result_list[len(result_list) - 1][1] == -1:
-                        item = list(result_list[len(result_list) - 1])
+                        item = result_list[len(result_list) - 1]
                         item[1] = my_end
-                        result_list[-1] = tuple(item)
+                        result_list[-1] = item
 
         return result_list
 
@@ -889,7 +916,7 @@ class MDict(object):
             p += 4
 
         compressed_size, decompressed_size, compressed_size_b, decompressed_size_b, compressed_size_a, \
-        decompressed_size_a = self.get_block_size(key)
+        decompressed_size_a, compressed_size_b2, decompressed_size_b2 = self.get_block_size(key)
 
         if compressed_size == -1:
             return ['']
