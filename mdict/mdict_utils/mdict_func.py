@@ -227,3 +227,25 @@ def check_xapian():
         return False
 
     return True
+
+
+def clear_duplication(record_list):
+    # 查询coaling station,enwiki-p1指向fuelling station，enwiki-p3指向Fuelling station，最后是重复的词条，因此这里比较f_pk,f_p1,f_p2，如果相同，说明重复
+    # 其2是简繁查询，有的词典自带简繁转化，因此查一遍简，再查一遍繁，合并，导致结果重复
+    for i in range(len(record_list) - 1, -1, -1):
+        mdx_i = record_list[i]
+        i_pk = mdx_i.f_pk
+        i_p1 = mdx_i.f_p1
+        i_p2 = mdx_i.f_p2
+        d_list = []
+        if i_pk != -1:
+            for j in range(len(record_list) - 1, -1, -1):
+                mdx_j = record_list[j]
+                j_pk = mdx_j.f_pk
+                j_p1 = mdx_j.f_p1
+                j_p2 = mdx_j.f_p2
+                if i_pk == j_pk and i_p1 == j_p1 and i_p2 == j_p2:
+                    d_list.append(j)
+        if len(d_list) > 1:
+            del record_list[i]
+    return record_list

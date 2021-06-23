@@ -24,7 +24,7 @@ except Exception as e:
 
 from .entry_object import entryObject
 from .init_utils import init_vars
-from .mdict_func import replace_res_name, is_local, get_m_path, replace_res_name2
+from .mdict_func import replace_res_name, is_local, get_m_path, replace_res_name2, clear_duplication
 from .exception_decorator import search_exception
 from base.base_func import guess_mime, print_log_info
 
@@ -320,7 +320,7 @@ class SearchObject:
 
     def process_zim_query(self):
         if self.query == 'main.html':
-            self.query_list.append('/main.html')
+            self.query_list.insert(0, '/main.html')
         else:
             if self.query.find('A/') == 0:
                 tquery = self.query[2:]
@@ -338,21 +338,21 @@ class SearchObject:
 
             tquery = 'A/' + '_'.join(tqlist2)
             if tquery not in self.query_list:
-                self.query_list.append(tquery)
+                self.query_list.insert(0, tquery)
 
             if not tquery.endswith('.html'):
                 tquery += '.html'
                 if tquery not in self.query_list:
-                    self.query_list.append(tquery)
+                    self.query_list.insert(0, tquery)
 
             tquery = 'A/' + '_'.join(tqlist)
             if tquery not in self.query_list:
-                self.query_list.append(tquery)
+                self.query_list.insert(0, tquery)
 
             if not tquery.endswith('.html'):
                 tquery += '.html'
                 if tquery not in self.query_list:
-                    self.query_list.append(tquery)
+                    self.query_list.insert(0, tquery)
 
     @search_exception()
     def search_entry_list(self):
@@ -386,6 +386,7 @@ class SearchObject:
                             entryObject(self.dic_name, rt[4], record, self.prior, self.dic_id, self.f_pk, self.f_p1,
                                         self.f_p2))
         self.close_all()
+        r_list = clear_duplication(r_list)
         return r_list
 
     @search_exception()

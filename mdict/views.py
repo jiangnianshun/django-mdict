@@ -26,14 +26,15 @@ from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 
-from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs, check_xapian
+from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs, check_xapian, \
+    clear_duplication
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
 from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
 from mdict.mdict_utils.loop_decorator import loop_mdict_list, innerObject
 from mdict.mdict_utils.init_utils import init_vars, sound_list
 from mdict.mdict_utils.mdict_config import *
 from mdict.mdict_utils.search_object import SearchObject
-from mdict.mdict_utils.search_utils import search, clear_duplication, search_bultin_dic_sug, search_mdx_sug, \
+from mdict.mdict_utils.search_utils import search, search_bultin_dic_sug, search_mdx_sug, \
     search_revise
 from .mdict_utils.entry_object import entryObject
 
@@ -141,7 +142,7 @@ class MdictEntryViewSet(viewsets.ViewSet):
             record_list = search(query_list, group)
             for query in query_list:
                 record_list = search_revise(query, record_list, self.is_en)
-            record_list = clear_duplication(record_list)
+            # record_list = clear_duplication(record_list)
 
             if len(record_list) == 0 and query.find('.htm') != -1:
                 query = query[:query.find('.htm')]
