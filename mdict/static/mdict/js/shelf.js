@@ -246,13 +246,17 @@ function get_header(container, dic_pk, dic_name, type){
     });
 }
 
-function shelf_dic_btn(type){
-    var dic_pk=$("#modal-shelf-dic").attr('data-pk');
-    if(type==0){
-        window.open('/mdict/dic/'+dic_pk+'/');
-    }else if(type==1){
-        window.open('/mdict/esdic/'+dic_pk+'/');
+function shelf_dic_btn(type1,type2){
+    if(type1==1){
+        var dic_pk=$("#modal-shelf-dic").attr('data-pk');
     }else{
+        var dic_pk=$("#offcanvas-shelf-dic").attr('data-pk');
+    }
+    if(type2==0){
+        window.open('/mdict/dic/'+dic_pk+'/');
+    }else if(type2==1){
+        window.open('/mdict/esdic/'+dic_pk+'/');
+    }else if(type2==2){
         window.open('/admin/mdict/mdictdic/'+dic_pk+'/');
     }
 }
