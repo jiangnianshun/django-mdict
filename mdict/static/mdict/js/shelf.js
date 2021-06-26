@@ -109,6 +109,7 @@ function get_items(container,style){
                     set_canvas('textCanvas2');
                     tCtx2.drawImage(document.getElementById('textCanvas1'),0,0);
                     tCtx2.fillStyle = '#ffffff';
+                    tCtx2.font = 12*devicePixelRatio+'px Arial';
 
                     var new_text_array = new Array();
                     var row_width = 0;
