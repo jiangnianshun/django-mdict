@@ -59,9 +59,9 @@
 <script src="/static/jquery/jquery.min.js"></script>
 <script src="/static/mdict/wordcloud/wordcloud2.js"></script>
 <script>
-    function resizeCanvasToDisplaySize() {
+    function resizeCanvasToDisplaySize(canvas_id) {
        // look up the size the canvas is being displayed
-       var canvas = document.getElementById('wordcloud_canvas');
+       var canvas = document.getElementById(canvas_id);
        var width = canvas.clientWidth;
        var height = canvas.clientHeight;
 
@@ -78,7 +78,7 @@
     function change_canvas(){
         $("#wordcloud_canvas").width($("body").width());
         $("#wordcloud_canvas").height($("body").height());
-        resizeCanvasToDisplaySize();
+        resizeCanvasToDisplaySize('wordcloud_canvas');
         get_word_list();
     }
 

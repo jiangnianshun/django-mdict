@@ -1,85 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>书架</title>
-    <link rel="manifest" href="/static/json/manifest.json">
-	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/bootstrap/font/bootstrap-icons.css">
-    <style>
-        body{overflow-x:hidden;margin-top:3rem;margin-bottom:3rem;}
-        a{text-decoration:none;color:black;}
-        .row{height:12rem;}
-        .col{height:12rem;}
-        .card{height:10rem;cursor:pointer;}
-        .card-body{color:gray;padding:0.5rem;}
-        .card-body h5{color:black;}
-        .card-body i{color:orange;}
-        .container{margin-top:2rem;}
-        .container img{height:6rem;}
-        .card-title{
-        font-size:0.8rem;
-        max-height:2.5rem;
-        overflow:hidden;
-        }
-        .shadow:hover{
-        box-shadow: 0 .5rem 1rem rgba(240,240,240,.15)!important;
-        }
-    </style>
-</head>
-<body class="bg-light">
-<div class="btn-group" style="position:fixed;top:1rem;left:1.5rem;z-index:99;">
-    <button type="button" class="btn btn-primary"><i class="bi bi-house-door" onclick="window.location.href='/';"></i></button>
-    <input autocomplete="off" id="mdict-filter-input" class="form-control" type="text">
-    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        分组
-    </button>
-    <ul class="dropdown-menu" id="dic-group">
-        <li onclick="start_dic_filter(0)"><span class="dropdown-item" data-pk=0>全部分组</span></li>
-    </ul>
-    <button type="button" class="btn btn-primary" id="dic-num"></button>
-</div>
-<div class="container">
-    <div class="row"></div>
-</div>
-<div aria-hidden="true" class="modal fade" id="modal-shelf-dic"
-     role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-shelf-dic-title">
-                    词典简介
-                </h5>
-                <div class="input-group">
-                    <button type="button" class="btn btn-light" onclick="shelf_dic_btn(0)">正查</button>
-                    <button type="button" class="btn btn-light" onclick="shelf_dic_btn(1)">全文查询</button>
-                    <button type="button" class="btn btn-light" onclick="shelf_dic_btn(2)">编辑</button>
-                </div>
-                <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-                    关闭
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-</body>
-<script src="/static/jquery/jquery.min.js"></script>
-<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/static/mdict/iframe-resizer/js/iframeResizer.min.js"></script>
-<script src="/static/mdict/js/transform.js"></script>
-<script src="/static/mdict/js/base_func.js"></script>
-<script src="/static/mdict/js/shelf.js"></script>
-<script>
-init_mdict_filter();
-init_dropdown();
-get_items($('.container .row'));
-</script>
-</html>
+{% extends "mdict/shelf-base.html" %}
+
+{% block head %}
+<style>
+    a{text-decoration:none;color:black;}
+    .row{height:12rem;}
+    .col{height:12rem;}
+    .card{height:10rem;cursor:pointer;}
+    .card-body{color:gray;padding:0.5rem;}
+    .card-body h5{color:black;}
+    .card-body i{color:orange;}
+    .container{margin-top:2rem;}
+    .container img{height:6rem;}
+    .card-title{
+    font-size:0.8rem;
+    max-height:2.5rem;
+    overflow:hidden;
+    }
+    .shadow:hover{
+    box-shadow: 0 .5rem 1rem rgba(240,240,240,.15)!important;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    {% include "mdict/shelf-filter.html" %}
+    {% include "mdict/shelf-modal.html" %}
+{% endblock %}
+
+{% block script %}
+    get_items($('.container .row'),1);
+{% endblock %}

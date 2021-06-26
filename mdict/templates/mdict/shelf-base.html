@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>书架</title>
+    <link rel="manifest" href="/static/json/manifest.json">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/font/bootstrap-icons.css">
+    <style>
+        body{overflow-x:hidden;margin-top:3.5rem;margin-bottom:3rem;}
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="row"></div>
+    </div>
+    <canvas id="textCanvas1" style="display:none;width:110px;height:150px;" width="110" height="150"></canvas>
+    <canvas id="textCanvas2" style="display:none;width:110px;height:150px;" width="110" height="150"></canvas>
+    {% block body %}{% endblock %}
+</body>
+<script src="/static/jquery/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/mdict/iframe-resizer/js/iframeResizer.min.js"></script>
+<script src="/static/mdict/js/transform.js"></script>
+<script src="/static/mdict/js/base_func.js"></script>
+<script src="/static/mdict/js/shelf.js"></script>
+<script>
+    init_mdict_filter();
+    init_dropdown();
+    {% block script %}{% endblock %}
+</script>
+</html>

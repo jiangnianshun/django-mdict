@@ -1,0 +1,17 @@
+{% extends "mdict/shelf-base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/mdict/css/shelf2.css">
+<style>
+    .book{margin-bottom:35px;}
+    .book img{background-color:white;}
+</style>
+{% endblock %}
+
+{% block body %}
+    {% include "mdict/shelf-filter.html" %}
+{% endblock %}
+
+{% block script %}
+    get_items($('.container .row'),2);
+{% endblock %}

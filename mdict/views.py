@@ -1281,6 +1281,8 @@ def wordcloud(request):
 def shelf(request):
     return render(request, 'mdict/shelf.html')
 
+def shelf2(request):
+    return render(request, 'mdict/shelf2.html')
 
 def doc(request):
     return render(request, 'mdict/md.html')
