@@ -85,14 +85,10 @@ dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readli
 
 ### 说明文档
 
-[常用操作](doc/doc_op.md)
-
 [功能实现](doc/doc_func.md)
+
+[常用操作](doc/doc_op.md)
 
 [说明文档](doc/doc_index.md)
 
 [样式](doc/doc_style.md)
-
-### 邮箱
-
-jiangnianshun@outlook.com

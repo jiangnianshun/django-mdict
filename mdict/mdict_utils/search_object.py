@@ -322,9 +322,9 @@ class SearchObject:
         if self.query == 'main.html':
             self.query_list.insert(0, '/main.html')
         else:
-            if self.query.find('A/') == 0:
+            if self.query.startswith('A/'):
                 tquery = self.query[2:]
-            elif self.query.find('/') == 0:
+            elif self.query.startswith('/'):
                 tquery = self.query[1:]
             else:
                 tquery = self.query
