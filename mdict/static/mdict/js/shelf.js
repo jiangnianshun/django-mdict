@@ -6,7 +6,14 @@ function start_modal(obj){
     var dic_pk=$(obj).attr('data-pk');
     $("#modal-shelf-dic").attr('data-pk',dic_pk);
     var dic_name=$(obj).attr('data-name');
-    get_header($("#modal-shelf-dic .modal-body"),dic_pk,dic_name);
+    get_header($("#modal-shelf-dic .modal-body"),dic_pk,dic_name,1);
+}
+
+function start_offcanvas(obj){
+    var dic_pk=$(obj).attr('data-pk');
+    $("#offcanvas-shelf-dic").attr('data-pk',dic_pk);
+    var dic_name=$(obj).attr('data-name');
+    get_header($("#offcanvas-shelf-dic .offcanvas-body"),dic_pk,dic_name,2);
 }
 
 function set_canvas(canvas_id) {
@@ -75,7 +82,7 @@ function get_items(container,style){
                     if(dic_icon.indexOf("/static")==0){
                         var s=`
                         <div class="col">
-                            <span class='book dic-container' title="${html_escape(dic_name)}" data-pk=${dic_pk} data-name="${html_escape(dic_name)}" data-file="${html_escape(dic_file)}">
+                            <span class='book dic-container' title="${html_escape(dic_name)}" data-pk=${dic_pk} data-name="${html_escape(dic_name)}" data-file="${html_escape(dic_file)}" onclick="start_offcanvas(this)">
                                 <img id=${dic_id} src="${html_escape(dic_icon,false)}"></img>
                             </span>
                         </div>
@@ -83,7 +90,7 @@ function get_items(container,style){
                     }else{
                         var s=`
                         <div class="col">
-                            <span class='book dic-container' title="${html_escape(dic_name)}" data-pk=${dic_pk} data-name="${html_escape(dic_name)}" data-file="${html_escape(dic_file)}">
+                            <span class='book dic-container' title="${html_escape(dic_name)}" data-pk=${dic_pk} data-name="${html_escape(dic_name)}" data-file="${html_escape(dic_file)}" onclick="start_offcanvas(this)">
                                 <img src="${html_escape(dic_icon,false)}"></img>
                             </span>
                         </div>
@@ -144,10 +151,14 @@ function get_items(container,style){
     });
 }
 
-function get_header(container, dic_pk, dic_name){
+function get_header(container, dic_pk, dic_name, type){
     container.empty();
 
-    $('#modal-shelf-dic-title').text(dic_name);
+    if(type==1){
+        $('#modal-shelf-dic-title').text(dic_name);
+    }else{
+        $('#offcanvas-shelf-dic-title').text(dic_name);
+    }
 
     var data={"dic_pk":dic_pk,"is_dic":false};
     $.ajax({
@@ -220,9 +231,14 @@ function get_header(container, dic_pk, dic_name){
                 heightCalculationMethod:'documentElementOffset',
                 warningTimeout:0,
             },iframe);
-            var modal_shelf_dic = new bootstrap.Modal(document.getElementById('modal-shelf-dic'), {});
-            modal_shelf_dic.show();
 
+            if(type==1){
+                var modal_shelf_dic = new bootstrap.Modal(document.getElementById('modal-shelf-dic'), {});
+                modal_shelf_dic.show();
+            }else{
+                var offcanvas_shelf_dic = new bootstrap.Offcanvas(document.getElementById('offcanvas-shelf-dic'), {});
+                offcanvas_shelf_dic.show();
+            }
         },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);
