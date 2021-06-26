@@ -3,7 +3,7 @@ var script=`
 `;
 
 function set_body_height(){
-    $("body").height($(window).height());
+    $("body").height($(window).height()-60);
 }
 
 function start_modal(obj){
