@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap/font/bootstrap-icons.css">
     <style>
-        body{overflow-x:hidden;margin-top:3.5rem;margin-bottom:3rem;}
+        html,body{overflow-x:hidden;padding-top:3rem;padding-bottom:3rem;}
     </style>
     {% block head %}{% endblock %}
 </head>
@@ -28,6 +28,8 @@
 <script src="/static/mdict/js/base_func.js"></script>
 <script src="/static/mdict/js/shelf.js"></script>
 <script>
+    set_body_height();
+    $(window).resize(set_body_height);
     init_mdict_filter();
     init_dropdown();
     {% block script %}{% endblock %}

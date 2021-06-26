@@ -2,6 +2,10 @@ var script=`
 <script src='/static/mdict/iframe-resizer/js/iframeResizer.contentWindow.min.js'></script>
 `;
 
+function set_body_height(){
+    $("body").height($(window).height());
+}
+
 function start_modal(obj){
     var dic_pk=$(obj).attr('data-pk');
     $("#modal-shelf-dic").attr('data-pk',dic_pk);
