@@ -1302,32 +1302,34 @@ def grouping(request):
 
 def create_li(content, is_dir, file_type=''):
     if is_dir:
-        return '<li data-path="' + str(content) + '" class="jstree-closed">' + str(content) + '</li>'
+        return '<li data-path="' + str(content) + '" class="jstree-closed path-dir">' + str(content) + '</li>'
     else:
-        if file_type == 'mdd':
-            return '<li data-path="' + str(content) + '" data-jstree=\'{"disabled":true}\'>' + str(content) + '</li>'
-        else:
-            dic_name = content[:content.rfind('.')]
-            if dic_name in init_vars.mdict_odict.keys():
-                item = init_vars.mdict_odict[dic_name]
-                mdx = item.mdx
-                icon = item.icon
-                icon_path = get_icon_path(mdx, icon)
-                return '<li data-path="' + str(content) + '" data-jstree=\'{"icon":"' + icon_path + '"}\'>' + str(
-                    content) + '</li>'
+        dic_name = content[:content.rfind('.')]
+        if dic_name in init_vars.mdict_odict.keys():
+            item = init_vars.mdict_odict[dic_name]
+            mdx = item.mdx
+            icon = item.icon
+            icon_path = get_icon_path(mdx, icon)
+            if file_type == 'mdd':
+                return '<li class="path-file" data-path="' + str(content) + '" data-jstree=\'{"disabled":true,"icon":"' \
+                       + icon_path + '"}\'>' + str(content) + '</li>'
             else:
-                return '<li data-path="' + str(content) + '">' + str(content) + '</li>'
+                return '<li class="path-file" data-path="' + str(content) + '" data-jstree=\'{"icon":"' \
+                       + icon_path + '"}\'>' + str(
+                    content) + '</li>'
+        else:
+            return ''
 
 
 def create_li2(group_name, group_pk):
-    return '<li data-pk="' + str(group_pk) + '" class="jstree-closed">' + str(group_name) + '</li>'
+    return '<li data-pk="' + str(group_pk) + '" class="jstree-closed group-item" data-jstree=\'{"icon":"bi-window-dock"}\'>' + str(group_name) + '</li>'
 
 
 def create_li3(mdict_name, mdict_file, mdict_pk):
     if mdict_name == mdict_file:
-        return '<li data-pk="' + str(mdict_pk) + '">' + str(mdict_name) + '</li>'
+        return '<li class="dic-item" data-pk="' + str(mdict_pk) + '" data-jstree=\'{"icon":"bi-file-earmark-fill"}\'>' + str(mdict_name) + '</li>'
     else:
-        return '<li data-pk="' + str(mdict_pk) + '">' + str(
+        return '<li class="dic-item" data-pk="' + str(mdict_pk) + '" data-jstree=\'{"icon":"bi-file-earmark-fill"}\'>' + str(
             mdict_name) + '<span style="color:red;"> (' + mdict_file + ')</span></li>'
 
 
@@ -1346,7 +1348,7 @@ def create_ul(path):
 
 
 def create_ul2(group_list):
-    ul_ele = '<ul><li data-jstree=\'{"opened":true}\'>分组<ul>'
+    ul_ele = '<ul><li class="group-root" data-jstree=\'{"opened":true,"icon":"bi-wallet-fill"}\'>分组<ul>'
     for gp in group_list:
         ul_ele += create_li2(gp.dic_group_name, gp.pk)
     ul_ele += '</ul></li></ul>'
@@ -1365,7 +1367,7 @@ def grouping_mdictpath(request):
     path_name = request.GET.get("path", "")
     if path_name == "":
         root_content = "词典库(" + mdict_root_path + ")"
-        jt_ele = '<ul><li data-path="root" data-jstree=\'{"opened":true}\'>' + root_content
+        jt_ele = '<ul><li data-path="root" data-jstree=\'{"opened":true,"icon":"bi-wallet-fill"}\' class="path-root">' + root_content
         jt_ele += create_ul(mdict_root_path)
         jt_ele += '</li></ul>'
     else:
