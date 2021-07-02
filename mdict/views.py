@@ -998,28 +998,34 @@ def search_mdx_record(request):
     return HttpResponse(json.dumps(return_list))
 
 
+def get_icon_path(mdx, icon):
+    file = mdx.get_fname()
+    m_path = get_m_path(mdx)
+    if icon == 'none':
+        dic_icon = '/static/mdict/img/book.png'
+    else:
+        if is_local:
+            dic_icon = os.path.join('/', m_path, file + '.' + icon)
+        else:
+            if m_path == '':
+                t_path = file
+            else:
+                t_path = m_path + '/' + file
+            dic_icon = '/mdict/exfile/?path=' + t_path + '.' + icon
+    return dic_icon
+
+
 @loop_mdict_list(return_type=2)
 class get_mdict_list_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         file = mdx.get_fname()
-        m_path = get_m_path(mdx)
         if mdx.get_fpath().endswith('.zim'):
             m_type = 'zim'
         else:
             m_type = 'mdx'
         dic = get_or_create_dic(file)
         file = quote(file)
-        if icon == 'none':
-            dic_icon = os.path.join('/', 'static', 'mdict', 'img', 'book.png')
-        else:
-            if is_local:
-                dic_icon = os.path.join('/', m_path, file + '.' + icon)
-            else:
-                if m_path == '':
-                    t_path = file
-                else:
-                    t_path = m_path + '/' + file
-                dic_icon = '/mdict/exfile/?path=' + t_path + '.' + icon
+        dic_icon = get_icon_path(mdx, icon)
         item = {'dic_name': dic.mdict_name, 'dic_file': file, 'dic_icon': dic_icon, 'dic_pror': dic.mdict_priority,
                 'dic_pk': dic.pk, 'dic_enable': dic.mdict_enable, 'dic_es_enable': dic.mdict_es_enable,
                 'dic_type': m_type}
@@ -1281,11 +1287,109 @@ def wordcloud(request):
 def shelf(request):
     return render(request, 'mdict/shelf.html')
 
+
 def shelf2(request):
     return render(request, 'mdict/shelf2.html')
 
+
 def doc(request):
     return render(request, 'mdict/md.html')
+
+
+def grouping(request):
+    return render(request, 'mdict/grouping.html')
+
+
+def create_li(content, is_dir, file_type=''):
+    if is_dir:
+        return '<li data-path="' + str(content) + '" class="jstree-closed">' + str(content) + '</li>'
+    else:
+        if file_type == 'mdd':
+            return '<li data-path="' + str(content) + '" data-jstree=\'{"disabled":true}\'>' + str(content) + '</li>'
+        else:
+            dic_name = content[:content.rfind('.')]
+            if dic_name in init_vars.mdict_odict.keys():
+                item = init_vars.mdict_odict[dic_name]
+                mdx = item.mdx
+                icon = item.icon
+                icon_path = get_icon_path(mdx, icon)
+                return '<li data-path="' + str(content) + '" data-jstree=\'{"icon":"' + icon_path + '"}\'>' + str(
+                    content) + '</li>'
+            else:
+                return '<li data-path="' + str(content) + '">' + str(content) + '</li>'
+
+
+def create_li2(group_name, group_pk):
+    return '<li data-pk="' + str(group_pk) + '" class="jstree-closed">' + str(group_name) + '</li>'
+
+
+def create_li3(mdict_name, mdict_file, mdict_pk):
+    if mdict_name == mdict_file:
+        return '<li data-pk="' + str(mdict_pk) + '">' + str(mdict_name) + '</li>'
+    else:
+        return '<li data-pk="' + str(mdict_pk) + '">' + str(
+            mdict_name) + '<span style="color:red;"> (' + mdict_file + ')</span></li>'
+
+
+def create_ul(path):
+    ul_ele = "<ul>"
+    for fl in os.listdir(path):
+        fl_path = os.path.join(path, fl)
+        if os.path.isdir(fl_path):
+            ul_ele += create_li(fl, True)
+        elif fl.endswith('mdd'):
+            ul_ele += create_li(fl, False, 'mdd')
+        elif fl.endswith('mdx') or fl.endswith('zim'):
+            ul_ele += create_li(fl, False)
+    ul_ele += '</ul>'
+    return ul_ele
+
+
+def create_ul2(group_list):
+    ul_ele = '<ul><li data-jstree=\'{"opened":true}\'>分组<ul>'
+    for gp in group_list:
+        ul_ele += create_li2(gp.dic_group_name, gp.pk)
+    ul_ele += '</ul></li></ul>'
+    return ul_ele
+
+
+def create_ul3(dic_list):
+    ul_ele = '<ul>'
+    for dic in dic_list:
+        ul_ele += create_li3(dic.mdict_name, dic.mdict_file, dic.pk)
+    ul_ele += '</ul>'
+    return ul_ele
+
+
+def grouping_mdictpath(request):
+    path_name = request.GET.get("path", "")
+    if path_name == "":
+        root_content = "词典库(" + mdict_root_path + ")"
+        jt_ele = '<ul><li data-path="root" data-jstree=\'{"opened":true}\'>' + root_content
+        jt_ele += create_ul(mdict_root_path)
+        jt_ele += '</li></ul>'
+    else:
+        if path_name == 'root':
+            jt_ele = create_ul(mdict_root_path)
+        else:
+            jt_ele = create_ul(os.path.join(mdict_root_path, path_name))
+    return HttpResponse(jt_ele)
+
+
+def grouping_mdictgroup(request):
+    group_pk = int(request.GET.get("group", 0))
+    if group_pk == 0:
+        group_list = MdictDicGroup.objects.all()
+        jt_ele = create_ul2(group_list)
+    else:
+        group_list = MdictDicGroup.objects.filter(pk=group_pk)
+        if len(group_list) > 0:
+            dic_list = group_list[0].mdict_group.all()
+            jt_ele = create_ul3(dic_list)
+        else:
+            jt_ele = ''
+
+    return HttpResponse(jt_ele)
 
 
 def read_doc(doc_path):

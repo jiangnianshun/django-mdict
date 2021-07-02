@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>分组</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/mdict/jstree/themes/default/style.min.css" />
+    <style>
+        i.jstree-themeicon-custom{background-size:16px !important;}
+        .jstree-default a {
+            white-space:normal !important; height: auto;
+        }
+        .jstree-anchor {
+            height: auto !important;
+        }
+        .jstree-default li > ins {
+            vertical-align:top;
+        }
+        .jstree-leaf {
+            height: auto;
+        }
+        .jstree-leaf a{
+            height: auto !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="margin-top:2rem;margin-bottom:2rem;">
+        <div class="row">
+            <div id="grouping-left" class="col"></div>
+            <div id="grouping-right" class="col"></div>
+        </div>
+    </div>
+</body>
+<script src="/static/jquery/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/mdict/jstree/jstree.min.js"></script>
+<script>
+    $(function () {
+        $('#grouping-left').jstree({
+            'plugins' : [ "checkbox" ],
+            'core' : {
+                'data' : {
+                    'url' : 'mdictpath/',
+                    'data' : function (node) {
+                        let data_path="";
+                        if(node.id!="#"){
+                            let cur_ele=$("#"+node.id);
+                            let pre_ele=$("#"+node.id).parent();
+                            if(pre_ele.is("ul")){
+                                pre_ele=pre_ele.parent();
+                            }
+                            let cur_path=cur_ele.attr("data-path");
+                            let pre_path=pre_ele.attr("data-path");
+                            while(typeof(pre_path)!="undefined"){
+                                if(pre_path!="root"){
+                                    cur_path=pre_path+"/"+cur_path;
+                                }
+                                cur_ele=pre_ele;
+                                pre_ele=cur_ele.parent();
+                                if(pre_ele.is("ul")){
+                                    pre_ele=pre_ele.parent();
+                                }
+                                pre_path=pre_ele.attr("data-path");
+                            }
+                            data_path=cur_path;
+                        }
+                        return { 'path' : data_path };
+                    }
+                }
+            }
+        });
+        $('#grouping-right').jstree({
+            'core' : {
+                'data' : {
+                    'url' : 'mdictgroup/',
+                    'data' : function (node) {
+                        let group_pk=0;
+                        if(node.id!="#"){
+                            let cur_ele=$("#"+node.id);
+                            group_pk=cur_ele.attr("data-pk");
+                        }
+                        return { 'group' : group_pk };
+                    }
+                }
+            }
+        });
+    });
+</script>
+</html>
