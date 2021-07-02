@@ -1322,14 +1322,18 @@ def create_li(content, is_dir, file_type=''):
 
 
 def create_li2(group_name, group_pk):
-    return '<li data-pk="' + str(group_pk) + '" class="jstree-closed group-item" data-jstree=\'{"icon":"bi-window-dock"}\'>' + str(group_name) + '</li>'
+    return '<li data-pk="' + str(
+        group_pk) + '" class="jstree-closed group-item" data-jstree=\'{"icon":"bi-window-dock"}\'>' + str(
+        group_name) + '</li>'
 
 
 def create_li3(mdict_name, mdict_file, mdict_pk):
     if mdict_name == mdict_file:
-        return '<li class="dic-item" data-pk="' + str(mdict_pk) + '" data-jstree=\'{"icon":"bi-file-earmark-fill"}\'>' + str(mdict_name) + '</li>'
+        return '<li class="dic-item" data-pk="' + str(
+            mdict_pk) + '" data-jstree=\'{"icon":"bi-file-earmark-fill"}\'>' + str(mdict_name) + '</li>'
     else:
-        return '<li class="dic-item" data-pk="' + str(mdict_pk) + '" data-jstree=\'{"icon":"bi-file-earmark-fill"}\'>' + str(
+        return '<li class="dic-item" data-pk="' + str(
+            mdict_pk) + '" data-jstree=\'{"icon":"bi-file-earmark-fill"}\'>' + str(
             mdict_name) + '<span style="color:red;"> (' + mdict_file + ')</span></li>'
 
 
@@ -1392,6 +1396,17 @@ def grouping_mdictgroup(request):
             jt_ele = ''
 
     return HttpResponse(jt_ele)
+
+
+def create_group(request):
+    group_name = request.GET.get("group_name", "")
+    if group_name != "":
+        try:
+            MdictDicGroup.objects.create(dic_group_name=group_name)
+            return HttpResponse('success')
+        except Exception as e:
+            return HttpResponse(e)
+    return HttpResponse('null')
 
 
 def read_doc(doc_path):

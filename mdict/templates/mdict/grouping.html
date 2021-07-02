@@ -14,6 +14,8 @@
         .path-root{color:brown;}
         .path-file{color:blue;}
         .path-dir{color:orange;}
+        .mdict-icon{font-size:22px;}
+        .input-group{margin-bottom:0.5rem;}
         i.jstree-themeicon-custom{background-size:16px !important;}
         .jstree-default a {
             white-space:normal !important; height: auto;
@@ -34,6 +36,31 @@
 </head>
 <body>
     <div class="container" style="margin-top:2rem;margin-bottom:2rem;">
+        <div class="row" style="margin-bottom:2rem;">
+            <div class="col">
+                <div class="input-group">
+                    <button  id="add_to_group" class="btn btn-secondary" type="button">添加词典到</button>
+                    <i class="btn bi-chevron-double-right mdict-icon" title="添加到分组"></i>
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="group-list" data-bs-toggle="dropdown" aria-expanded="false">
+                        词典分组
+                    </button>
+                    <ul class="dropdown-menu" id="dic-group">
+                    </ul>
+                </div>
+                <div class="input-group">
+                    <span class="btn">创建分组</span>
+                    <input autocomplete="off" id="group_name" class="form-control" type="text">
+                    <i id="create_group" class="btn bi-plus-lg mdict-icon" title="创建分组"></i>
+                </div>
+                <div class="input-group">
+                    <span class="btn">词典筛选</span>
+                    <input autocomplete="off" id="grouping-filter" class="form-control" type="text">
+                    <i id="home" class="btn bi-house-door mdict-icon" title="返回首页"></i>
+                </div>
+            </div>
+            <div class="col"></div>
+            <div class="col"></div>
+        </div>
         <div class="row">
             <div id="grouping-left" class="col"></div>
             <div id="grouping-right" class="col"></div>
@@ -43,56 +70,10 @@
 <script src="/static/jquery/jquery.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/static/mdict/jstree/jstree.min.js"></script>
+<script src="/static/mdict/js/grouping.js"></script>
 <script>
     $(function () {
-        $('#grouping-left').jstree({
-            'plugins' : [ "checkbox" ],
-            'core' : {
-                'data' : {
-                    'url' : 'mdictpath/',
-                    'data' : function (node) {
-                        let data_path="";
-                        if(node.id!="#"){
-                            let cur_ele=$("#"+node.id);
-                            let pre_ele=$("#"+node.id).parent();
-                            if(pre_ele.is("ul")){
-                                pre_ele=pre_ele.parent();
-                            }
-                            let cur_path=cur_ele.attr("data-path");
-                            let pre_path=pre_ele.attr("data-path");
-                            while(typeof(pre_path)!="undefined"){
-                                if(pre_path!="root"){
-                                    cur_path=pre_path+"/"+cur_path;
-                                }
-                                cur_ele=pre_ele;
-                                pre_ele=cur_ele.parent();
-                                if(pre_ele.is("ul")){
-                                    pre_ele=pre_ele.parent();
-                                }
-                                pre_path=pre_ele.attr("data-path");
-                            }
-                            data_path=cur_path;
-                        }
-                        return { 'path' : data_path };
-                    }
-                }
-            }
-        });
-        $('#grouping-right').jstree({
-            'core' : {
-                'data' : {
-                    'url' : 'mdictgroup/',
-                    'data' : function (node) {
-                        let group_pk=0;
-                        if(node.id!="#"){
-                            let cur_ele=$("#"+node.id);
-                            group_pk=cur_ele.attr("data-pk");
-                        }
-                        return { 'group' : group_pk };
-                    }
-                }
-            }
-        });
+        init_grouping();
     });
 </script>
 </html>

@@ -52,4 +52,5 @@ urlpatterns = [
     path('grouping/', views.grouping),
     path('grouping/mdictpath/', views.grouping_mdictpath),
     path('grouping/mdictgroup/', views.grouping_mdictgroup),
+    path('grouping/creategroup/', views.create_group),
 ]

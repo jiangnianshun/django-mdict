@@ -70,8 +70,8 @@ function rotate_content(item){
 }
 
 function init_btn_group(){
-	$('.go-left').click(function(){//展开上一词条
-	    if(is_index()||$("#scroll_list").length==0){
+    $('.go-left').click(function(){//展开上一词条
+        if(is_index()||$("#scroll_list").length==0){
             var c=$("#card-container .collapse.show");
             if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
                 var c_id=c.attr("id");
@@ -85,9 +85,9 @@ function init_btn_group(){
             var c=$(li_id).prev();
             c.trigger("click");
         }
-	});
-	$('.go-right').click(function(){//展开下一词条
-	    if(is_index()||$("#scroll_list").length==0){
+    });
+    $('.go-right').click(function(){//展开下一词条
+        if(is_index()||$("#scroll_list").length==0){
             var c=$("#card-container .collapse.show");
             //c.length==1表示当前有一个展开的词条
             //$('.ui-autocomplete').css('display')=='none'表示当前查询提示框没有显示
@@ -103,23 +103,23 @@ function init_btn_group(){
             var c=$(li_id).next();
             c.trigger("click");
         }
-	});
-	$('.scaleup').click(function(){
-	    var c=$("#card-container .collapse.show");
-	    if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
-	        c.find('iframe').contents().find('*').animate({ fontSize: '+=2px' });
-	        //只放大字号对于设置height的行之间文字会重叠，同时放大行高，会导致总高度无法准确获取。
+    });
+    $('.scaleup').click(function(){
+        var c=$("#card-container .collapse.show");
+        if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
+            c.find('iframe').contents().find('*').animate({ fontSize: '+=2px' });
+            //只放大字号对于设置height的行之间文字会重叠，同时放大行高，会导致总高度无法准确获取。
         }
-	});
-	$('.scaledown').click(function(){
-	    var c=$("#card-container .collapse.show");
-	    if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
-	        c.find('iframe').contents().find('*').animate({ fontSize: '-=2px' });
+    });
+    $('.scaledown').click(function(){
+        var c=$("#card-container .collapse.show");
+        if(c.length==1&&$('.ui-autocomplete').css('display')=='none'){
+            c.find('iframe').contents().find('*').animate({ fontSize: '-=2px' });
         }
-	});
-	$('.go-top').click(function(){//返回顶部
-		$('html,body').animate({scrollTop:0},'fast');
-	});
+    });
+    $('.go-top').click(function(){//返回顶部
+        $('html,body').animate({scrollTop:0},'fast');
+    });
 }
 
 function speaker_func(c_blue){
@@ -188,141 +188,141 @@ function init_mdict_filter(){
 }
 
 function init_input(){
-	$("#query").focus(function(){//input聚焦时调用auocomplete
-		$("#query").autocomplete("search");
-	});
+    $("#query").focus(function(){//input聚焦时调用auocomplete
+        $("#query").autocomplete("search");
+    });
 
     $("#mdict-query-clear").click(function(){
         $("#query").val("");
         $("#query").focus();
     })
 
-	init_mdict_filter();
+    init_mdict_filter();
 }
 
 function init_autocomplete(){
 
-	var dic_group=$('#dic-group option:selected').attr('data-pk');
+    var dic_group=$('#dic-group option:selected').attr('data-pk');
 
-	if(is_index()){//index.html
-		$( "#query" ).autocomplete({//jquery-ui
-		source: '/mdict/sug/?dic_group='+dic_group,
-		//source这里填一个字符串数组或返回字符串数组json的网址
-		//delay:500,//默认延迟300
-		formatItem: function (data, i, max) {//格式化列表中的条目 row:条目对象,i:当前条目数,max:总条目数
+    if(is_index()){//index.html
+        $( "#query" ).autocomplete({//jquery-ui
+        source: '/mdict/sug/?dic_group='+dic_group,
+        //source这里填一个字符串数组或返回字符串数组json的网址
+        //delay:500,//默认延迟300
+        formatItem: function (data, i, max) {//格式化列表中的条目 row:条目对象,i:当前条目数,max:总条目数
                 return  "<div style='margin-bottom: 10px;font-size: 20px;background:red;'>"+row+"</div>";
             }
-		});
-	}else{//dic.html
-		$( "#query" ).autocomplete({//jquery-ui
-		source: '/mdict/sug/?dic_pk='+$("html").attr("data-dic-pk"),
-		//source这里填一个字符串数组或返回字符串数组json的网址
-		//delay:500,
-		formatItem: function (data, i, max) {//格式化列表中的条目 row:条目对象,i:当前条目数,max:总条目数
+        });
+    }else{//dic.html
+        $( "#query" ).autocomplete({//jquery-ui
+        source: '/mdict/sug/?dic_pk='+$("html").attr("data-dic-pk"),
+        //source这里填一个字符串数组或返回字符串数组json的网址
+        //delay:500,
+        formatItem: function (data, i, max) {//格式化列表中的条目 row:条目对象,i:当前条目数,max:总条目数
                 return  "<div style='margin-bottom: 10px;font-size: 20px;background:red;'>"+row+"</div>";
             }
-		});
-	}
+        });
+    }
 
-	init_input();
+    init_input();
 };
 
 function add_click_event(){
-	$('#mdict-query').click(function(e){
-	    $("#query").autocomplete("close");//按下enter键时关闭autocomplete下拉框
-	    document.activeElement.blur();//收回手机浏览器的软键盘
+    $('#mdict-query').click(function(e){
+        $("#query").autocomplete("close");//按下enter键时关闭autocomplete下拉框
+        document.activeElement.blur();//收回手机浏览器的软键盘
 
         //var modal_brief=$('#modal-container-brief');
         //if(modal_brief.length>0){
-		    //modal_brief.modal('hide');
-		//}
-		//当#modal-container-brief中的entry点击时，触发#mdictquery的点击查询，此时要关闭#modal-container-brief。
+            //modal_brief.modal('hide');
+        //}
+        //当#modal-container-brief中的entry点击时，触发#mdictquery的点击查询，此时要关闭#modal-container-brief。
 
-		var dic_pk=$("html").attr("data-dic-pk");
-		var query=$('#query').val();
-		$("#card-container").attr("jump-to-entry",query);
-		//在iframe外用data设置的值在iframe内取不到，在iframe内用data设置的值，在iframe外用data取不到。改用attr。
+        var dic_pk=$("html").attr("data-dic-pk");
+        var query=$('#query').val();
+        $("#card-container").attr("jump-to-entry",query);
+        //在iframe外用data设置的值在iframe内取不到，在iframe内用data设置的值，在iframe外用data取不到。改用attr。
 
         check_speak(query);
 
         rotate_item_list={};//清空页面旋转记录
 
-		if(dic_pk==-1){
-			//index.html调用query_mdict，dic.html调用query_key。
-			if(!query){return;}
-			$("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
-			$("#result_time").attr("data-isover",false);
-			query_mdict(query,$("#card-container"),1,true,false);
-		}else if(dic_pk==-2){
-		    if(!query){return;}
-			$("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
-			$("#result_time").attr("data-isover",false);
-			query_es(query,$("#card-container"),1,true,false)
-		}else{//dic.html
-			dic_search=true;
-			dic_back=false;
-			var container=$("#card-container");
-			if($("html").attr("data-type")=='dic'){
-			    query_key(container,query);
-			}else if($("html").attr("data-type")=='esdic'){
-			    $("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
-			    $("#result_time").attr("data-isover",false);
-			    query_es(query,$("#card-container"),1,true,false)
-			}else if($("html").attr("data-type")=='zim'){
+        if(dic_pk==-1){
+            //index.html调用query_mdict，dic.html调用query_key。
+            if(!query){return;}
+            $("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
+            $("#result_time").attr("data-isover",false);
+            query_mdict(query,$("#card-container"),1,true,false);
+        }else if(dic_pk==-2){
+            if(!query){return;}
+            $("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
+            $("#result_time").attr("data-isover",false);
+            query_es(query,$("#card-container"),1,true,false)
+        }else{//dic.html
+            dic_search=true;
+            dic_back=false;
+            var container=$("#card-container");
+            if($("html").attr("data-type")=='dic'){
+                query_key(container,query);
+            }else if($("html").attr("data-type")=='esdic'){
+                $("#result_time").attr("data-start-time",new Date().getTime());//每次点击开始计时
+                $("#result_time").attr("data-isover",false);
+                query_es(query,$("#card-container"),1,true,false)
+            }else if($("html").attr("data-type")=='zim'){
                 query_zim($("#card-container"),query,dic_pk);
-			}
-		}
+            }
+        }
         if($('html').data('data-pushstate')){
-		    change_title_and_url(query);
-		}
-		$('html').data('data-pushstate',true)
-	})
+            change_title_and_url(query);
+        }
+        $('html').data('data-pushstate',true)
+    })
 
-	$("#sound-speaker").click(function(){
-	    var audio=$("#sound-speaker").children('audio');
+    $("#sound-speaker").click(function(){
+        var audio=$("#sound-speaker").children('audio');
         audio[0].play();
-	});
+    });
 
-	$('body').click(function(){
-		//iframe外点击时删除选择文字弹出框。
-		//后续添加点击时同时消除iframe中的选择
-		var iframe=$('.collapse.show').find('iframe');
-		var tooltip=iframe.contents().find('#tooltip');
-		if(tooltip.length>0){
-			tooltip.remove();
-		}
-	}).mousedown(function(e){
-	  if(e.which == 3){
-			var iframe=$('.collapse.show').find('iframe');
-			var tooltip=iframe.contents().find('#tooltip');
-			if(tooltip.length>0){
-				tooltip.remove();
-			}
-		    //'这是右键单击事件';
-	  }
-	})
-	$(document).keyup(function(e) {
+    $('body').click(function(){
+        //iframe外点击时删除选择文字弹出框。
+        //后续添加点击时同时消除iframe中的选择
+        var iframe=$('.collapse.show').find('iframe');
+        var tooltip=iframe.contents().find('#tooltip');
+        if(tooltip.length>0){
+            tooltip.remove();
+        }
+    }).mousedown(function(e){
+      if(e.which == 3){
+            var iframe=$('.collapse.show').find('iframe');
+            var tooltip=iframe.contents().find('#tooltip');
+            if(tooltip.length>0){
+                tooltip.remove();
+            }
+            //'这是右键单击事件';
+      }
+    })
+    $(document).keyup(function(e) {
         var eCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
-		//keypress检测不到方向键，必需用keydown或keyup
-		if (eCode==13){//回车键
-		    //判断modal是否打开，打开时，enter无效，这里返回的值有问题，再处理
+        //keypress检测不到方向键，必需用keydown或keyup
+        if (eCode==13){//回车键
+            //判断modal是否打开，打开时，enter无效，这里返回的值有问题，再处理
             $('#mdict-query').trigger('click');
-		}else if (eCode == 38){//方向键跳转词条
+        }else if (eCode == 38){//方向键跳转词条
             //左37上38
-			$('.go-left').trigger('click');
+            $('.go-left').trigger('click');
         }else if ( eCode == 40){
             //右39下40
-			$('.go-right').trigger('click');
+            $('.go-right').trigger('click');
         }
-		else if(e.shiftKey&&(eCode==107||eCode==61)){//107小键盘+，109小键盘-，61大键盘+，173大键盘-
-		    //设置组合键shift+加号和减号键
-		    //直接用加减号键和输入法的翻页键冲突
-		    //用ctrl+加减号键和浏览器的页面放大缩小快捷键冲突
-		    $('.scaleup').trigger('click');
-		}else if(e.shiftKey&&(eCode==109||eCode==173)){
-		    $('.scaledown'||eCode==173).trigger('click');
-		}
-	});
+        else if(e.shiftKey&&(eCode==107||eCode==61)){//107小键盘+，109小键盘-，61大键盘+，173大键盘-
+            //设置组合键shift+加号和减号键
+            //直接用加减号键和输入法的翻页键冲突
+            //用ctrl+加减号键和浏览器的页面放大缩小快捷键冲突
+            $('.scaleup').trigger('click');
+        }else if(e.shiftKey&&(eCode==109||eCode==173)){
+            $('.scaledown'||eCode==173).trigger('click');
+        }
+    });
 }
 
 var online_dic=[];
@@ -475,24 +475,24 @@ function init_other_config(){
         $("#night-mode").attr('data-value','no');
     })
     $('#rotate-page').click(function(){
-	    $("#card-container .card .show").each(function(){
+        $("#card-container .card .show").each(function(){
             rotate_content(this);
         });
-	});
-	$('#random-search').click(function(){
-	    $.ajax({
+    });
+    $('#random-search').click(function(){
+        $.ajax({
             url:"/mdict/randomsearch/",
             contentType:'json',
             type:'GET',
             success:function(data){
                 $('#query').val(html_unescape(data));
-		        $('#mdict-query').trigger("click");
+                $('#mdict-query').trigger("click");
             },
             error:function(jqXHR,textStatus,errorThrown){
                 alert(jqXHR.responseText);
             },
         });
-	});
+    });
 }
 
 function init_modal_config(){
@@ -537,8 +537,8 @@ function update_config(){
             },
             error:function(jqXHR,textStatus,errorThrown){
                 alert(jqXHR.responseText);
-		    },
-	    });
+            },
+        });
 }
 
 function update_online_dic(){
@@ -559,19 +559,19 @@ function update_online_dic(){
             },
             error:function(jqXHR,textStatus,errorThrown){
                 alert(jqXHR.responseText);
-		    },
-	    });
+            },
+        });
 }
 
 function init_dic_group(){
-	$( "#dic-group" ).selectmenu({
-	change: function( event, data ) {
-		init_autocomplete();//每次切换分组后，都要重置一下autocomplete()
-		get_pk_in_group();
-		}
-	});
+    $( "#dic-group" ).selectmenu({
+    change: function( event, data ) {
+        init_autocomplete();//每次切换分组后，都要重置一下autocomplete()
+        get_pk_in_group();
+        }
+    });
 
-	get_dic_group();
+    get_dic_group();
 }
 
 function set_dic_num(){
@@ -582,17 +582,17 @@ function get_pk_in_group(){
     var dic_group=$('#dic-group option:selected').attr('data-pk');
     data={"dic_group":dic_group};
     $.ajax({
-		url:"/mdict/getpkingroup/",
-		contentType:'json',
-		type:'GET',
-		data:data,
-		success:function(data){
-		var pk_list=$.parseJSON(data);
-		var mdict_list=$("#mdict-list-content .card-header");
-		if(pk_list.length==0&&dic_group<=0){
-		    $(mdict_list).each(function(){$(this).show();});
-		    set_dic_num()
-		}else{
+        url:"/mdict/getpkingroup/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+        var pk_list=$.parseJSON(data);
+        var mdict_list=$("#mdict-list-content .card-header");
+        if(pk_list.length==0&&dic_group<=0){
+            $(mdict_list).each(function(){$(this).show();});
+            set_dic_num()
+        }else{
             for(var i=0;i<mdict_list.length;i++){
                 var dic_pk=parseInt($(mdict_list[i]).find('input').attr('data-pk'));
                 var pk_pos=$.inArray(dic_pk,pk_list);
@@ -602,38 +602,38 @@ function get_pk_in_group(){
                     $(mdict_list[i]).show();
                 }
             }
-		    set_dic_num()
+            set_dic_num()
         }
 
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function get_dic_group(container){//载入词典列表
-	$.ajax({
-		url:"/mdict/dicgroup/",
-		contentType:'json',
-		type:'GET',
-		async:false,
-		success:function(data){
-		var dic_group=$.parseJSON(data);
-		for(var i=0;i<dic_group.length;i++){
-			var ele='<option data-pk='+dic_group[i][0]+'>'+dic_group[i][1]+'</option>'
-			$('#dic-group').append($(ele));
-		}
-		retrieveconfig(false,function(config){
+    $.ajax({
+        url:"/mdict/dicgroup/",
+        contentType:'json',
+        type:'GET',
+        async:false,
+        success:function(data){
+        var dic_group=$.parseJSON(data);
+        for(var i=0;i<dic_group.length;i++){
+            var ele='<option data-pk='+dic_group[i][0]+'>'+dic_group[i][1]+'</option>'
+            $('#dic-group').append($(ele));
+        }
+        retrieveconfig(false,function(config){
             var group_id=config['default_group'];
             var opt=$("#dic-group").find("option[data-pk="+group_id+"]");
             $('#dic-group').val(opt.text()).selectmenu("refresh");
         })
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function init_navbar_link(){
@@ -699,23 +699,23 @@ function init_resize_listener(){
 
 
 function init_common(){
-	$('html').data('data-pushstate',true);
+    $('html').data('data-pushstate',true);
 
     init_navbar_link();
 
-	init_modal_config();
+    init_modal_config();
 
-	init_autocomplete();
+    init_autocomplete();
 
-	add_click_event();
+    add_click_event();
 
-	init_btn_group();
+    init_btn_group();
 
-	init_dic_group();
+    init_dic_group();
 
-	init_resize_listener();
+    init_resize_listener();
 
-	$(window).bind('popstate', function(e){
+    $(window).bind('popstate', function(e){
         //对pushstate的back和forward进行处理
         var state=window.history.state;
         if(state){
@@ -734,20 +734,20 @@ function init_common(){
 }
 
 function first_query(){
-	var first_query=$("html").attr("data-first-query");
+    var first_query=$("html").attr("data-first-query");
 
-	if(first_query!=''){
-		$('#query').val(html_unescape(first_query));
-		$('#mdict-query').trigger("click");
-	}
+    if(first_query!=''){
+        $('#query').val(html_unescape(first_query));
+        $('#mdict-query').trigger("click");
+    }
 }
 
 function init_mdict(){
-	init_common();
+    init_common();
 
-	get_mdict_list($("#mdict-list-content"),false,false);
+    get_mdict_list($("#mdict-list-content"),false,false);
 
-	first_query();
+    first_query();
 }
 
 function init_es(){
@@ -768,56 +768,56 @@ function init_es(){
 function init_index(){//载入词典列表
     var dic_group=$('#dic-group option:selected').attr('data-pk');
     data={"dic_group":dic_group};
-	$.ajax({
-		url:"/mdict/initindex/",
-		contentType:'json',
-		type:'GET',
-		data:data,
-		success:function(data){
-		    $("#init-index-spinner").hide();
-		    if(data.indexOf("success")>-1){
-		        $("#live-toast-body").text("启停索引已完成。");
-		        new bootstrap.Toast($("#live-toast")[0]).show();
-		    }else{
-		        $("#live-toast-body").text(data);
-		        new bootstrap.Toast($("#live-toast")[0]).show();
-		        console.log('error:',data)
-		    }
-		    get_index_status();
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			$("#init-index-spinner").hide();
-			alert(jqXHR.responseText);
-			get_index_status();
-		},
-	});
+    $.ajax({
+        url:"/mdict/initindex/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            $("#init-index-spinner").hide();
+            if(data.indexOf("success")>-1){
+                $("#live-toast-body").text("启停索引已完成。");
+                new bootstrap.Toast($("#live-toast")[0]).show();
+            }else{
+                $("#live-toast-body").text(data);
+                new bootstrap.Toast($("#live-toast")[0]).show();
+                console.log('error:',data)
+            }
+            get_index_status();
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            $("#init-index-spinner").hide();
+            alert(jqXHR.responseText);
+            get_index_status();
+        },
+    });
 }
 
 function init_scroll_list(){
     if(window.location.href.indexOf("query=")>-1){dic_first=false;}
     query_scroll(0,0,dic_entry_nums,1);
 
-	$("#display_list").attr("data-start-p1",0);
-	$("#display_list").attr("data-start-p2",0);
-	$("#scroll_list").scroll(function (){
-		loadmore($(this),$("#display_list"));
-	});
+    $("#display_list").attr("data-start-p1",0);
+    $("#display_list").attr("data-start-p2",0);
+    $("#scroll_list").scroll(function (){
+        loadmore($(this),$("#display_list"));
+    });
 }
 
 function init_dic_range(){
     var dic_pk=$('html').attr('data-dic-pk');
     data={"dic_pk":dic_pk};
-	$.ajax({
-		url:"/mdict/getlbocknum/",
-		contentType:'json',
-		type:'GET',
-		data:data,
-		success:function(data){
-		    var item=$.parseJSON(data);
-		    var block_num=item['block_num'];
-		    var dic_range=$("#dic-range");
-		    dic_range.attr("max",block_num);
-		    dic_range.val(0);
+    $.ajax({
+        url:"/mdict/getlbocknum/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            var item=$.parseJSON(data);
+            var block_num=item['block_num'];
+            var dic_range=$("#dic-range");
+            dic_range.attr("max",block_num);
+            dic_range.val(0);
             dic_range.on('input propertychange', (e) => {
                 var block_num_val=$("#dic-range").val();
                 var block_num_val2=block_num_val-parseInt(block_num_val);
@@ -828,25 +828,25 @@ function init_dic_range(){
                     query_scroll(block_num_val,block_num_val2,dic_entry_nums,0);
                 }
             });
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function init_single_dic(){
-	get_header($("#modal-container-brief .modal-body"));
+    get_header($("#modal-container-brief .modal-body"));
 
-	init_dic_range();
+    init_dic_range();
 
-	init_scroll_list();
+    init_scroll_list();
 
-	init_common();
+    init_common();
 
-	get_mdict_list($("#mdict-list-content"),false,false);
+    get_mdict_list($("#mdict-list-content"),false,false);
 
-	first_query();//第一次查询会不会和初始化的0位置查询冲突？
+    first_query();//第一次查询会不会和初始化的0位置查询冲突？
 }
 
 function init_es_dic(){
@@ -867,12 +867,12 @@ function init_es_dic(){
 }
 
 function get_main_page(){
-	var first_query="main.html";
+    var first_query="main.html";
 
-	if(first_query!=''){
-		$('#query').val(html_unescape(first_query));
-		$('#mdict-query').trigger("click");
-	}
+    if(first_query!=''){
+        $('#query').val(html_unescape(first_query));
+        $('#mdict-query').trigger("click");
+    }
 }
 
 function init_zim_dic(){
