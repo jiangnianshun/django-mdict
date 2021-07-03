@@ -1,3 +1,29 @@
+function get_data_path(node_id){
+    let data_path="";
+    if(node_id!="#"){
+        let cur_ele=$("#"+node_id);
+        let pre_ele=$("#"+node_id).parent();
+        if(pre_ele.is("ul")){
+            pre_ele=pre_ele.parent();
+        }
+        let cur_path=cur_ele.attr("data-path");
+        let pre_path=pre_ele.attr("data-path");
+        while(typeof(pre_path)!="undefined"){
+            if(pre_path!="_root"){
+                cur_path=pre_path+"/"+cur_path;
+            }
+            cur_ele=pre_ele;
+            pre_ele=cur_ele.parent();
+            if(pre_ele.is("ul")){
+                pre_ele=pre_ele.parent();
+            }
+            pre_path=pre_ele.attr("data-path");
+        }
+        data_path=cur_path;
+    }
+    return data_path
+}
+
 function init_jstree(){
     $('#grouping-left').jstree({
         'plugins' : ["checkbox","search"],
@@ -5,29 +31,7 @@ function init_jstree(){
             'data' : {
                 'url' : 'mdictpath/',
                 'data' : function (node) {
-                    let data_path="";
-                    if(node.id!="#"){
-                        let cur_ele=$("#"+node.id);
-                        let pre_ele=$("#"+node.id).parent();
-                        if(pre_ele.is("ul")){
-                            pre_ele=pre_ele.parent();
-                        }
-                        let cur_path=cur_ele.attr("data-path");
-                        let pre_path=pre_ele.attr("data-path");
-                        while(typeof(pre_path)!="undefined"){
-                            if(pre_path!="root"){
-                                cur_path=pre_path+"/"+cur_path;
-                            }
-                            cur_ele=pre_ele;
-                            pre_ele=cur_ele.parent();
-                            if(pre_ele.is("ul")){
-                                pre_ele=pre_ele.parent();
-                            }
-                            pre_path=pre_ele.attr("data-path");
-                        }
-                        data_path=cur_path;
-                    }
-                    return { 'path' : data_path };
+                    return { 'path' : get_data_path(node.id) };
                 }
             }
         }
@@ -71,7 +75,7 @@ function init_event(){
                 type:'GET',
                 data:data,
                 success:function(data){
-                    refresh_jstree();
+                    refresh_right_jstree();
                     init_dropdown();
                 },
                 error:function(jqXHR,textStatus,errorThrown){
@@ -82,6 +86,31 @@ function init_event(){
     });
     $("#expand-all").click(function(){
         $("#grouping-left").jstree("open_all");
+    })
+    $("#add-to-group").click(function(){
+        let group_pk=$("#group-list").attr("data-pk");
+        if(group_pk>0){
+            let checked_path = [];
+            let checked_eles=$("#grouping-left").jstree(true).get_checked();
+            $.each(checked_eles,function () {
+                if(!$("#grouping-left").jstree(true).is_disabled(this)){
+                    let cur_node=$("#"+this);
+                    let prev_node=cur_node.parent().parent();
+                    if(prev_node.length>0){
+                        if(prev_node.attr("id")=="grouping-left"||!$("#grouping-left").jstree(true).is_checked(prev_node.attr("id"))){
+                            if(cur_node.hasClass('path-dir')){
+                                checked_path.push(get_data_path(this));
+                            }else{
+                                checked_path.push(cur_node.attr("data-path"));
+                            }
+                        }
+                    }
+                }
+            });
+            if(checked_path.length>0){
+                add_to_group(group_pk,checked_path)
+            }
+        }
     })
     var to = false;
     $('#grouping-filter').keyup(function () {
@@ -94,7 +123,25 @@ function init_event(){
     });
 }
 
-function refresh_jstree(){
+function add_to_group(group_pk,checked_path){
+    data={"group_pk":group_pk,"path":checked_path}
+    $.ajax({
+        url:"/mdict/addtogroup/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        traditional: true,
+        success:function(data){
+            console.log(data);
+            refresh_right_jstree();
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
+}
+
+function refresh_right_jstree(){
     $('#grouping-right').jstree(true).refresh();
 }
 
@@ -111,7 +158,6 @@ function init_dropdown(){
         url:"/mdict/dicgroup/",
         contentType:'json',
         type:'GET',
-        async:false,
         success:function(data){
         var dic_group=$.parseJSON(data);
         $('#dic-group').empty();

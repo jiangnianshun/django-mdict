@@ -1304,7 +1304,7 @@ def create_li(content, is_dir, file_type=''):
     if is_dir:
         return '<li data-path="' + str(content) + '" class="jstree-closed path-dir">' + str(content) + '</li>'
     else:
-        dic_name = content[:content.rfind('.')]
+        dic_name = content[:-4]
         if dic_name in init_vars.mdict_odict.keys():
             item = init_vars.mdict_odict[dic_name]
             mdx = item.mdx
@@ -1371,11 +1371,11 @@ def grouping_mdictpath(request):
     path_name = request.GET.get("path", "")
     if path_name == "":
         root_content = "词典库(" + mdict_root_path + ")"
-        jt_ele = '<ul><li data-path="root" data-jstree=\'{"opened":true,"icon":"bi-wallet-fill"}\' class="path-root">' + root_content
+        jt_ele = '<ul><li data-path="_root" data-jstree=\'{"opened":true,"icon":"bi-wallet-fill"}\' class="path-root">' + root_content
         jt_ele += create_ul(mdict_root_path)
         jt_ele += '</li></ul>'
     else:
-        if path_name == 'root':
+        if path_name == '_root':
             jt_ele = create_ul(mdict_root_path)
         else:
             jt_ele = create_ul(os.path.join(mdict_root_path, path_name))
@@ -1406,7 +1406,35 @@ def create_group(request):
             return HttpResponse('success')
         except Exception as e:
             return HttpResponse(e)
-    return HttpResponse('null')
+    return HttpResponse('failed')
+
+
+def add_dic_to_group(mdict_name, group_pk):
+    groups = MdictDicGroup.objects.filter(pk=group_pk)
+    if len(groups) == 0:
+        return
+    dics = MdictDic.objects.filter(mdict_file=mdict_name)
+    groups[0].mdict_group.add(*dics)
+
+
+def add_to_group(request):
+    group_pk = int(request.GET.get("group_pk", 0))
+    checked_path = request.GET.getlist('path', [])
+    if group_pk > 0 and checked_path:
+        for cpath in checked_path:
+            if cpath.endswith('.mdx') or cpath.endswith('.zim'):
+                add_dic_to_group(cpath[:-4], group_pk)
+            else:
+                if cpath == '_root':
+                    fpath = mdict_root_path
+                else:
+                    fpath = os.path.join(mdict_root_path, cpath)
+                if os.path.exists(fpath):
+                    for root, dirs, files in os.walk(fpath):
+                        for file in files:
+                            if file.endswith('.mdx') or file.endswith('.zim'):
+                                add_dic_to_group(file[:-4], group_pk)
+    return HttpResponse('success')
 
 
 def read_doc(doc_path):

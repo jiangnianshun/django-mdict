@@ -49,6 +49,7 @@ urlpatterns = [
     path('shelf2/', views.shelf2),
     path('doc/', views.doc),
     url('doc/(.+)', views.doc_md),
+    path('addtogroup/', views.add_to_group),
     path('grouping/', views.grouping),
     path('grouping/mdictpath/', views.grouping_mdictpath),
     path('grouping/mdictgroup/', views.grouping_mdictgroup),
