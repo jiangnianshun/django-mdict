@@ -45,7 +45,39 @@ function init_jstree(){
         }
     });
     $('#grouping-right').jstree({
+        'plugins' : ["contextmenu"],
+        "contextmenu": {
+            "items": function ($node) {
+                var tree = $("#grouping-right").jstree(true);
+                return {
+                    "Rename": {
+                        "separator_before": false,
+                        "separator_after": false,
+                        "label": "Rename",
+                        "action": function (obj) {
+                           tree.edit($node);
+                        }
+                    },
+                    "Delete": {
+                        "separator_before": false,
+                        "separator_after": false,
+                        "label": "Delete",
+                        "action": function (obj) {
+                            let cur_node=$("#"+$node.id);
+                            let prev_node=cur_node.parent().parent();
+                            if(cur_node.hasClass("jstree-leaf")){
+                                delete_item(cur_node.attr("data-pk"),prev_node.attr("data-pk"),false);
+                            }else{
+                                delete_item(cur_node.attr("data-pk"),prev_node.attr("data-pk"),true);
+                            }
+                            tree.delete_node($node);
+                        }
+                    },
+                }
+            },
+        },
         'core' : {
+            'check_callback' : true,
             'data' : {
                 'url' : 'mdictgroup/',
                 'data' : function (node) {
@@ -58,6 +90,49 @@ function init_jstree(){
                 }
             }
         }
+    }).bind('rename_node.jstree', function (e, data) {
+        let cur_node=$("#"+data.node.id);
+        if(cur_node.hasClass("jstree-leaf")){
+            rename_item(data.text,cur_node.attr("data-pk"),false);
+        }else{
+            rename_item(data.text,cur_node.attr("data-pk"),true);
+        }
+    });
+}
+
+function delete_item(item_pk,parent_pk,is_group){
+    data={"item_pk":item_pk,"parent_pk":parent_pk,"is_group":is_group};
+    $.ajax({
+        url:"/mdict/deleteitem/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            console.log(data);
+            refresh_right_jstree();
+            init_dropdown();
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
+}
+
+function rename_item(text,item_pk,is_group){
+    data={"text":text,"item_pk":item_pk,"is_group":is_group};
+    $.ajax({
+        url:"/mdict/renameitem/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            console.log(data);
+            refresh_right_jstree();
+            init_dropdown();
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
     });
 }
 

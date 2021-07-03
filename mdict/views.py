@@ -1437,6 +1437,42 @@ def add_to_group(request):
     return HttpResponse('success')
 
 
+def delete_item(request):
+    item_pk = int(request.GET.get("item_pk", 0))
+    parent_pk = int(request.GET.get("parent_pk", 0))
+    is_group = json.loads(request.GET.get("is_group", "false"))
+    if item_pk > 0:
+        if is_group:
+            groups = MdictDicGroup.objects.filter(pk=item_pk)
+            if len(groups) > 0:
+                groups[0].delete()
+        elif parent_pk > 0:
+            groups = MdictDicGroup.objects.filter(pk=parent_pk)
+            if len(groups) > 0:
+                dics = MdictDic.objects.filter(pk=item_pk)
+                if len(dics) > 0:
+                    groups[0].mdict_group.remove(dics[0])
+
+    return HttpResponse('success')
+
+
+def rename_item(request):
+    text = request.GET.get("text", "")
+    item_pk = int(request.GET.get("item_pk", 0))
+    is_group = json.loads(request.GET.get("is_group", "false"))
+    if text != "" and item_pk > 0:
+        if is_group:
+            groups = MdictDicGroup.objects.filter(pk=item_pk)
+            if len(groups) > 0:
+                groups.update(dic_group_name=text)
+        else:
+            dics = MdictDic.objects.filter(pk=item_pk)
+            if len(dics) > 0:
+                dics.update(mdict_name=text)
+
+    return HttpResponse('success')
+
+
 def read_doc(doc_path):
     data = ''
     mime_type = 'text/markdown'
