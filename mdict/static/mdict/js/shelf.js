@@ -134,7 +134,7 @@ function get_items(container,style){
 
                     var text_height=55*devicePixelRatio;
                     if(new_text_array.length>1){
-                        var text_height=(parseInt(150/new_text_array.length)-new_text_array.length*3)*devicePixelRatio;
+                        var text_height=(parseInt((150-15)/new_text_array.length))*devicePixelRatio;
                         if(text_height>55){text_height=55;}
                     }
 
