@@ -34,7 +34,10 @@ function init_jstree(){
     }).bind("search.jstree", function (e, data) {
         let snodes=data.res;
         for(let ri=0;ri<snodes.length;ri++){
-            $('#grouping-left').jstree(true).select_node(snodes[ri]);
+            if(!$('#'+snodes[ri]).hasClass("jstree-open")&&!$('#'+snodes[ri]).hasClass("jstree-closed")){
+                //只选择文件，不选择文件夹。
+                $('#grouping-left').jstree(true).select_node(snodes[ri]);
+            }
         }
     });
     $('#grouping-right').jstree({
@@ -58,8 +61,8 @@ function init_event(){
     $("#home").click(function(){
         window.location.href="/";
     });
-    $("#create_group").click(function(){
-        let group_name=$("#group_name").val();
+    $("#create-group").click(function(){
+        let group_name=$("#group-name").val();
         if(group_name!=""){
             let data={"group_name":group_name};
             $.ajax({
@@ -77,6 +80,9 @@ function init_event(){
             });
         }
     });
+    $("#expand-all").click(function(){
+        $("#grouping-left").jstree("open_all");
+    })
     var to = false;
     $('#grouping-filter').keyup(function () {
         if(to) { clearTimeout(to); }
