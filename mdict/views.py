@@ -999,7 +999,7 @@ def search_mdx_record(request):
 
 
 def get_icon_path(mdx, icon):
-    file = mdx.get_fname()
+    file = quote(mdx.get_fname())
     m_path = get_m_path(mdx)
     if icon == 'none':
         dic_icon = '/static/mdict/img/book.png'
