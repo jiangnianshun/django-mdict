@@ -221,7 +221,7 @@ function get_header(container, dic_pk, dic_name, type){
 
             var iframe = document.createElement('iframe');
             iframe.width="100%";
-            iframe.height="100%";
+            iframe.height="95%";
             iframe.id="dic-header";
             iframe.scrolling="no";
             container.append(iframe);
