@@ -90,7 +90,7 @@ bash run_server.sh
 
 ### 部署到wsl apache
 
-windows下建议部署到wsl1(ubuntu)。
+windows下建议部署到wsl1(ubuntu)。部署到apache后的启动速度远慢于启动自带的测试服务器。
 
 1. 安装wsl，系统ubuntu，建议使用18.04。
 

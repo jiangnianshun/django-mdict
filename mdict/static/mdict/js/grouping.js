@@ -50,18 +50,18 @@ function init_jstree(){
             "items": function ($node) {
                 var tree = $("#grouping-right").jstree(true);
                 return {
-                    "重命名": {
+                    "Rename": {
                         "separator_before": false,
                         "separator_after": false,
-                        "label": "Rename",
+                        "label": "重命名",
                         "action": function (obj) {
                            tree.edit($node);
                         }
                     },
-                    "删除": {
+                    "Delete": {
                         "separator_before": false,
                         "separator_after": false,
-                        "label": "Delete",
+                        "label": "删除",
                         "action": function (obj) {
                             let cur_node=$("#"+$node.id);
                             let prev_node=cur_node.parent().parent();
