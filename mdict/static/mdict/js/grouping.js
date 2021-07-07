@@ -25,32 +25,32 @@ function get_data_path(node_id){
 }
 
 function init_jstree(){
-    $('#grouping-left').jstree({
-        'plugins' : ["checkbox","search"],
-        'core' : {
-            'data' : {
-                'url' : 'mdictpath/',
-                'data' : function (node) {
-                    return { 'path' : get_data_path(node.id) };
+    $("#grouping-left").jstree({
+        "plugins" : ["checkbox","search"],
+        "core" : {
+            "data" : {
+                "url" : "mdictpath/",
+                "data" : function (node) {
+                    return { "path" : get_data_path(node.id) };
                 }
             }
         }
     }).bind("search.jstree", function (e, data) {
         let snodes=data.res;
         for(let ri=0;ri<snodes.length;ri++){
-            if(!$('#'+snodes[ri]).hasClass("jstree-open")&&!$('#'+snodes[ri]).hasClass("jstree-closed")){
+            if(!$("#"+snodes[ri]).hasClass("jstree-open")&&!$("#"+snodes[ri]).hasClass("jstree-closed")){
                 //只选择文件，不选择文件夹。
-                $('#grouping-left').jstree(true).select_node(snodes[ri]);
+                $("#grouping-left").jstree(true).select_node(snodes[ri]);
             }
         }
     });
-    $('#grouping-right').jstree({
-        'plugins' : ["contextmenu"],
+    $("#grouping-right").jstree({
+        "plugins" : ["contextmenu"],
         "contextmenu": {
             "items": function ($node) {
                 var tree = $("#grouping-right").jstree(true);
                 return {
-                    "Rename": {
+                    "重命名": {
                         "separator_before": false,
                         "separator_after": false,
                         "label": "Rename",
@@ -58,7 +58,7 @@ function init_jstree(){
                            tree.edit($node);
                         }
                     },
-                    "Delete": {
+                    "删除": {
                         "separator_before": false,
                         "separator_after": false,
                         "label": "Delete",
@@ -76,21 +76,21 @@ function init_jstree(){
                 }
             },
         },
-        'core' : {
-            'check_callback' : true,
-            'data' : {
-                'url' : 'mdictgroup/',
-                'data' : function (node) {
+        "core" : {
+            "check_callback" : true,
+            "data" : {
+                "url" : 'mdictgroup/',
+                "data" : function (node) {
                     let group_pk=0;
                     if(node.id!="#"){
                         let cur_ele=$("#"+node.id);
                         group_pk=cur_ele.attr("data-pk");
                     }
-                    return { 'group' : group_pk };
+                    return { "group" : group_pk };
                 }
             }
-        }
-    }).bind('rename_node.jstree', function (e, data) {
+        },
+    }).bind("rename_node.jstree", function (e, data) {
         let cur_node=$("#"+data.node.id);
         if(cur_node.hasClass("jstree-leaf")){
             rename_item(data.text,cur_node.attr("data-pk"),false);
