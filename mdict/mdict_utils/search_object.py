@@ -534,9 +534,14 @@ class SearchObject:
                         record = result[5]
                     elif entry == result[4]:
                         record += result[5]
+                    else:
+                        break
                 elif self.mdx.process_str_keys(res_name) != self.mdx.process_str_keys(
                         record[8:].rstrip('\n').rstrip('\r')):  # 如果是新LINK，中断。
+                    record = result[5]
                     break
+                else:
+                    record = result[5]
 
         if record.find('@@@LINK') == 0:
             record = self.substitute_mdx_link(record)
