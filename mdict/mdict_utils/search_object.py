@@ -518,18 +518,22 @@ class SearchObject:
             result_list = self.mdx.look_up(res_name, self.f_mdx)
 
         record = ''
-
+        entry = ''
         for i in range(len(result_list)):
             result = result_list[i]
-            # LINK指向的词条有时不只一个，这里只取第一个，这样不一定正确，但查询link的词条时可以都显示出来，因此这里将link指向的所有重复词条都显示出来，意义不大
+
             if result[0] not in self.cmp:  # self.cmp记录start位置，如果start相同，说明是同一个词条。
-                record = result[5]
                 self.f_p1 = result[2]
                 self.f_p2 = result[3]
                 self.cmp.append(result[0])
 
-                if record.find('@@@LINK') != 0:  # 如果不是LINK，说明是正文，中断。
-                    break
+                if record.find('@@@LINK') != 0:  # 如果不是LINK，说明是正文.
+                    # xinshijirihan查こっか，分别指向6个词条，其中こっか【国家】和こっか【国華】分别有2个同名词条，因此不能只取第一个。
+                    if entry == '':
+                        entry = result[4]
+                        record = result[5]
+                    elif entry == result[4]:
+                        record += result[5]
                 elif self.mdx.process_str_keys(res_name) != self.mdx.process_str_keys(
                         record[8:].rstrip('\n').rstrip('\r')):  # 如果是新LINK，中断。
                     break
@@ -680,7 +684,8 @@ class SearchObject:
                        'entry://' + str(res_name) + delimiter_r
             else:
                 if self.is_dic:
-                    return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + quote(str(res_name)) + delimiter_r
+                    return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + quote(
+                        str(res_name)) + delimiter_r
                 else:
                     return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
                            'zim' + '/' + str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
