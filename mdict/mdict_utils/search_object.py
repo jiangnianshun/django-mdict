@@ -113,6 +113,7 @@ class SearchObject:
         self.f_pk = -1
 
         self.cmp = []
+        self.cmp2 = []
         self.result_list = []
 
         if self.mdd is not None and len(self.mdd) > 0:
@@ -374,10 +375,15 @@ class SearchObject:
             for key in result_dict.keys():
                 self.query = key
                 self.result_list = result_dict[key]
+
+                self.cmp.clear()
+                self.cmp2.clear()
+                self.cmp2.extend((self.mdx.process_str_keys(quy) for quy in self.query_list))
+
                 for rt in self.result_list:
                     self.f_p1 = rt[2]
                     self.f_p2 = rt[3]
-                    self.cmp.clear()
+
                     record = self.substitute_record(rt[5])
                     if record != '' and (self.f_p1, self.f_p2) not in t_list:
                         # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
@@ -401,7 +407,11 @@ class SearchObject:
         for rt in result_list:
             self.f_p1 = rt[2]
             self.f_p2 = rt[3]
+
             self.cmp.clear()
+            self.cmp2.clear()
+            self.cmp2.extend((self.mdx.process_str_keys(quy) for quy in self.query_list))
+
             record = self.substitute_record(rt[5])
             if record != '':
                 # 这里self.f_p2应该是不正确的，可能需要将自身的r_p1,r_p2也写入rsult_list中
@@ -511,6 +521,12 @@ class SearchObject:
     def substitute_mdx_link(self, record):  # 处理LINK连接
         t_record = record
         res_name = record[8:].rstrip('\n').rstrip('\r')
+
+        if self.mdx.process_str_keys(res_name) in self.cmp2:
+            # LDOCE5++ En-Cn V2.15查a返回a,a-,a*3个结果，其start均不相同，而a-,a*均指向A，造成重复，应当判断词头，避免重复。
+            return ''
+        else:
+            self.cmp2.append(self.mdx.process_str_keys(res_name))
 
         if self.result_list and self.mdx.process_str_keys(res_name) == self.mdx.process_str_keys(self.query):
             result_list = self.result_list
