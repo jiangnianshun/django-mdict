@@ -1418,7 +1418,7 @@ def add_dic_to_group(mdict_name, group_pk):
 
 
 def add_to_group(request):
-    group_pk = int(request.GET.get("group_pk", 0))
+    group_pk = int(request.GET.get("group_pk", -1))
     checked_path = request.GET.getlist('path', [])
     if group_pk >= 0 and checked_path:
         for cpath in checked_path:
@@ -1438,8 +1438,8 @@ def add_to_group(request):
 
 
 def delete_item(request):
-    item_pk = int(request.GET.get("item_pk", 0))
-    parent_pk = int(request.GET.get("parent_pk", 0))
+    item_pk = int(request.GET.get("item_pk", -1))
+    parent_pk = int(request.GET.get("parent_pk", -1))
     is_group = json.loads(request.GET.get("is_group", "false"))
     if item_pk >= 0:
         if is_group:
@@ -1458,7 +1458,7 @@ def delete_item(request):
 
 def rename_item(request):
     text = request.GET.get("text", "")
-    item_pk = int(request.GET.get("item_pk", 0))
+    item_pk = int(request.GET.get("item_pk", -1))
     is_group = json.loads(request.GET.get("is_group", "false"))
     if text != "" and item_pk >= 0:
         if is_group:
@@ -1474,9 +1474,9 @@ def rename_item(request):
 
 
 def move_item(request):
-    item_pk = int(request.GET.get("item_pk", 0))
-    new_group_pk = int(request.GET.get("new_group_pk", 0))
-    old_group_pk = int(request.GET.get("old_group_pk", 0))
+    item_pk = int(request.GET.get("item_pk", -1))
+    new_group_pk = int(request.GET.get("new_group_pk", -1))
+    old_group_pk = int(request.GET.get("old_group_pk", -1))
     if item_pk >= 0 and new_group_pk >= 0 and old_group_pk >= 0:
         dics = MdictDic.objects.filter(pk=item_pk)
         if len(dics) > 0:
@@ -1633,7 +1633,7 @@ def get_dic_group(request):
 
 
 def get_pk_in_group(request):
-    group_pk = int(request.GET.get('dic_group'))
+    group_pk = int(request.GET.get('dic_group', 0))
     group_list = MdictDicGroup.objects.filter(pk=group_pk)
     pk_list = []
     if len(group_list) > 0:
