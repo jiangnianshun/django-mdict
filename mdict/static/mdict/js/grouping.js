@@ -45,7 +45,7 @@ function init_jstree(){
         }
     });
     $("#grouping-right").jstree({
-        "plugins" : ["contextmenu"],
+        "plugins" : ["contextmenu","dnd"],
         "contextmenu": {
             "items": function ($node) {
                 var tree = $("#grouping-right").jstree(true);
@@ -76,8 +76,28 @@ function init_jstree(){
                 }
             },
         },
+        "dnd" : {
+            "check_while_dragging" : true,
+        },
         "core" : {
-            "check_callback" : true,
+            "check_callback" : function(operation, node, node_parent, node_position, more){
+                if (operation === "move_node") {
+                    let cur_ele=$("#"+node.id);
+                    if(cur_ele.hasClass("group-item")){
+                        //节点是分组时禁止移动
+                        return false;
+                    }else if(node_position == 0){
+                        //node_position,0插入，>0非插入的其他位置
+                        //more,a之后,b之前,i插入
+                        let par_ele=$("#"+node_parent.id);//新的父节点
+                        if(par_ele.hasClass("dic-item")){
+                            //节点是词典时禁止插入子元素
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            },
             "data" : {
                 "url" : 'mdictgroup/',
                 "data" : function (node) {
@@ -97,6 +117,28 @@ function init_jstree(){
         }else{
             rename_item(data.text,cur_node.attr("data-pk"),true);
         }
+    }).bind("move_node.jstree", function (e, data) {
+        let node_ele = $('#' + data.node.id);
+        let par_ele = $('#' + data.parent);
+        let old_par_ele = $('#' + data.old_parent);
+        move_item(node_ele.attr("data-pk"),par_ele.attr("data-pk"),old_par_ele.attr("data-pk"));
+    });
+}
+
+function move_item(item_pk,new_group_pk,old_group_pk){
+    data={"item_pk":item_pk,"new_group_pk":new_group_pk,"old_group_pk":old_group_pk};
+    $.ajax({
+        url:"/mdict/moveitem/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            console.log(data);
+            refresh_right_jstree();
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
     });
 }
 

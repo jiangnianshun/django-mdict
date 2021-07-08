@@ -1420,7 +1420,7 @@ def add_dic_to_group(mdict_name, group_pk):
 def add_to_group(request):
     group_pk = int(request.GET.get("group_pk", 0))
     checked_path = request.GET.getlist('path', [])
-    if group_pk > 0 and checked_path:
+    if group_pk >= 0 and checked_path:
         for cpath in checked_path:
             if cpath.endswith('.mdx') or cpath.endswith('.zim'):
                 add_dic_to_group(cpath[:-4], group_pk)
@@ -1441,12 +1441,12 @@ def delete_item(request):
     item_pk = int(request.GET.get("item_pk", 0))
     parent_pk = int(request.GET.get("parent_pk", 0))
     is_group = json.loads(request.GET.get("is_group", "false"))
-    if item_pk > 0:
+    if item_pk >= 0:
         if is_group:
             groups = MdictDicGroup.objects.filter(pk=item_pk)
             if len(groups) > 0:
                 groups[0].delete()
-        elif parent_pk > 0:
+        elif parent_pk >= 0:
             groups = MdictDicGroup.objects.filter(pk=parent_pk)
             if len(groups) > 0:
                 dics = MdictDic.objects.filter(pk=item_pk)
@@ -1460,7 +1460,7 @@ def rename_item(request):
     text = request.GET.get("text", "")
     item_pk = int(request.GET.get("item_pk", 0))
     is_group = json.loads(request.GET.get("is_group", "false"))
-    if text != "" and item_pk > 0:
+    if text != "" and item_pk >= 0:
         if is_group:
             groups = MdictDicGroup.objects.filter(pk=item_pk)
             if len(groups) > 0:
@@ -1469,6 +1469,23 @@ def rename_item(request):
             dics = MdictDic.objects.filter(pk=item_pk)
             if len(dics) > 0:
                 dics.update(mdict_name=text)
+
+    return HttpResponse('success')
+
+
+def move_item(request):
+    item_pk = int(request.GET.get("item_pk", 0))
+    new_group_pk = int(request.GET.get("new_group_pk", 0))
+    old_group_pk = int(request.GET.get("old_group_pk", 0))
+    if item_pk >= 0 and new_group_pk >= 0 and old_group_pk >= 0:
+        dics = MdictDic.objects.filter(pk=item_pk)
+        if len(dics) > 0:
+            groups = MdictDicGroup.objects.filter(pk=new_group_pk)
+            if len(groups) > 0:
+                groups[0].mdict_group.add(dics[0])
+            groups = MdictDicGroup.objects.filter(pk=old_group_pk)
+            if len(groups) > 0:
+                groups[0].mdict_group.remove(dics[0])
 
     return HttpResponse('success')
 
