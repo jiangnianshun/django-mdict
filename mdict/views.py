@@ -1477,7 +1477,7 @@ def move_item(request):
     item_pk = int(request.GET.get("item_pk", -1))
     new_group_pk = int(request.GET.get("new_group_pk", -1))
     old_group_pk = int(request.GET.get("old_group_pk", -1))
-    if item_pk >= 0 and new_group_pk >= 0 and old_group_pk >= 0:
+    if item_pk >= 0 and 0 <= new_group_pk != old_group_pk >= 0:
         dics = MdictDic.objects.filter(pk=item_pk)
         if len(dics) > 0:
             groups = MdictDicGroup.objects.filter(pk=new_group_pk)
