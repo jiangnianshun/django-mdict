@@ -243,6 +243,10 @@ class SearchObject:
 
         if record.find('@@@LINK') == 0:  # 处理@@@LINK连接
             record = self.substitute_mdx_link(record)
+
+        if record == '':
+            return ''
+
         if self.mdd_exist:  # 处理图片，css和js的超链接
             record = regp.sub(self.substitute_hyper_link, record)
         else:
