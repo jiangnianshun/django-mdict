@@ -105,55 +105,57 @@ function get_items(container,style){
             container.append(ts);
             set_dic_num();
             if(style==2){
-                for(var i=0;i<d.length;i++){
-                    var dic_name=d[i]["dic_name"];
-                    var dic_icon=d[i]["dic_icon"];
-                    var dic_id='dic-'+i;
+                setTimeout(function(){//异步运行
+                    for(var i=0;i<d.length;i++){
+                        var dic_name=d[i]["dic_name"];
+                        var dic_icon=d[i]["dic_icon"];
+                        var dic_id='dic-'+i;
 
-                    //绘制封面图
-                    if(dic_icon.indexOf("/static")==0){
-                        (function(dic_name,dic_id){
-                            var canvas2 = document.getElementById('textCanvas2');
-                            var tCtx2 = canvas2.getContext('2d');
-                            tCtx2.canvas.width = parseInt(getComputedStyle(canvas2, null)['width']) * devicePixelRatio;
-                            tCtx2.canvas.height = parseInt(getComputedStyle(canvas2, null)['height']) * devicePixelRatio;
-                            set_canvas('textCanvas2');
-                            tCtx2.drawImage(document.getElementById('textCanvas1'),0,0);
-                            tCtx2.fillStyle = '#ffffff';
-                            tCtx2.font = 12*devicePixelRatio+'px Arial';
+                        //绘制封面图
+                        if(dic_icon.indexOf("/static")==0){
+                            (function(dic_name,dic_id){
+                                var canvas2 = document.getElementById('textCanvas2');
+                                var tCtx2 = canvas2.getContext('2d');
+                                tCtx2.canvas.width = parseInt(getComputedStyle(canvas2, null)['width']) * devicePixelRatio;
+                                tCtx2.canvas.height = parseInt(getComputedStyle(canvas2, null)['height']) * devicePixelRatio;
+                                set_canvas('textCanvas2');
+                                tCtx2.drawImage(document.getElementById('textCanvas1'),0,0);
+                                tCtx2.fillStyle = '#ffffff';
+                                tCtx2.font = 12*devicePixelRatio+'px Arial';
 
-                            var new_text_array = new Array();
-                            var row_width = 0;
-                            var row_text = "";
-                            var row_max_width = (img_width-7-15)*devicePixelRatio;
+                                var new_text_array = new Array();
+                                var row_width = 0;
+                                var row_text = "";
+                                var row_max_width = (img_width-7-15)*devicePixelRatio;
 
-                            for(var ti=0;ti<dic_name.length;ti++){
-                                row_width+=tCtx2.measureText(dic_name[ti]).width;
-                                row_text+=dic_name[ti];
-                                if(row_width>=row_max_width){
-                                    new_text_array.push(row_text);
-                                    row_width=0;
-                                    row_text="";
-                                }else if(ti==dic_name.length-1){
-                                    new_text_array.push(row_text);
+                                for(var ti=0;ti<dic_name.length;ti++){
+                                    row_width+=tCtx2.measureText(dic_name[ti]).width;
+                                    row_text+=dic_name[ti];
+                                    if(row_width>=row_max_width){
+                                        new_text_array.push(row_text);
+                                        row_width=0;
+                                        row_text="";
+                                    }else if(ti==dic_name.length-1){
+                                        new_text_array.push(row_text);
+                                    }
                                 }
-                            }
 
-                            var text_height=55*devicePixelRatio;
-                            if(new_text_array.length>1){
-                                var text_height=(parseInt((150-15)/new_text_array.length))*devicePixelRatio;
-                                if(text_height>55){text_height=55;}
-                            }
+                                var text_height=55*devicePixelRatio;
+                                if(new_text_array.length>1){
+                                    var text_height=(parseInt((150-15)/new_text_array.length))*devicePixelRatio;
+                                    if(text_height>55){text_height=55;}
+                                }
 
-                            for(var ti=0;ti<new_text_array.length;ti++){
-                                tCtx2.fillText(new_text_array[ti], 8*devicePixelRatio, (ti+1)*text_height, img_width*devicePixelRatio);
-                            }
+                                for(var ti=0;ti<new_text_array.length;ti++){
+                                    tCtx2.fillText(new_text_array[ti], 8*devicePixelRatio, (ti+1)*text_height, img_width*devicePixelRatio);
+                                }
 
-                            var imageElem = document.getElementById(dic_id);
-                            imageElem.src = tCtx2.canvas.toDataURL();
-                        })(dic_name,dic_id);
+                                var imageElem = document.getElementById(dic_id);
+                                imageElem.src = tCtx2.canvas.toDataURL();
+                            })(dic_name,dic_id);
+                        }
                     }
-                }
+                },0);
             }
         },
         error:function(jqXHR,textStatus,errorThrown){
