@@ -33,6 +33,10 @@
     $(window).resize(set_body_height);
     init_mdict_filter();
     init_dropdown();
-    {% block script %}{% endblock %}
+</script>
+<script>
+    (function(){
+        {% block script %}{% endblock %}
+    })();
 </script>
 </html>
