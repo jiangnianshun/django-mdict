@@ -1015,7 +1015,7 @@ def get_icon_path(mdx, icon):
     return dic_icon
 
 
-@loop_mdict_list(return_type=2)
+@loop_mdict_list()
 class get_mdict_list_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         file = mdx.get_fname()
@@ -1023,17 +1023,15 @@ class get_mdict_list_object(innerObject):
             m_type = 'zim'
         else:
             m_type = 'mdx'
-        dic = get_or_create_dic(file)
-        file = quote(file)
         dic_icon = get_icon_path(mdx, icon)
-        item = {'dic_name': dic.mdict_name, 'dic_file': file, 'dic_icon': dic_icon, 'dic_pror': dic.mdict_priority,
+        item = {'dic_name': dic.mdict_name, 'dic_file': quote(file), 'dic_icon': dic_icon, 'dic_pror': dic.mdict_priority,
                 'dic_pk': dic.pk, 'dic_enable': dic.mdict_enable, 'dic_es_enable': dic.mdict_es_enable,
                 'dic_type': m_type}
-        self.inner_odict.update({file: item})
+        self.inner_list.append(item)
 
 
 def get_mdict_list(requset):
-    dic_list = list(get_mdict_list_object().values())
+    dic_list = get_mdict_list_object()
     dic_list.sort(key=lambda k: k['dic_pror'])
 
     return HttpResponse(json.dumps(dic_list))
