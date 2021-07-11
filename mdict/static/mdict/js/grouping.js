@@ -118,10 +118,11 @@ function init_jstree(){
             rename_item(data.text,cur_node.attr("data-pk"),true);
         }
     }).bind("move_node.jstree", function (e, data) {
-        let node_ele = $('#' + data.node.id);
+        //let node_ele = $('#' + data.node.id);
+        //使用node_ele.attr("data-pk")取值有时候是undefined
         let par_ele = $('#' + data.parent);
         let old_par_ele = $('#' + data.old_parent);
-        move_item(node_ele.attr("data-pk"),par_ele.attr("data-pk"),old_par_ele.attr("data-pk"));
+        move_item(parseInt(data.node.li_attr["data-pk"]),par_ele.attr("data-pk"),old_par_ele.attr("data-pk"));
     });
 }
 
