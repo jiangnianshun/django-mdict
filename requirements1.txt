@@ -4,11 +4,11 @@ django-ckeditor
 websockets
 elasticsearch
 elasticsearch_dsl
-nltk
 opencc-python-reimplemented
 pyspellchecker
-cython
 pillow
 psutil
-python-Levenshtein
 zstandard
+cython
+nltk
+python-Levenshtein
