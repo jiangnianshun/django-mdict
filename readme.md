@@ -63,11 +63,7 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
    
 ### 注意
 
-不要更新测试分支（test branch），测试分支可能无法正常运行，当测试分支稳定后会合并到主分支。
-
-建议使用ubuntu进行部署(18.04或20.04，20.04有多进程无法结束的问题)。 
-
-目前windows下查询速度与ubuntu下相近，但存在僵尸进程的问题，需要改进。windows下建议部署到wsl1(ubuntu)。
+目前windows下查询速度与ubuntu下相近，但存在僵尸进程的问题。windows下建议部署到wsl1(ubuntu)。
 
 不建议使用pypy，有时候查询快，有时候反而更慢。
 
@@ -79,7 +75,7 @@ apt-get install dos2unix
 dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 
-更新后为了避免出问题，需要手动清除浏览器缓存（不需要清cookies）。
+更新后为了避免出问题，需要手动清除浏览器缓存（不需要清cookies）并删除根目录下的.cache和.dat缓存文件。
 
 建议每个物理核心分配30-50本词典，查询词典数=物理核心数*(30~50)，如果查询词典数大于这个数量，建议分组。
 

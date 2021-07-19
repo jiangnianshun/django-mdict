@@ -7,6 +7,7 @@
   * [繁简转化和全角转化](#繁简转化和全角转化)
   * [同名加载](#同名加载)
   * [查询历史](#查询历史)
+  * [其他](#其他)
   
 ### iframe显示
 
@@ -128,3 +129,23 @@ mdx同名的js、css和字体文件会自动加载。
 关闭保存查询历史，修改config.ini中的history_enable为False，然后重启django-mdict。
 
 删除保存的查询历史，直接删除根目录下所有history开头的dat文件。
+
+### 其他
+
+内置词条使用django-ckeditor和MathJax实现富文本和latex公式输入。
+
+django-ckeditor：[https://github.com/django-ckeditor/django-ckeditor](https://github.com/django-ckeditor/django-ckeditor)
+
+MathJax：[https://github.com/mathjax/MathJax](https://github.com/mathjax/MathJax)
+
+查询历史词云使用wordcloud2.js实现。
+
+wordcloud2.js：[https://github.com/timdream/wordcloud2.js](https://github.com/timdream/wordcloud2.js)
+
+按照路径和分组显示词典使用jstree.js实现。
+
+jstree.js：[https://www.jstree.com/](https://www.jstree.com/)
+
+markdown文档显示使用marked.js实现。
+
+marked.js：[https://github.com/markedjs/marked](https://github.com/markedjs/marked)
