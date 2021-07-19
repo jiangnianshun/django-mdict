@@ -178,7 +178,7 @@ class MDict(object):
         header中StripKey只对mdx有效，为No，则不分词，字母、空格、符号都参与排序，为Yes，则分词，仅字母参与排序，去掉空格、符号。
         MDX的编码有utf-8,utf-16,gb18030(包括gbk，gb2313,gb18030),BIG5,ISO8859-1。
         MDD的编码为utf-16le,尽管utf-16默认也是utf-16le，但是会加前缀\xff\xfe。
-        排序:utf-16按照utf-16be排序，其他按照各自编码排序。
+        排序:utf-16按照utf-16le编解码，按照utf-16be排序，其他按照各自编码排序。
         @param key1: the key user input
         @param key2: the key from the file
         @return:
@@ -267,7 +267,7 @@ class MDict(object):
         if self.__class__.__name__ == 'MDX':
             if type(key) == bytes:
                 if self._encoding == 'UTF-16':
-                    key = key.decode('utf-16be', errors='ignore')
+                    key = key.decode('utf-16le', errors='ignore')
                 else:
                     # ISO8859-1编码中文报错latin-1 UnicodeDecodeError
                     key = key.decode(self._encoding, errors='ignore')
