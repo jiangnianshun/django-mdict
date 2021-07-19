@@ -552,19 +552,26 @@ class SearchObject:
                     if entry == '':
                         entry = result[4]
                         record = result[5]
+                        if record.find('@@@LINK') == 0:
+                            record = self.substitute_mdx_link(record)
                     elif entry == result[4]:
-                        record += result[5]
+                        tt_record = result[5]
+                        if tt_record.find('@@@LINK') == 0:
+                            # 牛津高阶双解(第9版)_V3.1.3版查Scotch tape有2个词条，其中第2个词条指向sellotape，需要处理LINK。
+                            tt_record = self.substitute_mdx_link(tt_record)
+                        record += tt_record
                     else:
                         break
                 elif self.mdx.process_str_keys(res_name) != self.mdx.process_str_keys(
                         record[8:].rstrip('\n').rstrip('\r')):  # 如果是新LINK，中断。
                     record = result[5]
+                    if record.find('@@@LINK') == 0:
+                        record = self.substitute_mdx_link(record)
                     break
                 else:
                     record = result[5]
-
-        if record.find('@@@LINK') == 0:
-            record = self.substitute_mdx_link(record)
+                    if record.find('@@@LINK') == 0:
+                        record = self.substitute_mdx_link(record)
 
         if record == '':
             record = self.search_dic_group(res_name)
