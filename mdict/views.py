@@ -1049,21 +1049,21 @@ def search_audio(request):
     # 这里应该在readmdict中处理，比较时去掉不比较点和扩展名
     bk = False
     for tp in audio_type_list:
-        res_name = '\\' + res_name + tp
+        t_res_name = '\\' + res_name + tp
         for mdd in sound_list:
             f = open(mdd.get_fpath(), 'rb')
-            rr_list = mdd.look_up(res_name, f)
+            rr_list = mdd.look_up(t_res_name, f)
             if len(rr_list) > 0:
                 res_content = rr_list[0][5]
                 if mime_type is None:
                     f_name = rr_list[0][4]
                     mime_type = guess_mime(f_name)
+                if t_res_name.endswith('.spx'):
+                    mime_type = 'audio/speex'
                 bk = True
                 break
         if bk:
             break
-    if res_name.endswith('.spx'):
-        mime_type = 'audio/speex'
     return HttpResponse(res_content, content_type=mime_type)
 
 
