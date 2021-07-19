@@ -127,9 +127,6 @@ def _parse_header(header):
 reg = r'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|]'
 regp = re.compile(reg)
 
-regb = rb'[ _=,.;:!?@%&#~`()\[\]<>{}/\\\$\+\-\*\^\'"\t|]'
-regpb = re.compile(regb)
-
 
 # 搜韵诗词词条：八归·辛巳，CC-CEDICT词条威廉·莎士比亚，stripkey时不包含·
 
@@ -195,45 +192,50 @@ class MDict(object):
         key1 = self.process_str_keys(key1)
         key2 = self.process_str_keys(key2)
 
-        if operator.__lt__(key1, key2):
-            return -1
-        elif operator.__eq__(key1, key2):
-            return 0
-        elif operator.__gt__(key1, key2):
-            return 1
+        # if operator.__lt__(key1, key2):
+        #     return -1
+        # elif operator.__eq__(key1, key2):
+        #     return 0
+        # elif operator.__gt__(key1, key2):
+        #     return 1
 
-        # if self.__class__.__name__ == 'MDX':
-        #     if self._encoding == 'UTF-16':
-        #         if operator.__lt__(key1.encode('utf-16be'), key2.encode('utf-16be')):
-        #             return -1
-        #         elif operator.__eq__(key1.encode('utf-16be'), key2.encode('utf-16be')):
-        #             return 0
-        #         elif operator.__gt__(key1.encode('utf-16be'), key2.encode('utf-16be')):
-        #             return 1
-        #     if self._encoding == 'BIG-5':
-        #         if operator.__lt__(key1.encode('utf-8'), key2.encode('utf-8')):
-        #             return -1
-        #         elif operator.__eq__(key1.encode('utf-8'), key2.encode('utf-8')):
-        #             return 0
-        #         elif operator.__gt__(key1.encode('utf-8'), key2.encode('utf-8')):
-        #             return 1
-        #     else:
-        #         if operator.__lt__(key1.encode(self._encoding, errors='ignore'),
-        #                            key2.encode(self._encoding, errors='ignore')):
-        #             return -1
-        #         elif operator.__eq__(key1.encode(self._encoding, errors='ignore'),
-        #                              key2.encode(self._encoding, errors='ignore')):
-        #             return 0
-        #         elif operator.__gt__(key1.encode(self._encoding, errors='ignore'),
-        #                              key2.encode(self._encoding, errors='ignore')):
-        #             return 1
-        # else:
-        #     if operator.__lt__(key1.encode('utf-8'), key2.encode('utf-8')):
-        #         return -1
-        #     elif operator.__eq__(key1.encode('utf-8'), key2.encode('utf-8')):
-        #         return 0
-        #     elif operator.__gt__(key1.encode('utf-8'), key2.encode('utf-8')):
-        #         return 1
+        if self.__class__.__name__ == 'MDX':
+            if self._encoding == 'UTF-16':
+                t_key1 = key1.encode('utf-16be', errors='ignore')
+                t_key2 = key2.encode('utf-16be', errors='ignore')
+                if operator.__lt__(t_key1, t_key2):
+                    return -1
+                elif operator.__eq__(t_key1, t_key2):
+                    return 0
+                elif operator.__gt__(t_key1, t_key2):
+                    return 1
+            if self._encoding == 'BIG-5':
+                t_key1 = key1.encode('utf-8', errors='ignore')
+                t_key2 = key2.encode('utf-8', errors='ignore')
+                if operator.__lt__(t_key1, t_key2):
+                    return -1
+                elif operator.__eq__(t_key1, t_key2):
+                    return 0
+                elif operator.__gt__(t_key1, t_key2):
+                    return 1
+            else:
+                t_key1 = key1.encode(self._encoding, errors='ignore')
+                t_key2 = key2.encode(self._encoding, errors='ignore')
+                if operator.__lt__(t_key1, t_key2):
+                    return -1
+                elif operator.__eq__(t_key1, t_key2):
+                    return 0
+                elif operator.__gt__(t_key1, t_key2):
+                    return 1
+        else:
+            t_key1 = key1.encode('utf-8', errors='ignore')
+            t_key2 = key2.encode('utf-8', errors='ignore')
+            if operator.__lt__(t_key1, t_key2):
+                return -1
+            elif operator.__eq__(t_key1, t_key2):
+                return 0
+            elif operator.__gt__(t_key1, t_key2):
+                return 1
 
     def lower_str_keys(self, key):
         """
@@ -263,19 +265,17 @@ class MDict(object):
 
     def process_str_keys(self, key):
         if self.__class__.__name__ == 'MDX':
-            if type(key) == str:
+            if type(key) == bytes:
                 if self._encoding == 'UTF-16':
-                    key = key.encode('utf-16be', errors='ignore')
+                    key = key.decode('utf-16be', errors='ignore')
                 else:
                     # ISO8859-1编码中文报错latin-1 UnicodeDecodeError
-                    key = key.encode(self._encoding, errors='ignore')
-            if self._strip_key == 1:
-                key = regpb.sub(b'', key)
+                    key = key.decode(self._encoding, errors='ignore')
         else:
             if type(key) == bytes:
                 key = key.decode(self._encoding)
-            if self._strip_key == 1:
-                key = regp.sub('', key)
+        if self._strip_key == 1:
+            key = regp.sub('', key)
         key = self.lower_str_keys(key)
 
         # 这里不能strip()
@@ -478,7 +478,7 @@ class MDict(object):
         if self.compare_keys(key, key_list[half][1]) == 0:
             k = self.process_str_keys(key_list[half][1])
 
-            m_a = [k.decode(self._encoding, errors='ignore')]
+            m_a = [k]
 
             lim = num
             if key_list_len - 1 - half < 6:
@@ -490,7 +490,7 @@ class MDict(object):
                 k = self.process_str_keys(key_list[half + j][1])
                 self._sug_flag = half + j + 1
                 if k not in m_a:
-                    m_a.append(k.decode(self._encoding, errors='ignore'))
+                    m_a.append(k)
                     i += 1
                 j += 1
             return m_a
