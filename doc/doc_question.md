@@ -66,3 +66,11 @@ chmod +x /bin/sleep
 11. run_server.sh: line 16: syntax error: unexpected end of file
 
 需要转换脚本格式
+
+12. Error: [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。
+
+默认端口8000被占用，尝试使用其他端口。
+
+```
+python manage.py runserver 0.0.0.0:7000
+```

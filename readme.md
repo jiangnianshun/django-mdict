@@ -63,11 +63,15 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
    
 ### 注意
 
-目前windows下查询速度与ubuntu下相近，但存在僵尸进程的问题。windows下建议部署到wsl1(ubuntu)。
+1. 目前windows下存在僵尸进程的问题。windows下建议部署到wsl1(ubuntu)。
 
-不建议使用pypy，有时候查询快，有时候反而更慢。
+2. 保证文件夹名是django-mdict而不是django-mdict-master或其他名字以确保脚本运行正确。
 
-linux下可能需要转换脚本格式
+3. 确保当前用户对django-mdict及所有子文件拥有权限，ubuntu上使用chmod -R 777 django-mdict，windows上在django-mdict文件夹上右键，在属性/安全中将本机账户添加进去并设置权限为完全控制。
+
+4. 不建议使用pypy，有时候查询快，有时候反而更慢。
+
+5. linux下可能需要转换脚本格式
 
 ```
 apt-get update
@@ -75,9 +79,9 @@ apt-get install dos2unix
 dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 
-更新后为了避免出问题，需要手动清除浏览器缓存（不需要清cookies）并删除根目录下的.cache和.dat缓存文件。
+6. 更新后为了避免出问题，需要手动清除浏览器缓存（不需要清cookies）并删除根目录下的.cache和.dat缓存文件。
 
-建议每个物理核心分配30-50本词典，查询词典数=物理核心数*(30~50)，如果查询词典数大于这个数量，建议分组。
+7. 建议每个物理核心分配30-50本词典，查询词典数=物理核心数*(30~50)，如果查询词典数大于这个数量，建议分组。
 
 ### 说明文档
 
