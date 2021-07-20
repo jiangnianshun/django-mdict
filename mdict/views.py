@@ -102,6 +102,7 @@ class MdictEntryViewSet(viewsets.ViewSet):
         st_enable = self.request.query_params.get('st_enable', None)
         chaizi_enable = self.request.query_params.get('chaizi_enable', None)
         kana_enable = self.request.query_params.get('kana_enable', None)
+        romaji_enable = self.request.query_params.get('romaji_enable', None)
 
         query_params = {}
 
@@ -113,6 +114,8 @@ class MdictEntryViewSet(viewsets.ViewSet):
             query_params['chaizi_enable'] = json.loads(chaizi_enable)
         if kana_enable is not None:
             query_params['kana_enable'] = json.loads(kana_enable)
+        if romaji_enable is not None:
+            query_params['romaji_enable'] = json.loads(romaji_enable)
 
         if (force_refresh and page == 1) or key_paginator.get(query, group) is None:
             record_list = self.get_results(query, group, query_params)

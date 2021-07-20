@@ -15,25 +15,25 @@ var search_history=new Array();
 var style=`
 <style>
 html,body{
-	padding:0;
-	overflow-y:hidden !important;
+    padding:0;
+    overflow-y:hidden !important;
 }
 .mdict-tooltip{
-	background-color:gray !important;
-	color:#EEEEEE !important;
-	border-radius:5px !important;
-	font-size:1.1em !important;
-	z-index:999 !important;
+    background-color:gray !important;
+    color:#EEEEEE !important;
+    border-radius:5px !important;
+    font-size:1.1em !important;
+    z-index:999 !important;
 }
 .mdict-tooltip span{
-	white-space:nowrap !important;
-	margin:5px !important;
+    white-space:nowrap !important;
+    margin:5px !important;
 }
 .mdict-tooltip span a{
-	background-color:gray !important;
-	text-decoration:none !important;
-	color:#EEEEEE !important;
-	font-style:normal !important;
+    background-color:gray !important;
+    text-decoration:none !important;
+    color:#EEEEEE !important;
+    font-style:normal !important;
 }
 mark{
     background: yellow !important;
@@ -45,7 +45,7 @@ mark{
 var style_img=`
 <style>
 img{
-	max-width:100% !important;
+    max-width:100% !important;
 }
 /*这里如果设置全部元素强制max-width:100%，slangit.com中smh词条的svg会特别大。*/
 </style>
@@ -245,10 +245,10 @@ function bind_card(iframe,html,tokens){
                         minHeight:550,
                         warningTimeout:0,
                         scrolling:true,
-    //							onInit: function(iframe_a){
-    //							},
-    //							onResized: function(messageData) {
-    //							},
+    //                            onInit: function(iframe_a){
+    //                            },
+    //                            onResized: function(messageData) {
+    //                            },
                     },iframe);
                     iframe_content.find('html').css('overflow-y','visible');
                     iframe_content.find('body').css('overflow-y','visible');
@@ -260,10 +260,10 @@ function bind_card(iframe,html,tokens){
                         heightCalculationMethod:width_calculation_method,
                         warningTimeout:0,
                         scrolling:true,
-    //							onInit: function(iframe_a){
-    //							},
-    //							onResized: function(messageData) {
-    //							},
+    //                            onInit: function(iframe_a){
+    //                            },
+    //                            onResized: function(messageData) {
+    //                            },
                     },iframe);
                 }
                 $(iframe).attr('data-content-fill','true');
@@ -344,85 +344,85 @@ function bind_card(iframe,html,tokens){
 }
 
 function add_iframes(data,container,need_clear,is_list){
-	//need_clear，第一次需要清除card
-	//is_list，query_mdict传进来的字典，query_record传进来的是列表
-	if(data.length==0){
-		return [-1,-1,-1]
-	}else{
-		if(is_list){
-			var d=data;
-		}else{
-			var d=data['data'];
-			var tokens=data['tokens'];
-			if(typeof(tokens)=="undefined"){tokens=[];}
-			var page_size=data['page_size'];
-			var total_count=data['total_count'];
-			var total_page=data['total_page'];
-			
-			var current_page=data['current_page'];
-			var iframe_length=$('#card-container iframe').length;
-		}
+    //need_clear，第一次需要清除card
+    //is_list，query_mdict传进来的字典，query_record传进来的是列表
+    if(data.length==0){
+        return [-1,-1,-1]
+    }else{
+        if(is_list){
+            var d=data;
+        }else{
+            var d=data['data'];
+            var tokens=data['tokens'];
+            if(typeof(tokens)=="undefined"){tokens=[];}
+            var page_size=data['page_size'];
+            var total_count=data['total_count'];
+            var total_page=data['total_page'];
+            
+            var current_page=data['current_page'];
+            var iframe_length=$('#card-container iframe').length;
+        }
 
-		var s_id = 0;
-		
-		for(var i=0;i<d.length;i++){
-			var record=d[i];
+        var s_id = 0;
+        
+        for(var i=0;i<d.length;i++){
+            var record=d[i];
 
-			var mdx_name=record["mdx_name"];
-			var mdx_entry=record["mdx_entry"];
-			var mdx_record=record["mdx_record"];
-			var mdx_pk=record["pk"];
-			var mdx_extra=record["extra"];
+            var mdx_name=record["mdx_name"];
+            var mdx_entry=record["mdx_entry"];
+            var mdx_record=record["mdx_record"];
+            var mdx_pk=record["pk"];
+            var mdx_extra=record["extra"];
 
-			if(typeof(mdx_extra)=="undefined"){
-			    mdx_extra="";
-			}
-			
-			if(need_clear){
-				s_id=i;
-			}else{
-				s_id=iframe_length+i;
-				
-			}
+            if(typeof(mdx_extra)=="undefined"){
+                mdx_extra="";
+            }
+            
+            if(need_clear){
+                s_id=i;
+            }else{
+                s_id=iframe_length+i;
+                
+            }
 
             var card_ele=create_card(s_id,mdx_pk,mdx_name,mdx_entry,mdx_record,mdx_extra)
             var html=create_html(mdx_pk,mdx_name,mdx_record);
 
 
-			//script加到最后，因为enwikipart1查gucci，最后有未完成的注释<!--，导致script被注释掉。
+            //script加到最后，因为enwikipart1查gucci，最后有未完成的注释<!--，导致script被注释掉。
 
-			var iframe = document.createElement('iframe');
-			//iframe.width="100%";
-			//iframe.height="auto";
-			iframe.id="iframe-"+s_id;
-			iframe.setAttribute("data-name", mdx_name);
-			iframe.sandbox="allow-same-origin allow-scripts allow-popups allow-downloads";
-			//禁止iframe中js操作父页面的location
-			//iframe.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
-			//html中的#号会被截断，导致iframe读取不完整，因此要编码，而encodeURIComponent()会编码#号，但是encodeURI()不会编码，问题是使用encodeURIComponent()载入的子页面，css无法载入。
-			
-			var card_body_id="#card-body-"+s_id;
-			var card_mdict_i=$(card_body_id);
-			if(card_mdict_i.length>0){//清理同一时间的多次异步产生的多个重复词条
-				card_mdict_i.children().remove();
-			}else{
-				container.append(card_ele);
-			}
-			$(card_body_id).append(iframe);
+            var iframe = document.createElement('iframe');
+            //iframe.width="100%";
+            //iframe.height="auto";
+            iframe.id="iframe-"+s_id;
+            iframe.setAttribute("data-name", mdx_name);
+            iframe.sandbox="allow-same-origin allow-scripts allow-popups allow-downloads";
+            //禁止iframe中js操作父页面的location
+            //iframe.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
+            //html中的#号会被截断，导致iframe读取不完整，因此要编码，而encodeURIComponent()会编码#号，但是encodeURI()不会编码，问题是使用encodeURIComponent()载入的子页面，css无法载入。
+            
+            var card_body_id="#card-body-"+s_id;
+            var card_mdict_i=$(card_body_id);
+            if(card_mdict_i.length>0){//清理同一时间的多次异步产生的多个重复词条
+                card_mdict_i.children().remove();
+            }else{
+                container.append(card_ele);
+            }
+            $(card_body_id).append(iframe);
 
-			if($("#night-mode").attr('data-value')=='yes'){
+            if($("#night-mode").attr('data-value')=='yes'){
                 container.addClass('dm-night');
                 container.find('*').addClass('dm-night');
                 container.find('.card-header').addClass('dm-night-border');
             }
-			
-			(function(iframe,html){//通过闭包来避免for循环事件绑定中的赋值问题
-				bind_card(iframe,html,tokens);
-			})(iframe,html);
-		}
-		return [current_page,total_page,d.length]
-	}
-	
+            
+            (function(iframe,html){//通过闭包来避免for循环事件绑定中的赋值问题
+                bind_card(iframe,html,tokens);
+            })(iframe,html);
+        }
+        return [current_page,total_page,d.length]
+    }
+    
 }
 
 
@@ -457,197 +457,198 @@ function add_to_history(query,result_num){
 }
 
 function query_es(query,container,page,need_clear,is_over){
-	clear_alert_info();
-	var dic_group=$('#dic-group option:selected').attr('data-pk');
-	var es_phrase=$('#es-filter-phrase').prop("checked");
-	var es_entry=$('#es-filter-entry').prop("checked");
-	var es_content=$('#es-filter-content').prop("checked");
-	var es_and=$('#es-filter-and').prop("checked");
-	var search_zim=$('#search-zim').prop("checked");
+    clear_alert_info();
+    var dic_group=$('#dic-group option:selected').attr('data-pk');
+    var es_phrase=$('#es-filter-phrase').prop("checked");
+    var es_entry=$('#es-filter-entry').prop("checked");
+    var es_content=$('#es-filter-content').prop("checked");
+    var es_and=$('#es-filter-and').prop("checked");
+    var search_zim=$('#search-zim').prop("checked");
 
-	var dic_pk=$("html").attr("data-dic-pk");
+    var dic_pk=$("html").attr("data-dic-pk");
 
-	var frag_num=$('#frag-num').val();
-	var frag_size=$('#frag-size').val();
-	if(frag_num==''){frag_num=3;}
-	if(frag_size==''){frag_size=50;}
+    var frag_num=$('#frag-num').val();
+    var frag_size=$('#frag-size').val();
+    if(frag_num==''){frag_num=3;}
+    if(frag_size==''){frag_size=50;}
 
-	if(!es_entry&&!es_content){
-	    console.log('must select one search item')
-	    return
-	}
+    if(!es_entry&&!es_content){
+        console.log('must select one search item')
+        return
+    }
 
-	var data={"query":query,"dic-group":dic_group,"result-page":page,"force-refresh":$('#config-force-refresh').prop('checked'),
-	"es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content,"es-and":es_and,"frag-num":frag_num,"frag-size":frag_size,
-	"dic-pk":dic_pk,"search-zim":search_zim};
-	$.ajax({
-		url:"/mdict/essearch/",
-		contentType:'json',
-		type:'GET',
-		data:data,
-		success:function(data){
-			if(need_clear){clear_card();}
+    var data={"query":query,"dic-group":dic_group,"result-page":page,"force-refresh":$('#config-force-refresh').prop('checked'),
+    "es-phrase":es_phrase,"es-entry":es_entry,"es-content":es_content,"es-and":es_and,"frag-num":frag_num,"frag-size":frag_size,
+    "dic-pk":dic_pk,"search-zim":search_zim};
+    $.ajax({
+        url:"/mdict/essearch/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            if(need_clear){clear_card();}
 
-			//每次按钮点击后清理掉已有的显示的词条
+            //每次按钮点击后清理掉已有的显示的词条
             page=add_iframes(data,container,need_clear,false);
-			//page[0]是当前页码，page[1]是总页码
+            //page[0]是当前页码，page[1]是总页码
 
-			if(page[2]<=0&&$('#card-container .card').length==0){set_alert_info(query);}
+            if(page[2]<=0&&$('#card-container .card').length==0){set_alert_info(query);}
 
-		    var s2=`
-			<div id='next-page' class='card card-header m-auto'>
-				<div class='m-auto' style='color:#007bff;hover:pointer;'>
-					继续加载
-				</div>
-			</div>
-			`;
-			$('#card-container #next-page').remove();
-			if(page[2]>0&&page[1]>=page[0]){
+            var s2=`
+            <div id='next-page' class='card card-header m-auto'>
+                <div class='m-auto' style='color:#007bff;hover:pointer;'>
+                    继续加载
+                </div>
+            </div>
+            `;
+            $('#card-container #next-page').remove();
+            if(page[2]>0&&page[1]>=page[0]){
                 container.append(s2);
 
                 $('#card-container #next-page').on('click',function(){
                     query_es(query,container,page[0]+1,false,true);
                 })
-			}
+            }
 
-			is_over=true
-//			if(page[0]<page[1]){
-//				var next_page=page[0]+1;
-//				var t_over=false
-//				if(next_page==page[1]){
-//					t_over=true
-//				}
-//				query_es(query,container,next_page,false,t_over);
-//			}else if(page[0]==page[1]){
-//				is_over=true
-//			}
-			if(need_clear){
-				$("#query").autocomplete("close");
-				//有时查询结果比搜索提示出现的快，此时autocomplete没有关闭，因此这里要关闭。
-				if(!is_over){
-					$("#result_num").text('');//清空上一次的结果数目
-					$("#result_time").text('');
-				}
+            is_over=true
+//            if(page[0]<page[1]){
+//                var next_page=page[0]+1;
+//                var t_over=false
+//                if(next_page==page[1]){
+//                    t_over=true
+//                }
+//                query_es(query,container,next_page,false,t_over);
+//            }else if(page[0]==page[1]){
+//                is_over=true
+//            }
+            if(need_clear){
+                $("#query").autocomplete("close");
+                //有时查询结果比搜索提示出现的快，此时autocomplete没有关闭，因此这里要关闭。
+                if(!is_over){
+                    $("#result_num").text('');//清空上一次的结果数目
+                    $("#result_time").text('');
+                }
 
-			}
+            }
 
-			if(is_over){
+            if(is_over){
                 var result_num=$("#card-container iframe").length;
 
-				$("#result_num").text(result_num);
-				var start_time=$("#result_time").attr("data-start-time");
-				var isover=$("#result_time").attr("data-isover");
-				var end_time=new Date().getTime();
-				if(isover){
-				    $("#result_time").attr("data-start-time",end_time);
-				}
+                $("#result_num").text(result_num);
+                var start_time=$("#result_time").attr("data-start-time");
+                var isover=$("#result_time").attr("data-isover");
+                var end_time=new Date().getTime();
+                if(isover){
+                    $("#result_time").attr("data-start-time",end_time);
+                }
 
-				var elapse_time=process_time(end_time-start_time);
+                var elapse_time=process_time(end_time-start_time);
 
-				$("#result_time").text(elapse_time);
+                $("#result_time").text(elapse_time);
 
-				add_to_history(query,result_num);
-			}
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+                add_to_history(query,result_num);
+            }
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function query_zim(container,entry,dic_pk){
-	clear_alert_info();
-	var data={"entry":entry,"dic_pk":dic_pk};
-	$.ajax({
-		url:"/mdict/zim/",
-		contentType:'json',
-		type:'GET',
-		data:data,
-		success:function(data){
-			var d=$.parseJSON(data);
-			clear_card();
-			clear_parent_card(container);
-			//query_record在iframe外调用一次，在iframe内调用一次，因此这里用两个清除函数。;
+    clear_alert_info();
+    var data={"entry":entry,"dic_pk":dic_pk};
+    $.ajax({
+        url:"/mdict/zim/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            var d=$.parseJSON(data);
+            clear_card();
+            clear_parent_card(container);
+            //query_record在iframe外调用一次，在iframe内调用一次，因此这里用两个清除函数。;
             page=add_iframes(d,container,true,true);
             if(page[2]<=0){set_alert_info(entry);}
-			show_first_card();
+            show_first_card();
             //change_title_and_url(entry);
             add_to_history(entry,1);
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function query_mdict(query,container,page,need_clear,is_over){
-	clear_alert_info();
-	var dic_group=$('#dic-group option:selected').attr('data-pk');
+    clear_alert_info();
+    var dic_group=$('#dic-group option:selected').attr('data-pk');
 
-	var force_refresh=$('#config-force-refresh').prop('checked');
-	var fh_char_enable=$('#config-fh-char-enable').prop("checked");
+    var force_refresh=$('#config-force-refresh').prop('checked');
+    var fh_char_enable=$('#config-fh-char-enable').prop("checked");
     var st_enable=$('#config-st-enable').prop("checked");
     var chaizi_enable=$('#config-chaizi-enable').prop("checked");
     var kana_enable=$('#config-kana-enable').prop("checked");
+    var romaji_enable=$('#config-romaji-enable').prop("checked");
 
-	var data={"query":query,"dic_group":dic_group,"page":page,"force_refresh":force_refresh,"fh_char_enable":fh_char_enable,"st_enable":st_enable,
-    "chaizi_enable":chaizi_enable,"kana_enable":kana_enable};
-	$.ajax({
-		url:"/api/mdict2/mdict/",
-		contentType:'json',
-		type:'GET',
-		data:data,
-		success:function(data){
-			if(need_clear){clear_card();}
+    var data={"query":query,"dic_group":dic_group,"page":page,"force_refresh":force_refresh,"fh_char_enable":fh_char_enable,"st_enable":st_enable,
+    "chaizi_enable":chaizi_enable,"kana_enable":kana_enable,"romaji_enable":romaji_enable};
+    $.ajax({
+        url:"/api/mdict2/mdict/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            if(need_clear){clear_card();}
 
-			//每次按钮点击后清理掉已有的显示的词条
+            //每次按钮点击后清理掉已有的显示的词条
             page=add_iframes(data,container,need_clear,false);
             if(page[2]<=0){set_alert_info(query);}
-			//page[0]是当前页码，page[1]是总页码
-			if(page[0]<page[1]){
-				var next_page=page[0]+1;
-				var t_over=false
-				if(next_page==page[1]){
-					t_over=true
-				}
-				query_mdict(query,container,next_page,false,t_over);
-			}else if(page[0]==page[1]){
-				is_over=true
-			}
-			if(need_clear){	
-				$("#query").autocomplete("close");
-				//有时查询结果比搜索提示出现的快，此时autocomplete没有关闭，因此这里要关闭。
-				if(!is_over){
-					$("#result_num").text('');//清空上一次的结果数目
-					$("#result_time").text('');
-				}
-				show_first_card();
-			}
+            //page[0]是当前页码，page[1]是总页码
+            if(page[0]<page[1]){
+                var next_page=page[0]+1;
+                var t_over=false
+                if(next_page==page[1]){
+                    t_over=true
+                }
+                query_mdict(query,container,next_page,false,t_over);
+            }else if(page[0]==page[1]){
+                is_over=true
+            }
+            if(need_clear){    
+                $("#query").autocomplete("close");
+                //有时查询结果比搜索提示出现的快，此时autocomplete没有关闭，因此这里要关闭。
+                if(!is_over){
+                    $("#result_num").text('');//清空上一次的结果数目
+                    $("#result_time").text('');
+                }
+                show_first_card();
+            }
 
-			if(is_over){
+            if(is_over){
                 online_search(query,container)
 
                 var result_num=$("#card-container iframe").length;
 
-				$("#result_num").text(result_num);
-				var start_time=$("#result_time").attr("data-start-time");
-				var isover=$("#result_time").attr("data-isover");
-				var end_time=new Date().getTime();
-				if(isover){
-				    $("#result_time").attr("data-start-time",end_time);
-				}
+                $("#result_num").text(result_num);
+                var start_time=$("#result_time").attr("data-start-time");
+                var isover=$("#result_time").attr("data-isover");
+                var end_time=new Date().getTime();
+                if(isover){
+                    $("#result_time").attr("data-start-time",end_time);
+                }
 
-				var elapse_time=process_time(end_time-start_time);
+                var elapse_time=process_time(end_time-start_time);
 
-				$("#result_time").text(elapse_time);
+                $("#result_time").text(elapse_time);
 
-				add_to_history(query,result_num);
-			}
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+                add_to_history(query,result_num);
+            }
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 //online_dic变量见mdict_base.js
@@ -729,19 +730,19 @@ function online_search(query,container){//有道在线
 }
 
 function process_time(time){
-	if(time<1000){
-		return time+'ms';
-	}else{
-		return time/1000+'s';
-	}
+    if(time<1000){
+        return time+'ms';
+    }else{
+        return time/1000+'s';
+    }
 }
 
 
 function decodeSpeex(file) {
-	var ogg = new Ogg(file, {file: true});
-	ogg.demux();
+    var ogg = new Ogg(file, {file: true});
+    ogg.demux();
 
-	var header = Speex.parseHeader(ogg.frames[0]);
+    var header = Speex.parseHeader(ogg.frames[0]);
     if(header.nb_channels==2){
         header.rate=header.rate/2;
         //播放牛8简的spx是正常的，mode=1,nb_channels=1,rate=16000，
@@ -750,22 +751,22 @@ function decodeSpeex(file) {
         //推测可能和nb_channels有关。
     }
 
-	var comment = new SpeexComment(ogg.frames[1]);
+    var comment = new SpeexComment(ogg.frames[1]);
 
-	var spx = new Speex({
-		quality: 8,
-		mode: header.mode,
-		rate: header.rate
-	});
+    var spx = new Speex({
+        quality: 8,
+        mode: header.mode,
+        rate: header.rate
+    });
 
-	var waveData = PCMData.encode({
-		sampleRate: header.rate,
-		channelCount: header.nb_channels,
-		bytesPerSample: 2,
-		data: spx.decode(ogg.bitstream(), ogg.segments)
-	});
+    var waveData = PCMData.encode({
+        sampleRate: header.rate,
+        channelCount: header.nb_channels,
+        bytesPerSample: 2,
+        data: spx.decode(ogg.bitstream(), ogg.segments)
+    });
 
-	return new Blob([Speex.util.str2ab(waveData)], {type: "audio/wav"});
+    return new Blob([Speex.util.str2ab(waveData)], {type: "audio/wav"});
 }
 
 
@@ -824,85 +825,85 @@ function play_audio(ob,array,play,mime,func){
 }
 
 function query_audio(ob,url,play,func){
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', url, true);
-	xhr.responseType = 'arraybuffer';
-	 
-	xhr.onload = function(e) {
-	  if (this.status == 200) {
-		var mime='';
-		var blob=null;
-		var mime=this.getResponseHeader('content-type');
-		var array=this.response;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'arraybuffer';
+     
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+        var mime='';
+        var blob=null;
+        var mime=this.getResponseHeader('content-type');
+        var array=this.response;
 
-		if(mime=='audio/speex'){
-			play_speex(ob,array,play,mime,func);
-		}else if(mime=='audio/wav'||mime=='audio/mp3'||mime=='audio/mpeg'||mime=='audio/ogg'){
-			play_audio(ob,array,play,mime,func);
-		}else{
-		    if(typeof(func)=='function'){
+        if(mime=='audio/speex'){
+            play_speex(ob,array,play,mime,func);
+        }else if(mime=='audio/wav'||mime=='audio/mp3'||mime=='audio/mpeg'||mime=='audio/ogg'){
+            play_audio(ob,array,play,mime,func);
+        }else{
+            if(typeof(func)=='function'){
                 func(false);
             }
-		}
-	  }
-	};
-	 
-	xhr.send();
+        }
+      }
+    };
+     
+    xhr.send();
 }
 
 
 function query_key(container,entry){
-	var dic_pk=$("html").attr("data-dic-pk");
-	var data={"entry":entry,"dic_pk":dic_pk};
-	$.ajax({
-		url:"/mdict/key/",
-		contentType:'json',
-		type:'GET',
-		data:data,
-		success:function(data){
-			var d=$.parseJSON(data);
+    var dic_pk=$("html").attr("data-dic-pk");
+    var data={"entry":entry,"dic_pk":dic_pk};
+    $.ajax({
+        url:"/mdict/key/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            var d=$.parseJSON(data);
             var s=d["start"];
-			var e=d["end"];
-			var p1=d["p1"];
-			var p2=d["p2"];
-			var new_entry=d["entry"];
-			if(s!=-1){
-				$("#alert-box").empty();
-				$("#dic-range").val(p1);
-				query_scroll(p1,p2,dic_entry_nums,0);
-				query_record(container,new_entry,dic_pk,s,e);
-			}else{
-				set_alert_info(entry);
-			}
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+            var e=d["end"];
+            var p1=d["p1"];
+            var p2=d["p2"];
+            var new_entry=d["entry"];
+            if(s!=-1){
+                $("#alert-box").empty();
+                $("#dic-range").val(p1);
+                query_scroll(p1,p2,dic_entry_nums,0);
+                query_record(container,new_entry,dic_pk,s,e);
+            }else{
+                set_alert_info(entry);
+            }
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function query_record(container,entry,dic_pk,start,end){
     if(end==0){end=-1;}//-1存储后变为0
-	var data={"entry":entry,"dic_pk":dic_pk,"start":start,"end":end};
-	$.ajax({
-		url:"/mdict/record/",
-		contentType:'json',
-		type:'GET',
-		data:data,
-		success:function(data){
-			var d=$.parseJSON(data);
-			clear_card();
-			clear_parent_card(container);
-			//query_record在iframe外调用一次，在iframe内调用一次，因此这里用两个清除函数。;
+    var data={"entry":entry,"dic_pk":dic_pk,"start":start,"end":end};
+    $.ajax({
+        url:"/mdict/record/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            var d=$.parseJSON(data);
+            clear_card();
+            clear_parent_card(container);
+            //query_record在iframe外调用一次，在iframe内调用一次，因此这里用两个清除函数。;
             add_iframes(d,container,true,true);
-			show_first_card();
+            show_first_card();
             //change_title_and_url(entry);
             add_to_history(entry,1);
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function set_scroll_list(data_list,direction,r_s_p1,r_s_p2,r_e_p1,r_e_p2){
@@ -922,56 +923,56 @@ function set_scroll_list(data_list,direction,r_s_p1,r_s_p2,r_e_p1,r_e_p2){
 
 function query_scroll(p1,p2,num,direction){
     var dic_pk=$("html").attr("data-dic-pk");
-	var data={"p1":p1,"p2":p2,"num":num,"direction":direction,"dic_pk":dic_pk};
-	$.ajax({
-		url:"/mdict/allentrys/",
-		contentType:'json',
-		type:'GET',
-		data:data,
-		success:function(data){
-		var d=$.parseJSON(data);
-		var data_list=d["entry_list"];
-		var r_s_p1=d["s_p1"];
-		var r_s_p2=d["s_p2"];
-		var r_e_p1=d["e_p1"];
-		var r_e_p2=d["e_p2"];
-		
-		var data_len=data_list.length;
-		
-		if(data_len>0){
-			var old_r_s_p1=parseInt($("#display_list").attr("data-start-p1"));
-			var old_r_s_p2=parseInt($("#display_list").attr("data-start-p2"));
-			var old_r_e_p1=parseInt($("#display_list").attr("data-end-p1"));
-			var old_r_e_p2=parseInt($("#display_list").attr("data-end-p2"));
-			var scroll_counts=$("#display_list li").length;
-			if(isNaN(old_r_s_p1)||isNaN(old_r_s_p2)||isNaN(old_r_e_p1)||isNaN(old_r_e_p2)){
-			    set_scroll_list(data_list,direction,r_s_p1,r_s_p2,r_e_p1,r_e_p2);
-			}else{
-			    if(!dic_back&&!(r_s_p1==old_r_s_p1&&r_s_p2==old_r_s_p2)){
-			        set_scroll_list(data_list,direction,r_s_p1,r_s_p2,r_e_p1,r_e_p2);
-			    }else if(dic_back&&!(r_e_p1==old_r_e_p1&&r_e_p2==old_r_e_p2)){
+    var data={"p1":p1,"p2":p2,"num":num,"direction":direction,"dic_pk":dic_pk};
+    $.ajax({
+        url:"/mdict/allentrys/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+        var d=$.parseJSON(data);
+        var data_list=d["entry_list"];
+        var r_s_p1=d["s_p1"];
+        var r_s_p2=d["s_p2"];
+        var r_e_p1=d["e_p1"];
+        var r_e_p2=d["e_p2"];
+        
+        var data_len=data_list.length;
+        
+        if(data_len>0){
+            var old_r_s_p1=parseInt($("#display_list").attr("data-start-p1"));
+            var old_r_s_p2=parseInt($("#display_list").attr("data-start-p2"));
+            var old_r_e_p1=parseInt($("#display_list").attr("data-end-p1"));
+            var old_r_e_p2=parseInt($("#display_list").attr("data-end-p2"));
+            var scroll_counts=$("#display_list li").length;
+            if(isNaN(old_r_s_p1)||isNaN(old_r_s_p2)||isNaN(old_r_e_p1)||isNaN(old_r_e_p2)){
+                set_scroll_list(data_list,direction,r_s_p1,r_s_p2,r_e_p1,r_e_p2);
+            }else{
+                if(!dic_back&&!(r_s_p1==old_r_s_p1&&r_s_p2==old_r_s_p2)){
+                    set_scroll_list(data_list,direction,r_s_p1,r_s_p2,r_e_p1,r_e_p2);
+                }else if(dic_back&&!(r_e_p1==old_r_e_p1&&r_e_p2==old_r_e_p2)){
                     set_scroll_list(data_list,direction,r_s_p1,r_s_p2,r_e_p1,r_e_p2);
                 }
-			}
-		}
-		
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+            }
+        }
+        
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function set_mdict_enable(obj){
     var data={"mdict_pk":$(obj).attr("data-pk"),"mdict_enable":$(obj).prop("checked")};
     $.ajax({
-		url:"/mdict/mdictenable/",
-		contentType:'json',
-		type:'GET',
-		data:data,
-		success:function(data){
+        url:"/mdict/mdictenable/",
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
             console.log(data);
-		},
+        },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);
         },
@@ -1009,14 +1010,14 @@ function set_all_mdict_enable(obj){
 function set_all_mdict_ajax(dic_list,o_check){
     data={'dic_list':dic_list,"mdict_enable":o_check};
     $.ajax({
-		url:"/mdict/mdictenable/",
-		contentType:'json',
-		type:'GET',
-		traditional: true,
-		data:data,
-		success:function(data){
+        url:"/mdict/mdictenable/",
+        contentType:'json',
+        type:'GET',
+        traditional: true,
+        data:data,
+        success:function(data){
             console.log(data);
-		},
+        },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);
         },
@@ -1024,27 +1025,27 @@ function set_all_mdict_ajax(dic_list,o_check){
 }
 
 function get_mdict_list(container, es_icon_enable, es_page_enable){//载入词典列表
-	$.ajax({
-		url:"/mdict/mdictlist/",
-		contentType:'json',
-		type:'GET',
-		success:function(data){
-			var d=$.parseJSON(data);
-			$("#dic_num").text(d.length);
-			for(var i=0;i<d.length;i++){
-				var dic_name=d[i]["dic_name"];
-				var dic_file=d[i]["dic_file"];
-				var dic_icon=d[i]["dic_icon"];
-				var dic_pror=d[i]["dic_pror"];
-				var dic_pk=d[i]["dic_pk"];
-				var dic_enable=d[i]["dic_enable"];
-				var dic_es_enable=d[i]["dic_es_enable"]
-				var dic_type=d[i]["dic_type"];
+    $.ajax({
+        url:"/mdict/mdictlist/",
+        contentType:'json',
+        type:'GET',
+        success:function(data){
+            var d=$.parseJSON(data);
+            $("#dic_num").text(d.length);
+            for(var i=0;i<d.length;i++){
+                var dic_name=d[i]["dic_name"];
+                var dic_file=d[i]["dic_file"];
+                var dic_icon=d[i]["dic_icon"];
+                var dic_pror=d[i]["dic_pror"];
+                var dic_pk=d[i]["dic_pk"];
+                var dic_enable=d[i]["dic_enable"];
+                var dic_es_enable=d[i]["dic_es_enable"]
+                var dic_type=d[i]["dic_type"];
 
 
-				var checked="";
+                var checked="";
 
-				if(dic_enable){checked="checked";}
+                if(dic_enable){checked="checked";}
 
                 if(dic_type=='mdx'){
                     if(dic_es_enable){
@@ -1053,25 +1054,25 @@ function get_mdict_list(container, es_icon_enable, es_page_enable){//载入词�
                         var es_icon="<i class='bi bi-x' style='color:red;'></i>"
                     }
                     es_icon+="<i class='bi bi-question index-status' style='color:gray;' data-pk="+dic_pk+"></i>"
-				}else{
-				    var es_icon="<i class='bi bi-x' style='visibility:hidden;'></i><i class='bi bi-question' style='visibility:hidden;'></i>"
-				}
+                }else{
+                    var es_icon="<i class='bi bi-x' style='visibility:hidden;'></i><i class='bi bi-question' style='visibility:hidden;'></i>"
+                }
 
 
-				var checkbox_html=`
+                var checkbox_html=`
                             <div class="form-checkbox" style="display:inline;">
                                 <input class="form-check-input" type="checkbox" id="customControlInline${i}" ${checked} data-pk=${dic_pk} onchange="set_mdict_enable(this)">
                                 <label class="form-check-label" for="customControlInline${i}" style="display:inline;vertical-align:middle;"></label>
                             </div>
                             `
                 if(!es_icon_enable){
-				    es_icon="";
-				}
-				if(es_page_enable){
-				    es_page='esdic'
-				}else{
-				    es_page='dic'
-				}
+                    es_icon="";
+                }
+                if(es_page_enable){
+                    es_page='esdic'
+                }else{
+                    es_page='dic'
+                }
                 var s=`
                 <div class="card-header">${checkbox_html}${es_icon}
                     <img class="dic-icon" src="${html_escape(dic_icon,false)}"></img>
@@ -1082,32 +1083,32 @@ function get_mdict_list(container, es_icon_enable, es_page_enable){//载入词�
                 </div>
                 `
 
-				container.append(s);
-			}
+                container.append(s);
+            }
 
-			var dic_pk=$("html").attr("data-dic-pk");
-			if(dic_pk==-2){
+            var dic_pk=$("html").attr("data-dic-pk");
+            if(dic_pk==-2){
                 get_index_status();
-		    }else{
-		        if($("html").attr("data-type")=='esdic'){
-		            get_index_status();
-		        }
-		    }
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+            }else{
+                if($("html").attr("data-type")=='esdic'){
+                    get_index_status();
+                }
+            }
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function get_index_status(){
     $.ajax({
-		url:"/mdict/indexstatus/",
-		contentType:'json',
-		type:'GET',
-		success:function(data){
-			if(typeof(data)=='undefined'||data.indexOf('ConnectionError')>-1){
-			    $("#live-toast-body").text("error:"+data);
+        url:"/mdict/indexstatus/",
+        contentType:'json',
+        type:'GET',
+        success:function(data){
+            if(typeof(data)=='undefined'||data.indexOf('ConnectionError')>-1){
+                $("#live-toast-body").text("error:"+data);
                 new bootstrap.Toast($("#live-toast")[0]).show();
                 console.log("error:",data);
                 $('#mdict-list-content .index-status').each(function(){
@@ -1118,7 +1119,7 @@ function get_index_status(){
                     $(this).addClass('bi-cloud-slash');
                     $(this).css('color','gray');
                 });
-			}else{
+            }else{
                 var st_data=$.parseJSON(data);
                 var st_status = st_data['status'];
                 var st_error = st_data['error'];
@@ -1149,80 +1150,80 @@ function get_index_status(){
                     new bootstrap.Toast($("#live-toast")[0]).show();
                     console.log("error:",st_error);
                 }
-			}
+            }
 
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function get_header(container){
-	var data={"dic_pk":$("html").attr("data-dic-pk")};
-	$.ajax({
-		url:"/mdict/header/",
-		contentType:'json',
-		data:data,
-		type:'GET',
-		success:function(data){
-			var d=$.parseJSON(data);
-			var header=d['header'];
-			var num=d['num_entrys'];
-			var mdx_path=d['mdx_path'];
-			var mdd_path=d['mdd_path'];
-			
-			var h_line="<div style='width:100%;height:1px;border:0;margin-top:1em;margin-bottom:1em;background-color:gray;'></div>";
-			var title="";
-			var description="";
-			var num_entrys="词条数量："+thousands(num);
-			var other_attributes="";
-			for(var key in header){
-				if(key!="StyleSheet"&&header[key].length>0){//不显示StyleSheet属性和空属性
-					if(key=="Title"){
-						if(header[key]!=''){
-						    title=`<div style="font-size:22px;color:brown;">${header[key]}</div>`;
-						}
-					}else if(key=="Description"){
-						if(header[key]!=''){
-						    description=`<div>${header[key]}</div>`;
-						}
-					}else{
-						other_attributes+=`<div>${key}：${header[key]}</div>`;
-					}
-					
-				}
-			}
+    var data={"dic_pk":$("html").attr("data-dic-pk")};
+    $.ajax({
+        url:"/mdict/header/",
+        contentType:'json',
+        data:data,
+        type:'GET',
+        success:function(data){
+            var d=$.parseJSON(data);
+            var header=d['header'];
+            var num=d['num_entrys'];
+            var mdx_path=d['mdx_path'];
+            var mdd_path=d['mdd_path'];
+            
+            var h_line="<div style='width:100%;height:1px;border:0;margin-top:1em;margin-bottom:1em;background-color:gray;'></div>";
+            var title="";
+            var description="";
+            var num_entrys="词条数量："+thousands(num);
+            var other_attributes="";
+            for(var key in header){
+                if(key!="StyleSheet"&&header[key].length>0){//不显示StyleSheet属性和空属性
+                    if(key=="Title"){
+                        if(header[key]!=''){
+                            title=`<div style="font-size:22px;color:brown;">${header[key]}</div>`;
+                        }
+                    }else if(key=="Description"){
+                        if(header[key]!=''){
+                            description=`<div>${header[key]}</div>`;
+                        }
+                    }else{
+                        other_attributes+=`<div>${key}：${header[key]}</div>`;
+                    }
+                    
+                }
+            }
 
-			var file_info=`<div>${mdx_path}</div><div>${mdd_path}</div>`
+            var file_info=`<div>${mdx_path}</div><div>${mdd_path}</div>`
 
-//			description=description.replace('height="100%"','').replace("heigth='100%'",'');
-			
-			var style="<style>html,body{margin:0;padding:0;}img{max-width:100%;}</style>";
+//            description=description.replace('height="100%"','').replace("heigth='100%'",'');
+            
+            var style="<style>html,body{margin:0;padding:0;}img{max-width:100%;}</style>";
 
-			if(title==''){
-			    var html=style;
-			}else{
-			    var html=style+title;
-			}
+            if(title==''){
+                var html=style;
+            }else{
+                var html=style+title;
+            }
 
-			if(description==''){
-			    html+=h_line+num_entrys;
-			}else{
-			    html+=h_line+num_entrys+h_line+description;
-			}
-			html+=h_line+file_info+h_line+other_attributes+script;
-			
-			var iframe = document.createElement('iframe');
-			iframe.width="100%";
-			iframe.height="100%";
-			iframe.id="dic-header";
-			iframe.scrolling="no";
-			container.append(iframe);
-			
-			iframe.contentWindow.document.open();
-			iframe.contentWindow.document.write(html);//这里用iframe是因为某些字典的description中含有body样式，导致样式污染。
-			iframe.contentWindow.document.close();
+            if(description==''){
+                html+=h_line+num_entrys;
+            }else{
+                html+=h_line+num_entrys+h_line+description;
+            }
+            html+=h_line+file_info+h_line+other_attributes+script;
+            
+            var iframe = document.createElement('iframe');
+            iframe.width="100%";
+            iframe.height="100%";
+            iframe.id="dic-header";
+            iframe.scrolling="no";
+            container.append(iframe);
+            
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(html);//这里用iframe是因为某些字典的description中含有body样式，导致样式污染。
+            iframe.contentWindow.document.close();
             iFrameResize({
                 log:false,
                 checkOrigin:false,
@@ -1230,12 +1231,12 @@ function get_header(container){
                 heightCalculationMethod:'documentElementOffset',
                 warningTimeout:0,
             },iframe);
-			
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+            
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 
