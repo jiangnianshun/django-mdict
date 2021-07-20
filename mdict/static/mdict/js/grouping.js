@@ -50,6 +50,16 @@ function init_jstree(){
             "items": function ($node) {
                 var tree = $("#grouping-right").jstree(true);
                 return {
+                    "Open": {
+                        "separator_before": false,
+                        "separator_after": false,
+                        "label": "打开",
+                        "action": function (obj) {
+                            let dic_pk=$("#"+$node.id).attr("data-pk");
+                            let url="/mdict/dic/"+dic_pk;
+                            window.open(url);
+                        }
+                    },
                     "Rename": {
                         "separator_before": false,
                         "separator_after": false,
@@ -112,10 +122,20 @@ function init_jstree(){
         },
     }).bind("rename_node.jstree", function (e, data) {
         let cur_node=$("#"+data.node.id);
-        if(cur_node.hasClass("jstree-leaf")){
-            rename_item(data.text,cur_node.attr("data-pk"),false);
+        let text=data.text;
+        let mark=text.indexOf("<span style=\"color:red;\">");
+        if(mark>-1){
+            text=text.substring(0,mark);
         }else{
-            rename_item(data.text,cur_node.attr("data-pk"),true);
+            mark=text.indexOf("</span>");
+            if(mark>-1){
+                text=text.substring(0,mark);
+            }
+        }
+        if(cur_node.hasClass("jstree-leaf")){
+            rename_item(text,cur_node.attr("data-pk"),false);
+        }else{
+            rename_item(text,cur_node.attr("data-pk"),true);
         }
     }).bind("move_node.jstree", function (e, data) {
         //let node_ele = $('#' + data.node.id);
