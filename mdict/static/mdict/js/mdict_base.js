@@ -720,7 +720,7 @@ function init_common(){
         var state=window.history.state;
         if(state){
             var query=state['query'];
-            var group=state['group']
+            var group=state['group'];
 
             var opt=$("#dic-group").find("option[data-pk="+group+"]");
             $('#dic-group').val(opt.text()).selectmenu("refresh");
