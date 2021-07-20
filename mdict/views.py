@@ -37,6 +37,7 @@ from mdict.mdict_utils.search_object import SearchObject
 from mdict.mdict_utils.search_utils import search, search_bultin_dic_sug, search_mdx_sug, \
     search_revise
 from .mdict_utils.entry_object import entryObject
+from mdict.mdict_utils.romkan import to_hiragana, to_katakana, to_hepburn, to_kunrei
 
 from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
@@ -832,12 +833,12 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
 
 def get_query_list(query, query_params={}):
     # 找出query的各种变体（简繁，拆字反查，全角半角，假名）
-    query_list = []
+    query_set = set()
 
     query = query.strip()
 
     if query:  # 非空字符串为True
-        query_list.append(query)
+        query_set.add(query)
 
         if 'fh_char_enable' in query_params.keys():
             fh_char_enable = query_params['fh_char_enable']
@@ -848,7 +849,18 @@ def get_query_list(query, query_params={}):
             # 全角英文字母转半角
             q2b = strQ2B(query)
             if q2b != query:
-                query_list.append(q2b)
+                query_set.add(q2b)
+
+        if 'romaji_enable' in query_params.keys():
+            romaji_enable = query_params['romaji_enable']
+        else:
+            romaji_enable = get_config_con('romaji_enable')
+
+        if romaji_enable:
+            query_set.add(to_hiragana(query))
+            query_set.add(to_katakana(query))
+            query_set.add(to_hepburn(query))
+            query_set.add(to_kunrei(query))
 
         if not is_en_func(query):
             # 非纯英文的处理
@@ -870,44 +882,42 @@ def get_query_list(query, query_params={}):
                 result = hc.reverse_query(query)
                 if result:
                     for r in result:
-                        query_list.append(r)
+                        query_set.add(r)
 
             if st_enable:
                 # 繁简转化
                 q_s = t2s.convert(query)
                 q_t = s2t.convert(query)
                 if q_t != query:
-                    query_list.append(q_t)
+                    query_set.add(q_t)
                     if chaizi_enable and len(q_t) > 1:
                         result = hc.reverse_query(q_t)
                         if result:
                             for r in result:
-                                query_list.append(r)
+                                query_set.add(r)
                 elif q_s != query:
-                    query_list.append(q_s)
+                    query_set.add(q_s)
                     if chaizi_enable and len(q_s) > 1:
                         result = hc.reverse_query(q_s)
                         if result:
                             for r in result:
-                                query_list.append(r)
+                                query_set.add(r)
 
             if kana_enable:
                 # 平假名、片假名转化
                 k_kana = h2k(query)
                 h_kana = k2h(query)
                 f_kana = kh2f(query)
-                if k_kana != query:
-                    query_list.append(k_kana)
-                elif h_kana != query:
-                    query_list.append(h_kana)
+
+                query_set.add(k_kana)
+                query_set.add(h_kana)
 
                 if f_kana != query:
-                    query_list.append(f_kana)
+                    query_set.add(f_kana)
                     fk_kana = k2h(f_kana)
-                    if fk_kana != f_kana:
-                        query_list.append(fk_kana)
+                    query_set.add(fk_kana)
 
-    return query_list
+    return list(query_set)
 
 
 hc = HanziChaizi()
@@ -1024,7 +1034,8 @@ class get_mdict_list_object(innerObject):
         else:
             m_type = 'mdx'
         dic_icon = get_icon_path(mdx, icon)
-        item = {'dic_name': dic.mdict_name, 'dic_file': quote(file), 'dic_icon': dic_icon, 'dic_pror': dic.mdict_priority,
+        item = {'dic_name': dic.mdict_name, 'dic_file': quote(file), 'dic_icon': dic_icon,
+                'dic_pror': dic.mdict_priority,
                 'dic_pk': dic.pk, 'dic_enable': dic.mdict_enable, 'dic_es_enable': dic.mdict_es_enable,
                 'dic_type': m_type}
         self.inner_list.append(item)

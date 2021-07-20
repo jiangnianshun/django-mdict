@@ -87,4 +87,6 @@ dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readli
 
 [说明文档](doc/doc_index.md)
 
+[更新](doc/doc_update.md)
+
 [样式](doc/doc_style.md)

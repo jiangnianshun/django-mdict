@@ -79,8 +79,8 @@ def replace_res_name(res_name):
     if res_name[-1] == "'" or res_name[-1] == "'":
         res_name = res_name[:-1]
     # 在html中href是用/，在mdd中文件名用\，因此这里要替换。
-    res_name = res_name.strip()
-    # Concise Oxford English Dictionary and Thesaurus中部分图片名前后有不可见字符\1E和\1F干扰，需要去掉。
+    # res_name = res_name.strip()
+    # Concise Oxford English Dictionary and Thesaurus中部分图片名前后有不可见字符\1E和\1F干扰，需要去掉。strip后可能为空字符串。
     if res_name[0] != '/' and res_name[0] != '\\':
         res_name = '/' + res_name
     res_name = res_name.replace('/', '\\')

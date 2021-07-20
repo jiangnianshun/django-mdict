@@ -4,7 +4,7 @@
   * [原形推测和拼写检查](#原形推测和拼写检查)
   * [拆字反查](#拆字反查)
   * [部件检索和全宋体](#部件检索和全宋体)
-  * [繁简转化和全角转化](#繁简转化和全角转化)
+  * [字符转化](#字符转化)
   * [同名加载](#同名加载)
   * [查询历史](#查询历史)
   * [其他](#其他)
@@ -104,13 +104,17 @@ pdawiki部件检索和全宋体：[https://www.pdawiki.com/forum/forum.php?mod=v
 
 部件检索目前包含151917个汉字。
 
-### 繁简转化和全角转化
+### 字符转化
 
 繁简转化用的是opencc-python-reimplemented
 
 部分pdf复制的字符是全角字符，查询时会全角查询一遍，转化为半角再查询一遍。
 
 日文平假名和片假名自动转换，半角片假名会转换为全角片假名。
+
+日文假名和罗马音转化使用python-romkan实现。
+
+python-romkan：[https://github.com/soimort/python-romkan](https://github.com/soimort/python-romkan)
 
 ### 同名加载
 
