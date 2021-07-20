@@ -41,7 +41,7 @@ default_config = {
         'chaizi_enable': True,  # 拆字反查
         'fh_char_enable': True,  # 全角转换
         'kana_enable': True,  # 假名转换
-        'romaji_enable': False, #罗马字假名转换
+        'romaji_enable': False,  # 罗马字假名转换
         'force_refresh': False,  # 强制刷新
         'select_btn_enable': True,  # 是否启用选择文字弹出框
         'disable_iframe_click': True,  # 屏蔽iframe中的默认点击事件
