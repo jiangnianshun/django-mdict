@@ -241,7 +241,7 @@ class SearchObject:
         if record == '':
             return ''
 
-        if record.find('@@@LINK') == 0:  # 处理@@@LINK连接
+        if record.startswith('@@@LINK'):  # 处理@@@LINK连接
             record = self.substitute_mdx_link(record)
 
         if record == '':
@@ -547,30 +547,32 @@ class SearchObject:
                 self.f_p2 = result[3]
                 self.cmp.append(result[0])
 
-                if record.find('@@@LINK') != 0:  # 如果不是LINK，说明是正文.
+                if not record.startswith('@@@LINK'):  # 如果不是LINK，说明是正文.
                     # xinshijirihan查こっか，分别指向6个词条，其中こっか【国家】和こっか【国華】分别有2个同名词条，因此不能只取第一个。
                     if entry == '':
                         entry = result[4]
                         record = result[5]
-                        if record.find('@@@LINK') == 0:
+                        if record.startswith('@@@LINK'):
                             record = self.substitute_mdx_link(record)
                     elif entry == result[4]:
                         tt_record = result[5]
-                        if tt_record.find('@@@LINK') == 0:
+                        if tt_record.startswith('@@@LINK'):
                             # 牛津高阶双解(第9版)_V3.1.3版查Scotch tape有2个词条，其中第2个词条指向sellotape，需要处理LINK。
                             tt_record = self.substitute_mdx_link(tt_record)
                         record += tt_record
                     else:
+                        if not result[5].startswith('@@@LINK'):
+                            record = result[5]
                         break
                 elif self.mdx.process_str_keys(res_name) != self.mdx.process_str_keys(
                         record[8:].rstrip('\n').rstrip('\r')):  # 如果是新LINK，中断。
                     record = result[5]
-                    if record.find('@@@LINK') == 0:
+                    if record.startswith('@@@LINK'):
                         record = self.substitute_mdx_link(record)
                     break
                 else:
                     record = result[5]
-                    if record.find('@@@LINK') == 0:
+                    if record.startswith('@@@LINK'):
                         record = self.substitute_mdx_link(record)
 
         if record == '':
@@ -601,7 +603,7 @@ class SearchObject:
                         self.f_p1 = result[2]
                         self.f_p2 = result[3]
                         self.f_pk = MdictDic.objects.get(mdict_file=mdx.get_fname()).pk
-                        if record.find('@@@LINK') != 0:  # 如果不是LINK，说明是正文，中断。
+                        if not record.startswith('@@@LINK'):  # 如果不是LINK，说明是正文，中断。
                             flag = True
                             break
                         else:
