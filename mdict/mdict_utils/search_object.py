@@ -37,9 +37,10 @@ except ImportError as e:
 
 # 超链接href包含sound://,entry://,file://,http://,https://，data:开头是base64，mailto:开头是邮件,javascript:脚本，#开头可能是锚点，www.开头可能是网址，这两个当在mdd中查询不存在时不处理。
 # reg = r'([ <\n])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >])'
-reg = r'([ <\n\t])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'>]+)(["\' >\t])'
+reg = r'([ <\n\t])((src=("|\'| )*)|(href=("|\'| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^"\'> ]+)(["\' >\t])'
 regp = re.compile(reg, re.IGNORECASE)
 # 漢字音形義字典20191017词条泉的图片href中有=，[^"\'>=]改[^"\'>]。
+# 字海(葉典)20210618中的图片href中字符串没有用引号包裹，用空格判断结束。
 
 regz = r'([ <\n])((src[ ]*=[ ]*("| )*)|(href[ ]*=[ ]*("| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^">]+)([" >])'
 regpz = re.compile(regz, re.IGNORECASE)
