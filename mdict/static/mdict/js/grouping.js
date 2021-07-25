@@ -55,9 +55,12 @@ function init_jstree(){
                         "separator_after": false,
                         "label": "打开",
                         "action": function (obj) {
-                            let dic_pk=$("#"+$node.id).attr("data-pk");
-                            let url="/mdict/dic/"+dic_pk;
-                            window.open(url);
+                            let cur_ele=$("#"+$node.id);
+                            if(cur_ele.hasClass("dic-item")){
+                                let dic_pk=cur_ele.attr("data-pk");
+                                let url="/mdict/dic/"+dic_pk;
+                                window.open(url);
+                            }
                         }
                     },
                     "Rename": {
