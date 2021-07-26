@@ -22,6 +22,13 @@ def create_process_pool():
     return multiprocessing.Pool(processes=cnum)
 
 
+def pre_pool_search(prpool):
+    # 预热，避免第一次查询等待。
+    cnum = get_cpu_num()
+    q_list = ((i, ['apple'], 0) for i in range(cnum))
+    prpool.starmap(multiprocess_search_mdx, q_list)
+
+
 def terminate_pool(pool):
     print_log_info('terminating multiprocessing pool.')
     if pool is not None:
@@ -49,6 +56,5 @@ def loop_create_model():
     terminate_pool(pool)
     loop_create_model_object({})
     pool = create_process_pool()
-
 
 # pool = create_process_pool()

@@ -16,7 +16,7 @@ from .loop_search import loop_search_sug
 from .mdict_config import get_config_con, get_cpu_num
 from .ws_client import ws_search
 
-from .multi_process import create_process_pool, multiprocess_search_mdx, multiprocess_search_sug
+from .multi_process import create_process_pool, multiprocess_search_mdx, multiprocess_search_sug, pre_pool_search
 from .multi_thread import create_thread_pool, multithread_search_mdx, multithread_search_sug
 
 prpool = None
@@ -24,6 +24,7 @@ thpool = None
 
 if check_system() == 0:
     prpool = create_process_pool()
+    pre_pool_search(prpool)
 else:
     thpool = create_thread_pool()
 
