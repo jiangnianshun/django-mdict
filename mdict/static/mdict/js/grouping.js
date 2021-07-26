@@ -48,45 +48,60 @@ function init_jstree(){
         "plugins" : ["contextmenu","dnd"],
         "contextmenu": {
             "items": function ($node) {
-                var tree = $("#grouping-right").jstree(true);
-                return {
-                    "Open": {
+                let tree = $("#grouping-right").jstree(true);
+                let cur_node=$("#"+$node.id);
+                let dic_pk=cur_node.attr("data-pk");
+                let prev_node=cur_node.parent().parent();
+                let menu = {};
+                if(cur_node.hasClass("dic-item")){
+                    menu["Open"]={
                         "separator_before": false,
                         "separator_after": false,
                         "label": "打开",
                         "action": function (obj) {
-                            let cur_ele=$("#"+$node.id);
-                            if(cur_ele.hasClass("dic-item")){
-                                let dic_pk=cur_ele.attr("data-pk");
+                            if(cur_node.hasClass("dic-item")){
                                 let url="/mdict/dic/"+dic_pk;
                                 window.open(url);
                             }
                         }
-                    },
-                    "Rename": {
-                        "separator_before": false,
-                        "separator_after": false,
-                        "label": "重命名",
-                        "action": function (obj) {
-                           tree.edit($node);
-                        }
-                    },
-                    "Delete": {
-                        "separator_before": false,
-                        "separator_after": false,
-                        "label": "删除",
-                        "action": function (obj) {
-                            let cur_node=$("#"+$node.id);
-                            let prev_node=cur_node.parent().parent();
-                            if(cur_node.hasClass("jstree-leaf")){
-                                delete_item(cur_node.attr("data-pk"),prev_node.attr("data-pk"),false);
-                            }else{
-                                delete_item(cur_node.attr("data-pk"),prev_node.attr("data-pk"),true);
-                            }
-                            tree.delete_node($node);
-                        }
-                    },
+                    };
                 }
+                menu["Edit"]={
+                    "separator_before": false,
+                    "separator_after": false,
+                    "label": "编辑",
+                    "action": function (obj) {
+                        if(cur_node.hasClass("dic-item")){
+                            let url="/admin/mdict/mdictdic/"+dic_pk;
+                            window.open(url);
+                        }else{
+                            let url="/admin/mdict/mdictdicgroup/"+dic_pk;
+                            window.open(url);
+                        }
+                    }
+                };
+                menu["Rename"]={
+                    "separator_before": false,
+                    "separator_after": false,
+                    "label": "重命名",
+                    "action": function (obj) {
+                       tree.edit($node);
+                    }
+                };
+                menu["Delete"]={
+                    "separator_before": false,
+                    "separator_after": false,
+                    "label": "删除",
+                    "action": function (obj) {
+                        if(cur_node.hasClass("jstree-leaf")){
+                            delete_item(cur_node.attr("data-pk"),prev_node.attr("data-pk"),false);
+                        }else{
+                            delete_item(cur_node.attr("data-pk"),prev_node.attr("data-pk"),true);
+                        }
+                        tree.delete_node($node);
+                    }
+                };
+                return menu
             },
         },
         "dnd" : {
