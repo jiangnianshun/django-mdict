@@ -128,6 +128,9 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+# 新版django会报警告Auto-created primary key used when not defining a primary key type
+
 LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai'
