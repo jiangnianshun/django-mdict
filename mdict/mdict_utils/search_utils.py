@@ -203,28 +203,29 @@ def extract_bultin_dic_all(r_list):
 def search_builtin(query):
     # 查询内置词典
     query = regp.sub('', query).lower()
-    max_query_len = len(query) * 1.5
+    if len(query) <= 2:
+        max_query_len = len(query) * 2
+    else:
+        max_query_len = len(query) * 1.5
 
-    r_list = list(MyMdictEntry.objects.all()
-                  .filter(mdict_entry_strip__icontains=query)
-                  .annotate(text_len=Length('mdict_entry_strip'))
-                  .filter(text_len__lte=max_query_len))
-    entry_list = list(MyMdictItem.objects.all()
-                      .filter(item_entry_strip__icontains=query)
-                      .annotate(text_len=Length('item_entry_strip'))
-                      .filter(text_len__lte=max_query_len))
+    r_list = MyMdictEntry.objects.all() \
+        .filter(mdict_entry_strip__icontains=query) \
+        .annotate(text_len=Length('mdict_entry_strip')) \
+        .filter(text_len__lte=max_query_len)
+    entry_list = MyMdictItem.objects.all() \
+        .filter(item_entry_strip__icontains=query) \
+        .annotate(text_len=Length('item_entry_strip')) \
+        .filter(text_len__lte=max_query_len)
 
-    for e in entry_list:
-        if e.item_mdict is not None:
-            r_list.append(e.item_mdict)
+    r_dict = {}
+    for r_item in r_list:
+        r_dict.update({r_item.mdict_entry: r_item})
+    for e_item in entry_list:
+        if e_item.item_mdict is not None:
+            i_mdict = e_item.item_mdict
+            r_dict.update({i_mdict.mdict_entry: i_mdict})
 
-    # 去重
-    for i in range(len(r_list) - 1, -1, -1):
-        for j in range(i - 1, -1, -1):
-            if r_list[i].mdict_entry == r_list[j].mdict_entry:
-                del r_list[i]
-                break
-    return r_list
+    return list(r_dict.values())
 
 
 def search_bultin_dic(required, record_list):
