@@ -47,7 +47,6 @@ from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
 try:
     from mdict.readlib.lib.readzim import ZIMFile
 except ImportError as e:
-    print(e)
     print_log_info('loading readzim lib failed!', 1)
     from mdict.readlib.src.readzim import ZIMFile
 

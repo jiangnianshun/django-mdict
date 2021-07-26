@@ -31,7 +31,6 @@ from base.base_func import guess_mime, print_log_info
 try:
     from mdict.readlib.lib.readzim import ZIMFile
 except ImportError as e:
-    print(e)
     print_log_info('loading readzim lib failed!', 1)
     from mdict.readlib.src.readzim import ZIMFile
 

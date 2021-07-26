@@ -14,14 +14,12 @@ print_log_info(['system is', get_sys_name(), '.'])
 try:
     from mdict.readlib.lib.readzim import ZIMFile
 except ImportError as e:
-    print(e)
     print_log_info('loading readzim lib failed!', 1)
     from mdict.readlib.src.readzim import ZIMFile
 
 try:
     from mdict.readlib.lib.readmdict import MDX, MDD
 except ImportError as e:
-    print(e)
     print_log_info('loading readmdict lib failed!', 1)
     from mdict.readlib.src.readmdict import MDX, MDD
 
