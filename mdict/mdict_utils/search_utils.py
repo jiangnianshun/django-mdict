@@ -2,14 +2,6 @@
 import os
 import re
 
-is_leven = False
-try:
-    import Levenshtein  # python-Levenshtein包
-
-    is_leven = True
-except ImportError as e:
-    print('Levenshtein not support')
-
 from django.db.models.functions import Length
 from nltk.data import path as nltk_path
 from nltk.stem import WordNetLemmatizer
@@ -221,19 +213,9 @@ def search_builtin(query):
                       .annotate(text_len=Length('item_entry_strip'))
                       .filter(text_len__lte=max_query_len))
 
-    if is_leven:
-        for i in range(len(r_list) - 1, -1, -1):
-            # Levenshtein包含大小写，因此要将两字符串都取小写再计算
-            if Levenshtein.ratio(query, r_list[i].mdict_entry.lower()) < 0.7:
-                del r_list[i]
-        for e in entry_list:
-            if e.item_mdict is not None and e.item_entry is not None:
-                if Levenshtein.ratio(query, e.item_entry.lower()) >= 0.7:
-                    r_list.append(e.item_mdict)
-    else:
-        for e in entry_list:
-            if e.item_mdict is not None:
-                r_list.append(e.item_mdict)
+    for e in entry_list:
+        if e.item_mdict is not None:
+            r_list.append(e.item_mdict)
 
     # 去重
     for i in range(len(r_list) - 1, -1, -1):

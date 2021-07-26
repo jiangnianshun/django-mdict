@@ -11,4 +11,3 @@ psutil
 zstandard
 cython
 nltk
-python-Levenshtein

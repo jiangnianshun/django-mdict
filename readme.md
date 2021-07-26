@@ -18,7 +18,7 @@ django-mdict是django实现的mdict词典查询工具（支持zim格式）。
 
 2. 安装Visual Studio（同时安装C++开发组件），或者安装Microsoft C++ Build Tools（安装时勾选C++开发组件）。
 
-在安装nltk、python-Levenshtein等库以及进行cython编译时需要C++开发组件。
+在进行cython编译时需要C++开发组件。
 
 Visual Studio地址：
 
