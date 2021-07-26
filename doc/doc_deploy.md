@@ -6,9 +6,9 @@
 
 1. 安装python3。
 
-2. 安装Visual Studio（同时安装C++开发组件），或者安装Microsoft C++ Build Tools（安装时勾选C++开发组件）。
+2. （可跳过）安装Visual Studio（同时安装C++开发组件），或者安装Microsoft C++ Build Tools（安装时勾选C++开发组件）。
 
-在进行cython编译时需要C++开发组件。
+在进行cython编译时需要C++编译器，跳过后无法进行cython编译，查询速度变慢。
 
 Visual Studio地址：
 
