@@ -310,6 +310,7 @@ def write_dir_change():
 
 
 def init_mdict_list(rewrite_cache):
+    global init_vars
     t1 = time.perf_counter()
     print_log_info(['media root path:', mdict_root_path])
 
@@ -341,3 +342,4 @@ def init_mdict_list(rewrite_cache):
 
     print_log_info(['dictionary counts', len(init_vars.mdict_odict)])
     print_log_info('initializing', 0, t1, time.perf_counter())
+    return init_vars

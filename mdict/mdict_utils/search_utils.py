@@ -25,8 +25,8 @@ thpool = None
 if check_system() == 0:
     prpool = create_process_pool()
     pre_pool_search(prpool)
-else:
-    thpool = create_thread_pool()
+# else:
+#     thpool = create_thread_pool()
 
 nltk_path.append(os.path.join(ROOT_DIR, 'media', 'nltk_data'))
 lemmatizer = WordNetLemmatizer()
@@ -121,6 +121,8 @@ def search_mdx_sug(dic_pk, sug_list, group, flag):
             sug.extend(ws_search(sug_list, group, 'sug'))
         except Exception as e:
             print(e)
+            if thpool is None:
+                thpool = create_thread_pool()
             q_list = ((i, sug_list, group) for i in range(cnum))
             record_list = thpool.starmap(multithread_search_sug, q_list)
             for r in record_list:
@@ -265,6 +267,8 @@ def search_mdx_dic(query_list, record_list, group):
             record_list.extend(ws_search(query_list, group, 'dic'))
         except Exception as e:
             print('ws server connection failed', e)
+            if thpool is None:
+                thpool = create_thread_pool()
             q_list = ((i, query_list, group) for i in range(cnum))
             a_list = thpool.starmap(multithread_search_mdx, q_list)
             for a in a_list:

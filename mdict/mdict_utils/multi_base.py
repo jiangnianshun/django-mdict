@@ -3,7 +3,7 @@ import os
 from base.base_func import ROOT_DIR
 from .mdict_config import get_config_con
 from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
-from .init_utils import init_vars, sort_mdict_list, read_pickle_file
+from .init_utils import init_vars, read_pickle_file, sort_mdict_list
 from .search_object import SearchObject
 from .mdict_func import get_dic_attrs
 from .dic_object import dicObject
@@ -86,14 +86,16 @@ def merge_record(record_list):
     return record_list
 
 
-def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
+def multi_search_mdx(n, query_list, group_pk, is_mdx=True, tinit_vars=None):
+    global init_vars
     r_list = []
 
     if not init_vars.mdict_odict:
-        init_vars.mdict_odict = read_pickle_file(pickle_file_path)
-
-    if not init_vars.indicator:
-        init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
+        if tinit_vars is None:
+            init_vars.mdict_odict = read_pickle_file(pickle_file_path)
+            init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
+        else:
+            init_vars = tinit_vars
 
     for k in init_vars.indicator[n]:
         temp_object = init_vars.mdict_odict[k]
