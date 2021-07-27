@@ -54,7 +54,7 @@ if __name__ == '__main__':
     prpool = create_process_pool()
     cnum = get_cpu_num()
 
-    pre_pool_search(prpool, init_vars)
+    # pre_pool_search(prpool, init_vars)
     # windows下ws_server第一次查询时
     # 1.在asyncio内且各进程独自读取缓存，占用内存一直大于正常值但不到100%；
     # 2.在asyncio外且各进程独自读取缓存，内存和硬盘占用100%，一段时间后内存和硬盘占用恢复到正常值；

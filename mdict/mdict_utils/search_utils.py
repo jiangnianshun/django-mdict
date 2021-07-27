@@ -24,7 +24,7 @@ thpool = None
 
 if check_system() == 0:
     prpool = create_process_pool()
-    pre_pool_search(prpool)
+    # pre_pool_search(prpool)
 # else:
 #     thpool = create_thread_pool()
 
