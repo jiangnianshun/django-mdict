@@ -25,7 +25,7 @@ chmod -R 777 django-mdict
 
 可能需要手动删除.Linux.cache和.Linux.dat等缓存文件。
 
-可能需要提升词典库中生成的idx文件的权限。
+可能需要提升词典库中zim文件抽取出的idx文件的权限。
 
 5. Failed to enable APR_TCP_DEFER_ACCEPT
 
@@ -59,9 +59,9 @@ chmod +x /bin/sleep
 
 尝试将该词条重新保存。
 
-10. windows下后台残留僵尸进程。
+10. windows下关闭djnago-mdict后，后台残留僵尸进程。
 
-注销系统后重新进入。
+注销或重启系统。
 
 11. run_server.sh: line 16: syntax error: unexpected end of file
 

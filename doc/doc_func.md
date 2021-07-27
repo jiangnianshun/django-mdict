@@ -130,8 +130,6 @@ mdx同名的js、css和字体文件会自动加载。
 
 在mdict/wordcloud/下查看查询历史生成的词云，可以在右上角设置中选择时间范围。
 
-关闭保存查询历史，修改config.ini中的history_enable为False，然后重启django-mdict。
-
 删除保存的查询历史，直接删除根目录下所有history开头的dat文件。
 
 ### 其他
