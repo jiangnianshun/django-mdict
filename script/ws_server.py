@@ -8,7 +8,7 @@ import websockets
 root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(root_path)
 
-from mdict.mdict_utils.multi_process import multiprocess_search_mdx, multiprocess_search_sug, create_process_pool, \
+from mdict.mdict_utils.multi_process import multiprocess_search_mdx, create_process_pool, \
     get_cpu_num, pre_pool_search
 from mdict.mdict_utils.object_coder import objectEncoder
 from mdict.mdict_utils.init_utils import init_mdict_list
@@ -32,11 +32,12 @@ async def ws_search(websocket, path):
 
     result_list = []
 
-    q_list = ((i, query_list, group) for i in range(cnum))
     if query_type == 'dic':
+        q_list = ((i, query_list, group) for i in range(cnum))
         r_list = prpool.starmap(multiprocess_search_mdx, q_list)
     else:
-        r_list = prpool.starmap(multiprocess_search_sug, q_list)
+        q_list = ((i, query_list, group, False) for i in range(cnum))
+        r_list = prpool.starmap(multiprocess_search_mdx, q_list)
     for ri in r_list:
         result_list.extend(ri)
 

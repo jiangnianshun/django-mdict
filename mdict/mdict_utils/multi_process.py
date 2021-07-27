@@ -8,12 +8,12 @@ from .mdict_config import get_cpu_num
 from .multi_base import multi_search_mdx
 
 
-def multiprocess_search_sug(n, sug_list, group):
-    return multi_search_mdx(n, sug_list, group, is_mdx=False)
+# def multiprocess_search_sug(n, sug_list, group):
+#     return multi_search_mdx(n, sug_list, group, is_mdx=False)
 
 
-def multiprocess_search_mdx(n, query_list, group):
-    return multi_search_mdx(n, query_list, group)
+def multiprocess_search_mdx(n, query_list, group, is_mdx=True):
+    return multi_search_mdx(n, query_list, group, is_mdx=is_mdx)
 
 
 def create_process_pool():
@@ -25,7 +25,7 @@ def create_process_pool():
 def pre_pool_search(prpool):
     # 预热，避免第一次查询等待。
     cnum = get_cpu_num()
-    q_list = ((i, ['apple'], 0) for i in range(cnum))
+    q_list = ((i, ['bananapie'], 0) for i in range(cnum))
     prpool.starmap(multiprocess_search_mdx, q_list)
 
 
