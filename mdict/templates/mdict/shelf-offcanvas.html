@@ -7,6 +7,9 @@
         <button type="button" class="btn btn-light" onclick="shelf_dic_btn(2,0)">正查</button>
         <button type="button" class="btn btn-light" onclick="shelf_dic_btn(2,1)">全文查询</button>
         <button type="button" class="btn btn-light" onclick="shelf_dic_btn(2,2)">编辑</button>
+        {% if address == 'local' %}
+            <button type="button" class="btn btn-light" onclick="open_path(2)">打开路径</button>
+        {% endif %}
     </div>
     <div class="offcanvas-body"></div>
 </div>

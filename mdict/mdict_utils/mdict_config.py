@@ -33,7 +33,8 @@ default_config = {
         'cache_num': 30,  # 查询提示缓存的个数
         'search_cache_num': 20,  # 查询（分页）缓存的个数
         'builtin_dic_enable': True,  # 启用内置词典
-        'es_host': 'http://127.0.0.1:9200/'
+        'es_host': 'http://127.0.0.1:9200/',
+        'open_path_enable': True  # 是否允许打开本地词典路径
     },
     'SEARCH': {
         'merge_entry_max_length': 1000,

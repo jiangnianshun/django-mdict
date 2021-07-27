@@ -203,8 +203,10 @@ def extract_bultin_dic_all(r_list):
 def search_builtin(query):
     # 查询内置词典
     query = regp.sub('', query).lower()
-    if len(query) <= 2:
-        max_query_len = len(query) * 2
+    if len(query) == 1:
+        max_query_len = 1
+    elif len(query) == 2:
+        max_query_len = 3
     else:
         max_query_len = len(query) * 1.5
 

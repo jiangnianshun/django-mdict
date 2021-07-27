@@ -274,6 +274,26 @@ function shelf_dic_btn(type1,type2){
     }
 }
 
+function open_path(type1){
+    if(type1==1){
+        var dic_pk=$("#modal-shelf-dic").attr('data-pk');
+    }else{
+        var dic_pk=$("#offcanvas-shelf-dic").attr('data-pk');
+    }
+    $.ajax({
+        url:"/mdict/openpath/",
+        contentType:'json',
+        type:'GET',
+        data:{"dic_pk":dic_pk},
+        success:function(data){
+            console.log(data);
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
+}
+
 function set_dic_num(){
     $("#dic-num").text($(".col:visible").length);
 }
@@ -316,7 +336,6 @@ function init_dropdown(){
         url:"/mdict/dicgroup/",
         contentType:'json',
         type:'GET',
-        async:false,
         success:function(data){
         var dic_group=$.parseJSON(data);
         for(var i=0;i<dic_group.length;i++){

@@ -25,6 +25,7 @@ from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime
     ROOT_DIR
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
+from base.sys_utils import check_system
 
 from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs, check_xapian, \
     clear_duplication
@@ -1296,11 +1297,21 @@ def wordcloud(request):
 
 
 def shelf(request):
-    return render(request, 'mdict/shelf.html')
+    request_url = request.META['REMOTE_ADDR']
+    if request_url == "127.0.0.1":
+        address = 'local'
+    else:
+        address = 'nonlocal'
+    return render(request, 'mdict/shelf.html', {'address': address})
 
 
 def shelf2(request):
-    return render(request, 'mdict/shelf2.html')
+    request_url = request.META['REMOTE_ADDR']
+    if request_url == "127.0.0.1":
+        address = 'local'
+    else:
+        address = 'nonlocal'
+    return render(request, 'mdict/shelf2.html', {'address': address})
 
 
 def doc(request):
@@ -1419,6 +1430,34 @@ def create_group(request):
         except Exception as e:
             return HttpResponse(e)
     return HttpResponse('failed')
+
+
+def open_folder(folder_path):
+    if check_system() == 0:
+        import subprocess
+        subprocess.check_call(['gnome-open', '--', folder_path])
+    elif check_system() == 1:
+        os.startfile(folder_path)
+
+
+def open_path(request):
+    request_url = request.META['REMOTE_ADDR']
+    open_path_enable = get_config_con('open_path_enable')
+    if request_url == "127.0.0.1" and open_path_enable:
+        # 只允许本地访问打开路径
+        dic_pk = int(request.GET.get("dic_pk", -1))
+        if dic_pk > -1:
+            dics = MdictDic.objects.filter(pk=dic_pk)
+            if len(dics) > 0:
+                dic_file = dics[0].mdict_file
+                item = init_vars.mdict_odict[dic_file]
+                dic_path = item.mdx.get_fpath()
+                if os.path.exists(dic_path):
+                    try:
+                        open_folder(os.path.dirname(dic_path))
+                    except Exception as e:
+                        print(e)
+    return HttpResponse('success')
 
 
 def add_dic_to_group(mdict_name, group_pk):
