@@ -44,6 +44,7 @@ from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
 from .mdict_utils.mdict_func import mdict_root_path, is_local, get_m_path
 from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
+from .mdict_utils.anki import create_deck, get_decks, add_note
 
 try:
     from mdict.readlib.lib.readzim import ZIMFile
@@ -1422,7 +1423,7 @@ def grouping_mdictgroup(request):
 
 
 def create_group(request):
-    group_name = request.GET.get("group_name", "")
+    group_name = request.GET.get('group_name', '')
     if group_name != "":
         try:
             MdictDicGroup.objects.create(dic_group_name=group_name)
@@ -1430,6 +1431,27 @@ def create_group(request):
         except Exception as e:
             return HttpResponse(e)
     return HttpResponse('failed')
+
+
+def create_anki_deck(request):
+    deck_name = request.GET.get('deck_name', '')
+    if deck_name != "":
+        result = create_deck(deck_name)
+        return HttpResponse(result)
+    return HttpResponse('failed')
+
+
+def deck_group(request):
+    deck_list = get_decks()
+    return HttpResponse(json.dumps(deck_list))
+
+
+def add_to_deck(request):
+    deck_name = request.GET.get('deck_name', '')
+    front_content = request.GET.get('front', '')
+    back_content = request.GET.get('back', '')
+    result=add_note(deck_name, front_content, back_content)
+    return HttpResponse(str(result))
 
 
 def open_folder(folder_path):

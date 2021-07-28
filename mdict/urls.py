@@ -58,4 +58,7 @@ urlpatterns = [
     path('grouping/mdictgroup/', views.grouping_mdictgroup),
     path('grouping/creategroup/', views.create_group),
     path('openpath/', views.open_path),
+    path('createdeck/', views.create_anki_deck),
+    path('deckgroup/', views.deck_group),
+    path('addtodeck/', views.add_to_deck),
 ]

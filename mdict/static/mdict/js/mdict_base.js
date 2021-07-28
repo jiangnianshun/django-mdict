@@ -697,6 +697,78 @@ function init_resize_listener(){
     $(window).resize(change_modal);
 }
 
+function fill_dropdown(item){
+    let span_ele=$(item).children('span');
+    $("#deck-list").text(span_ele.text());
+    $("#deck-list").attr("deck-name",span_ele.attr("deck-name"));
+}
+
+function init_anki_dropdown(){
+    $("#deck-list").text("牌组");
+    $("#deck-list").attr("deck-name","");
+    $.ajax({
+        url:"/mdict/deckgroup/",
+        contentType:'json',
+        type:'GET',
+        success:function(data){
+        var deck_group=$.parseJSON(data);
+        $('#deck-group').empty();
+        for(var i=0;i<deck_group.length;i++){
+            var ele='<li onclick="fill_dropdown(this)"><span class="dropdown-item" deck-name='+html_escape(deck_group[i])+'>'+html_escape(deck_group[i])+'</span></li>'
+            $('#deck-group').append($(ele));
+        }
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
+}
+
+function init_anki_modal(){
+    init_anki_dropdown();
+    $("#create-deck").click(function(){
+        let deck_name=$("#deck-name").val();
+        let data={"deck_name":deck_name};
+        $.ajax({
+            url:"/mdict/createdeck/",
+            contentType:'json',
+            type:'GET',
+            data:data,
+            success:function(data){
+                console.log(data);
+                init_anki_dropdown();
+            },
+            error:function(jqXHR,textStatus,errorThrown){
+                alert(jqXHR.responseText);
+            },
+        });
+    });
+
+    $("#clear-card").click(function(){
+        $("#card-front").val("");
+        $("#card-back").val("");
+    });
+    
+    $("#add-to-deck").click(function(){
+        let deck_name=$("#deck-list").attr("deck-name");
+        let front_content=$("#card-front").val();
+        let back_content=$("#card-back").val();
+        data={"deck_name":deck_name,"front":front_content,"back":back_content}
+        $.ajax({
+            url:"/mdict/addtodeck/",
+            contentType:'json',
+            type:'GET',
+            data:data,
+            traditional: true,
+            success:function(data){
+                console.log(data);
+            },
+            error:function(jqXHR,textStatus,errorThrown){
+                alert(jqXHR.responseText);
+            },
+        });
+    })
+}
 
 function init_common(){
     $('html').data('data-pushstate',true);
@@ -712,6 +784,8 @@ function init_common(){
     init_btn_group();
 
     init_dic_group();
+
+    init_anki_modal()
 
     init_resize_listener();
 
