@@ -12,6 +12,7 @@ from mdict.mdict_utils.multi_process import multiprocess_search_mdx, create_proc
     get_cpu_num, pre_pool_search
 from mdict.mdict_utils.object_coder import objectEncoder
 from mdict.mdict_utils.init_utils import init_mdict_list
+from mdict.mdict_utils.mdict_config import get_config_con
 
 prpool = None
 
@@ -59,9 +60,8 @@ if __name__ == '__main__':
     # 1.在asyncio内且各进程独自读取缓存，占用内存一直大于正常值但不到100%；
     # 2.在asyncio外且各进程独自读取缓存，内存和硬盘占用100%，一段时间后内存和硬盘占用恢复到正常值；
     # 3.在asyncio外且统一传入缓存，内存逐渐增加到100%再回归到正常值，硬盘无占用，但是启动时间相比与1和2大大增加。
-
-    start_server = websockets.serve(ws_search, "localhost", 8766)
-    # 8765是anki connect的默认端口
+    ws_server_port = get_config_con('ws_server_port')
+    start_server = websockets.serve(ws_search, "localhost", ws_server_port)
 
     try:
         asyncio.get_event_loop().run_until_complete(start_server)

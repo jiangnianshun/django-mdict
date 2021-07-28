@@ -4,10 +4,12 @@ import websockets
 import json
 
 from mdict.mdict_utils.object_coder import objectDecoder
+from mdict.mdict_utils.mdict_config import get_config_con
 
 
 async def search(params):
-    uri = "ws://localhost:8766"
+    ws_server_port = get_config_con('ws_server_port')
+    uri = "ws://localhost:"+str(ws_server_port)
     async with websockets.connect(uri, max_size=100000000) as websocket:
         # entry = input("search entry:")
 
