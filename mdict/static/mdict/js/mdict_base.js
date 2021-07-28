@@ -712,10 +712,13 @@ function init_anki_dropdown(){
         type:'GET',
         success:function(data){
         var deck_group=$.parseJSON(data);
-        $('#deck-group').empty();
-        for(var i=0;i<deck_group.length;i++){
-            var ele='<li onclick="fill_dropdown(this)"><span class="dropdown-item" deck-name='+html_escape(deck_group[i])+'>'+html_escape(deck_group[i])+'</span></li>'
-            $('#deck-group').append($(ele));
+        if(deck_group!="error"){
+            $("#modal-anki").parent().show();
+            $('#deck-group').empty();
+            for(var i=0;i<deck_group.length;i++){
+                var ele='<li onclick="fill_dropdown(this)"><span class="dropdown-item" deck-name='+html_escape(deck_group[i])+'>'+html_escape(deck_group[i])+'</span></li>'
+                $('#deck-group').append($(ele));
+            }
         }
         },
         error:function(jqXHR,textStatus,errorThrown){

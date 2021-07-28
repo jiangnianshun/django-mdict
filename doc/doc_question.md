@@ -78,3 +78,7 @@ python manage.py runserver 0.0.0.0:7000
 13. 载入词典报错mdx loading failed 'Encoding'或mdd loading failed 'GeneratedByEngineVersion'。
 
 该词典为mdxbuilder4.0生成的新格式的mdx词典，不支持。
+
+14. 部件检索不显示结果。
+
+查看是否勾选了即时查询。
