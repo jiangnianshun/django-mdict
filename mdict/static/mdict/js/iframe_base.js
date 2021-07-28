@@ -29,45 +29,36 @@ function isImgLoad(callback){
     }
 }
 
-function copyToClip(content) {
-    var aux = document.createElement("input");
-    aux.setAttribute("value", content);
-    document.body.appendChild(aux);
-    aux.select();
-    document.execCommand("copy");
-    document.body.removeChild(aux);
-}
-
 function in_page_jump(ob,entry){//页内跳转
-	//iFrame.contentWindow.location.href=entry;是在iframe中跳转，而window.location.href=entry;是在主页面进行跳转；
-	//由于iframe高度是100%，因此这两种方法对锚点的跳转都无效。
-	//ob锚点所在的元素，entry要跳转的锚点的名称
+    //iFrame.contentWindow.location.href=entry;是在iframe中跳转，而window.location.href=entry;是在主页面进行跳转；
+    //由于iframe高度是100%，因此这两种方法对锚点的跳转都无效。
+    //ob锚点所在的元素，entry要跳转的锚点的名称
 
-	var e=entry;
+    var e=entry;
     var frame_element=window.frameElement
-	if(frame_element==null){$('html,body').animate({scrollTop:0},'fast');return;}
-	var id=frame_element.id;
-	var y=0;
+    if(frame_element==null){$('html,body').animate({scrollTop:0},'fast');return;}
+    var id=frame_element.id;
+    var y=0;
 
-	//计算滚动距离
-	if(e=="top"){
-		y = $("#"+id,parent.document).offset().top;
-	}else{
-		if(ob.parents("html").find('[name="'+entry+'"]').length>0){
-		    y = $("#"+id,parent.document).offset().top + ob.parents("html").find('[name="'+entry+'"]').offset().top;
-		}else if(ob.parents("html").find('[id="'+entry+'"]').length>0){
-		    y = $("#"+id,parent.document).offset().top + ob.parents("html").find('[id="'+entry+'"]').offset().top;
-		}
+    //计算滚动距离
+    if(e=="top"){
+        y = $("#"+id,parent.document).offset().top;
+    }else{
+        if(ob.parents("html").find('[name="'+entry+'"]').length>0){
+            y = $("#"+id,parent.document).offset().top + ob.parents("html").find('[name="'+entry+'"]').offset().top;
+        }else if(ob.parents("html").find('[id="'+entry+'"]').length>0){
+            y = $("#"+id,parent.document).offset().top + ob.parents("html").find('[id="'+entry+'"]').offset().top;
+        }
 
-	}
+    }
 
-	//进行滚动
-	if(e=="top"||ob.parents("html").find('[name="'+entry+'"]').length>0||ob.parents("html").find('[id="'+entry+'"]').length>0){
-		$(window.parent).scrollTop(y);
-	}
+    //进行滚动
+    if(e=="top"||ob.parents("html").find('[name="'+entry+'"]').length>0||ob.parents("html").find('[id="'+entry+'"]').length>0){
+        $(window.parent).scrollTop(y);
+    }
 
-	//清空in-page-jump标识
-	$("#card-container",parent.document).attr("in-page-jump","");
+    //清空in-page-jump标识
+    $("#card-container",parent.document).attr("in-page-jump","");
 }
 
 function ihyperlink(e){
@@ -76,7 +67,7 @@ function ihyperlink(e){
     //href存储是要跳转的词条或要获取的图片和音频名，这里不能用this.href获取href的值，在firefox中正常，但在edge浏览器中，获取的href后会被自动加一个斜杠，导致最后查询失败。
     e.preventDefault();
     if(query!=null){
-//		    e.preventDefault();
+//            e.preventDefault();
         if(query.indexOf("entry")==0){//处理entry超链接
 
             var entry=query.substring(8);
@@ -168,21 +159,21 @@ function ihyperlink(e){
 function init_hyperlink(){
     init_hyperlink_click();
 
-	var inPageJump=$("#card-container",parent.document).attr("in-page-jump");
-	if(inPageJump!=""){
-		//页内跳转
-		//如果inPageJump不为空，说明这是从之前的entry跳转过来的，需要继续跳转锚点
-		var ob=$("a[name='"+inPageJump+"']")||$("a[id='"+inPageJump+"']");
+    var inPageJump=$("#card-container",parent.document).attr("in-page-jump");
+    if(inPageJump!=""){
+        //页内跳转
+        //如果inPageJump不为空，说明这是从之前的entry跳转过来的，需要继续跳转锚点
+        var ob=$("a[name='"+inPageJump+"']")||$("a[id='"+inPageJump+"']");
 
-		in_page_jump(ob,inPageJump);
-	}
+        in_page_jump(ob,inPageJump);
+    }
 }
 
 function init_hyperlink_click(){
     //$("a").click(ihyperlink);
     $("a[href$='.mp3'],a[href$='.spx'],a[href$='.wav'],a[href$='.ogg']").click(ihyperlink);
-	$("body").on("click", "a", ihyperlink);
-	//给动态增加的a添加click
+    $("body").on("click", "a", ihyperlink);
+    //给动态增加的a添加click
     var disable_iframe_click=$('#config-disable-iframe-click',parent.document).prop("checked");
 
     if(disable_iframe_click){
@@ -193,6 +184,81 @@ function init_hyperlink_click(){
         });
         //LDOCE5++ V 2-15的js中有在线发音，导致在桌面chrome中重复发音，需要禁止a的点击事件。
     }
+}
+
+function copyToClip(content) {//普通复制
+    var aux = document.createElement("input");
+    aux.setAttribute("value", content);
+    document.body.appendChild(aux);
+    aux.select();
+    document.execCommand("copy");
+    document.body.removeChild(aux);
+}
+
+function CopyToClipData(element) {//普通复制+带格式复制
+    // array off all block level elements
+    var block_level_elements = ['P','H1', 'H2', 'H3', 'H4', 'H5', 'H6','OL', 'UL','DIV','FORM','HR','TABLE'];
+
+    //create new Element so we can vhange elments like we need
+    var newelment = document.createElement("div");
+
+    //copy target Element to the new Element
+    newelment.innerHTML = element.innerHTML;
+
+    //hide new Element to body
+    newelment.style.opacity  = 0;
+    // add new Element to body
+    document.body.appendChild(newelment);
+
+    //get all element childs
+    var descendents = newelment.getElementsByTagName('*');
+
+    //loop in childs
+    for (var i = 0; i < descendents.length; ++i) {
+        //get defult Style
+        var style = window.getComputedStyle(descendents[i]);
+        var dis = style.getPropertyValue('display');
+        //get defult tag name
+        var tagname = descendents[i].tagName;
+
+        //---------------------------
+        //this part is little tricky
+        //---------------------------
+        //true : Element is a block level elements and css display is inline
+        if(dis.includes("inline") && block_level_elements.includes(tagname)){
+            //get all Element style include default style
+            var defultcss = document.defaultView.getComputedStyle(descendents[i], "").cssText;
+            //chang Element tag from block level elements to inline level elements (span)
+            descendents[i].outerHTML = descendents[i].outerHTML.replace(new RegExp(tagname, "ig"),"span");
+            //todo: need to change RegExp to tag name only not inner text
+            //add all Element style include default style to new tag
+            descendents[i].style.cssText = defultcss;
+        }
+    }
+    //-----------------copy new Element--------------
+    var doc = document;
+    var range, selection;
+
+    if (doc.body.createTextRange)
+    {
+        range = doc.body.createTextRange();
+        range.moveToElementText(newelment);
+        range.select();
+    }
+
+    else if (window.getSelection)
+    {
+        selection = window.getSelection();
+        range = doc.createRange();
+        range.selectNodeContents(newelment);
+        selection.removeAllRanges();
+        selection.addRange(range);
+     }
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+
+    // remove new Element from document
+    document.body.removeChild(newelment);
 }
 
 var select_words='';
@@ -282,15 +348,15 @@ function create_tooltip(e){
         $("#t_copy").click(function(e){
             //e.stopPropagation();
             //阻止冒泡，子元素的点击事件不会冒泡到父元素，即子元素点击事件触发后，父元素的点击事件不会触发。
-            var copy_with_tag=$('#config-copy-with-tag',parent.document).prop("checked");
-            if(copy_with_tag){
+//            var copy_with_tag=$('#config-copy-with-tag',parent.document).prop("checked");
+//            if(copy_with_tag){
                 var range=window.getSelection().getRangeAt(0);
                 var container = document.createElement('div');
                 container.appendChild(range.cloneContents());
-                copyToClip(container.innerHTML);
-            }else{
-                copyToClip(select_words);
-            }
+                CopyToClipData(container);
+//            }else{
+//                copyToClip(select_words);
+//            }
             //window.getSelection().empty();
             //当用mouseup和mousedown设置事件时，需要代码取消选择，但设置click时，第二次click会自动取消选择。
         })
@@ -311,9 +377,6 @@ function create_tooltip(e){
             //a.mouseup(function(){
 
             //})
-
-
-
             window.getSelection().empty();
         })
     }
@@ -322,21 +385,21 @@ function create_tooltip(e){
 
 
 function init_tooltip(){
-	//选择文字后的弹出框
+    //选择文字后的弹出框
     $("body").click(function (e) {//body加一个右键点击消除事件
-		create_tooltip(e);
+        create_tooltip(e);
     }).mousedown(function(e){
-	  if(e.which == 3){
-			window.getSelection().empty();
-			$('#tooltip').remove();
+      if(e.which == 3){
+            window.getSelection().empty();
+            $('#tooltip').remove();
 
-		    //这是右键单击事件
-	  }else if(e.which == 1){
-			   //这是左键单击事件
-	  }else if(e.which == 2){
-			   //这是鼠标中键事件
-	  }
-	})
+            //这是右键单击事件
+      }else if(e.which == 1){
+               //这是左键单击事件
+      }else if(e.which == 2){
+               //这是鼠标中键事件
+      }
+    })
 
 }
 
@@ -347,15 +410,15 @@ function resize_iframe(){
 }
 
 function fix_chrome_bug(){
-	var userAgent = navigator.userAgent;
-		// 判断图片加载状况，加载完成后回调
-		//在firefox中，主页面先设置iframe为最小高度，当iframe加载完所有资源后，css，img等，
-		//iframeResizer.contentWindow向主页面发送iframe高度，这样的缺点时，当iframe中某个图片超时，要等很长时间，才能改变iframe高度。
-		//在chrome中，iframe一加载，iframeResizer.contentWindow向主页面发送iframe高度,
-		//这样的缺点是高度不包含图片高度，因此当图片加载完后，被遮挡。
-		isImgLoad(function(){
-			resize_iframe();
-		});
+    var userAgent = navigator.userAgent;
+        // 判断图片加载状况，加载完成后回调
+        //在firefox中，主页面先设置iframe为最小高度，当iframe加载完所有资源后，css，img等，
+        //iframeResizer.contentWindow向主页面发送iframe高度，这样的缺点时，当iframe中某个图片超时，要等很长时间，才能改变iframe高度。
+        //在chrome中，iframe一加载，iframeResizer.contentWindow向主页面发送iframe高度,
+        //这样的缺点是高度不包含图片高度，因此当图片加载完后，被遮挡。
+        isImgLoad(function(){
+            resize_iframe();
+        });
 }
 
 function fix_img_delay_bug(){
@@ -376,15 +439,15 @@ function init_night_mode(){
 
 
 function init_iframe(){
-	init_hyperlink();
+    init_hyperlink();
     var select_btn_enable=$('#config-select-btn-enable',parent.document);
-	if(select_btn_enable.length==0||select_btn_enable.prop("checked")){
-	    init_tooltip();
-	}
-	fix_chrome_bug();
-	//fix_img_delay_bug();
-	forbid_contextmenu();
-	init_night_mode();
+    if(select_btn_enable.length==0||select_btn_enable.prop("checked")){
+        init_tooltip();
+    }
+    fix_chrome_bug();
+    //fix_img_delay_bug();
+    forbid_contextmenu();
+    init_night_mode();
 }
 
 function transform_all_text(isFt){

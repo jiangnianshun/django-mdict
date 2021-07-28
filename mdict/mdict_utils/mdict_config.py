@@ -56,7 +56,7 @@ default_config = {
         'new_label_link': True,  # 新标签页查询，True打开正查，False打开当前页查询。
         'compute_every_element': True,  # 计算iframe的每一个元素来计算总高度
         'fixed_height': False,  # iframe固定高度
-        'copy_with_tag': False  # 复制时包含html标签
+        'copy_with_tag': False  # 复制时包含html标签和css样式和图片
     }
 }
 

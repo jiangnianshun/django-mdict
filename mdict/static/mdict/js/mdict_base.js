@@ -385,7 +385,7 @@ function init_online_dic_var(){
 //'compute-every-element':'精确计算高度'
 common_config={'force-refresh':'强制刷新','st-enable':'繁简转化','chaizi-enable':'拆字反查','fh-char-enable':'英文全角转半角','kana-enable':'平片假名转化','romaji-enable':'罗马字假名转化',
 'link-new-label':'跳转新标签页','force-font':'强制使用全宋体','card-show':'展开多个词典','select-btn-enable':'启用查询菜单','disable-iframe-click':'屏蔽默认点击',
-'new-label-link':'新标签页正查','fixed-height':'固定高度','copy-with-tag':'复制包含标签'}
+'new-label-link':'新标签页正查','fixed-height':'固定高度','copy-with-tag':'复制包含样式'}
 
 function init_common_config(){//这里后面改成从后台取数据
     var c_parent=$('#function-checkbox');
@@ -772,6 +772,26 @@ function init_anki_modal(){
             },
         });
     })
+
+    //设置textarea可以粘贴html
+    set_clipboard_data(document.getElementById('card-front'));
+    set_clipboard_data(document.getElementById('card-back'));
+}
+
+function set_clipboard_data(card_ele){
+    card_ele.addEventListener('paste', function(e) {
+        var copy_with_tag=$('#config-copy-with-tag').prop("checked");
+        if(copy_with_tag){
+            e.preventDefault();
+            var pastedText = ''
+            if (window.clipboardData && window.clipboardData.getData) { // IE
+                pastedText = window.clipboardData.getData('Text');
+            } else if (e.clipboardData && e.clipboardData.getData) {
+                pastedText = e.clipboardData.getData('text/html');
+            }
+            card_ele.value = pastedText;//这里用value不用innerHTML
+        }
+    });
 }
 
 function init_common(){
