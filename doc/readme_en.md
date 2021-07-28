@@ -53,17 +53,17 @@ recommend deploying to wsl1(ubuntu) on Windows.
 
 ### Documentation
 
-[function](doc/doc_func.md)
+[function](doc_func.md)
 
-[common operation](doc/doc_op.md)
+[common operation](doc_op.md)
 
-[documentation](doc/doc_index.md)
+[documentation](doc_index.md)
 
-[install](doc/doc_deploy.md)
+[install](doc_deploy.md)
 
-[update](doc/doc_update.md)
+[update](doc_update.md)
 
-[style](doc/doc_style.md)
+[style](doc_style.md)
 
-[question](doc/doc_question.md)
+[question](doc_question.md)
 
