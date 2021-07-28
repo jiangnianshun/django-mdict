@@ -7,7 +7,7 @@ from mdict.mdict_utils.object_coder import objectDecoder
 
 
 async def search(params):
-    uri = "ws://localhost:8765"
+    uri = "ws://localhost:8766"
     async with websockets.connect(uri, max_size=100000000) as websocket:
         # entry = input("search entry:")
 

@@ -60,7 +60,8 @@ if __name__ == '__main__':
     # 2.在asyncio外且各进程独自读取缓存，内存和硬盘占用100%，一段时间后内存和硬盘占用恢复到正常值；
     # 3.在asyncio外且统一传入缓存，内存逐渐增加到100%再回归到正常值，硬盘无占用，但是启动时间相比与1和2大大增加。
 
-    start_server = websockets.serve(ws_search, "localhost", 8765)
+    start_server = websockets.serve(ws_search, "localhost", 8766)
+    # 8765是anki connect的默认端口
 
     try:
         asyncio.get_event_loop().run_until_complete(start_server)
