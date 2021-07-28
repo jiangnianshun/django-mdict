@@ -20,7 +20,7 @@ Microsoft C++ Build Tools地址：
 ](https://visualstudio.microsoft.com/visual-cpp-build-tools/
 )
 
-3. 安装python-lzo
+3. 安装python-lzo，python-lzo在windows下需要手动安装。
 
 [https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo)
 

@@ -49,19 +49,21 @@ git clone https://github.com/jiangnianshun/django-mdict.git --depth=1
    
 ### Recommendation
 
-recommend deploying to Ubuntu or wsl1 on Windows.
+recommend deploying to wsl1(ubuntu) on Windows.
 
 ### Documentation
 
-[documentation](doc_index.md)
+[function](doc/doc_func.md)
 
-### Style
+[common operation](doc/doc_op.md)
 
-![图片1](doc/img/structure.png?raw=true)
+[documentation](doc/doc_index.md)
 
-![图片2](doc/img/img1.jpg?raw=true)
+[install](doc/doc_deploy.md)
 
-![图片3](doc/img/img2.jpg?raw=true)
+[update](doc/doc_update.md)
 
-![图片4](doc/img/img3.jpg?raw=true)
+[style](doc/doc_style.md)
+
+[question](doc/doc_question.md)
 
