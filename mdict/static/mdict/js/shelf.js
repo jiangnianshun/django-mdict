@@ -73,10 +73,10 @@ function get_items(container,style){
                 if(style==1){
                     var s=`
                     <div class="col">
-                        <div class="card shadow dic-container" title="${html_escape(dic_name)}" data-pk=${dic_pk} data-name="${html_escape(dic_name)}" data-file="${html_escape(dic_file)}" onclick="start_modal(this)">
+                        <div class="card shadow dic-container" title="${html_escape(dic_name,false)}" data-pk=${dic_pk} data-name="${html_escape(dic_name,false)}" data-file="${html_escape(dic_file,false)}" onclick="start_modal(this)">
                             <div class="card-body text-center">
                                 <img src="${html_escape(dic_icon,false)}"></img>
-                                <div class="card-title"><b class="text-primary">${dic_pror}</b>&nbsp;${html_escape(dic_name)}</div>
+                                <div class="card-title"><b class="text-primary">${dic_pror}</b>&nbsp;${html_escape(dic_name,false)}</div>
                             </div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@ function get_items(container,style){
                     if(dic_icon.indexOf("/static")==0){
                         var s=`
                         <div class="col">
-                            <span class='book dic-container' title="${html_escape(dic_name)}" data-pk=${dic_pk} data-name="${html_escape(dic_name)}" data-file="${html_escape(dic_file)}" onclick="start_offcanvas(this)">
+                            <span class='book dic-container' title="${html_escape(dic_name,false)}" data-pk=${dic_pk} data-name="${html_escape(dic_name,false)}" data-file="${html_escape(dic_file,false)}" onclick="start_offcanvas(this)">
                                 <img id=${dic_id} src=""></img>
                             </span>
                         </div>
@@ -93,7 +93,7 @@ function get_items(container,style){
                     }else{
                         var s=`
                         <div class="col">
-                            <span class='book dic-container' title="${html_escape(dic_name)}" data-pk=${dic_pk} data-name="${html_escape(dic_name)}" data-file="${html_escape(dic_file)}" onclick="start_offcanvas(this)">
+                            <span class='book dic-container' title="${html_escape(dic_name,false)}" data-pk=${dic_pk} data-name="${html_escape(dic_name,false)}" data-file="${html_escape(dic_file,false)}" onclick="start_offcanvas(this)">
                                 <img src="${html_escape(dic_icon,false)}"></img>
                             </span>
                         </div>

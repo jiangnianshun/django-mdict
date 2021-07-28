@@ -717,7 +717,7 @@ function init_anki_dropdown(){
             $("#modal-anki").parent().show();
             $('#deck-group').empty();
             for(var i=0;i<deck_group.length;i++){
-                var ele='<li onclick="fill_dropdown(this)"><span class="dropdown-item" deck-name='+html_escape(deck_group[i])+'>'+html_escape(deck_group[i])+'</span></li>'
+                var ele='<li onclick="fill_dropdown(this)"><span class="dropdown-item" deck-name='+html_escape(deck_group[i],false)+'>'+html_escape(deck_group[i],false)+'</span></li>'
                 $('#deck-group').append($(ele));
             }
         }
