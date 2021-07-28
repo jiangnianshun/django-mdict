@@ -10,6 +10,7 @@
   * [admin操作和内置词典](#admin操作和内置词典)
   * [功能实现](#功能实现)
   * [全文搜索](#全文搜索)
+  * [anki制卡](#anki制卡)
   * [划词](#划词)
   * [设置](#设置)
   * [运行](#运行)
@@ -165,6 +166,10 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 ### 全文搜索
 
 [全文搜索](doc_es.md)
+
+### anki制卡
+
+[anki](doc_anki.md)
 
 ### 划词
 
