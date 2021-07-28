@@ -282,7 +282,15 @@ function create_tooltip(e){
         $("#t_copy").click(function(e){
             //e.stopPropagation();
             //阻止冒泡，子元素的点击事件不会冒泡到父元素，即子元素点击事件触发后，父元素的点击事件不会触发。
-            copyToClip(select_words);
+            var copy_with_tag=$('#config-copy-with-tag',parent.document).prop("checked");
+            if(copy_with_tag){
+                var range=window.getSelection().getRangeAt(0);
+                var container = document.createElement('div');
+                container.appendChild(range.cloneContents());
+                copyToClip(container.innerHTML);
+            }else{
+                copyToClip(select_words);
+            }
             //window.getSelection().empty();
             //当用mouseup和mousedown设置事件时，需要代码取消选择，但设置click时，第二次click会自动取消选择。
         })
