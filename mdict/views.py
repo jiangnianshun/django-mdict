@@ -1447,9 +1447,9 @@ def deck_group(request):
 
 
 def add_to_deck(request):
-    deck_name = request.GET.get('deck_name', '')
-    front_content = request.GET.get('front', '')
-    back_content = request.GET.get('back', '')
+    deck_name = request.POST.get('deck_name', '')
+    front_content = request.POST.get('front', '')
+    back_content = request.POST.get('back', '')
     result=add_note(deck_name, front_content, back_content)
     return HttpResponse(str(result))
 

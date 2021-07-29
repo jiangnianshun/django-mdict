@@ -766,20 +766,22 @@ function init_anki_modal(){
         let deck_name=html_unescape($("#deck-list").attr("deck-name"));
         let front_content=$("#card-front").val();
         let back_content=$("#card-back").val();
-        data={"deck_name":deck_name,"front":front_content,"back":back_content}
-        $.ajax({
-            url:"/mdict/addtodeck/",
-            contentType:'json',
-            type:'GET',
-            data:data,
-            traditional: true,
-            success:function(data){
-                console.log(data);
-            },
-            error:function(jqXHR,textStatus,errorThrown){
-                alert(jqXHR.responseText);
-            },
-        });
+        if(deck_name!=""){
+            data={"deck_name":deck_name,"front":front_content,"back":back_content}
+            $.ajax({//传递数据大，在apache上报414错误，应当用POST传递。contentType应当为默认或者application/x-www-form-urlencoded。
+                url:"/mdict/addtodeck/",
+                contentType:'application/x-www-form-urlencoded',
+                type:'POST',
+                data:data,
+                traditional: true,
+                success:function(data){
+                    console.log(data);
+                },
+                error:function(jqXHR,textStatus,errorThrown){
+                    alert(jqXHR.responseText);
+                },
+            });
+        }
     })
 
     //设置textarea可以粘贴html
