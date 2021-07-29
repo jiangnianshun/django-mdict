@@ -766,7 +766,7 @@ function init_anki_modal(){
         let deck_name=html_unescape($("#deck-list").attr("deck-name"));
         let front_content=$("#card-front").val();
         let back_content=$("#card-back").val();
-        if(deck_name!=""){
+        if(deck_name!=""&&front_content!=""&&back_content!=""){
             data={"deck_name":deck_name,"front":front_content,"back":back_content}
             $.ajax({//传递数据大，在apache上报414错误，应当用POST传递。contentType应当为默认或者application/x-www-form-urlencoded。
                 url:"/mdict/addtodeck/",
@@ -776,6 +776,12 @@ function init_anki_modal(){
                 traditional: true,
                 success:function(data){
                     console.log(data);
+                    if(parseInt(data),parseInt(data)>0){
+                        $("#live-toast-body").text("card has been inserted "+deck_name+".");
+                    }else{
+                        $("#live-toast-body").text("error:"+data);
+                    }
+                    new bootstrap.Toast($("#live-toast")[0]).show();
                 },
                 error:function(jqXHR,textStatus,errorThrown){
                     alert(jqXHR.responseText);
