@@ -221,7 +221,8 @@ function bind_card(iframe,html,tokens){
     card.on('shown.bs.collapse',function(){
         //shown.bs.collapse是collapse展开完成事件
         var iframe_content=$(iframe).contents();
-        var compute_every_element=$('#config-compute-every-element').prop("checked");
+//        var compute_every_element=$('#config-compute-every-element').prop("checked");
+        var compute_every_element=true;
         var fixed_height=$('#config-fixed-height').prop("checked");
         if(compute_every_element){
             var width_calculation_method='lowestElement';
