@@ -417,6 +417,15 @@ function init_common_config(){//这里后面改成从后台取数据
             config_param=key.replace(/-/g,'_');
             $(config_id).prop("checked",config[config_param]);
         }
+        var copy_with_tag=$('#config-copy-with-tag').prop("checked");
+        $("#copy-with-tag2").prop("checked",copy_with_tag);
+        $("#copy-with-tag2").parent().show();
+        $("#copy-with-tag2").click(function(){
+            $('#config-copy-with-tag').prop("checked",$("#copy-with-tag2").prop("checked"));
+        })
+        $("#config-copy-with-tag").click(function(){
+            $('#copy-with-tag2').prop("checked",$("#config-copy-with-tag").prop("checked"));
+        })
     })
 
 }
