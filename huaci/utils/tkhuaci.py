@@ -5,8 +5,8 @@ import collections
 
 import pyscreenshot
 import pytesseract
-import cv2
-import numpy as np
+# import cv2
+# import numpy as np
 from pynput.keyboard import Key, Listener as KeyboardListener
 from pynput.mouse import Button, Listener as MouseListener
 
@@ -68,31 +68,39 @@ class Huaci:
         self.max_text_length = 40
 
     def translate_picture(self, img):
-        img = np.asarray(img)
-        shape = img.shape
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        if shape[0] < 40 or shape[1] < 40:
-            # 图片放大
-            img = cv2.resize(np.asarray(img), None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
-
-            # kernel = np.ones((1, 1), np.uint8)
-            # img = cv2.dilate(img, kernel, iterations=1)
-            # img = cv2.erode(img, kernel, iterations=1)
-            # img = cv2.adaptiveThreshold(cv2.medianBlur(img, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-            #                             cv2.THRESH_BINARY, 31, 2)
-
-        tess_cmd = '--psm 6 -c page_separator=""'
+        tess_cmd = '--psm 6 --oem 1 -c lstm_choice_iterations=0 -c page_separator=""'
         if data_path != '':
             tess_cmd += ' --tessdata-dir ' + data_path
 
-        text = pytesseract.image_to_string(img, lang=self.lang_con, config=tess_cmd)
+        # img = np.asarray(img)
+        # shape = img.shape
+        # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # if shape[0] < 40 or shape[1] < 40:
+        #     # 图片放大
+        #     img = cv2.resize(np.asarray(img), None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
+
+        # kernel = np.ones((1, 1), np.uint8)
+        # img = cv2.dilate(img, kernel, iterations=1)
+        # img = cv2.erode(img, kernel, iterations=1)
+        # img = cv2.adaptiveThreshold(cv2.medianBlur(img, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        #                             cv2.THRESH_BINARY, 31, 3)
+
+        # text = pytesseract.image_to_string(img, lang=self.lang_con, config=tess_cmd)
+        data = pytesseract.image_to_data(img, lang=self.lang_con, config=tess_cmd)
+        data_list = [line.split('\t') for line in data.split('\n')]
+        text = ''
+        for data in data_list[1:]:
+            # 去重重复
+            if len(data) == 12 and data[5] == '1' and data[-1] != '':
+                text += data[-1][0]
+
         # psm设置布局，小段文本6或7比较好，6可用于横向和竖向文字，7只能用于横向文字，文字方向转90度的用5。
         # tesseract会在末尾加form feed分页符，unicode码000c。
         # -c page_separator=""设置分页符为空
         text = regp.sub('', text)
-        if len(text) == 0 or len(text) > self.max_text_length:
-            print('text length exceed limit of length', len(text))
-            return
+        # if len(text) == 0 or len(text) > self.max_text_length:
+        #     print('text length exceed limit of length', len(text))
+        #     return
 
         self.search_mdict(text)
 
@@ -114,7 +122,7 @@ class Huaci:
 
                 self.flag += 1
 
-                if self.flag % 2 is 1:
+                if self.flag % 2 == 1:
                     self.t1 = time.perf_counter()
                     self.start_x = x
                     self.start_y = y
@@ -164,7 +172,7 @@ class Huaci:
         if self.start_flag == 1 and self.huaci_mode == 'ocr':
             self.master.show_mask()
             self.master.clear_rectangle()
-            if self.flag % 2 is 1:
+            if self.flag % 2 == 1:
                 tx1 = self.start_x
                 tx2 = x
                 ty1 = self.start_y
