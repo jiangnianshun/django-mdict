@@ -90,11 +90,14 @@ class Huaci:
         data_list = [line.split('\t') for line in data.split('\n')]
         text = ''
         for di in range(1, len(data_list)):
-            # 去重重复
+            # 去重
             data = data_list[di]
             if data[0] == '5' and len(data) == 12:
                 if data[4] == '1':
-                    text += data[-1]
+                    if di + 2 < len(data) and data[4] != data_list[di + 2][4]:
+                        text += data[-1][0]
+                    else:
+                        text += data[-1]
                 else:
                     if data[4] != data_list[di - 2][4]:
                         if data[5] == '1':
