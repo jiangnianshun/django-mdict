@@ -89,10 +89,16 @@ class Huaci:
         data = pytesseract.image_to_data(img, lang=self.lang_con, config=tess_cmd)
         data_list = [line.split('\t') for line in data.split('\n')]
         text = ''
-        for data in data_list[1:]:
+        for di in range(1, len(data_list)):
             # 去重重复
-            if len(data) == 12 and data[5] == '1' and data[-1] != '':
-                text += data[-1][0]
+            data = data_list[di]
+            if data[0] == '5' and len(data) == 12:
+                if data[4] == '1':
+                    text += data[-1]
+                else:
+                    if data[4] != data_list[di - 2][4]:
+                        if data[5] == '1':
+                            text += data[-1][0]
 
         # psm设置布局，小段文本6或7比较好，6可用于横向和竖向文字，7只能用于横向文字，文字方向转90度的用5。
         # tesseract会在末尾加form feed分页符，unicode码000c。
