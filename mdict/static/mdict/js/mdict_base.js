@@ -737,13 +737,48 @@ function init_anki_dropdown(){
     });
 }
 
+function start_with(strings,startstring){
+    if(strings.indexOf(startstring)==0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function test_absolute(url){
+    if(url.indexOf('www.')==0){return true;}
+    if(url.indexOf('data:')==0){return true;}
+    var reg = new RegExp('^(?:[a-z]+:)?//', 'i');
+    return reg.test(url);
+}
+
+function convert_img_absolute(item){
+    item.find('img').each(function(){
+        var img_src=$(this).attr("src");
+        if(typeof(img_src)!="undefined"&&!test_absolute(img_src)){
+            if(img_src.indexOf('/')==0){
+                var href=window.location.protocol;
+            }else{
+                var href=window.location.href;
+                var mark=href.indexOf('?');
+                if(mark>-1){
+                    href=href.substring(0,mark);
+                }
+            }
+            $(this).attr("src",href+img_src);
+        }
+    })
+}
+
 function convert_css_inline(item) {
     item.each(function(idx, el) {
         var style = el.style;
         var properties = [];
         for(var property in style) {
-            if($(this).css(property)) {
-                properties.push(property + ':' + $(this).css(property));
+            if(!start_with(property,'width')&&!start_with(property,'height')){//width会导致文字重叠
+                if($(this).css(property)) {
+                    properties.push(property + ':' + $(this).css(property));
+                }
             }
         }
         this.style.cssText = properties.join(';');
@@ -812,9 +847,17 @@ function init_anki_modal(){
         var card_show=$("#card-container .collapse.show");
         if(card_show.length==1){
             $("#card-front").val(card_show.parent().children('.card-header').find('span.badge').text());
-            var card_content=card_show.find('iframe').contents().find('body');
+
+            let card_content=card_show.find('iframe').contents().find('body');
+            convert_img_absolute($(card_content));
             convert_css_inline($(card_content));
-            $("#card-back").val($(card_content).html());
+
+            let card_html=$(card_content).html();
+            card_html=card_html.replace(/<script.*?<\/script>/ig,"");
+            card_html=card_html.replace(/<link.*?>/ig,"");
+            card_html=card_html.replace(/<style>.*?<\/style>/ig,"");
+            
+            $("#card-back").val(card_html);
         }
     });
 }
