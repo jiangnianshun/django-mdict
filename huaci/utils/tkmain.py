@@ -142,6 +142,7 @@ class MainWindow:
 
     def hide_window(self):
         # 隐藏窗口
+        self.app.navigation_bar.setting.hide_window()
         self.root.withdraw()
         self.create_systray()
 

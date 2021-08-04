@@ -94,8 +94,12 @@ class Huaci:
             data = data_list[di]
             if data[0] == '5' and len(data) == 12:
                 if data[4] == '1':
-                    if di + 2 < len(data) and data[4] != data_list[di + 2][4]:
-                        text += data[-1][0]
+                    if di + 2 < len(data_list):
+                        edata = data_list[di + 2]
+                        if len(edata) == 12 and data[4] != edata[4]:
+                            text += data[-1][0]
+                        else:
+                            text += data[-1]
                     else:
                         text += data[-1]
                 else:
