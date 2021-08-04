@@ -737,6 +737,20 @@ function init_anki_dropdown(){
     });
 }
 
+function convert_css_inline(item) {
+    item.each(function(idx, el) {
+        var style = el.style;
+        var properties = [];
+        for(var property in style) {
+            if($(this).css(property)) {
+                properties.push(property + ':' + $(this).css(property));
+            }
+        }
+        this.style.cssText = properties.join(';');
+        convert_css_inline($(this).children());
+    });
+}
+
 function init_anki_modal(){
     init_anki_dropdown();
     $("#create-deck").click(function(){
@@ -788,11 +802,21 @@ function init_anki_modal(){
                 },
             });
         }
-    })
+    });
 
     //设置textarea可以粘贴html
     set_clipboard_data(document.getElementById('card-front'));
     set_clipboard_data(document.getElementById('card-back'));
+
+    $("#auto-create-card").click(function(){
+        var card_show=$("#card-container .collapse.show");
+        if(card_show.length==1){
+            $("#card-front").val(card_show.parent().children('.card-header').find('span.badge').text());
+            var card_content=card_show.find('iframe').contents().find('body');
+            convert_css_inline($(card_content));
+            $("#card-back").val($(card_content).html());
+        }
+    });
 }
 
 function set_clipboard_data(card_ele){
