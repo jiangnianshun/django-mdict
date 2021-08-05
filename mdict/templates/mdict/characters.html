@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>符号</title>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card-header span:hover{cursor:pointer;}
+        .card-body span:hover{cursor:pointer;}
+        .card-body{font-size:2rem;}
+        @font-face {
+        font-family: FSung-m;
+        src: url(/media/font/FSung-m.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-1;
+        src: url(/media/font/FSung-1.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-2-1;
+        src: url(/media/font/FSung-2-1.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-2-2;
+        src: url(/media/font/FSung-2-2.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-3;
+        src: url(/media/font/FSung-3.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-F-1;
+        src: url(/media/font/FSung-F-1.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-F-2;
+        src: url(/media/font/FSung-F-2.ttf);
+        font-display:swap;
+        }
+        .mark1{font-family:Arial,kaixinsong,FSung-p,FSung-m,FSung-1,FSung-2-1,FSung-2-2,FSung-3,FSung-F-1,FSung-F-2;}
+    </style>
+</head>
+<body>
+{% autoescape off %}
+<div class="container">
+    {% for key,value in data.items %}
+        <div class='card {{ value.type }}' id='card-{{ key }}'>
+            <div class='card-header'>
+                <span class='text-primary collapsed card-link' href='#card-element-{{ key }}' data-bs-toggle='collapse' aria-expanded="false" aria-controls="#card-element-{{ key }}">{{ key }}</span>
+            </div>
+            <div class='collapse show' id='card-element-{{ key }}'>
+                <div class='card-body' id='card-body-{{ key }}'>
+                    {% for character in value.content %}
+                        <span style="width:2.5rem;height:2.5rem;display:inline-block;">{{ character }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endautoescape %}
+</body>
+<script src="/static/jquery/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(".card-body span").click(function(){
+        var url = window.location.href;
+        var qn=url.indexOf('characters');
+        if(qn>-1){
+            var url=url.substring(0,qn);
+        }
+        url+="?query="+$(this).text();
+        window.open(url);
+    })
+</script>
+</html>

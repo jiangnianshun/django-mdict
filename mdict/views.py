@@ -1323,6 +1323,28 @@ def grouping(request):
     return render(request, 'mdict/grouping.html')
 
 
+special_char = {"punctuation-marks", "kharoshthi", "pahlavi", "runic", "avestan", "balinese", "bamum", "bassa-vah",
+                "batak", "buhid", "caucasian-albanian", "cham", "elbasan", "grantha", "hanunoo", "kaithi", "kayah-li",
+                "khojki", "khudawadi", "lepcha", "limbu", "linear-b-Syllabary", "mahajani", "mandaic", "manichaean",
+                "mende-kikakui", "modi", "mro", "nabataean", "old-north-arabian", "old-permic", "pahawh-hmong",
+                "palmyrene", "pau-cin-hau", "pollard", "rejang", "samaritan", "saurashtra", "sharada", "siddham",
+                "sundanese", "syloti-nagri", "tagalog", "tagbanwa", "tai-tham", "tai-viet", "takri", "tirhuta",
+                "varang-kshiti"}
+
+
+def characters(request):
+    char_path = os.path.join(ROOT_DIR, 'media', 'char', 'characters.json')
+    data = {}
+    with open(char_path, 'r', encoding='utf-8') as f:
+        char_data = json.load(f)
+    for key, value in char_data.items():
+        if key in special_char:
+            data.update({key: {'type': 'mark1', 'content': value}})
+        else:
+            data.update({key: {'type': 'mark2', 'content': value}})
+    return render(request, 'mdict/characters.html', {'data': data})
+
+
 def create_li(content, is_dir, file_type=''):
     if is_dir:
         return '<li data-path="' + str(content) + '" class="jstree-closed path-dir">' + str(content) + '</li>'
@@ -1450,7 +1472,7 @@ def add_to_deck(request):
     deck_name = request.POST.get('deck_name', '')
     front_content = request.POST.get('front', '')
     back_content = request.POST.get('back', '')
-    result=add_note(deck_name, front_content, back_content)
+    result = add_note(deck_name, front_content, back_content)
     return HttpResponse(str(result))
 
 

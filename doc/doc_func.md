@@ -151,3 +151,11 @@ jstree.js：[https://www.jstree.com/](https://www.jstree.com/)
 markdown文档显示使用marked.js实现。
 
 marked.js：[https://github.com/markedjs/marked](https://github.com/markedjs/marked)
+
+anki制卡使用anki-connect实现。
+
+anki-connect：[https://github.com/FooSoft/anki-connect](https://github.com/FooSoft/anki-connect)
+
+特殊符号数据来自unicode-table-data。
+
+unicode-table-data：[https://github.com/unicode-table/unicode-table-data](https://github.com/unicode-table/unicode-table-data)

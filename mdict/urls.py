@@ -61,4 +61,5 @@ urlpatterns = [
     path('createdeck/', views.create_anki_deck),
     path('deckgroup/', views.deck_group),
     path('addtodeck/', views.add_to_deck),
+    path('characters/', views.characters),
 ]
