@@ -451,13 +451,15 @@ function init_iframe(){
     init_night_mode();
     var magnifier_enable=$('#config-magnifier-enable',parent.document).prop("checked");
     if(magnifier_enable){
-        $("img").blowup({
-            "round" : false,//放大镜是否圆形
-            "width" : 450,//放大镜宽高
-            "height" : 450,
-            "cursor" : false,//是否显示鼠标指针
-            "scale" : 1,//放大倍数
-        });
+        $("img").each(function(){
+            $(this).blowup({
+                "round" : false,//放大镜是否圆形
+                "width" : 450,//放大镜宽高
+                "height" : 450,
+                "cursor" : false,//是否显示鼠标指针
+                "scale" : 1.2,//放大倍数
+            });
+        })
     }
 }
 
