@@ -140,6 +140,10 @@ django-ckeditor：[https://github.com/django-ckeditor/django-ckeditor](https://g
 
 MathJax：[https://github.com/mathjax/MathJax](https://github.com/mathjax/MathJax)
 
+全文搜索的关键字高亮使用mark.js实现。
+
+mark.js：[https://github.com/julmot/mark.js](https://github.com/julmot/mark.js)
+
 查询历史词云使用wordcloud2.js实现。
 
 wordcloud2.js：[https://github.com/timdream/wordcloud2.js](https://github.com/timdream/wordcloud2.js)
@@ -159,3 +163,7 @@ anki-connect：[https://github.com/FooSoft/anki-connect](https://github.com/FooS
 特殊符号数据来自unicode-table-data。
 
 unicode-table-data：[https://github.com/unicode-table/unicode-table-data](https://github.com/unicode-table/unicode-table-data)
+
+图片放大镜使用blowup.js实现。
+
+blowup.js：[https://github.com/paulkr/blowup.js](https://github.com/paulkr/blowup.js)

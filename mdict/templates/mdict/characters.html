@@ -70,14 +70,16 @@
 <script src="/static/jquery/jquery.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script>
-    $(".card-body span").click(function(){
-        var url = window.location.href;
-        var qn=url.indexOf('characters');
-        if(qn>-1){
-            var url=url.substring(0,qn);
-        }
-        url+="?query="+$(this).text();
-        window.open(url);
-    })
+    $(document).ready(function(){
+        $(".card-body span").click(function(){
+            var url = window.location.href;
+            var qn=url.indexOf('characters');
+            if(qn>-1){
+                var url=url.substring(0,qn);
+            }
+            url+="?query="+$(this).text();
+            window.open(url);
+        })
+    });
 </script>
 </html>
