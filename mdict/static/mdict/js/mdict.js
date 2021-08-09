@@ -7,6 +7,7 @@ var script=`
 <script src="/static/mdict/js/mdict_base.js"></script>
 <script src="/static/mdict/js/iframe_base.js"></script>
 <script src="/static/mdict/js/mdict.js"></script>
+<script src="/static/mdict/blowup/blowup.min.js"></script>
 <script src="/static/mdict/js/init_iframe.js" defer></script>
 `;
 
@@ -591,9 +592,10 @@ function query_mdict(query,container,page,need_clear,is_over){
     var chaizi_enable=$('#config-chaizi-enable').prop("checked");
     var kana_enable=$('#config-kana-enable').prop("checked");
     var romaji_enable=$('#config-romaji-enable').prop("checked");
+    var magnifier_enable=$('#config-magnifier-enable').prop("checked");
 
     var data={"query":query,"dic_group":dic_group,"page":page,"force_refresh":force_refresh,"fh_char_enable":fh_char_enable,"st_enable":st_enable,
-    "chaizi_enable":chaizi_enable,"kana_enable":kana_enable,"romaji_enable":romaji_enable};
+    "chaizi_enable":chaizi_enable,"kana_enable":kana_enable,"romaji_enable":romaji_enable,"magnifier_enable":magnifier_enable};
     $.ajax({
         url:"/api/mdict2/mdict/",
         contentType:'json',

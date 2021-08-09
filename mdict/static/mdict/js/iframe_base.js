@@ -174,7 +174,8 @@ function init_hyperlink_click(){
     $("a[href$='.mp3'],a[href$='.spx'],a[href$='.wav'],a[href$='.ogg']").click(ihyperlink);
     $("body").on("click", "a", ihyperlink);
     //给动态增加的a添加click
-    var disable_iframe_click=$('#config-disable-iframe-click',parent.document).prop("checked");
+    //var disable_iframe_click=$('#config-disable-iframe-click',parent.document).prop("checked");
+    var disable_iframe_click=true;
 
     if(disable_iframe_click){
         $("a[href$='.mp3'],a[href$='.spx'],a[href$='.wav'],a[href$='.ogg']").click(function(event) {
@@ -448,6 +449,16 @@ function init_iframe(){
     //fix_img_delay_bug();
     forbid_contextmenu();
     init_night_mode();
+    var magnifier_enable=$('#config-magnifier-enable',parent.document).prop("checked");
+    if(magnifier_enable){
+        $("img").blowup({
+            "round" : false,//放大镜是否圆形
+            "width" : 450,//放大镜宽高
+            "height" : 450,
+            "cursor" : false,//是否显示鼠标指针
+            "scale" : 1,//放大倍数
+        });
+    }
 }
 
 function transform_all_text(isFt){
