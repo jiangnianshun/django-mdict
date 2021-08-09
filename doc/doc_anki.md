@@ -10,4 +10,4 @@ anki-connect：[https://github.com/FooSoft/anki-connect](https://github.com/FooS
 
 自动复制按钮，自动将当前展开词条的词头无样式复制到卡片正面，将词条所有内容带样式复制到卡片背面。复制时词条中有未展开的内容，复制后将无法展开。如果HTML结构较复杂，复制耗时会很长。
 
-![图片](img/img072901.png?raw=true)
+![图片](img/img080901.png?raw=true)
