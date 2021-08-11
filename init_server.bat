@@ -13,4 +13,7 @@ python manage.py createsuperuser
 cd mdict/readlib/pyx
 echo "cython compiling..."
 call build.bat
-cd ../../../
+set "lj=%~p0"
+set "lj=%lj:\= %"
+for %%a in (%lj%) do set wjj=%%a
+if %wjj%=="pyx"(cd ../../../)
