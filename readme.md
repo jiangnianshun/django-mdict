@@ -56,7 +56,7 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 
 路径信息保存在mdict_path.json文件中。
 
-最后要求设置django的用户名和密码。
+最后要求设置django的用户名和密码，邮箱不需要填写。
 
 5. django服务器默认端口8000
 <br />本地电脑访问http://127.0.0.1:8000/mdict/
