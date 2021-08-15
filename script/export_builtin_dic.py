@@ -33,13 +33,13 @@ builtin_dic_prefix = '''
 static_list = [r'static\bootstrap\css\bootstrap.min.css', r'mdict\static\mdict\css\mdict.css']
 # r'mdict\static\mdict\MathJax-master'
 
-export_txt_root_path = os.path.join(ROOT_DIR, 'export')
+export_root_path = os.path.join(ROOT_DIR, 'export')
 export_txt_path = os.path.join(ROOT_DIR, 'export', 'export.txt')
 
-export_data_root_path = os.path.join(export_txt_root_path, 'data')
+export_data_root_path = os.path.join(export_root_path, 'data')
 
-uploads_path = os.path.join(ROOT_DIR, '../media', 'uploads')
-export_uploads_path = os.path.join(export_data_root_path, '../media', 'uploads')
+uploads_path = os.path.join(ROOT_DIR, 'media', 'uploads')
+export_uploads_path = os.path.join(export_data_root_path, 'media', 'uploads')
 
 
 def export_to_txt():
@@ -54,8 +54,8 @@ def export_to_txt():
 
         i += 1
         mdict_list.append(mdict)
-    if not os.path.exists(export_txt_root_path):
-        os.mkdir(export_txt_root_path)
+    if not os.path.exists(export_root_path):
+        os.mkdir(export_root_path)
     if os.path.exists(export_data_root_path):
         shutil.rmtree(export_data_root_path)
     os.mkdir(export_data_root_path)
