@@ -386,7 +386,8 @@ function init_online_dic_var(){
 common_config={'force-refresh':'强制刷新','st-enable':'繁简转化','chaizi-enable':'拆字反查','fh-char-enable':'英文全角转半角',
 'kana-enable':'平片假名转化','romaji-enable':'罗马字假名转化','link-new-label':'跳转新标签页','force-font':'强制使用全宋体',
 'card-show':'展开多个词典','select-btn-enable':'启用查询菜单','new-label-link':'新标签页正查','fixed-height':'固定高度',
-'copy-with-tag':'复制包含样式','magnifier-enable':'启用放大镜'}
+'magnifier-enable':'启用放大镜'}
+//'copy-with-tag':'复制包含样式'
 
 function init_common_config(){//这里后面改成从后台取数据
     var c_parent=$('#function-checkbox');
@@ -418,15 +419,15 @@ function init_common_config(){//这里后面改成从后台取数据
             config_param=key.replace(/-/g,'_');
             $(config_id).prop("checked",config[config_param]);
         }
-        var copy_with_tag=$('#config-copy-with-tag').prop("checked");
-        $("#copy-with-tag2").prop("checked",copy_with_tag);
-        $("#copy-with-tag2").parent().show();
-        $("#copy-with-tag2").click(function(){
-            $('#config-copy-with-tag').prop("checked",$("#copy-with-tag2").prop("checked"));
-        })
-        $("#config-copy-with-tag").click(function(){
-            $('#copy-with-tag2').prop("checked",$("#config-copy-with-tag").prop("checked"));
-        })
+//        var copy_with_tag=$('#config-copy-with-tag').prop("checked");
+//        $("#copy-with-tag2").prop("checked",copy_with_tag);
+//        $("#copy-with-tag2").parent().show();
+//        $("#copy-with-tag2").click(function(){
+//            $('#config-copy-with-tag').prop("checked",$("#copy-with-tag2").prop("checked"));
+//        })
+//        $("#config-copy-with-tag").click(function(){
+//            $('#copy-with-tag2').prop("checked",$("#config-copy-with-tag").prop("checked"));
+//        })
     })
 
 }
@@ -787,6 +788,28 @@ function convert_css_inline(item) {
     });
 }
 
+const editors = {};
+
+function createEditor(elementId) {
+    return ClassicEditor
+        .create(document.getElementById(elementId),{
+            htmlSupport: {
+                allow: [
+                    {
+                        name: /.*/,
+                        attributes: true,
+                        classes: true,
+                        styles: true
+                    }
+                ]
+            }
+        })
+        .then(editor => {
+            editors[elementId] = editor;
+        })
+        .catch(err => console.error(err.stack));
+}
+
 function init_anki_modal(){
     init_anki_dropdown();
     $("#create-deck").click(function(){
@@ -807,15 +830,22 @@ function init_anki_modal(){
         });
     });
 
+    //createEditor('ckeditor1');
+    createEditor('ckeditor2');
+
     $("#clear-card").click(function(){
         $("#card-front").val("");
-        $("#card-back").val("");
+        //$("#card-back").val("");
+        //editors.ckeditor1.setData('');
+        editors.ckeditor2.setData('');
     });
     
     $("#add-to-deck").click(function(){
         let deck_name=html_unescape($("#deck-list").attr("deck-name"));
         let front_content=$("#card-front").val();
-        let back_content=$("#card-back").val();
+        //let back_content=$("#card-back").val();
+        //let front_content=editors.ckeditor1.getData();
+        let back_content=editors.ckeditor2.getData();
         if(deck_name!=""&&front_content!=""&&back_content!=""){
             data={"deck_name":deck_name,"front":front_content,"back":back_content}
             $.ajax({//传递数据大，在apache上报414错误，应当用POST传递。contentType应当为默认或者application/x-www-form-urlencoded。
@@ -841,13 +871,14 @@ function init_anki_modal(){
     });
 
     //设置textarea可以粘贴html
-    set_clipboard_data(document.getElementById('card-front'));
-    set_clipboard_data(document.getElementById('card-back'));
+    //set_clipboard_data(document.getElementById('card-front'));
+    //set_clipboard_data(document.getElementById('card-back'));
 
     $("#auto-create-card").click(function(){
         var card_show=$("#card-container .collapse.show");
         if(card_show.length==1){
             $("#card-front").val(card_show.parent().children('.card-header').find('span.badge').text());
+            //editors.ckeditor1.setData(card_show.parent().children('.card-header').find('span.badge').text());
 
             let card_content=card_show.find('iframe').contents().find('body');
             convert_img_absolute($(card_content));
@@ -858,7 +889,8 @@ function init_anki_modal(){
             card_html=card_html.replace(/<link.*?>/ig,"");
             card_html=card_html.replace(/<style>.*?<\/style>/ig,"");
             
-            $("#card-back").val(card_html);
+            //$("#card-back").val(card_html);
+            editors.ckeditor2.setData(card_html);
         }
     });
 }
