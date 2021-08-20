@@ -858,7 +858,7 @@ function init_anki_modal(){
                 success:function(data){
                     console.log(data);
                     if(parseInt(data),parseInt(data)>0){
-                        $("#live-toast-body").text("card has been inserted "+deck_name+".");
+                        $("#live-toast-body").text("卡片已加入到牌组"+deck_name+"。");
                     }else{
                         $("#live-toast-body").text("error:"+data);
                     }

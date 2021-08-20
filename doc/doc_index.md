@@ -128,6 +128,10 @@ apache修改配置文件django-mdict.conf中的VirtualHost *:80。
 
 主页位于django-mdict/templates/index.html
 
+#### 初始化
+
+运行run_server脚本时，仅当根目录下数据库db.sqlite3不存在时，才会进行初始化，db.sqlite3存在的情况下，直接启动django服务器。
+
 ### 依赖
 
 默认用的是清华源，如果需要修改，修改init_server.bat和init_server.sh中pip命令的-i参数。
