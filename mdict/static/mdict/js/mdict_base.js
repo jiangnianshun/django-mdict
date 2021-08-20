@@ -791,6 +791,7 @@ function convert_css_inline(item) {
 const editors = {};
 
 function createEditor(elementId) {
+    //xinshijirihan的ばか词条，复制时的类名导致ckeditor报错e[n] is not iterable。
     return ClassicEditor
         .create(document.getElementById(elementId),{
             htmlSupport: {
@@ -798,7 +799,7 @@ function createEditor(elementId) {
                     {
                         name: /.*/,
                         attributes: true,
-                        classes: true,
+                        classes: false,
                         styles: true
                     }
                 ]
@@ -877,7 +878,9 @@ function init_anki_modal(){
     $("#auto-create-card").click(function(){
         var card_show=$("#card-container .collapse.show");
         if(card_show.length==1){
-            $("#card-front").val(card_show.parent().children('.card-header').find('span.badge').text());
+            let front_card_text=card_show.parent().children('.card-header').find('span.badge').text();
+            front_card_text=front_card_text.replace(/【\d+】$/g,"");
+            $("#card-front").val(front_card_text);
             //editors.ckeditor1.setData(card_show.parent().children('.card-header').find('span.badge').text());
 
             let card_content=card_show.find('iframe').contents().find('body');
@@ -885,9 +888,9 @@ function init_anki_modal(){
             convert_css_inline($(card_content));
 
             let card_html=$(card_content).html();
-            card_html=card_html.replace(/<script.*?<\/script>/ig,"");
-            card_html=card_html.replace(/<link.*?>/ig,"");
-            card_html=card_html.replace(/<style>.*?<\/style>/ig,"");
+            //card_html=card_html.replace(/<script.*?<\/script>/ig,"");
+            //card_html=card_html.replace(/<link.*?>/ig,"");
+            //card_html=card_html.replace(/<style>.*?<\/style>/ig,"");
             
             //$("#card-back").val(card_html);
             editors.ckeditor2.setData(card_html);
