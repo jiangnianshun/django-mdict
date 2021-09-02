@@ -169,7 +169,7 @@ def get_mdict_content(mymdictentry):
         else:
             mdict_content.append(
                 "<li class='mymdict_item'>" + item_entry
-                + "<span class='badge bg-secondary' style='margin-left:0.2rem;'><b>"
+                + "<span class='badge bg-secondary' style='margin-left:0.2rem;color:#FFF;background-color:#6C757D;'><b>"
                 + m.item_type.mdict_type + "</b></span><br /><div style='background:#F5F5F5;'>"
                 + item_content + "</div></li>")
 
