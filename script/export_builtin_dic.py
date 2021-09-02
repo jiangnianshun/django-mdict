@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import shutil
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -33,12 +34,17 @@ builtin_dic_prefix = '''
 static_list = [r'static\bootstrap\css\bootstrap.min.css', r'mdict\static\mdict\css\mdict.css']
 # r'mdict\static\mdict\MathJax-master'
 
+time_str = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
+
+export_file = 'export'+time_str+'.txt'
 export_root_path = os.path.join(ROOT_DIR, 'export')
-export_txt_path = os.path.join(ROOT_DIR, 'export', 'export.txt')
+export_txt_path = os.path.join(ROOT_DIR, 'export', export_file)
 
 export_data_root_path = os.path.join(export_root_path, 'data')
 
 uploads_path = os.path.join(ROOT_DIR, 'media', 'uploads')
+if not os.path.exists(uploads_path):
+    os.mkdir(uploads_path)
 export_uploads_path = os.path.join(export_data_root_path, 'media', 'uploads')
 
 

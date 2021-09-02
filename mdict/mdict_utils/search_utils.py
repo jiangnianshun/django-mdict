@@ -164,11 +164,14 @@ def get_mdict_content(mymdictentry):
             if m.item_entry is None:
                 mdict_content.append('<div style="background:#F5F5F5;">' + item_content + "</div></li>")
             else:
-                mdict_content.append(item_entry + '<br /><div style="background:#F5F5F5;">' + item_content + "</div></li>")
+                mdict_content.append(item_entry + '<br /><div style="background:#F5F5F5;">' + item_content
+                                     + "</div></li>")
         else:
             mdict_content.append(
-                "<li class='mymdict_item'>" + item_entry + "<span class='badge bg-secondary'>"
-                + m.item_type.mdict_type + "</span><br /><div style='background:#F5F5F5;'>" + item_content + "</div></li>")
+                "<li class='mymdict_item'>" + item_entry
+                + "<span class='badge bg-secondary' style='font-weight:bold;margin-left:0.2rem;'>"
+                + m.item_type.mdict_type + "</span><br /><div style='background:#F5F5F5;'>"
+                + item_content + "</div></li>")
 
     mdict_content.append('</ol></div>')
     return mdict_content
