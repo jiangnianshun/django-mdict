@@ -6,7 +6,7 @@
 
 django-mdict是django实现的mdict词典查询工具（支持zim格式）。
 
-在线demo：[http://81.68.207.87/mdict/](http://81.68.207.87/mdict/)
+在线demo（已失效）：~~http://81.68.207.87/mdict/~~
 
 ### 适用情景
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block meta %}{% endblock %}
+    
+    <title>我的导航</title>
+
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/font/bootstrap-icons.css">
+    <link rel='stylesheet' href="/static/mynav/css/mynav.css">
+    <script src="/static/jquery/jquery.min.js"></script>
+    <style>
+        html,body{overflow-x:hidden;}
+        a{text-decoration:none;}
+        .card{margin-top:15px;}
+        .input-group{margin-bottom:0.5rem;}
+        .card-body{padding:0.5rem;}
+        .col .card-body{padding:0.3rem;}
+        .card-header span{cursor:pointer;}
+        .shadow:hover{
+        box-shadow: 0 .5rem 1rem rgba(240,240,240,.15)!important;
+        }
+    </style>
+</head>
+<body class="bg-light">
+{% include "mynav/mynav-navbar.html" %}
+<div class="container-fluid" style="margin-top:60px;">
+    <div class='row'>
+        <div class="col-md-1 col-lg-2 col-xxl-3">
+        </div>
+        <div class="col-md-10 col-lg-8 col-xxl-6" id="main-contents">
+        </div>
+        <div class="col-md-1 col-lg-2 col-xxl-3">
+        </div>
+    </div>
+</div>
+
+{% load static %}
+
+{% include "mynav/modal-container-addsite.html" %}
+
+{% include "mynav/modal-container-addgroup.html" %}
+
+{% include "mynav/mynav-bottom-button-group.html" %}
+    
+</body>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/mdict/transform/transform.js"></script>
+<script src="/static/mynav/js/mynav.js"></script>
+<script>
+$(document).ready(function(){
+    init_mynav();
+});
+</script>
+</html>

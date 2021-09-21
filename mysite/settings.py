@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mdict.apps.MdictConfig',
+    'mynav.apps.MynavConfig',
     'ckeditor',
     'ckeditor_uploader',
     'rest_framework',

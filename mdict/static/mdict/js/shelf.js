@@ -307,18 +307,18 @@ function start_dic_filter(group_pk){
         data:data,
         success:function(data){
         var pk_list=$.parseJSON(data);
-        var mdict_list=$(".col");
+        var col_list=$(".col");
         if(pk_list.length==0&&group_pk<=0){
-            $(mdict_list).each(function(){$(this).show();});
+            $(col_list).each(function(){$(this).show();});
             set_dic_num()
         }else{
-            for(var i=0;i<mdict_list.length;i++){
-                var dic_pk=parseInt($(mdict_list[i]).children('.dic-container').attr('data-pk'));
+            for(var i=0;i<col_list.length;i++){
+                var dic_pk=parseInt($(col_list[i]).children('.dic-container').attr('data-pk'));
                 var pk_pos=$.inArray(dic_pk,pk_list);
                 if(pk_pos<0){
-                    $(mdict_list[i]).hide();
+                    $(col_list[i]).hide();
                 }else{
-                    $(mdict_list[i]).show();
+                    $(col_list[i]).show();
                 }
             }
             set_dic_num()
@@ -353,27 +353,25 @@ function init_mdict_filter(){
     $("#mdict-filter-input").bind("input propertychange",function(event){
         //juery的change事件，只有当input没有聚焦的时候才能触发，input propertychange能检测input输入过程中的变化
         var txt=$.trim($(this).val().toLowerCase( ));
-        var mdict_list=$(".col");
-        if(txt.length>0){
-//延时有问题
-            last =  event.timeStamp;
+        var item_list=$(".col");
+        if(txt.length>0){//延时有问题
+            last=event.timeStamp;
             //利用event的timeStamp来标记时间，这样每次事件都会修改last的值，注意last必需为全局变量
-            setTimeout(function(){    //设时延迟0.5s执行
-                if(last-event.timeStamp==0)
+            setTimeout(function(){
+            //设时延迟0.5s执行
+                if(last-event.timeStamp==0){
                 //如果时间差为0（也就是你停止输入0.5s之内都没有其它的keyup事件发生）则做你想要做的事
-                {
-
-                    for(var i=0;i<=mdict_list.length;i++){
-                        var dic_a=$(mdict_list[i]).find('.dic-container');
-                        if(dic_a.length>0){
-                            var title=dic_a.attr('data-name').toLowerCase();
+                    for(var i=0;i<=item_list.length;i++){
+                        var item_a=$(item_list[i]).find('.dic-container');
+                        if(item_a.length>0){
+                            var title=item_a.attr('data-name').toLowerCase();
                             if(title=="")continue;
-                            var file=dic_a.attr('data-file').toLowerCase();
+                            var file=item_a.attr('data-file').toLowerCase();
 
                             if(t2s(title).indexOf(txt)==-1&&s2t(title).indexOf(txt)==-1&&t2s(file).indexOf(txt)==-1&&s2t(file).indexOf(txt)==-1){
-                                $(mdict_list[i]).hide();
+                                $(item_list[i]).hide();
                             }else{
-                                $(mdict_list[i]).show();
+                                $(item_list[i]).show();
                             }
                         }
                     }
@@ -381,14 +379,13 @@ function init_mdict_filter(){
                 set_dic_num();
             },500);
         }else{
-           last =  event.timeStamp;
+           last=event.timeStamp;
            setTimeout(function(){//这里也要定时，否则在手机上，这里运行快，上面延时，快速删除时，显示结果不对
-               for(var i=0;i<=mdict_list.length;i++){
-                    $(mdict_list[i]).show();
+               for(var i=0;i<=item_list.length;i++){
+                    $(item_list[i]).show();
                }
                set_dic_num();
            },500);
         }
-
     })
 }

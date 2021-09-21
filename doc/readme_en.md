@@ -4,7 +4,7 @@
 
 django-mdict is a mdict search tool based on Django.
 
-online demo：[http://81.68.207.87/mdict/](http://81.68.207.87/mdict/)
+online demo (expired)：~~http://81.68.207.87/mdict/~~
 
 ### run on Windows
 

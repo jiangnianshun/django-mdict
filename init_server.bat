@@ -8,6 +8,8 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py makemigrations mdict
 python manage.py migrate mdict
+python manage.py makemigrations mynav
+python manage.py migrate mynav
 python manage.py createsuperuser
 )
 cd mdict/readlib/pyx

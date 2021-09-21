@@ -134,6 +134,10 @@ mdx同名的js、css和字体文件会自动加载。
 
 ### 其他
 
+前端界面使用bootstrap5
+
+bootstrap5：[https://getbootstrap.com/](https://getbootstrap.com/)
+
 内置词条使用django-ckeditor和MathJax实现富文本和latex公式输入。
 
 django-ckeditor：[https://github.com/django-ckeditor/django-ckeditor](https://github.com/django-ckeditor/django-ckeditor)
@@ -156,11 +160,11 @@ markdown文档显示使用marked.js实现。
 
 marked.js：[https://github.com/markedjs/marked](https://github.com/markedjs/marked)
 
-anki制卡使用anki-connect实现。
+anki制卡通过调用anki-connect实现。
 
 anki-connect：[https://github.com/FooSoft/anki-connect](https://github.com/FooSoft/anki-connect)
 
-特殊符号数据来自unicode-table-data。
+特殊符号的数据来自unicode-table-data。
 
 unicode-table-data：[https://github.com/unicode-table/unicode-table-data](https://github.com/unicode-table/unicode-table-data)
 

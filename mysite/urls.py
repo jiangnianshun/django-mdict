@@ -74,6 +74,7 @@ def swView(request):
 
 urlpatterns = [
     path('', main, name='main'),
+    path('mynav/', include('mynav.urls')),
     path('api/', include(router.urls)),  # djangoresrframework生成的url
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('font/', redirect_font),

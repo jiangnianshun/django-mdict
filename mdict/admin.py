@@ -124,6 +124,7 @@ class MdictOnlineAdmin(admin.ModelAdmin):
 
 class MdictDicGroupAdmin(admin.ModelAdmin):
     list_display = ('id', 'dic_group_name')
+    list_editable = ('dic_group_name',)
     filter_horizontal = ('mdict_group',)
 
 

@@ -722,7 +722,7 @@ def get_es_results(query, dic_pk, result_num, result_page, frag_size, frag_num, 
     for hit in response:
         meta = hit.meta
 
-        index_name = meta.index
+        index_name = meta.mynav_index
 
         if index_name not in meta_dict_keys:
             init_meta_list(client)

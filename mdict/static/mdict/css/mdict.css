@@ -1,6 +1,6 @@
 html,body,.container-fluid{
-	padding:0px;
-	margin:0px;
+    padding:0px;
+    margin:0px;
 }
 
 #es-filter-div label{
@@ -15,8 +15,8 @@ html,body,.container-fluid{
 }
 
 .navbar{
-	margin:0px;
-	padding:0px;
+    margin:0px;
+    padding:0px;
 }
 
 .menu-icon{
@@ -37,7 +37,7 @@ html,body,.container-fluid{
 
 
 #mdict-query{
-	margin:0px !important;
+    margin:0px !important;
 
 }
 
@@ -55,7 +55,7 @@ html,body,.container-fluid{
 }
 
 #dic-group-button{
-	width:100%;
+    width:100%;
 }
 
 #next-page{
@@ -87,24 +87,24 @@ html,body,.container-fluid{
 }
 
 iframe {
-	overflow:hidden;
-	border-style: none;
+    overflow:hidden;
+    border-style: none;
     margin: 0px;
-	width: 1px;
-	min-width: 100%;
+    width: 1px;
+    min-width: 100%;
 }
 
 #modal-container-mdict span{
-	padding:0px 2px;
+    padding:0px 2px;
 }
 
 #modal-container-mdict .card-header a{
-	word-break:break-all;
-	/*使得词典列表中长标题能在任意位置换行*/
+    word-break:break-all;
+    /*使得词典列表中长标题能在任意位置换行*/
 }
 
 #card-container{
-	margin-bottom:50px;
+    margin-bottom:50px;
 }
 
 #card-container .badge{
@@ -112,75 +112,75 @@ iframe {
 }
 
 #display_list{
-	padding:0;
-	margin:0;
-	list-style:none;
+    padding:0;
+    margin:0;
+    list-style:none;
 }
 
 #dic-name{
-	color:#CC9900;
+    color:#CC9900;
 }
 
 #scroll_list li{
-	border-left:1px solid #EEEEEE;
-	border-right:1px solid #EEEEEE;
-	border-bottom:1px solid #EEEEEE;
-	color:brown;
+    border-left:1px solid #EEEEEE;
+    border-right:1px solid #EEEEEE;
+    border-bottom:1px solid #EEEEEE;
+    color:brown;
 }
 
 #scroll_list li:hover{
-	background-color:#EEEEEE;
+    background-color:#EEEEEE;
 }
 
 
 #mdict-query:hover{
-	cursor:pointer;
+    cursor:pointer;
 }
 
 .alert{
-	margin:0px;
-	padding:0.5rem 1rem;
+    margin:0px;
+    padding:0.5rem 1rem;
 
 }
 
 .mymdict_entry{
-	width:100%;
-	color:grown;
+    width:100%;
+    color:grown;
 }
 
 .card-body{
-	padding:5px;
+    padding:5px;
 }
 
 .olnum{
-	margin:0px;
-	margin-left:20px;
-	padding:0px;
+    margin:0px;
+    margin-left:20px;
+    padding:0px;
 }
 
 .olnone{
-	margin:0px;
-	padding:0px;
-	list-style:none;
+    margin:0px;
+    padding:0px;
+    list-style:none;
 }
 
 .mymdict_item{
-	width:100%;
+    width:100%;
 }
 
 .card-body{margin:0px;padding:0px;}
 
 .card-header{
-	padding:5px;
+    padding:5px;
 }
 
 
 .dic-icon{
-	width:35px;
-	height:35px;
-	border-radius:3px;
-	margin-left:2px;
-	margin-right:2px;
+    width:35px;
+    height:35px;
+    border-radius:3px;
+    margin-left:2px;
+    margin-right:2px;
 }
 
 .card-link:hover{
@@ -195,17 +195,14 @@ iframe {
     cursor:pointer;
 }
 
-.mdict-icon{font-size:22px;}
-
 .ui-selectmenu-menu{position:absolute;z-index:9999 !important;}
 
 a{text-decoration:none !important;}
 
+.mdict-icon{font-size:22px;}
 
 #bottom-button-group{margin:0;padding:0;position:fixed;bottom:10px;display:flex;justify-content:center;width:100%;pointer-events: none;}
-
 #bottom-button-group li{list-style: none;margin-top:2px;margin-bottom:2px;pointer-events: auto;cursor:pointer;}
-
 .float-a{float: left;width: 40px;height: 40px;background-color: #fff;box-shadow: 0 0 2px #bbb;position: relative;overflow: hidden;}
 .float-a i{-webkit-transition:all 0.5s;display: block;font-size:24px;width:40px;height:40px;}
 .float-a:hover i{margin-top: -40px;}

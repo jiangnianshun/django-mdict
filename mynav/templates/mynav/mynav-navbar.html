@@ -1,0 +1,31 @@
+<nav class="fixed-top navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img src="/static/mynav/img/mynav.png" class="my-img-width" alt=''>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynav-navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mynav-navbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                     <a class="nav-link" href="/mdict/">词典</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="mynav-navbar-dropdown" href="#" data-bs-toggle="dropdown">打开</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/mdict/bujian/">部件检索</a></li>
+                        <li><a class="dropdown-item" href="/mdict/shelf/">书架</a></li>
+                        <li><a class="dropdown-item" href="/mdict/shelf2/">书架2</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                     <a class="nav-link" href="/admin/">管理</a>
+                </li>
+            </ul>
+            <div class="input-group w-auto">
+                <input id="mynav-filter-input" autocomplete="off" class="form-control me-2" type="search" placeholder="筛选" aria-label="Search">
+            </div>
+        </div>
+    </div>
+</nav>

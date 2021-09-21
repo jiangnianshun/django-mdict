@@ -1,6 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from base.base_constant import regp
+from base.base_func import item_order
 
 
 class MdictOnline(models.Model):
@@ -18,7 +19,7 @@ class MdictOnline(models.Model):
         return self.mdict_name
 
     def save(self, *args, **kwargs):
-        mdict_order(self, MdictOnline)
+        item_order(self, MdictOnline, 'mdict')
 
         super(MdictOnline, self).save()
 
@@ -28,7 +29,7 @@ class MdictDic(models.Model):
     mdict_file = models.CharField('文件名', max_length=100, unique=True)
     mdict_enable = models.BooleanField('启用', default=True)
     mdict_priority = models.PositiveIntegerField('词典排序', default=1)  # 优先级显示，validator设置范围
-    mdict_es_enable = models.BooleanField('启用es索引', default=False,  null=True)
+    mdict_es_enable = models.BooleanField('启用es索引', default=False, null=True)
     mdict_md5 = models.CharField('MD5值', max_length=35, default='', null=True, blank=True)
 
     class Meta:
@@ -39,41 +40,9 @@ class MdictDic(models.Model):
         return self.mdict_name
 
     def save(self, *args, **kwargs):
-        mdict_order(self, MdictDic)
+        item_order(self, MdictDic, 'mdict')
 
         super(MdictDic, self).save()
-
-
-def mdict_order(obj, mdl):
-    if obj.mdict_priority == 0:
-        obj.mdict_priority = 1
-
-    mdict_dic = mdl.objects.all().order_by('mdict_priority')
-
-    mdict_dic_len = len(mdict_dic)
-
-    if obj.mdict_priority > mdict_dic_len:
-        obj.mdict_priority = mdict_dic_len
-
-    for i in range(mdict_dic_len):
-        if i + 1 != mdict_dic[i].mdict_priority:
-            mdict_dic.filter(pk=mdict_dic[i].pk).update(mdict_priority=i + 1)
-
-    mdict_dic = mdl.objects.all().order_by('mdict_priority')
-    w1 = mdict_dic.filter(pk=obj.pk)
-    if len(w1) > 0:  # 新添加的词典还不存在
-        real_order = w1[0].mdict_priority
-
-        if obj.mdict_priority > real_order:  # 向后移动，后面的都向前补一位
-            w2 = mdict_dic.filter(mdict_priority__gt=real_order, mdict_priority__lte=obj.mdict_priority)
-            for w in w2:
-                w2.filter(mdict_priority=w.mdict_priority).update(mdict_priority=w.mdict_priority - 1)
-
-        elif obj.mdict_priority < real_order:
-            w2 = mdict_dic.filter(mdict_priority__lt=real_order, mdict_priority__gte=obj.mdict_priority).order_by(
-                '-mdict_priority')
-            for w in w2:
-                w2.filter(mdict_priority=w.mdict_priority).update(mdict_priority=w.mdict_priority + 1)
 
 
 class MdictDicGroup(models.Model):

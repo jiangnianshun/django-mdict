@@ -217,3 +217,26 @@ def read_from_sqlite(db_path, exec_cmd):
     cursor.execute(exec_cmd)
     rows = cursor.fetchall()
     return rows
+
+
+def item_order(obj, mdl, type):
+    attr1 = type + '_priority'
+    attr2 = type + '_name'
+    priority = eval('obj.' + attr1)
+    if priority < 1:
+        priority = 1
+
+    item_list = mdl.objects.all().exclude(pk=obj.pk).order_by(attr1, attr2)
+
+    item_list_len = len(item_list)
+
+    if priority > item_list_len:
+        priority = item_list_len
+
+    for i in range(item_list_len):
+        if i + 1 < priority:
+            if i + 1 != eval('item_list[i].'+attr1):
+                eval('item_list.filter(pk=item_list[i].pk).update('+attr1+'=i + 1)')
+        elif i + 1 >= priority:
+            if i + 2 != eval('item_list[i].'+attr1):
+                eval('item_list.filter(pk=item_list[i].pk).update('+attr1+'=i + 2)')

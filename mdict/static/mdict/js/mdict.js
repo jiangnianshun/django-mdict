@@ -2,7 +2,7 @@
 var script=`
 <script src="/static/jquery/jquery.min.js"></script>
 <script src='/static/mdict/iframe-resizer/js/iframeResizer.contentWindow.min.js'></script>
-<script src="/static/mdict/js/transform.js"></script>
+<script src="/static/mdict/transform/transform.js"></script>
 <script src="/static/mdict/js/base_func.js"></script>
 <script src="/static/mdict/js/mdict_base.js"></script>
 <script src="/static/mdict/js/iframe_base.js"></script>
@@ -776,9 +776,9 @@ function decodeSpeex(file) {
 function play_speex(ob,array,play,mime,func){
     var data = new Uint8Array( array );
     $.when(//动态加载js
-        $.getScript("/static/mdict/js/bitstring.min.js"),
-        $.getScript("/static/mdict/js/pcmdata.min.js"),
-        $.getScript("/static/mdict/js/speex.min.js"),
+        $.getScript("/static/mdict/speex/bitstring.min.js"),
+        $.getScript("/static/mdict/speex/pcmdata.min.js"),
+        $.getScript("/static/mdict/speex/speex.min.js"),
         $.Deferred(function( deferred ){
             $( deferred.resolve );
         })
