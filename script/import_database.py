@@ -128,18 +128,19 @@ def import_database(item_list, jtype):
 def import_all():
     json_data = read_json()
     json_data_keys = json_data.keys()
+    print('import starting...')
     if 'mymdictentry' in json_data_keys:
         import_database(json_data['mymdictentry'], 'mymdictentry')
-        print('import mymdictentry has finished.')
+        print('mymdictentry import has finished.')
     if 'mdictdic' in json_data_keys:
         import_database(json_data['mdictdic'], 'mdictdic')
-        print('import mdictdic has finished.')
+        print('mdictdic import has finished.')
     if 'mdictonline' in json_data_keys:
         import_database(json_data['mdictonline'], 'mdictonline')
-        print('import mdictonline has finished.')
+        print('mdictonline import has finished.')
     if 'website' in json_data_keys:
         import_database(json_data['website'], 'website')
-        print('import website has finished.')
+        print('website import has finished.')
 
 
 import_all()

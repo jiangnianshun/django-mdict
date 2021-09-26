@@ -101,6 +101,7 @@ def export_mymdictentry():
     from mdict.models import MyMdictEntry
     export_data = export_database(MyMdictEntry, 'mymdictentry')
     write_json(export_data, 'mymdictentry')
+    print('mymdictentry export has finished.')
 
 
 # @except_decorator
@@ -108,6 +109,7 @@ def export_mdictdic():
     from mdict.models import MdictDic
     export_data = export_database(MdictDic, 'mdictdic')
     write_json(export_data, 'mdictdic')
+    print('mdictdic export has finished.')
 
 
 # @except_decorator
@@ -115,6 +117,7 @@ def export_mdictonline():
     from mdict.models import MdictOnline
     export_data = export_database(MdictOnline, 'mdictonline')
     write_json(export_data, 'mdictonline')
+    print('mdictonline export has finished.')
 
 
 # @except_decorator
@@ -122,7 +125,7 @@ def export_website():
     from mynav.models import Website
     export_data = export_database(Website, 'website')
     write_json(export_data, 'website')
-
+    print('website export has finished.')
 
 def exprot_all():
     export_mymdictentry()

@@ -14,6 +14,7 @@
 *.c
 .Windows.cache
 .Linux.cache
+db.sqlite3-journal
 migrations/
 __pycache__/
 build/

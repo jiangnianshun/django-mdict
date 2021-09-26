@@ -146,6 +146,16 @@ mdict/readlib/pyx/build/ cython编译生成的中间文件
 
 mdict/readlib/pyx/mdict/ cython编译生成的中间文件
 
+#### 查词API
+
+1. 使用GET方法获取查词的json结果
+
+url是[http://IP地址/api/mdict2/mdict/]()，参数是query:apple,page:1
+
+2. 使用url获取查词的json结果
+
+访问[http://IP地址/api/mdict2/mdict/?query=apple&page=2&format=json]()
+
 ### 依赖
 
 默认用的是清华源，如果需要修改，修改init_server.bat和init_server.sh中pip命令的-i参数。
