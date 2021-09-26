@@ -48,20 +48,20 @@ function change_title_and_url(query){
 }
 
 function show_first_card(){
-	//展开第一个词典
+    //展开第一个词典
     var target="#card-element-0";
     //var card="div[id^=card-element-]";
 
-	if($(target).length>0){
-		$(target).collapse('show');
-		//show是展开，hide是折叠
-	}
+    if($(target).length>0){
+        $(target).collapse('show');
+        //show是展开，hide是折叠
+    }
 }
 
 function close_autocomplete(form){
-	$(form).children("input").autocomplete("close");//按下enter键时关闭autocomplete下拉框
-	document.activeElement.blur();//收回手机浏览器的软键盘
-	return false;
+    $(form).children("input").autocomplete("close");//按下enter键时关闭autocomplete下拉框
+    document.activeElement.blur();//收回手机浏览器的软键盘
+    return false;
 }
 
 function thousands(num){
@@ -71,35 +71,35 @@ function thousands(num){
 }
 
 function html_escape(text,all){
-	//后端用urllib.parse.quote转义，汉字和符号都会被转义。
-	//标题只需要转义影响html元素的符号。
-	if(text==null){
-		return "";
-	}else if(all){
+    //后端用urllib.parse.quote转义，汉字和符号都会被转义。
+    //标题只需要转义影响html元素的符号。
+    if(text==null){
+        return "";
+    }else if(all){
         return encodeURIComponent(text).replace(/[!'()*]/g, escape);
-	}else{
+    }else{
         //返回字符实体
         return text.replace(/[<>'"&]/g, function(match, pos, originalText){
-		switch(match){
-			case "'":return "&apos;";
-			case "<":return "&lt;";
-			case ">":return "&gt;";
-			case "&":return "&amp;";
-			case "\"":return "&quot;";
-		}
-		});
-	}
+        switch(match){
+            case "'":return "&apos;";
+            case "<":return "&lt;";
+            case ">":return "&gt;";
+            case "&":return "&amp;";
+            case "\"":return "&quot;";
+        }
+        });
+    }
 }
 
 function html_unescape(text){
     if(text==null){
-		return "";
-	}else{
+        return "";
+    }else{
         //text = decodeURIComponent(text.replace('%', '%25'));
         //韦氏高阶双解anemones词条义项2是sea%20anemone，这里%20需要替换。其他是否有%需要保留的情况？？？
         text = decodeURIComponent(text);
         return decodeHTMLEntities(text);
-	}
+    }
 }
 
 function decodeHTMLEntities(text) {
@@ -142,8 +142,8 @@ function extractHostname(url) {
 }
 
 function forbid_contextmenu(){
-	//禁止手机浏览器的上下文菜单
-	if(!is_PC()){
+    //禁止手机浏览器的上下文菜单
+    if(!is_PC()){
         window.addEventListener("contextmenu", function(e) {
             e.preventDefault();
             create_tooltip(e);
@@ -168,13 +168,13 @@ function is_PC() {
 
 
 function clear_parent_card(container){
-	var card=container.children(".card");
-	if(card.length>0){card.remove();}
+    var card=container.children(".card");
+    if(card.length>0){card.remove();}
 }
 
 function clear_card(){
-	var card=$(".card");
-	var d=$("#no-found");
-	if(card.length>0){card.remove();}
-	if(d.length>0){d.remove();}
+    var card=$(".card");
+    var d=$("#no-found");
+    if(card.length>0){card.remove();}
+    if(d.length>0){d.remove();}
 }

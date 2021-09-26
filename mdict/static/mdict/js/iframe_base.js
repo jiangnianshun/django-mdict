@@ -69,13 +69,11 @@ function ihyperlink(e){
     if(query!=null){
 //            e.preventDefault();
         if(query.indexOf("entry")==0){//处理entry超链接
-
             var entry=query.substring(8);
             if(entry[0]=="#"){
                 //#锚点
                 //页面内跳转到锚点
                 in_page_jump(ob,entry.substring("1"));
-
             }else{
                 //entry#锚点
                 //跳转到entry词条的锚点位置
@@ -90,20 +88,16 @@ function ihyperlink(e){
                 if(backslash==entry.length-1){
                     entry=entry.substring(0,backslash);
                 }
-
                 var new_label=$('#config-link-new-label',parent.document).prop("checked");
                 if(new_label){
                     //通过url参数设置新页面的in-page-jump参数
                     var url=create_new_url(entry);
-
                     window.open(url);
                 }else{
                     $('#query',parent.document).val(html_unescape(entry));
                     $("#card-container",parent.document).attr("in-page-jump",inPageJump);
                     $('#mdict-query',parent.document).trigger("click");
                 }
-
-
             }
         }else if(query.indexOf("http")==0||query.indexOf("www.")==0){
             window.open(query);
@@ -113,15 +107,12 @@ function ihyperlink(e){
                 audio='/'+audio;
             }
             audio=html_escape(audio,true);
-
             var dic_pk=$('body').attr('data-pk');
-
             if($("html",parent.document).attr("data-type")=='dic'){
                 var url=audio;
             }else{
                 var url=dic_pk+'/'+audio;
             }
-
             if(ob.children("audio").length==0){
                 query_audio(ob,url,true,null);
             }else{
@@ -153,7 +144,6 @@ function ihyperlink(e){
             }
         }
     }
-
 }
 
 function init_hyperlink(){

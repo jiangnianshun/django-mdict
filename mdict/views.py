@@ -25,6 +25,7 @@ from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime
     ROOT_DIR
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
+from base.base_constant import builtin_dic_prefix
 from base.sys_utils import check_system
 
 from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs, check_xapian, \
@@ -36,7 +37,7 @@ from mdict.mdict_utils.init_utils import init_vars, sound_list
 from mdict.mdict_utils.mdict_config import *
 from mdict.mdict_utils.search_object import SearchObject
 from mdict.mdict_utils.search_utils import search, search_bultin_dic_sug, search_mdx_sug, \
-    search_revise
+    search_revise, get_mdict_content
 from .mdict_utils.entry_object import entryObject
 from mdict.mdict_utils.romkan import to_hiragana, to_katakana, to_hepburn, to_kunrei
 
@@ -1346,6 +1347,67 @@ def characters(request):
         else:
             data.update({key: {'type': 'mark2', 'content': value}})
     return render(request, 'mdict/characters.html', {'data': data})
+
+
+def network(request):
+    return render(request, 'mdict/builtin-network.html')
+
+
+def getmymdictentry(request):
+    entry = request.GET.get('entry', '')
+    mdictentry_list = MyMdictEntry.objects.filter(mdict_entry=entry)
+    if len(mdictentry_list) > 0:
+        item = mdictentry_list[0]
+        mdict_entry = item.mdict_entry
+        mdict_content = ''.join(get_mdict_content(item)).replace('\r', '').replace('\n', '')
+        mdict_body = builtin_dic_prefix + mdict_content + '\n</>'
+        data = {'entry': mdict_entry, 'content': mdict_body}
+        return HttpResponse(json.dumps(data))
+    else:
+        return HttpResponse(json.dumps({'entry': entry, 'content': '该词条不存在！'}))
+
+
+def getdigraph(request):
+    entry_list = MyMdictEntry.objects.all()
+
+    data_set = {}
+    data_id = 1
+
+    edge_list = []
+
+    for entry in entry_list:
+        mdict_entry = entry.mdict_entry
+
+        link_set = set()
+        for mdict_item in entry.mymdictitem_set.all():
+            item_content = mdict_item.item_content
+            link_list = re.findall(r'\[link\](.+?)\[/link\]', item_content)
+            link_set.update(set(link_list))
+        nlink_list = list(link_set)
+
+        data_set_keys = data_set.keys()
+        if len(nlink_list) > 0:
+            if mdict_entry not in data_set_keys:
+                data_set.update({mdict_entry: {'id': data_id, 'label': mdict_entry}})
+                from_id = data_id
+                data_id += 1
+            else:
+                from_id = data_set[mdict_entry]['id']
+            for link in nlink_list:
+                if link not in data_set_keys:
+                    data_set.update({link: {'id': data_id, 'label': link}})
+                    to_id = data_id
+                    data_id += 1
+                else:
+                    to_id = data_set[link]['id']
+                edge_list.append({'from': from_id, 'to': to_id})
+        else:
+            if mdict_entry not in data_set_keys:
+                data_set.update({mdict_entry: {'id': data_id, 'label': mdict_entry}})
+                data_id += 1
+
+    node_list = list(data_set.values())
+    return HttpResponse(json.dumps({'nodes': node_list, 'edges': edge_list}))
 
 
 def create_li(content, is_dir, file_type=''):

@@ -171,3 +171,7 @@ unicode-table-data：[https://github.com/unicode-table/unicode-table-data](https
 图片放大镜使用blowup.js实现。
 
 blowup.js：[https://github.com/paulkr/blowup.js](https://github.com/paulkr/blowup.js)
+
+内置词条的网状图显示使用vis-network实现。
+
+vis-network：[https://github.com/visjs/vis-network](https://github.com/visjs/vis-network)

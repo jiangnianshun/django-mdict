@@ -62,4 +62,7 @@ urlpatterns = [
     path('deckgroup/', views.deck_group),
     path('addtodeck/', views.add_to_deck),
     path('characters/', views.characters),
+    path('network/', views.network),
+    path('getdigraph/', views.getdigraph),
+    path('getmymdictentry/', views.getmymdictentry),
 ]
