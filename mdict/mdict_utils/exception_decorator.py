@@ -13,9 +13,6 @@ def search_exception(default_value=[]):
                 print(e)
             except Exception as e:
                 print(e)
-
             return default_value
-
         return wrapper
-
     return decorator
