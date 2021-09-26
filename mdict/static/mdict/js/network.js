@@ -112,6 +112,9 @@ function init_events(network,nodes){
             get_entry(label);
         }
     })
+    $("#home").click(function(){
+        window.location.href="/";
+    });
 }
 
 
