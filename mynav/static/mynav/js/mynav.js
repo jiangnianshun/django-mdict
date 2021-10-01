@@ -111,7 +111,6 @@ function init_contents(){
                     let site_name=site[1];
                     let site_url=site[2];
                     let site_icon=site[3];
-                    console.log(site_id,site_name,site_icon)
                     if(site_icon){
                         ele_str+=`
                             <div class="col">
@@ -141,6 +140,20 @@ function init_contents(){
             }
             $('#main-contents').empty();
             $('#main-contents').append(ele_str);
+
+            $('.my-card-group a').click(function(e){
+                e.preventDefault();
+                let url=$(this).attr("href");
+                let new_url=url;
+                if(url.indexOf('://')==-1){
+                    if(url[0]=='/'){
+                        new_url='http:/'+url;
+                    }else{
+                        new_url='http://'+url;
+                    }
+                }
+                window.open(new_url);
+            })
         },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);
