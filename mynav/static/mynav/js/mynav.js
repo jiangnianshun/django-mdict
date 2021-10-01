@@ -116,7 +116,7 @@ function init_contents(){
                             <div class="col">
                                 <div class="card shadow">
                                     <div class="card-body text-center">
-                                        <a class="web-site" href="${site_url}" target="_blank"><img src="/media/icon/${site_id}.ico"></img>${site_name}</a>
+                                        <a class="web-site" href="${site_url}" target="_blank"><img src="/media/icon/${site_id}.ico" style="margin-right:3px;"></img>${site_name}</a>
                                     </div>
                                 </div>
                             </div>

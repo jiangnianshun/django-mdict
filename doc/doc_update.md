@@ -1,6 +1,6 @@
 ### 更新
 
-* 如果需要保存旧数据，运行git pull更新项目，并清除浏览器缓存（不需要清cookie）。
+* 如果需要保存旧数据，运行git pull更新项目，并清除浏览器缓存（不需要清cookie）。如果models.py文件发生改动，应尽量用git clone重新下载。
 
 ```
 git pull
@@ -8,7 +8,7 @@ git pull
 
 删除根目录下的.cache和.dat缓存，然后运行一次run_server.bat或run_server.sh，这将安装新添加的依赖并重新cython编译。
 
-* 如果修改了数据库表结构，旧数据库可能无法正常使用，尝试运行
+* 如果修改了models.py文件，旧数据库可能无法正常使用，尝试运行
 
 ```
 python manage.py makemigrations mdict
