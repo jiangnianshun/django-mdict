@@ -4,6 +4,7 @@ django-ckeditor
 websockets
 elasticsearch
 elasticsearch_dsl
+requests
 opencc-python-reimplemented
 pyspellchecker
 pillow

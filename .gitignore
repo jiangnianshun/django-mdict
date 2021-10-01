@@ -30,6 +30,7 @@ build/
 /static/img/
 /static/css/
 /media/mynav/
+/media/icon/
 /blob_storage/
 /webrtc_event_logs/
 /export/

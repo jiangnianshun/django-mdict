@@ -107,17 +107,32 @@ function init_contents(){
                 `
                 for(let j=0;j<sites_list.length;j++){
                     let site=sites_list[j];
-                    let site_name=site[0];
-                    let site_url=site[1];
-                    ele_str+=`
-                        <div class="col">
-                            <div class="card shadow">
-                                <div class="card-body text-center">
-                                    <a class="web-site" href="${site_url}" target="_blank">${site_name}</a>
+                    let site_id=site[0];
+                    let site_name=site[1];
+                    let site_url=site[2];
+                    let site_icon=site[3];
+                    console.log(site_id,site_name,site_icon)
+                    if(site_icon){
+                        ele_str+=`
+                            <div class="col">
+                                <div class="card shadow">
+                                    <div class="card-body text-center">
+                                        <a class="web-site" href="${site_url}" target="_blank"><img src="/media/icon/${site_id}.ico"></img>${site_name}</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `
+                        `
+                    }else{
+                        ele_str+=`
+                            <div class="col">
+                                <div class="card shadow">
+                                    <div class="card-body text-center">
+                                        <a class="web-site" href="${site_url}" target="_blank">${site_name}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                    }
                 }
                 ele_str+=`
                     </div>

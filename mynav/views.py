@@ -1,9 +1,11 @@
 import json
+import os
 
 from django.http import HttpResponse
 from django.shortcuts import render
 
 from .models import Webgroup, Website
+from .icon_utils import get_icons_set, get_icon
 
 
 def mynav_index(request):
@@ -27,12 +29,16 @@ def addsite(request):
     else:
         webgroup = Webgroup.objects.get(pk=site_group)
 
-    Website.objects.create(site_name=site_name, site_url=site_url, site_group=webgroup, site_priority=site_priority, site_brief=site_brief)
+    site_obj = Website.objects.create(site_name=site_name, site_url=site_url, site_group=webgroup,
+                                      site_priority=site_priority,
+                                      site_brief=site_brief)
 
     if webgroup is None:
         group_name = '无分组'
     else:
         group_name = webgroup.group_name
+
+    get_icon(site_url, site_obj.pk)
 
     return HttpResponse(json.dumps({
         'site_name': site_name,
@@ -43,13 +49,18 @@ def addsite(request):
 
 
 def getsite(request):
+    icons_set = get_icons_set()
     groups = Webgroup.objects.all().order_by('group_priority', 'group_name')
     groups_list = []
     for group in groups:
         sites = group.website_set.all().order_by('site_priority', 'site_name')
         sites_list = []
         for site in sites:
-            sites_list.append((site.site_name, site.site_url))
+            if site.id in icons_set:
+                site_icon = True
+            else:
+                site_icon = False
+            sites_list.append((site.pk, site.site_name, site.site_url, site_icon))
         group_item = (group.group_name, sites_list)
         if len(sites_list) > 0:
             groups_list.append(group_item)
