@@ -1353,7 +1353,7 @@ def network(request):
     return render(request, 'mdict/builtin-network.html')
 
 
-def getmymdictentry(request):
+def get_mymdictentry(request):
     entry = request.GET.get('entry', '')
     mdictentry_list = MyMdictEntry.objects.filter(mdict_entry=entry)
     data = {'entry': entry, 'content': '该词条不存在！', 'pk': 0}
@@ -1368,7 +1368,7 @@ def getmymdictentry(request):
         return HttpResponse(json.dumps(data))
 
 
-def getnodeid(request):
+def get_node_id(request):
     label = request.GET.get('label', '')
     data = {'pk': 0, 'error': ''}
     if label != '':
@@ -1387,7 +1387,7 @@ def getnodeid(request):
     return HttpResponse(json.dumps(data))
 
 
-def addnode(request):
+def add_node(request):
     label = request.GET.get('label', '')
     if label != '':
         try:
@@ -1398,7 +1398,7 @@ def addnode(request):
     return HttpResponse('error')
 
 
-def addedge(request):
+def add_edge(request):
     from_label = request.GET.get('from', '')
     to_label = request.GET.get('to', '')
     if from_label != '' and to_label != '':
@@ -1420,7 +1420,7 @@ def addedge(request):
     return HttpResponse('error')
 
 
-def editedge(request):
+def edit_edge(request):
     from_label = request.GET.get('from', '')
     to_label = request.GET.get('to', '')
     old_from_label = request.GET.get('old_from', '')
@@ -1472,7 +1472,7 @@ def get_node_group(mdict_entry):
     return node_group
 
 
-def getnodes(request):
+def get_nodes(request):
     entry_list = MyMdictEntry.objects.all()
 
     data_set = {}

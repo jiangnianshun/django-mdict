@@ -18,7 +18,7 @@ def mynav_index(request):
     return render(request, 'mynav/mynav.html', context)
 
 
-def addsite(request):
+def add_site(request):
     site_name = request.GET.get('site_name')
     site_url = request.GET.get('site_url')
     site_group = int(request.GET.get('site_group', 0))
@@ -48,7 +48,7 @@ def addsite(request):
     }))
 
 
-def getsite(request):
+def get_site(request):
     icons_set = get_icons_set()
     groups = Webgroup.objects.all().order_by('group_priority', 'group_name')
     groups_list = []
@@ -73,14 +73,14 @@ def getsite(request):
     return HttpResponse(json.dumps(groups_list))
 
 
-def addgroup(request):
+def add_group(request):
     group_name = request.GET.get('group_name')
     group_priority = int(request.GET.get('group_priority', 1))
     Webgroup.objects.create(group_name=group_name, group_priority=group_priority)
     return HttpResponse('success')
 
 
-def getgroup(request):
+def get_group(request):
     groups = Webgroup.objects.all().order_by('group_priority')
     group_list = []
     for group in groups:

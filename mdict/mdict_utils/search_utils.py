@@ -85,8 +85,7 @@ def process_link(matched):
 
 
 def process_link2(matched):
-    return '<div class="badge bg-warning" style="cursor:pointer;" onclick="elementDisplay(\'wrap_div\')">展开/折叠</div><div name="wrap_div" style="display:none">' + matched.group(
-        1) + '</div>'
+    return '<details><summary>点击展开</summary>'+matched.group(1)+'</details>'
 
 
 def search_bultin_dic_sug(query):

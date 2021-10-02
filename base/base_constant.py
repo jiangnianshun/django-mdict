@@ -15,16 +15,6 @@ builtin_dic_prefix = '''
         inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
       }
     };
-    function elementDisplay(objname){
-        var obj=document.getElementsByName(objname);
-        for(var i=0;i<obj.length;i++){
-            if(obj[i].style.display !='none'){
-                obj[i].style.display='none';
-            }else{
-                obj[i].style.display='block';
-            }
-        }
-    }
 </script>
 <script id="MathJax-script" async src="/static/mdict/mathjax/3.1.2/tex-chtml-full.js"></script>
 '''
