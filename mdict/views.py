@@ -41,7 +41,7 @@ from mdict.mdict_utils.search_utils import search, search_bultin_dic_sug, search
 from .mdict_utils.entry_object import entryObject
 from mdict.mdict_utils.romkan import to_hiragana, to_katakana, to_hepburn, to_kunrei
 
-from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline
+from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline, MyMdictItem
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
 from .mdict_utils.mdict_func import mdict_root_path, is_local, get_m_path
 from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
@@ -1356,18 +1356,123 @@ def network(request):
 def getmymdictentry(request):
     entry = request.GET.get('entry', '')
     mdictentry_list = MyMdictEntry.objects.filter(mdict_entry=entry)
+    data = {'entry': entry, 'content': '该词条不存在！', 'pk': 0}
     if len(mdictentry_list) > 0:
         item = mdictentry_list[0]
-        mdict_entry = item.mdict_entry
+        data['entry'] = item.mdict_entry
         mdict_content = ''.join(get_mdict_content(item)).replace('\r', '').replace('\n', '')
-        mdict_body = builtin_dic_prefix + mdict_content + '\n</>'
-        data = {'entry': mdict_entry, 'content': mdict_body}
+        data['content'] = builtin_dic_prefix + mdict_content + '\n</>'
+        data['pk'] = item.pk
         return HttpResponse(json.dumps(data))
     else:
-        return HttpResponse(json.dumps({'entry': entry, 'content': '该词条不存在！'}))
+        return HttpResponse(json.dumps(data))
 
 
-def getdigraph(request):
+def getnodeid(request):
+    label = request.GET.get('label', '')
+    data = {'pk': 0, 'error': ''}
+    if label != '':
+        try:
+            mymdict_set = MyMdictEntry.objects.filter(mdict_entry=label)
+            if len(mymdict_set) > 0:
+                data['pk'] = mymdict_set[0].pk
+                return HttpResponse(json.dumps(data))
+            else:
+                data['error'] = '词条不存在'
+                return HttpResponse(json.dumps(data))
+        except Exception as e:
+            data['error'] = e
+            return HttpResponse(json.dumps(data))
+    data['error'] = 'error'
+    return HttpResponse(json.dumps(data))
+
+
+def addnode(request):
+    label = request.GET.get('label', '')
+    if label != '':
+        try:
+            MyMdictEntry.objects.create(mdict_entry=label)
+            return HttpResponse('success')
+        except Exception as e:
+            return HttpResponse(e)
+    return HttpResponse('error')
+
+
+def addedge(request):
+    from_label = request.GET.get('from', '')
+    to_label = request.GET.get('to', '')
+    if from_label != '' and to_label != '':
+        try:
+            from_obj = MyMdictEntry.objects.get(mdict_entry=from_label)
+            mymdictitem_set = from_obj.mymdictitem_set.all()
+            if len(mymdictitem_set) == 0:
+                item_content = '<p>[link]' + to_label + r'[/link]</p>'
+                MyMdictItem.objects.create(item_content=item_content, item_mdict=from_obj)
+            else:
+                mdict_item = mymdictitem_set[0]
+                item_content = mdict_item.item_content
+                item_content += '<p>[link]' + to_label + r'[/link]</p>'
+                mdict_item.item_content = item_content
+                mdict_item.save()
+            return HttpResponse('success')
+        except Exception as e:
+            return HttpResponse(e)
+    return HttpResponse('error')
+
+
+def editedge(request):
+    from_label = request.GET.get('from', '')
+    to_label = request.GET.get('to', '')
+    old_from_label = request.GET.get('old_from', '')
+    old_to_label = request.GET.get('old_to', '')
+    if from_label != '' and to_label != '':
+        try:
+            old_from_obj = MyMdictEntry.objects.get(mdict_entry=old_from_label)
+            mymdictitem_set = old_from_obj.mymdictitem_set.all()
+
+            old_to_text = r'\[link\]' + old_to_label + r'\[/link\]'
+            if from_label == old_from_label:
+                to_text = '[link]' + to_label + '[/link]'
+            else:
+                to_text = ''
+
+            if len(mymdictitem_set) == 0:
+                return HttpResponse('error')
+            for mdict_item in mymdictitem_set:
+                item_content = mdict_item.item_content
+                if re.search(old_to_text, item_content) is not None:
+                    item_temp = re.sub(old_to_text, to_text, item_content)
+                    mdict_item.item_content = item_temp
+                    mdict_item.save()
+
+            if from_label != old_from_label:
+                from_obj = MyMdictEntry.objects.get(mdict_entry=from_label)
+                mymdictitem_set = from_obj.mymdictitem_set.all()
+                add_text = '<p>[link]' + to_label + '[/link]</p>'
+                if len(mymdictitem_set) == 0:
+                    MyMdictItem.objects.create(item_content=add_text)
+                else:
+                    mdict_item = mymdictitem_set[0]
+                    item_content = mdict_item.item_content
+                    item_content += add_text
+                    mdict_item.item_content = item_content
+                    mdict_item.save()
+            return HttpResponse('success')
+        except Exception as e:
+            return HttpResponse(e)
+    return HttpResponse('error')
+
+
+def get_node_group(mdict_entry):
+    mymdict_set = MyMdictEntry.objects.filter(mdict_entry=mdict_entry)
+    if len(mymdict_set) > 0:
+        node_group = 'commonGroup'
+    else:
+        node_group = 'noneGroup'
+    return node_group
+
+
+def getnodes(request):
     entry_list = MyMdictEntry.objects.all()
 
     data_set = {}
@@ -1378,32 +1483,52 @@ def getdigraph(request):
     for entry in entry_list:
         mdict_entry = entry.mdict_entry
 
-        link_set = set()
+        link_set = {}
+
         for mdict_item in entry.mymdictitem_set.all():
+            item_entry = mdict_item.item_entry
             item_content = mdict_item.item_content
+            item_type = mdict_item.item_type
+
             link_list = re.findall(r'\[link\](.+?)\[/link\]', item_content)
-            link_set.update(set(link_list))
-        nlink_list = list(link_set)
+            if item_entry is None and item_type is None:
+                item_label = ''
+            elif item_entry is None:
+                item_label = item_type.mdict_type
+            elif item_type is None:
+                item_label = item_entry
+            else:
+                item_label = item_type.mdict_type + ':' + item_entry
+            for link in link_list:
+                if link in link_set.keys():
+                    if item_label != '' and item_label not in link_set[link]:
+                        link_set[link].append(item_label)
+                else:
+                    link_set.update({link: [item_label]})
+        nlink_set = link_set
 
         data_set_keys = data_set.keys()
-        if len(nlink_list) > 0:
+        if len(nlink_set) > 0:
             if mdict_entry not in data_set_keys:
-                data_set.update({mdict_entry: {'id': data_id, 'label': mdict_entry}})
+                data_set.update(
+                    {mdict_entry: {'id': data_id, 'label': mdict_entry, 'group': get_node_group(mdict_entry)}})
                 from_id = data_id
                 data_id += 1
             else:
                 from_id = data_set[mdict_entry]['id']
-            for link in nlink_list:
+            for link, label_list in nlink_set.items():
+                label = ','.join(label_list)
                 if link not in data_set_keys:
-                    data_set.update({link: {'id': data_id, 'label': link}})
+                    data_set.update({link: {'id': data_id, 'label': link, 'group': get_node_group(link)}})
                     to_id = data_id
                     data_id += 1
                 else:
                     to_id = data_set[link]['id']
-                edge_list.append({'from': from_id, 'to': to_id})
+                edge_list.append({'id': str(from_id) + '_' + str(to_id), 'from': from_id, 'to': to_id, 'label': label})
         else:
             if mdict_entry not in data_set_keys:
-                data_set.update({mdict_entry: {'id': data_id, 'label': mdict_entry}})
+                data_set.update(
+                    {mdict_entry: {'id': data_id, 'label': mdict_entry, 'group': get_node_group(mdict_entry)}})
                 data_id += 1
 
     node_list = list(data_set.values())

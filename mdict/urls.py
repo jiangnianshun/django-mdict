@@ -63,6 +63,10 @@ urlpatterns = [
     path('addtodeck/', views.add_to_deck),
     path('characters/', views.characters),
     path('network/', views.network),
-    path('getdigraph/', views.getdigraph),
+    path('getnodes/', views.getnodes),
     path('getmymdictentry/', views.getmymdictentry),
+    path('getnodeid/', views.getnodeid),
+    path('addnode/', views.addnode),
+    path('addedge/', views.addedge),
+    path('editedge/', views.editedge),
 ]

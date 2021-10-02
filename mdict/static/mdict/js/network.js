@@ -1,6 +1,10 @@
 var iframe_script=`
 <script src="/static/jquery/jquery.min.js"></script>
 <script>
+
+var nodes=null;
+var edges=null;
+
 function ihyperlink(e){
     var ob=$(this);
     query=ob.attr("href")||null;
@@ -35,18 +39,18 @@ $(document).ready(function(){
 
 function create_network(){
     $.ajax({
-        url:'/mdict/getdigraph/',
+        url:'/mdict/getnodes/',
         contentType:'json',
         type:'GET',
         success:function(data){
             var pdata=$.parseJSON(data);
             var node_list=pdata['nodes'];
             var edge_list=pdata['edges'];
-            var nodes = new vis.DataSet(node_list);
-            var edges = new vis.DataSet(edge_list);
+            nodes = new vis.DataSet(node_list);
+            edges = new vis.DataSet(edge_list);
             var ndata={'nodes':nodes,'edges':edges};
             var network=set_data(ndata);
-            init_events(network,nodes);
+            init_events(network);
         },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);
@@ -54,7 +58,7 @@ function create_network(){
     })
 }
 
-function create_entry(entry,html){
+function create_entry(entry,html,tpk){
     var entry_iframe=$("#entry-iframe");
     if(entry_iframe.length==0){
         var iframe = document.createElement('iframe');
@@ -65,6 +69,7 @@ function create_entry(entry,html){
     }else{
         var iframe=entry_iframe[0];
     }
+    iframe.setAttribute('data-pk',parseInt(tpk));
     iframe.contentWindow.document.open();
     iframe.contentWindow.document.write(html);
     iframe.contentWindow.document.close();
@@ -93,9 +98,10 @@ function get_entry(entry){
             var jdata=$.parseJSON(data);
             var tentry=jdata["entry"];
             var tcontent=jdata["content"];
+            var tpk=jdata["pk"];
             var html='<style>html,body{height:320px;}</style><script src=\"/static/mdict/iframe-resizer/js/iframeResizer.contentWindow.min.js\"></script>'+tcontent+iframe_script;
             //设置iframe的html和body高度，否则前一次的高度会影响后一次。
-            create_entry(tentry,html);
+            create_entry(tentry,html,tpk);
         },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);
@@ -103,7 +109,7 @@ function get_entry(entry){
     })
 }
 
-function init_events(network,nodes){
+function init_events(network){
     network.on("click",function(params){
         var ids = params.nodes;
         var clickedNodes = nodes.get(ids);
@@ -117,6 +123,147 @@ function init_events(network,nodes){
     });
 }
 
+function edit_node_btn(){
+    var node_pk=$("#entry-iframe").attr('data-pk');
+    if(typeof(node_pk)!='undefined'&&node_pk!='NaN'&&node_pk>0){
+        window.open('/admin/mdict/mymdictentry/'+node_pk+'/');
+    }else{
+        window.open('/admin/mdict/mymdictentry/add/');
+    }
+}
+
+function add_node(nodeData,callback){
+    $('#mytooltip').val('');
+    $('#mytooltip').show();
+    $('#create-myentry').unbind('click');
+    $('#create-myentry').click(function(){
+        let node_label=$('#myentry-name').val();
+        $('#mytooltip').hide();
+        if(node_label!=''){
+            $.ajax({
+                url:'/mdict/addnode/',
+                contentType:'json',
+                type:'GET',
+                data:{"label":node_label},
+                success:function(data){
+                    if(data=='success'){
+                        nodeData.label=node_label;
+                        nodeData.group='newGroup';
+                        callback(nodeData);
+                    }else{
+                        callback(null);
+                        $("#live-toast-body").text("error:"+data);
+                        new bootstrap.Toast($("#live-toast")[0]).show();
+                    }
+                },
+                error:function(jqXHR,textStatus,errorThrown){
+                    callback(null);
+                    alert(jqXHR.responseText);
+                },
+            })
+        }
+    })
+}
+
+function add_edge(edgeData,callback){
+    if (edgeData.from != edgeData.to) {
+        let edge_id=edgeData.from+'_'+edgeData.to;
+        let edge=edges.get(edge_id);
+        if(edge==null){
+            edgeData.id=edge_id;
+            let node_from=nodes.get(edgeData.from);
+            let node_to=nodes.get(edgeData.to);
+            $.ajax({
+                url:'/mdict/addedge/',
+                contentType:'json',
+                type:'GET',
+                data:{"from":node_from.label,"to":node_to.label},
+                success:function(data){
+                    if(data=='success'){
+                        callback(edgeData);
+                    }else{
+                        callback(null);
+                        $("#live-toast-body").text("error:"+data);
+                        new bootstrap.Toast($("#live-toast")[0]).show();
+                    }
+                },
+                error:function(jqXHR,textStatus,errorThrown){
+                    callback(null);
+                    alert(jqXHR.responseText);
+                },
+            })
+        }else{
+            callback(null);
+            $("#live-toast-body").text("不能创建重复的箭头！");
+            new bootstrap.Toast($("#live-toast")[0]).show();
+        }
+    }else{
+        callback(null);
+        $("#live-toast-body").text("不能创建指向自身的箭头！");
+        new bootstrap.Toast($("#live-toast")[0]).show();
+    }
+}
+
+function edit_edge(edgeData,callback){
+    if (edgeData.from != edgeData.to) {
+        let edge_id=edgeData.from+'_'+edgeData.to;
+        let old_edge_id=edgeData.id;
+        let old_node_from=nodes.get(parseInt(old_edge_id.split('_')[0]));
+        let old_node_to=nodes.get(parseInt(old_edge_id.split('_')[1]));
+        let node_from=nodes.get(edgeData.from);
+        let node_to=nodes.get(edgeData.to);
+        $.ajax({
+            url:'/mdict/editedge/',
+            contentType:'json',
+            type:'GET',
+            data:{"from":node_from.label,"to":node_to.label,"old_from":old_node_from.label,"old_to":old_node_to.label},
+            success:function(data){
+                if(data=='success'){
+                    edgeData.id=edge_id;
+                    callback(edgeData);
+                    let old_node=edges.get(old_edge_id);
+                    edges.remove(old_node);
+                }else{
+                    callback(null);
+                    $("#live-toast-body").text("error:"+data);
+                    new bootstrap.Toast($("#live-toast")[0]).show();
+                }
+            },
+            error:function(jqXHR,textStatus,errorThrown){
+                callback(null);
+                alert(jqXHR.responseText);
+            },
+        })
+    }else{
+        callback(null);
+        $("#live-toast-body").text("不能创建指向自身的箭头！");
+        new bootstrap.Toast($("#live-toast")[0]).show();
+    }
+}
+
+function edit_node(nodeData,callback){
+    let node_label=nodeData.label;
+    $.ajax({
+        url:'/mdict/getnodeid/',
+        contentType:'json',
+        type:'GET',
+        data:{"label":node_label},
+        success:function(data){
+            let jdata=$.parseJSON(data);
+            if(jdata['pk']>0){
+                let node_pk=jdata['pk'];
+                window.open('/admin/mdict/mymdictentry/'+node_pk+'/');
+                callback(nodeData);
+            }else{
+                $("#live-toast-body").text("error:"+jdata['error']);
+                new bootstrap.Toast($("#live-toast")[0]).show();
+            }
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    })
+}
 
 function set_data(data){
     var container = document.getElementById("mynetwork");
@@ -150,16 +297,21 @@ function set_data(data){
         },
         manipulation: {
             enabled: true,
-            initiallyActive: false,
-            addNode: true,
-            addEdge: true,
-            //editNode: undefined,//editNode应该是回调函数
-            editEdge: true,
-            deleteNode: true,
-            deleteEdge: true,
+            initiallyActive: true,
+            addNode: add_node,
+            addEdge: add_edge,
+            //editNode: edit_node,
+            editEdge: edit_edge,
+            deleteNode: false,
+            deleteEdge: false,
         },
         layout: {
             improvedLayout:improved_layout,
+        },
+        groups: {
+            commonGroup:{},
+            newGroup:{color:{background:'limegreen',highlight:{background:'yellowgreen'}}},
+            noneGroup:{color:{background:'red',highlight:{background:'pink'}}},
         }
     };
     return new vis.Network(container, data, options);

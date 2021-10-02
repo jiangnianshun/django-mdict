@@ -34,6 +34,27 @@
 <body>
     <div id="mynetwork"></div>
 
+    <div class="card" id="mytooltip" style="positon:absolute;z-index:9999;display:none;">
+        <div class="card-body text-center">
+            <div class="input-group">
+                <span class="btn">词条名</span>
+                <input autocomplete="off" id="myentry-name" class="form-control" type="text">
+                <button id="create-myentry" class="btn mdict-icon">创建</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
+        <div id="live-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">通知</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div id="live-toast-body" class="toast-body">
+            </div>
+        </div>
+    </div>
+
     {% include "mdict/builtin-container-entry.html" %}
 
     {% include "mdict/builtin-bottom-button-group.html" %}
