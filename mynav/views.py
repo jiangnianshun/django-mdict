@@ -60,7 +60,7 @@ def getsite(request):
                 site_icon = True
             else:
                 site_icon = False
-            sites_list.append((site.pk, site.site_name, site.site_url, site_icon))
+            sites_list.append((site.pk, site.site_name, site.site_url, site_icon, site.site_brief))
         group_item = (group.group_name, sites_list)
         if len(sites_list) > 0:
             groups_list.append(group_item)

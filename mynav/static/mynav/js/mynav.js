@@ -1,7 +1,7 @@
 function init_mynav_filter(){
     $("#mynav-filter-input").bind("input propertychange",function(event){
         //juery的change事件，只有当input没有聚焦的时候才能触发，input propertychange能检测input输入过程中的变化
-        var txt=$.trim($(this).val().toLowerCase( ));
+        var txt=$.trim($(this).val().toLowerCase());
         var item_list=$(".col");
         var card_list=$(".my-card-group");
         if(txt.length>0){//延时有问题
@@ -18,7 +18,7 @@ function init_mynav_filter(){
                             item_href='';
                         }
                         if(item_a.length>0){
-                            var title=item_a.text();
+                            var title=item_a.text().toLowerCase();
                             if(title=="")continue;
                             if(t2s(title).indexOf(txt)==-1&&s2t(title).indexOf(txt)==-1&&item_href.indexOf(txt)==-1){
                                 $(item_list[i]).hide();
@@ -85,6 +85,13 @@ function init_dropdown(){
     })
 }
 
+function init_tooltip(){
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+}
+
 function init_contents(){
     $.ajax({
         url:'/mynav/getsite/',
@@ -111,10 +118,11 @@ function init_contents(){
                     let site_name=site[1];
                     let site_url=site[2];
                     let site_icon=site[3];
+                    let site_brief=site[4];
                     if(site_icon){
                         ele_str+=`
                             <div class="col">
-                                <div class="card shadow">
+                                <div class="card shadow" tabindex="0" data-bs-toggle="tooltip" title="${site_brief}">
                                     <div class="card-body text-center">
                                         <a class="web-site" href="${site_url}" target="_blank"><img src="/media/icon/${site_id}.ico" style="margin-right:3px;"></img>${site_name}</a>
                                     </div>
@@ -124,7 +132,7 @@ function init_contents(){
                     }else{
                         ele_str+=`
                             <div class="col">
-                                <div class="card shadow">
+                                <div class="card shadow" tabindex="0" data-bs-toggle="tooltip" title="${site_brief}">
                                     <div class="card-body text-center">
                                         <a class="web-site" href="${site_url}" target="_blank">${site_name}</a>
                                     </div>
@@ -154,6 +162,8 @@ function init_contents(){
                 }
                 window.open(new_url);
             })
+
+            init_tooltip();
         },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);

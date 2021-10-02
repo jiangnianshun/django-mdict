@@ -15,8 +15,6 @@ from base.base_func import ROOT_DIR
 time_str = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
 
 export_root_path = os.path.join(ROOT_DIR, 'export')
-export_data_root_path = os.path.join(export_root_path, 'data')
-export_uploads_path = os.path.join(export_data_root_path, 'media', 'uploads')
 
 if not os.path.exists(export_root_path):
     os.mkdir(export_root_path)

@@ -39,13 +39,14 @@ time_str = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
 export_file = 'export'+time_str+'.txt'
 export_root_path = os.path.join(ROOT_DIR, 'export')
 export_txt_path = os.path.join(ROOT_DIR, 'export', export_file)
+export_data_path = os.path.join(export_root_path, 'data')
+export_uploads_path = os.path.join(export_data_path, 'media', 'uploads')
+import_uploads_path = os.path.join(ROOT_DIR, 'media', 'uploads')
 
-export_data_root_path = os.path.join(export_root_path, 'data')
-
-uploads_path = os.path.join(ROOT_DIR, 'media', 'uploads')
-if not os.path.exists(uploads_path):
-    os.mkdir(uploads_path)
-export_uploads_path = os.path.join(export_data_root_path, 'media', 'uploads')
+if not os.path.exists(export_root_path):
+    os.mkdir(export_root_path)
+if not os.path.exists(import_uploads_path):
+    os.mkdir(import_uploads_path)
 
 
 def export_to_txt():
@@ -62,9 +63,9 @@ def export_to_txt():
         mdict_list.append(mdict)
     if not os.path.exists(export_root_path):
         os.mkdir(export_root_path)
-    if os.path.exists(export_data_root_path):
-        shutil.rmtree(export_data_root_path)
-    os.mkdir(export_data_root_path)
+    if os.path.exists(export_data_path):
+        shutil.rmtree(export_data_path)
+    os.mkdir(export_data_path)
     if os.path.exists(export_uploads_path):
         shutil.rmtree(export_uploads_path)
 
@@ -76,16 +77,16 @@ def export_to_txt():
         data_path = os.path.join(ROOT_DIR, s)
         if os.path.isfile(data_path):
             s_name = os.path.basename(data_path)
-            target_path = os.path.join(export_data_root_path, s_name)
+            target_path = os.path.join(export_data_path, s_name)
             print(target_path)
             shutil.copy(data_path, target_path)
         else:
             a = s[s.find('static'):]
-            target_path = os.path.join(export_data_root_path, a)
+            target_path = os.path.join(export_data_path, a)
             print(target_path)
             shutil.copytree(data_path, target_path)
-    print(uploads_path)
-    shutil.copytree(uploads_path, export_uploads_path)
+    print(import_uploads_path)
+    shutil.copytree(import_uploads_path, export_uploads_path)
 
     print('已导出到mynav/export，导出完成。')
 
