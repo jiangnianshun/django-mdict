@@ -881,7 +881,8 @@ class MDict(object):
             key_list = self._split_key_block(key_block)
             tresult_list = self.search_key_block_position(key, key_list)
             if len(tresult_list) > 0:
-                tresult_list[-1][1] = result_list[0][0]
+                if tresult_list[-1][1] == -1:
+                    tresult_list[-1][1] = result_list[0][0]
                 tresult_list.extend(result_list)
                 result_list = tresult_list
 
