@@ -1,10 +1,6 @@
 var iframe_script=`
 <script src="/static/jquery/jquery.min.js"></script>
 <script>
-
-var nodes=null;
-var edges=null;
-
 function ihyperlink(e){
     var ob=$(this);
     query=ob.attr("href")||null;
@@ -37,20 +33,62 @@ $(document).ready(function(){
 </script>
 `
 
+var nodes=null;
+var edges=null;
+var nodeFilterValue="";
+var nodeFilterValue2="";
+var nodesView=null;
+var network=null;
+
+function check_filter(label){
+    if(nodeFilterValue==""&&nodeFilterValue2==""){
+        return true;
+    }else if(nodeFilterValue!=""&&label.toLowerCase( ).indexOf(nodeFilterValue.toLowerCase( ))>-1) {
+        return true;
+    }else if(nodeFilterValue2!=""&&label.toLowerCase( ).indexOf(nodeFilterValue2.toLowerCase( ))>-1){
+        return true;
+    }
+}
+
+function create_filter(nodes){
+    const nodesFilter = (node) => {
+        if(check_filter(node.label)) {
+            return true;
+        }else{
+            con_nodes=network.getConnectedNodes([node.id]);
+            let mark=false;
+            con_nodes.forEach(function(node_id){
+                let con_node=nodes.get(node_id);
+                if(check_filter(con_node.label)) {
+                    mark=true;
+                }
+            })
+            if(mark){return true;}
+        }
+    };
+    nodesView = new vis.DataView(nodes, { filter: nodesFilter });
+}
+
 function create_network(){
+    var only_edge_node=$('#only-edge-node').prop("checked");
+    var show_label=$('#show-label').prop("checked");
+    var data={"only_edge_node":only_edge_node,"show_label":show_label};
     $.ajax({
         url:'/mdict/getnodes/',
         contentType:'json',
+        data:data,
         type:'GET',
         success:function(data){
             var pdata=$.parseJSON(data);
             var node_list=pdata['nodes'];
             var edge_list=pdata['edges'];
+            if(node_list.length==0){node_list=[{"id":0,"label":"目前没有内置词条！"}];}
             nodes = new vis.DataSet(node_list);
             edges = new vis.DataSet(edge_list);
-            var ndata={'nodes':nodes,'edges':edges};
-            var network=set_data(ndata);
-            init_events(network);
+            create_filter(nodes);
+            var ndata={'nodes':nodesView,'edges':edges};
+            network=set_data(ndata);
+            init_network();
         },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);
@@ -80,6 +118,7 @@ function create_entry(entry,html,tpk){
         heightCalculationMethod:'lowestElement',
         minHeight:'320px',
         warningTimeout:0,
+        scrolling:true,
     },iframe);
     $("#builtin-container-title").text(entry);
     if(!$('#builtin-container-entry').hasClass('show')){
@@ -109,7 +148,7 @@ function get_entry(entry){
     })
 }
 
-function init_events(network){
+function init_network(){
     network.on("click",function(params){
         var ids = params.nodes;
         var clickedNodes = nodes.get(ids);
@@ -118,9 +157,6 @@ function init_events(network){
             get_entry(label);
         }
     })
-    $("#home").click(function(){
-        window.location.href="/";
-    });
 }
 
 function edit_node_btn(){
@@ -317,6 +353,70 @@ function set_data(data){
     return new vis.Network(container, data, options);
 }
 
+function get_txt_value(val1,val2){
+    let txt1=$.trim(val1.toLowerCase( ));
+    let txt2=$.trim(val2.toLowerCase( ));
+    if(typeof(txt1)=="undefined"){txt1="";}
+    if(typeof(txt2)=="undefined"){txt2="";}
+    return [txt1,txt2]
+}
+
+function refresh_filter(txt){
+    if(nodesView!=null){
+        nodeFilterValue=txt[0];
+        nodeFilterValue2=txt[1];
+        nodesView.refresh();
+    }
+}
+
+function init_event(){
+    $("#home").click(function(){
+        window.location.href="/";
+    });
+    $('#filter-entry').click(function(){
+        $('#myfilter').show();
+        $('#myfilter-name').focus();
+    })
+    $('#close-myfilter').click(function(){
+        $('#myfilter').hide();
+    })
+    $("#myfilter-name").bind("input propertychange",function(event){
+        let txt=get_txt_value($(this).val(),$('#myfilter-name2').val())
+        if(txt.length>0){
+            last=event.timeStamp;
+            setTimeout(function(){
+                if(last-event.timeStamp==0)
+                {
+                    refresh_filter(txt);
+                }
+            },500);
+        }else{
+           last=event.timeStamp;
+           setTimeout(function(){
+                refresh_filter(txt);
+           },500);
+        }
+    });
+    $("#myfilter-name2").bind("input propertychange",function(event){
+        let txt=get_txt_value($('#myfilter-name').val(),$(this).val())
+        if(txt.length>0){
+            last2=event.timeStamp;
+            setTimeout(function(){
+                if(last2-event.timeStamp==0)
+                {
+                    refresh_filter(txt);
+                }
+            },500);
+        }else{
+           last2=event.timeStamp;
+           setTimeout(function(){
+                refresh_filter(txt);
+           },500);
+        }
+    });
+}
+
 $(document).ready(function(){
     create_network();
+    init_event();
 });

@@ -1450,7 +1450,7 @@ def edit_edge(request):
                 mymdictitem_set = from_obj.mymdictitem_set.all()
                 add_text = '<p>[link]' + to_label + '[/link]</p>'
                 if len(mymdictitem_set) == 0:
-                    MyMdictItem.objects.create(item_content=add_text)
+                    MyMdictItem.objects.create(item_content=add_text, item_mdict=from_obj)
                 else:
                     mdict_item = mymdictitem_set[0]
                     item_content = mdict_item.item_content
@@ -1473,6 +1473,9 @@ def get_node_group(mdict_entry):
 
 
 def get_nodes(request):
+    only_edge_node = json.loads(request.GET.get('only_edge_node', 'false'))
+    show_label = json.loads(request.GET.get('show_label', 'false'))
+
     entry_list = MyMdictEntry.objects.all()
 
     data_set = {}
@@ -1491,14 +1494,17 @@ def get_nodes(request):
             item_type = mdict_item.item_type
 
             link_list = re.findall(r'\[link\](.+?)\[/link\]', item_content)
-            if item_entry is None and item_type is None:
-                item_label = ''
-            elif item_entry is None:
-                item_label = item_type.mdict_type
-            elif item_type is None:
-                item_label = item_entry
+            if show_label:
+                if item_entry is None and item_type is None:
+                    item_label = ''
+                elif item_entry is None:
+                    item_label = item_type.mdict_type
+                elif item_type is None:
+                    item_label = item_entry
+                else:
+                    item_label = item_type.mdict_type + ':' + item_entry
             else:
-                item_label = item_type.mdict_type + ':' + item_entry
+                item_label = ''
             for link in link_list:
                 if link in link_set.keys():
                     if item_label != '' and item_label not in link_set[link]:
@@ -1526,10 +1532,11 @@ def get_nodes(request):
                     to_id = data_set[link]['id']
                 edge_list.append({'id': str(from_id) + '_' + str(to_id), 'from': from_id, 'to': to_id, 'label': label})
         else:
-            if mdict_entry not in data_set_keys:
-                data_set.update(
-                    {mdict_entry: {'id': data_id, 'label': mdict_entry, 'group': get_node_group(mdict_entry)}})
-                data_id += 1
+            if not only_edge_node:
+                if mdict_entry not in data_set_keys:
+                    data_set.update(
+                        {mdict_entry: {'id': data_id, 'label': mdict_entry, 'group': get_node_group(mdict_entry)}})
+                    data_id += 1
 
     node_list = list(data_set.values())
     return HttpResponse(json.dumps({'nodes': node_list, 'edges': edge_list}))

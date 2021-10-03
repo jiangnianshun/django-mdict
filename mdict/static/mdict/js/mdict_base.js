@@ -150,15 +150,13 @@ function init_mdict_filter(){
         //juery的change事件，只有当input没有聚焦的时候才能触发，input propertychange能检测input输入过程中的变化
         var txt=$.trim($(this).val().toLowerCase( ));
         var mdict_list=$("#mdict-list-content .card-header");
-        if(txt.length>0){
-//延时有问题
+        if(txt.length>0){//延时有问题
             last =  event.timeStamp;
             //利用event的timeStamp来标记时间，这样每次事件都会修改last的值，注意last必需为全局变量
             setTimeout(function(){    //设时延迟0.5s执行
                 if(last-event.timeStamp==0)
                 //如果时间差为0（也就是你停止输入0.5s之内都没有其它的keyup事件发生）则做你想要做的事
                 {
-
                     for(var i=0;i<=mdict_list.length;i++){
                         var dic_a=$(mdict_list[i]).children('a');
                         var title=dic_a.text().toLowerCase();
@@ -183,7 +181,6 @@ function init_mdict_filter(){
                set_dic_num();
            },500);
         }
-
     })
 }
 
