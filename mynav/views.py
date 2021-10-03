@@ -69,7 +69,8 @@ def get_site(request):
     sites_list = []
     for site in extra_sites:
         sites_list.append((site.site_name, site.site_url))
-    groups_list.append(('未分组', sites_list))
+    if len(sites_list) > 0:
+        groups_list.append(('未分组', sites_list))
     return HttpResponse(json.dumps(groups_list))
 
 

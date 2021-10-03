@@ -1209,6 +1209,10 @@ def search_mdd(request, *args):
             mdd_list = item.mdd_list
             sobj = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name, is_dic=True)
             res_content, mime_type = sobj.search_mdd()
+            if len(res_content) == 0 and res_name.startswith('\\data'):
+                # 韩国国立国语院韩汉学习词典中资源链接以\data开头，但实际mdd中文件夹结构中没有data。
+                sobj = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name[5:], is_dic=True)
+                res_content, mime_type = sobj.search_mdd()
             if sobj.is_zim:
                 if mime_type is not None:
                     from .mdict_utils.search_object import regpz
