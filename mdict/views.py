@@ -1894,7 +1894,8 @@ def mdict_dic(request, *args):
 
     item = init_vars.mdict_odict[dic.mdict_file]
     mdx = item.mdx
-    if isinstance(mdx, ZIMFile):
+    if mdx.get_fpath().endswith('.zim'):
+        # isinstance(mdx, ZIMFile)判断不可靠
         return render(request, 'mdict/zim.html',
                       {'dic_pk': dic_pk, 'name': dic_name, 'query': '', 'type': 'zim', 'is_mobile': is_mb})
     else:

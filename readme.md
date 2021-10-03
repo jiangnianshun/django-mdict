@@ -8,6 +8,10 @@ django-mdict是django实现的mdict词典查询工具（支持zim格式）。
 
 在线demo（已失效）：~~http://81.68.207.87/mdict/~~
 
+演示视频：https://pan.baidu.com/s/1bwv5TXZ7SpyVVjpSVi3h4g 
+
+提取码：76xe
+
 ### 适用情景
 
 局域网内，将django-mdict部署在服务器上，其他电脑、平板、手机可只保留少量词典，当离开局域网时，查询本地词典，当进入局域网时，可通过浏览器对全部词典进行查词。
