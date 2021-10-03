@@ -115,6 +115,7 @@ class SearchObject:
 
         self.cmp = []
         self.cmp2 = []
+        self.dup = False
         self.result_list = []
 
         if self.mdd is not None and len(self.mdd) > 0:
@@ -529,8 +530,11 @@ class SearchObject:
 
         if self.mdx.process_str_keys(res_name) in self.cmp2:
             # LDOCE5++ En-Cn V2.15查a返回a,a-,a*3个结果，其start均不相同，而a-,a*均指向A，造成重复，应当判断词头，避免重复。
+            # self.dup为True说明LINK存在但重复，此时返回空；self.dup为True说明LINK不存在，原样返回。
+            self.dup = True
             return ''
         else:
+            self.dup = False
             self.cmp2.append(self.mdx.process_str_keys(res_name))
 
         if self.result_list and self.mdx.process_str_keys(res_name) == self.mdx.process_str_keys(self.query):
@@ -578,7 +582,7 @@ class SearchObject:
 
         if record == '':
             record = self.search_dic_group(res_name)
-        if record == '':
+        if record == '' and not self.dup:
             # 比如英文wiki-part1的(词条指向Bracket Parentheses，但该词条在所有part中都不存在，此时返回record原样。
             return t_record
         return record
