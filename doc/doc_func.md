@@ -134,9 +134,11 @@ mdx同名的js、css和字体文件会自动加载。
 
 ### 其他
 
-前端界面使用bootstrap5
+前端界面使用bootstrap5和jquery-ui
 
 bootstrap5：[https://getbootstrap.com/](https://getbootstrap.com/)
+
+jquery-ui：[https://github.com/jquery/jquery-ui](https://github.com/jquery/jquery-ui)
 
 内置词条使用django-ckeditor和MathJax实现富文本和latex公式输入。
 
