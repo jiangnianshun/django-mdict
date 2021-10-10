@@ -239,7 +239,7 @@ function get_items(container,style){
                     }
                 },0);
             }
-            init_cols();
+            if(is_PC()){init_cols();}
         },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);

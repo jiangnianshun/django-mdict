@@ -204,7 +204,7 @@ function init_contents(){
             $('#main-contents').empty();
             $('#main-contents').append(ele_str);
 
-            init_cards();
+            if(is_PC()){init_cards();}
 
             init_tooltip();
         },
