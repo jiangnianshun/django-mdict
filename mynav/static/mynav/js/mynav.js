@@ -78,11 +78,6 @@ function init_dropdown(){
         },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);
-            //alert(jqXHR.status);
-            //alert(jqXHR.readyState);
-            //alert(jqXHR.statusText);
-            //alert(textStatus);
-            //alert(errorThrown);
         },
     })
 }

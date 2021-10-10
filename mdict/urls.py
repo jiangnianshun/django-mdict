@@ -71,4 +71,5 @@ urlpatterns = [
     path('addnode/', views.add_node),
     path('addedge/', views.add_edge),
     path('editedge/', views.edit_edge),
+    path('getlabels/', views.get_labels),
 ]

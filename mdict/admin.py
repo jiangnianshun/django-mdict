@@ -116,6 +116,10 @@ class MyMdictEntryAdmin(admin.ModelAdmin):
     list_editable = ['mdict_entry']
 
 
+class MyMdictEntryTypeAdmin(admin.ModelAdmin):
+    ordering = ('mdict_type',)
+
+
 class MdictOnlineAdmin(admin.ModelAdmin):
     list_display = ('id', 'mdict_name', 'mdict_enable', 'mdict_priority', 'mdict_isiframe', 'mdict_url')
     list_editable = ('mdict_name', 'mdict_priority', 'mdict_enable', 'mdict_name')
@@ -134,4 +138,4 @@ admin.site.register(MdictDic, MdictDicAdmin)
 admin.site.register(MdictDicGroup, MdictDicGroupAdmin)
 admin.site.register(MdictOnline, MdictOnlineAdmin)
 admin.site.register(MyMdictEntry, MyMdictEntryAdmin)
-admin.site.register(MyMdictEntryType)
+admin.site.register(MyMdictEntryType, MyMdictEntryTypeAdmin)

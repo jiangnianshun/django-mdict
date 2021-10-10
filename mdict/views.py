@@ -41,7 +41,7 @@ from mdict.mdict_utils.search_utils import search, search_bultin_dic_sug, search
 from .mdict_utils.entry_object import entryObject
 from mdict.mdict_utils.romkan import to_hiragana, to_katakana, to_hepburn, to_kunrei
 
-from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline, MyMdictItem
+from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline, MyMdictItem, MyMdictEntryType
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
 from .mdict_utils.mdict_func import mdict_root_path, is_local, get_m_path
 from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
@@ -1476,6 +1476,14 @@ def get_node_group(mdict_entry):
     return node_group
 
 
+def get_labels(request):
+    label_set = MyMdictEntryType.objects.all().order_by('mdict_type')
+    label_list = []
+    for label in label_set:
+        label_list.append((label.pk, label.mdict_type))
+    return HttpResponse(json.dumps(label_list))
+
+
 def get_nodes(request):
     only_edge_node = json.loads(request.GET.get('only_edge_node', 'false'))
     show_label = json.loads(request.GET.get('show_label', 'false'))
@@ -1491,12 +1499,15 @@ def get_nodes(request):
         mdict_entry = entry.mdict_entry
 
         link_set = {}
+        label_list = []
 
         for mdict_item in entry.mymdictitem_set.all():
             item_entry = mdict_item.item_entry
             item_content = mdict_item.item_content
             item_type = mdict_item.item_type
 
+            if item_type is not None:
+                label_list.append(item_type.mdict_type)
             link_list = re.findall(r'\[link\](.+?)\[/link\]', item_content)
             if show_label:
                 if item_entry is None and item_type is None:
@@ -1521,7 +1532,8 @@ def get_nodes(request):
         if len(nlink_set) > 0:
             if mdict_entry not in data_set_keys:
                 data_set.update(
-                    {mdict_entry: {'id': data_id, 'label': mdict_entry, 'group': get_node_group(mdict_entry)}})
+                    {mdict_entry: {'id': data_id, 'label': mdict_entry, 'group': get_node_group(mdict_entry),
+                                   'extra': label_list}})
                 from_id = data_id
                 data_id += 1
             else:
@@ -1529,7 +1541,8 @@ def get_nodes(request):
             for link, label_list in nlink_set.items():
                 label = ','.join(label_list)
                 if link not in data_set_keys:
-                    data_set.update({link: {'id': data_id, 'label': link, 'group': get_node_group(link)}})
+                    data_set.update(
+                        {link: {'id': data_id, 'label': link, 'group': get_node_group(link), 'extra': label_list}})
                     to_id = data_id
                     data_id += 1
                 else:
@@ -1539,7 +1552,8 @@ def get_nodes(request):
             if not only_edge_node:
                 if mdict_entry not in data_set_keys:
                     data_set.update(
-                        {mdict_entry: {'id': data_id, 'label': mdict_entry, 'group': get_node_group(mdict_entry)}})
+                        {mdict_entry: {'id': data_id, 'label': mdict_entry, 'group': get_node_group(mdict_entry),
+                                       'extra': label_list}})
                     data_id += 1
 
     node_list = list(data_set.values())

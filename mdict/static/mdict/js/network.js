@@ -37,36 +37,46 @@ var nodes=null;
 var edges=null;
 var nodeFilterValue="";
 var nodeFilterValue2="";
+var labelFilterValue="";
 var nodesView=null;
+var edgesView=null;
 var network=null;
 
-function check_filter(label){
+function check_node_filter(label,extra){
+    let mark1=false;
+    let mark2=false;
     if(nodeFilterValue==""&&nodeFilterValue2==""){
-        return true;
+        mark1=true;
     }else if(nodeFilterValue!=""&&label.toLowerCase( ).indexOf(nodeFilterValue.toLowerCase( ))>-1) {
-        return true;
+        mark1=true;
     }else if(nodeFilterValue2!=""&&label.toLowerCase( ).indexOf(nodeFilterValue2.toLowerCase( ))>-1){
-        return true;
+        mark1=true;
     }
+    if(labelFilterValue==""){
+        mark2=true;
+    }else if(extra.indexOf(labelFilterValue)>-1){
+        mark2=true;
+    }
+    if(mark1&&mark2){return true;}
 }
 
-function create_filter(nodes){
+function create_filter(){
     const nodesFilter = (node) => {
-        if(check_filter(node.label)) {
+        if(check_node_filter(node.label,node.extra)) {
             return true;
         }else{
             con_nodes=network.getConnectedNodes([node.id]);
             let mark=false;
             con_nodes.forEach(function(node_id){
                 let con_node=nodes.get(node_id);
-                if(check_filter(con_node.label)) {
+                if(check_node_filter(con_node.label,node.extra)) {
                     mark=true;
                 }
-            })
+            });
             if(mark){return true;}
         }
     };
-    nodesView = new vis.DataView(nodes, { filter: nodesFilter });
+    nodesView = new vis.DataView(nodes, {filter:nodesFilter});
 }
 
 function create_network(){
@@ -82,10 +92,11 @@ function create_network(){
             var pdata=$.parseJSON(data);
             var node_list=pdata['nodes'];
             var edge_list=pdata['edges'];
+
             if(node_list.length==0){node_list=[{"id":0,"label":"目前没有内置词条！"}];}
             nodes = new vis.DataSet(node_list);
             edges = new vis.DataSet(edge_list);
-            create_filter(nodes);
+            create_filter();
             var ndata={'nodes':nodesView,'edges':edges};
             network=set_data(ndata);
             init_network();
@@ -416,7 +427,47 @@ function init_event(){
     });
 }
 
+function fill_dropdown(item){
+    let span_ele=$(item).children('span');
+    $("#label-filter").text(span_ele.text());
+    $("#label-filter").attr("data-pk",span_ele.attr("data-pk"));
+    if(span_ele.attr("data-pk")==0){
+        labelFilterValue="";
+    }else{
+        labelFilterValue=span_ele.text();
+    }
+    nodesView.refresh();
+}
+
+function init_label_list(){
+    let label_list=$('#label-list');
+    label_list.empty();
+    let ele='<li onclick="fill_dropdown(this)"><span class="dropdown-item" data-pk=0>全部</span></li>';
+    label_list.append($(ele));
+}
+
+function init_dropdown(){
+    $.ajax({
+        url:'/mdict/getlabels/',
+        contentType:'json',
+        type:'GET',
+        success:function(data){
+            let data_list=$.parseJSON(data);
+            let label_list=$('#label-list');
+            init_label_list();
+            for(let i=0;i<data_list.length;i++){
+                var ele='<li onclick="fill_dropdown(this)"><span class="dropdown-item" data-pk='+data_list[i][0]+'>'+data_list[i][1]+'</span></li>';
+                label_list.append($(ele));
+            }
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    })
+}
+
 $(document).ready(function(){
-    create_network();
     init_event();
+    init_dropdown();
+    create_network();
 });
