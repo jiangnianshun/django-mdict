@@ -61,7 +61,7 @@ def get_site(request):
             else:
                 site_icon = False
             sites_list.append((site.pk, site.site_name, site.site_url, site_icon, site.site_brief))
-        group_item = (group.group_name, sites_list)
+        group_item = (group.pk, group.group_name, sites_list)
         if len(sites_list) > 0:
             groups_list.append(group_item)
 
@@ -72,6 +72,30 @@ def get_site(request):
     if len(sites_list) > 0:
         groups_list.append(('未分组', sites_list))
     return HttpResponse(json.dumps(groups_list))
+
+
+def edit_site(request):
+    cur_pk = int(request.GET.get('cur_pk', 0))
+    prev_pk = int(request.GET.get('prev_pk', 0))
+    group_pk = int(request.GET.get('group_pk', 0))
+    if cur_pk > 0:
+        cur_site = Website.objects.get(pk=cur_pk)
+        if prev_pk > 0:
+            prev_site = Website.objects.get(pk=prev_pk)
+            site_priority = prev_site.site_priority + 1
+        else:
+            site_priority = 1
+        if group_pk > 0:
+            group_obj = Webgroup.objects.get(pk=group_pk)
+            cur_site.site_priority = site_priority
+            cur_site.site_group = group_obj
+            cur_site.save()
+        else:
+            cur_site.site_priority = site_priority
+            cur_site.save()
+
+        return HttpResponse('success')
+    return HttpResponse('error')
 
 
 def add_group(request):

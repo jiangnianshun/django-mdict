@@ -1938,6 +1938,30 @@ def get_pk_in_group(request):
     return HttpResponse(json.dumps(pk_list))
 
 
+def edit_dic(request):
+    cur_pk = int(request.GET.get('cur_pk', 0))
+    prev_pk = int(request.GET.get('prev_pk', 0))
+    if cur_pk > 0:
+        cur_dic = MdictDic.objects.get(pk=cur_pk)
+        if prev_pk > 0:
+            prev_dic = MdictDic.objects.get(pk=prev_pk)
+            dic_priority = prev_dic.mdict_priority + 1
+        else:
+            dic_priority = 1
+        cur_dic.mdict_priority = dic_priority
+        cur_dic.save()
+        return HttpResponse('success')
+    return HttpResponse('error')
+
+
+def get_prior(request):
+    dic_set = MdictDic.objects.all().order_by('mdict_priority')
+    pk_list = []
+    for dic in dic_set:
+        pk_list.append((dic.pk, dic.mdict_priority))
+    return HttpResponse(json.dumps(pk_list))
+
+
 def search_suggestion(request):
     query = request.GET.get('query', '').strip()
     dic_pk = int(request.GET.get('dic_pk', -1))

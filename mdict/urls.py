@@ -45,6 +45,8 @@ urlpatterns = [
     url(r'^zim/$', views.search_zim_dic),
     path('randomsearch/', views.random_search),
     path('getpkingroup/', views.get_pk_in_group),
+    path('editdic/', views.edit_dic),
+    path('getprior/', views.get_prior),
     path('shelf/', views.shelf),
     path('shelf2/', views.shelf2),
     path('doc/', views.doc),

@@ -2,22 +2,28 @@ var script=`
 <script src='/static/mdict/iframe-resizer/js/iframeResizer.contentWindow.min.js'></script>
 `;
 
+var is_dragging=false;
+
 function set_body_height(){
     $("body").height($(window).height()-60);
 }
 
 function start_modal(obj){
-    var dic_pk=$(obj).attr('data-pk');
-    $("#modal-shelf-dic").attr('data-pk',dic_pk);
-    var dic_name=$(obj).attr('data-name');
-    get_header($("#modal-shelf-dic .modal-body"),dic_pk,dic_name,1);
+    if(!is_dragging){
+        var dic_pk=$(obj).attr('data-pk');
+        $("#modal-shelf-dic").attr('data-pk',dic_pk);
+        var dic_name=$(obj).attr('data-name');
+        get_header($("#modal-shelf-dic .modal-body"),dic_pk,dic_name,1);
+    }
 }
 
 function start_offcanvas(obj){
-    var dic_pk=$(obj).attr('data-pk');
-    $("#offcanvas-shelf-dic").attr('data-pk',dic_pk);
-    var dic_name=$(obj).attr('data-name');
-    get_header($("#offcanvas-shelf-dic .offcanvas-body"),dic_pk,dic_name,2);
+    if(!is_dragging){
+        var dic_pk=$(obj).attr('data-pk');
+        $("#offcanvas-shelf-dic").attr('data-pk',dic_pk);
+        var dic_name=$(obj).attr('data-name');
+        get_header($("#offcanvas-shelf-dic .offcanvas-body"),dic_pk,dic_name,2);
+    }
 }
 
 function set_canvas(canvas_id) {
@@ -48,6 +54,82 @@ function init_canvas(){
     tCtx1.canvas.height = parseInt(getComputedStyle(canvas1, null)['height']) * devicePixelRatio;
     set_canvas('textCanvas1');
     draw_canvas();
+}
+
+function refresh_dic_prior(){
+    $.ajax({
+        url:'/mdict/getprior/',
+        contentType:'json',
+        type:'GET',
+        success:function(data){
+            let pk_list=$.parseJSON(data);
+            for(let i=0;i<pk_list.length;i++){
+                let tpk=pk_list[i][0];
+                let tprior=pk_list[i][1];
+                let col=$('.card[data-pk="'+tpk+'"]').parent();
+                col.find('.card-body .text-primary').text(tprior);
+            }
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    })
+}
+
+function edit_dic(cur_pk,prev_pk){
+    let data={'cur_pk':cur_pk,'prev_pk':prev_pk}
+    $.ajax({
+        url:'/mdict/editdic/',
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            if(data=='success'){
+                refresh_dic_prior();
+            }
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    })
+}
+
+function init_cols(){
+    $(".row").sortable({
+        revert:true,
+        cursor:"move",
+        opacity:0.75,
+        helper:"clone",
+        items:".sorting-initialize",
+        forceHelperSize:true,
+        forcePlaceholderSize:true,
+        start:function(event,ui){
+            is_dragging=true;
+        },
+        stop:function(event,ui){
+            is_dragging=false;
+            let cur_ele=ui.item[0];
+            let prev_ele=cur_ele.previousElementSibling;
+            let cur_pk=$(cur_ele).children('.dic-container').attr('data-pk');
+            let prev_pk=$(prev_ele).children('.dic-container').attr('data-pk');
+            edit_dic(cur_pk,prev_pk);
+        }
+    });
+    $(".row").children(".col").one("mouseenter",function(){
+        //分批加载，避免卡顿
+        if(!$(this).hasClass("sorting-initialize")){
+            let col_list=$(".row").children(".col");
+            let cur_index=$(this).index();
+            let s_index=0;
+            let e_index=col_list.length-1;
+            if(cur_index-70>0){s_index=cur_index;}
+            if(s_index+140<col_list.length){e_index=s_index+140;}
+            for(let i=s_index;i<=e_index;i++){
+                $(col_list[i]).addClass("sorting-initialize");
+            }
+            $(".row").sortable('refresh');
+        }
+    });
 }
 
 function get_items(container,style){
@@ -157,6 +239,7 @@ function get_items(container,style){
                     }
                 },0);
             }
+            init_cols();
         },
         error:function(jqXHR,textStatus,errorThrown){
             alert(jqXHR.responseText);
@@ -321,7 +404,7 @@ function start_dic_filter(group_pk){
                     $(col_list[i]).show();
                 }
             }
-            set_dic_num()
+            set_dic_num();
         }
 
         },

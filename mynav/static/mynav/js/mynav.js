@@ -1,3 +1,5 @@
+var is_dragging=false;
+
 function init_mynav_filter(){
     $("#mynav-filter-input").bind("input propertychange",function(event){
         //juery的change事件，只有当input没有聚焦的时候才能触发，input propertychange能检测input输入过程中的变化
@@ -92,6 +94,63 @@ function init_tooltip(){
     })
 }
 
+function edit_site(cur_pk,prev_pk,group_pk){
+    let data={'cur_pk':cur_pk,'prev_pk':prev_pk,'group_pk':group_pk}
+    $.ajax({
+        url:'/mynav/editsite/',
+        contentType:'json',
+        type:'GET',
+        data:data,
+        success:function(data){
+            console.log(data)
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    })
+}
+
+function init_cards(){
+    $('.my-card-group a').click(function(e){
+        e.preventDefault();
+        if(!is_dragging){
+            let url=$(this).attr("href");
+            let new_url=url;
+            if(url.indexOf('://')==-1){
+                if(url[0]=='/'){
+                    new_url='http:/'+url;
+                }else{
+                    new_url='http://'+url;
+                }
+            }
+            window.open(new_url);
+        }
+    })
+
+    $(".my-card-group .row").sortable({
+        revert:true,
+        cursor:"move",
+        opacity:0.75,
+        helper:"clone",
+        forceHelperSize:true,
+        forcePlaceholderSize:true,
+        connectWith:'.my-card-group .row',
+        start:function(event,ui){
+            is_dragging=true;
+        },
+        stop:function(event,ui){
+            is_dragging=false;
+            let cur_ele=ui.item[0];
+            let prev_ele=cur_ele.previousElementSibling;
+            let group_ele=$(cur_ele).parent();
+            let cur_pk=$(cur_ele).attr('data-pk');
+            let prev_pk=$(prev_ele).attr('data-pk');
+            let group_pk=group_ele.attr('data-pk');
+            edit_site(cur_pk,prev_pk,group_pk);
+        }
+    });
+}
+
 function init_contents(){
     $.ajax({
         url:'/mynav/getsite/',
@@ -102,36 +161,37 @@ function init_contents(){
             let ele_str='';
             for(let i=0;i<group_list.length;i++){
                 let group_item=group_list[i];
-                let group_name=group_item[0];
-                let sites_list=group_item[1];
+                let group_pk=group_item[0];
+                let group_name=group_item[1];
+                let sites_list=group_item[2];
 
                 ele_str+=`
                 <div class="card my-card-group" id='card-${i}'>
                     <div class="card-header">
                         <span class='text-secondary card-link' href='#card-element-${i}' data-bs-toggle='collapse' aria-controls="#card-element-${i}">${group_name}</span>
                     </div>
-                    <div class="row card-body collapse show" id='card-element-${i}'>
+                    <div class="row card-body collapse show" id='card-element-${i}' data-pk=${group_pk}>
                 `
                 for(let j=0;j<sites_list.length;j++){
                     let site=sites_list[j];
-                    let site_id=site[0];
+                    let site_pk=site[0];
                     let site_name=site[1];
                     let site_url=site[2];
                     let site_icon=site[3];
                     let site_brief=site[4];
                     if(site_icon){
                         ele_str+=`
-                            <div class="col">
+                            <div class="col" data-pk=${site_pk}>
                                 <div class="card shadow" tabindex="0" data-bs-toggle="tooltip" title="${site_brief}">
                                     <div class="card-body text-center">
-                                        <a class="web-site" href="${site_url}" target="_blank"><img src="/media/icon/${site_id}.ico" style="margin-right:3px;"></img>${site_name}</a>
+                                        <a class="web-site" href="${site_url}" target="_blank"><img src="/media/icon/${site_pk}.ico" style="margin-right:3px;"></img>${site_name}</a>
                                     </div>
                                 </div>
                             </div>
                         `
                     }else{
                         ele_str+=`
-                            <div class="col">
+                            <div class="col" data-pk=${site_pk}>
                                 <div class="card shadow" tabindex="0" data-bs-toggle="tooltip" title="${site_brief}">
                                     <div class="card-body text-center">
                                         <a class="web-site" href="${site_url}" target="_blank">${site_name}</a>
@@ -149,19 +209,7 @@ function init_contents(){
             $('#main-contents').empty();
             $('#main-contents').append(ele_str);
 
-            $('.my-card-group a').click(function(e){
-                e.preventDefault();
-                let url=$(this).attr("href");
-                let new_url=url;
-                if(url.indexOf('://')==-1){
-                    if(url[0]=='/'){
-                        new_url='http:/'+url;
-                    }else{
-                        new_url='http://'+url;
-                    }
-                }
-                window.open(new_url);
-            })
+            init_cards();
 
             init_tooltip();
         },
