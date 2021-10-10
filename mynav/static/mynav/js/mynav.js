@@ -15,7 +15,7 @@ function init_mynav_filter(){
                 //如果时间差为0（也就是你停止输入0.5s之内都没有其它的keyup事件发生）则做你想要做的事
                     for(var i=0;i<=item_list.length;i++){
                         var item_a=$(item_list[i]).find('.web-site');
-                        var item_href=$(item_list[i]).attr('href');
+                        var item_href=$(item_a).attr('href');
                         if(typeof(item_href)=='undefined'){
                             item_href='';
                         }
@@ -294,6 +294,13 @@ function init_event(){
             let show_cards=$(this).find('.collapse.show');
             if(show_cards.length>0){$(this).find('.card-header span').trigger('click');}
         })
+    })
+    $('#refresh-addsite').click(function(){
+        init_dropdown();
+        $('#site-name').val('');
+        $('#site-url').val('');
+        $('#site-priority').val('1');
+        $('#site-brief').val('');
     })
 }
 
