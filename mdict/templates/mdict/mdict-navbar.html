@@ -3,7 +3,8 @@
         <!--form自动提交后刷新页面，因此onsubmit要返回false，阻止提交，在浏览器扩展中不能用onsubmit，导致不断刷新，或者有时候js错误，导致点击查询后，页面刷新，后面考虑去掉form，换成div。-->
         <div class="d-flex">
             <div class="input-group">
-                <input autocomplete="off" class="btn btn-outline-secondary" id="query" type="text">
+                <input autocomplete="off" class="form-control" id="query" type="text">
+<!--                input加btn类会导致在safari中无法输入-->
                 <i id="mdict-query-clear" class="bi bi-x input-group-text mdict-icon"></i>
                 {% if type == 'index' or type == 'dic' or type == 'zim' %}
                     <i id="mdict-query" class="bi bi-search btn mdict-icon"></i>
