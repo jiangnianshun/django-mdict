@@ -199,7 +199,7 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 
 [anki](doc_anki.md)
 
-### 划词
+### 划词脚本
 
 [划词](doc_huaci.md)
 

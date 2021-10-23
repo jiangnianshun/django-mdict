@@ -1,4 +1,4 @@
-划词工具仅适用于windows，cefpython3的python版本最高支持为3.9。
+划词脚本工具仅适用于win10，cefpython3的python版本最高支持为3.9。
 
 1. 安装依赖。
 
