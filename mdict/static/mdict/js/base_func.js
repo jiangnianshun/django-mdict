@@ -48,13 +48,10 @@ function change_title_and_url(query){
 }
 
 function show_first_card(){
-    //展开第一个词典
-    var target="#card-element-0";
-    //var card="div[id^=card-element-]";
-
-    if($(target).length>0){
-        $(target).collapse('show');
-        //show是展开，hide是折叠
+    //当前没有展开的词条时，展开第一个词条。
+    if($("#card-element-0").length>0&&$("#card-container .collapse.show").length==0){
+        $("#card-element-0").collapse('show');
+        //show展开，hide折叠
     }
 }
 
