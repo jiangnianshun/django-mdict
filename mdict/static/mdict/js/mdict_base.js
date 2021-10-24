@@ -148,7 +148,7 @@ var last=0;
 function init_mdict_filter(){
     $("#mdict-filter-input").bind("input propertychange",function(event){
         //juery的change事件，只有当input没有聚焦的时候才能触发，input propertychange能检测input输入过程中的变化
-        var txt=$.trim($(this).val().toLowerCase( ));
+        var txt=$.trim($(this).val().toLowerCase());
         var mdict_list=$("#mdict-list-content .card-header");
         if(txt.length>0){//延时有问题
             last =  event.timeStamp;
@@ -781,6 +781,8 @@ function convert_css_inline(item) {
             }
         }
         this.style.cssText = properties.join(';');
+        //修改.style.cssText在webkit上自动添加-webkit属性，其中-webkit-text-fill-color在safari上会覆盖本来的文字颜色。
+        this.style.cssText = this.style.cssText.replace('-webkit-text-fill-color','');
         convert_css_inline($(this).children());
     });
 }
