@@ -774,7 +774,7 @@ function convert_css_inline(item) {
         var style = el.style;
         var properties = [];
         for(var property in style) {
-            if(!start_with(property,'width')&&!start_with(property,'height')){//width会导致文字重叠
+            if(!start_with(property,'width')&&!start_with(property,'height')){
                 if($(this).css(property)) {
                     properties.push(property + ':' + $(this).css(property));
                 }
@@ -782,7 +782,12 @@ function convert_css_inline(item) {
         }
         this.style.cssText = properties.join(';');
         //修改.style.cssText在webkit上自动添加-webkit属性，其中-webkit-text-fill-color在safari上会覆盖本来的文字颜色。
-        this.style.cssText = this.style.cssText.replace('-webkit-text-fill-color','');
+        //width导致固定宽度，height导致两行文字重叠。
+        this.style.cssText = this.style.cssText.replace(/-webkit-.+?;/g,'');
+        this.style.cssText = this.style.cssText.replace(/-apple-.+?;/g,'');
+        this.style.cssText = this.style.cssText.replace(/inline-size:.+?;/g,'');
+        this.style.cssText = this.style.cssText.replace(/width.+?;/g,'');
+        this.style.cssText = this.style.cssText.replace(/height.+?;/g,'');
         convert_css_inline($(this).children());
     });
 }
