@@ -189,7 +189,7 @@ discovery.type: single-node
 
 * 显示connectionError
 
-es连接失败，确认es已开启且url和端口设置正确。
+es连接失败，确认es已开启且url和端口设置正确，有时es启动后不是默认的9200端口，可能是9219或其他。
 
 * 查询时报错org.elasticsearch.action.NoShardAvailableActionException: No shard available for ...
 
