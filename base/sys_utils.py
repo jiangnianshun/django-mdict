@@ -1,6 +1,7 @@
 import re
 import sys
 import platform
+import psutil
 
 reg1 = r'^[a-zA-Z]:[/\\]'
 reg2 = r'[/|\\]'
@@ -76,3 +77,12 @@ def check_module_import(mod_name):
         return True
     else:
         return False
+
+
+def print_sys_info():
+    print('[SYSTEM] System Version:', platform.platform(), platform.architecture()[0])
+    print('[SYSTEM] Python Version:', platform.python_version(), platform.python_compiler())
+    print('[SYSTEM] CPU Physical Core Number:', psutil.cpu_count(logical=False))
+    available_memory_size = round(psutil.virtual_memory().available / 1024 / 1024 / 1024, 2)
+    total_memory_size = round(psutil.virtual_memory().total / 1024 / 1024 / 1024, 2)
+    print('[SYSTEM] Memory Size:', available_memory_size, '/', total_memory_size, 'GB')

@@ -121,8 +121,6 @@ class MdictEntryViewSet(viewsets.ViewSet):
             query_params['romaji_enable'] = json.loads(romaji_enable)
         if magnifier_enable is not None:
             query_params['magnifier_enable'] = json.loads(magnifier_enable)
-        if magnifier_enable is not None:
-            query_params['magnifier_enable'] = json.loads(magnifier_enable)
 
         if (force_refresh and page == 1) or key_paginator.get(query, group) is None:
             record_list = self.get_results(query, group, query_params)
