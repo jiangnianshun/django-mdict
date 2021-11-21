@@ -355,12 +355,18 @@ function init_online_dic_var(){
                 if(o_enable){
                     checked="checked";
                 }
+                if(o_isiframe){
+                    var isiframe_icon='<i class="bi bi-plus-square" title="new page"></i></a>';
+                }else{
+                    var isiframe_icon='<i class="bi bi-vinyl-fill" title="iframe"></i></a>';
+                }
                 online_ele=`
                 <div class="form-checkbox" style="display:inline;">
                     <input class="form-check-input" type="checkbox" id="${o_id}" ${checked} value="${o_name}" data-url="${o_url}" data-isiframe="${o_isiframe}" autocomplete='off'>
                     <label class="form-check-label" for="${o_id}">
                         <span class='badge badge-light text-dark'>${o_pror}</span>
                         ${o_name}
+                        ${isiframe_icon}
                         <a class='badge badge-primary badge-light text-dark' href="${o_url_host}" target="_blank" style="text-decoration:none;">
                         <i class="bi bi-box-arrow-up-right"></i></a>
                     </label>
