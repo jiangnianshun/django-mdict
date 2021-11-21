@@ -57,7 +57,8 @@ default_config = {
         'compute_every_element': True,  # 计算iframe的每一个元素来计算总高度
         'fixed_height': False,  # iframe固定高度
         'copy_with_tag': False,  # 复制时包含html标签和css样式
-        'magnifier_enable': False
+        'magnifier_enable': False,
+        'hide-bottom-bar': False  # 隐藏底部工具栏
     }
 }
 
