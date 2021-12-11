@@ -1,3 +1,4 @@
+  * [目录结构](#目录结构)
   * [iframe显示](#iframe显示)
   * [mdict解析](#mdict解析)
   * [zim解析](#zim解析)
@@ -8,6 +9,65 @@
   * [同名加载](#同名加载)
   * [查询历史](#查询历史)
   * [其他](#其他)
+
+### 目录结构
+
+```
+django-mdict
+├─.git
+├─base（共用的一些函数）
+├─doc（markdown文档）
+├─export（mdx导出路径）
+├─huaci（划词脚本）
+├─mdict（词典模块）
+│  ├─mdict_utils
+│  ├─readlib（mdict和zim解析）
+│  │  ├─lib
+│  │  ├─pyx
+│  │  └─src
+│  ├─static
+│  │  └─mdict（mdict的静态文件）
+│  └─templates
+│     └─mdict（mdict的模板）
+├─media
+│  ├─char（来自unicode-table-data的特殊符号）
+│  ├─font（全宋体）
+│  ├─icon（本地导航的网站图标存储路径）
+│  ├─nltk_data（nltk的语料库）
+│  └─uploads（内置词条中的图片存储路径）
+├─mynav（本地导航模块）
+│  ├─static（mynav的静态文件）
+│  └─templates（mynav的模板）
+├─mysite（django的基础设置）
+├─script（服务脚本、导入导出脚本、图标下载脚本）
+├─static（共用的静态文件）
+├─templates（共用的模板）
+├─.gitattributes
+├─.gitignore
+├─.Linux.cache（linux下的缓存文件）
+├─.Linux.dat（linux下的缓存文件）
+├─.Windows.cache（windows下的缓存文件）
+├─.Windows.dat（windows下的缓存文件）
+├─config.ini（配置文件）
+├─db.sqlite3（数据库文件）
+├─django-mdict.conf（apache配置文件）
+├─huaci.bat（运行划词脚本）
+├─init_mdict_path.py（设置词典库和发音库路径）
+├─init_server.bat（windows下的初始化脚本）
+├─init_server.sh（linux下的初始化脚本）
+├─init_wsl.sh（linux下apache的初始化脚本）
+├─manage.py（django-mdict启动入口）
+├─mdict_path.json（词典库和发音库路径存储文件）
+├─readme.md
+├─requirements1.txt（django-mdict需要的依赖）
+├─requirements2.txt（django-mdict需要的依赖）
+├─requirements3.txt（划词脚本需要的依赖）
+├─run_server.bat（windows下运行django-mdict）
+├─run_server.sh（linux下运行django-mdict）
+├─run_server.vbs（windows下运行django-mdict-不显示窗口）
+├─run_server_no_check.bat（windows下运行django-mdict-启动时不检查）
+└─run_server_no_check.sh（linux下运行django-mdict-启动时不检查）
+```
   
 ### iframe显示
 
