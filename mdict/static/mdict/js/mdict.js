@@ -723,8 +723,8 @@ function online_search(query,container){//有道在线
 
             $(card_new_id).click(function(){
                 var url=item.attr("data-url").replace('%WORD%',query);
-                //window.open(url,"_blank")
-                window.open(url, "Newwindow", "height=1000, width=1000, top=100, left=100, scrollbars=yes, resizable=yes");
+                window.open(url,"_blank")
+                //window.open(url, "Newwindow", "height=1000, width=1000, top=100, left=100, scrollbars=yes, resizable=yes");
             });
         }
     });
