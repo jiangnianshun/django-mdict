@@ -1052,11 +1052,11 @@ function get_mdict_list(container, es_icon_enable, es_page_enable){//载入词�
 
                 if(dic_type=='mdx'){
                     if(dic_es_enable){
-                        var es_icon="<i class='bi bi-check' style='color:green;'></i>"
+                        var es_icon="<i class='bi bi-check' style='color:green;' title='已启用'></i>"
                     }else{
-                        var es_icon="<i class='bi bi-x' style='color:red;'></i>"
+                        var es_icon="<i class='bi bi-x' style='color:red;' title='未启用'></i>"
                     }
-                    es_icon+="<i class='bi bi-question index-status' style='color:gray;' data-pk="+dic_pk+"></i>"
+                    es_icon+="<i class='bi bi-question index-status' style='color:gray;' title='未知' data-pk="+dic_pk+"></i>"
                 }else{
                     var es_icon="<i class='bi bi-x' style='visibility:hidden;'></i><i class='bi bi-question' style='visibility:hidden;'></i>"
                 }
@@ -1121,6 +1121,7 @@ function get_index_status(){
                     $(this).removeClass('bi-x');
                     $(this).addClass('bi-cloud-slash');
                     $(this).css('color','gray');
+                    $(this).prop('title','无法连接到es');
                 });
             }else{
                 var st_data=$.parseJSON(data);
@@ -1139,12 +1140,15 @@ function get_index_status(){
                             if(index_status==1){
                                 $(this).addClass('bi-sun-fill');
                                 $(this).css('color','green');
+                                $(this).prop('title','es索引正在运行');
                             }else if(index_status==0){
                                 $(this).addClass('bi-moon-fill');
                                 $(this).css('color','orange');
+                                $(this).prop('title','es索引已停止');
                             }else{
                                 $(this).addClass('bi-x');
                                 $(this).css('color','red');
+                                $(this).prop('title','es索引不存在');
                             }
                         }
                     });

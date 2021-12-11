@@ -152,7 +152,13 @@ curl -X DELETE localhost:9200/_all
 
 es设置文件为config/elasticsearch.yml
 
-1. 设置use_real_memory为false有助于减少CircuitBreakingException Data too large的发生，但是可能导致es崩溃。
+1. 为避免每次启动端口发生变化，可以手动指定端口。同时config.ini中的es_host要修改为对应的端口。
+
+```
+http.port: 9200
+```
+
+3. 设置use_real_memory为false有助于减少CircuitBreakingException Data too large的发生，但是可能导致es崩溃。
 
 ```
 indices.breaker.total.use_real_memory: false
@@ -189,7 +195,7 @@ discovery.type: single-node
 
 * 显示connectionError
 
-es连接失败，确认es已开启且url和端口设置正确，有时es启动后不是默认的9200端口，可能是9219或其他。
+es连接失败，确认es已开启且url和端口设置正确，有时es启动后不是默认的9200端口，通过查看es命令行窗口中的publish_address来确定。
 
 * 查询时报错org.elasticsearch.action.NoShardAvailableActionException: No shard available for ...
 
