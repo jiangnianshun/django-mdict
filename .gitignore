@@ -27,8 +27,6 @@ build/
 /init_manga_path.py
 /log/
 /manga/
-/static/img/
-/static/css/
 /media/mynav/
 /media/icon/
 /blob_storage/

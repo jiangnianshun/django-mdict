@@ -67,6 +67,10 @@ def main(request):
     return render(request, 'index.html')
 
 
+def main2(request):
+    return render(request, 'index2.html')
+
+
 def swView(request):
     with open(settings.BASE_DIR + "/static/js/sw.js") as fp:
         return HttpResponse(fp.read(), 'text/javascript')
@@ -74,6 +78,7 @@ def swView(request):
 
 urlpatterns = [
     path('', main, name='main'),
+    path('index2/', main2, name='main2'),
     path('mynav/', include('mynav.urls')),
     path('api/', include(router.urls)),  # djangoresrframework生成的url
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

@@ -12,11 +12,17 @@
     <script src="/static/jquery/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
     <style>
+        body{
+            background-image:url('/static/img/background.png');
+            background-repeat:no-repeat;
+            background-attachment:fixed;
+            background-size:cover;
+        }
         a{text-decoration:none;color:black;}
         .row{height:10rem;}
         .col{height:10rem;}
-        .card{height:8rem;}
-        .card-body{color:gray;}
+        .card{height:8rem;background-color:rgba(256,256,256,0.2)}
+        .card-body{color:DarkGray;}
         .card-body h5{color:black;}
         .card-body i{color:orange;}
         .container{margin-top:2rem;}
@@ -144,15 +150,16 @@
     </div>
     <div class="row">
         <div class="col">
-            <a class="card" href="/index2/" target="_self">
+            <a class="card" href="/" target="_self">
                 <div class="card-body">
-                    <h5 class="card-title">主页2</h5>
+                    <h5 class="card-title">主页1</h5>
                     <i class="bi bi-book"></i>
-                    <span class="themes-sub">打开主页2</span>
+                    <span class="themes-sub">打开主页1</span>
                 </div>
             </a>
         </div>
     </div>
+</div>
 </div>
 <script>
     if ('serviceWorker' in navigator) {

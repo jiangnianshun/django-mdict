@@ -156,6 +156,12 @@ url是[http://IP地址/api/mdict2/mdict/]()，参数是query:apple,page:1
 
 访问[http://IP地址/api/mdict2/mdict/?query=apple&page=2&format=json]()
 
+#### 主页2
+
+替换主页2背景图：主页2通过替换/static/img/background.png来替换背景图片。
+
+交换主页1和主页2：交换/templates/下index.html和index2.html的名字。
+
 ### 依赖
 
 默认用的是清华源，如果需要修改，修改init_server.bat和init_server.sh中pip命令的-i参数。
