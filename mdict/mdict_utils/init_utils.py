@@ -27,6 +27,13 @@ from .mdict_func import mdict_root_path, audio_path
 
 pickle_file_path = os.path.join(ROOT_DIR, '.' + get_sys_name() + '.cache')
 change_file_path = os.path.join(ROOT_DIR, '.' + get_sys_name() + '.dat')
+uploads_path = os.path.join(ROOT_DIR, 'media', 'uploads')
+
+if not os.path.exists(uploads_path):
+    try:
+        os.mkdir(uploads_path)
+    except Exception as e:
+        print(e)
 
 
 # 这里使用init_vars包裹mdit_list是因为，当其他模块引入mdict_list后，再修改mdict_list，其他模块引入的mdict_list没有改变，因此需要用类包裹。
