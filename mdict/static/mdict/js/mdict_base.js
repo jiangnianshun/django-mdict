@@ -356,9 +356,9 @@ function init_online_dic_var(){
                     checked="checked";
                 }
                 if(o_isiframe){
-                    var isiframe_icon='<i class="bi bi-plus-square" title="new page"></i></a>';
+                    var isiframe_icon='<i class="bi bi-vinyl-fill" title="iframe显示"></i></a>';
                 }else{
-                    var isiframe_icon='<i class="bi bi-vinyl-fill" title="iframe"></i></a>';
+                    var isiframe_icon='<i class="bi bi-plus-square" title="新标签页显示"></i></a>';
                 }
                 online_ele=`
                 <div class="form-checkbox" style="display:inline;">
