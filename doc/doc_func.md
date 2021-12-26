@@ -22,9 +22,9 @@ django-mdict
 ├─mdict（词典模块）
 │  ├─mdict_utils
 │  ├─readlib（mdict和zim解析）
-│  │  ├─lib
-│  │  ├─pyx
-│  │  └─src
+│  │  ├─lib（cython编译的so或pyd文件会被复制到这里）
+│  │  ├─pyx（pyx文件和cython生成的中间文件）
+│  │  └─src（py文件）
 │  ├─static
 │  │  └─mdict（mdict的静态文件）
 │  └─templates

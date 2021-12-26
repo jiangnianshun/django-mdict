@@ -248,7 +248,10 @@ function bind_card(iframe,html,tokens){
                         warningTimeout:0,
                         scrolling:true,
                         onInit:function(iframe){
-                            iframe.contentWindow.init_in_page_jump();
+                            var tcard=$(iframe).parents(".card");
+                            if(tcard.attr('id')=='card-0'){
+                                iframe.contentWindow.init_in_page_jump();
+                            }
                         }
     //                            onInit: function(iframe_a){
     //                            },
@@ -266,7 +269,10 @@ function bind_card(iframe,html,tokens){
                         warningTimeout:0,
                         scrolling:true,
                         onInit:function(iframe){
-                            iframe.contentWindow.init_in_page_jump();
+                            var tcard=$(iframe).parents(".card");
+                            if(tcard.attr('id')=='card-0'){
+                                iframe.contentWindow.init_in_page_jump();
+                            }
                         }
     //                            onInit: function(iframe_a){
     //                            },
