@@ -45,15 +45,15 @@ function in_page_jump(ob,entry){//页内跳转
         y = $("#"+id,parent.document).offset().top;
     }else{
         if(ob.parents("html").find('[name="'+entry+'"]').length>0){
-            y = $("#"+id,parent.document).offset().top + ob.parents("html").find('[name="'+entry+'"]').offset().top;
+            y = $("#"+id,parent.document).offset().top + ob.parents("html").find('[name='+entry+']').offset().top;
         }else if(ob.parents("html").find('[id="'+entry+'"]').length>0){
-            y = $("#"+id,parent.document).offset().top + ob.parents("html").find('[id="'+entry+'"]').offset().top;
+            y = $("#"+id,parent.document).offset().top + ob.parents("html").find('[id='+entry+']').offset().top;
         }
 
     }
 
     //进行滚动
-    if(e=="top"||ob.parents("html").find('[name="'+entry+'"]').length>0||ob.parents("html").find('[id="'+entry+'"]').length>0){
+    if(e=="top"||ob.parents("html").find('[name='+entry+']').length>0||ob.parents("html").find('[id='+entry+']').length>0){
         $(window.parent).scrollTop(y);
     }
 
@@ -146,17 +146,20 @@ function ihyperlink(e){
     }
 }
 
-function init_hyperlink(){
-    init_hyperlink_click();
-
+function init_in_page_jump(){
     var inPageJump=$("#card-container",parent.document).attr("in-page-jump");
-    if(inPageJump!=""){
+    if(inPageJump!=""&&typeof(inPageJump)!="undefined"){
         //页内跳转
         //如果inPageJump不为空，说明这是从之前的entry跳转过来的，需要继续跳转锚点
-        var ob=$("a[name='"+inPageJump+"']")||$("a[id='"+inPageJump+"']");
+        var ob=$("[name="+inPageJump+"]").add("[id="+inPageJump+"]");
 
         in_page_jump(ob,inPageJump);
     }
+}
+
+function init_hyperlink(){
+    init_hyperlink_click();
+    //init_in_page_jump();
 }
 
 function init_hyperlink_click(){

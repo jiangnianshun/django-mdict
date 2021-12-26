@@ -247,6 +247,9 @@ function bind_card(iframe,html,tokens){
                         minHeight:550,
                         warningTimeout:0,
                         scrolling:true,
+                        onInit:function(iframe){
+                            iframe.contentWindow.init_in_page_jump();
+                        }
     //                            onInit: function(iframe_a){
     //                            },
     //                            onResized: function(messageData) {
@@ -262,6 +265,9 @@ function bind_card(iframe,html,tokens){
                         heightCalculationMethod:width_calculation_method,
                         warningTimeout:0,
                         scrolling:true,
+                        onInit:function(iframe){
+                            iframe.contentWindow.init_in_page_jump();
+                        }
     //                            onInit: function(iframe_a){
     //                            },
     //                            onResized: function(messageData) {
