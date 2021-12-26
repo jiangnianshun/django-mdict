@@ -167,7 +167,7 @@ function get_items(container,style){
                     if(dic_icon.indexOf("/static")==0){
                         var s=`
                         <div class="col">
-                            <span class='book dic-container' title="${html_escape(dic_name,false)}" data-pk=${dic_pk} data-name="${html_escape(dic_name,false)}" data-file="${html_escape(dic_file,false)}" onclick="start_offcanvas(this)">
+                            <span class='book dic-container' title="${dic_pk}-${html_escape(dic_name,false)}" data-pk=${dic_pk} data-name="${html_escape(dic_name,false)}" data-file="${html_escape(dic_file,false)}" onclick="start_offcanvas(this)">
                                 <img id=${dic_id} src=""></img>
                             </span>
                         </div>
@@ -175,7 +175,7 @@ function get_items(container,style){
                     }else{
                         var s=`
                         <div class="col">
-                            <span class='book dic-container' title="${html_escape(dic_name,false)}" data-pk=${dic_pk} data-name="${html_escape(dic_name,false)}" data-file="${html_escape(dic_file,false)}" onclick="start_offcanvas(this)">
+                            <span class='book dic-container' title="${dic_pk}-${html_escape(dic_name,false)}" data-pk=${dic_pk} data-name="${html_escape(dic_name,false)}" data-file="${html_escape(dic_file,false)}" onclick="start_offcanvas(this)">
                                 <img src="${html_escape(dic_icon,false)}"></img>
                             </span>
                         </div>

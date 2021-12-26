@@ -70,7 +70,6 @@ def get_mdict_dict():
     # 词典结尾是mdx或MDX
     # ntfs下文件名不区分大小写，但ext4下区分大小写
 
-    # os.walk和os.scandir()
     for root, dirs, files in os.walk(mdict_root_path):
         for file in files:
             if file.lower().endswith('.mdx'):
@@ -320,6 +319,7 @@ def init_mdict_list(rewrite_cache):
     global init_vars
     t1 = time.perf_counter()
     print_log_info(['media root path:', mdict_root_path])
+    print_log_info(['audio root path:', audio_path])
 
     rename_history()
 

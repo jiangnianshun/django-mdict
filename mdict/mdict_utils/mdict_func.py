@@ -54,14 +54,31 @@ def set_mdict_path():
     for p in audio_path_list:
         t = False
         if os.path.exists(p):
-            for root, dirs, files in os.walk(p):
-                for file in files:
+            # for root, dirs, files in os.walk(p):
+            #     for file in files:
+            #         if file.lower().endswith('.mdd'):
+            #             audio_path = p
+            #             t = True
+            #             break
+            #     if t:
+            #         break
+
+            # 遍历深度1
+            for file in os.listdir(p):
+                file_path = os.path.join(p, file)
+                if os.path.isfile(file_path):
                     if file.lower().endswith('.mdd'):
                         audio_path = p
                         t = True
                         break
-                if t:
-                    break
+                # else:
+                #     for file2 in os.listdir(file_path):
+                #         file2_path = os.path.join(file_path, file2)
+                #         if os.path.isfile(file2_path):
+                #             if file2.lower().endswith('.mdd'):
+                #                 audio_path = p
+                #                 t = True
+                #                 break
         if t:
             break
 
