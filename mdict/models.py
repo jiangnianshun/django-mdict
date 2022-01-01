@@ -58,7 +58,7 @@ class MdictDicGroup(models.Model):
 
 
 class MyMdictEntryType(models.Model):
-    mdict_type = models.CharField('标签', max_length=100, blank=True, null=True)
+    mdict_type = models.CharField('标签', max_length=100, blank=True, null=True, unique=True)
 
     class Meta:
         verbose_name = '标签'
