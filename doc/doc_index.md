@@ -168,7 +168,7 @@ url是[http://IP地址/api/mdict2/mdict/]()，参数是query:apple,page:1
 
 1. requirements1.txt：必需依赖
 
-django版本需要不小于3.0
+django版本需要3.0以上或者4.0
 
 2. requirements2.txt：python-lzo在windows下需要手动安装
 

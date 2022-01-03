@@ -4,7 +4,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import redirect
-from django.conf.urls import url
+# from django.conf.urls import url
+# url已被废弃，改用re_path。
+from django.urls import re_path
 from django.shortcuts import render
 from django.views.static import serve
 from django.contrib.auth.models import User, Group
@@ -84,9 +86,9 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('font/', redirect_font),
     path('mdict/', include('mdict.urls')),
-    url(r'^admin/', admin.site.urls),
-    url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),  # ckeditor的图片上传
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
+    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),  # ckeditor的图片上传
     path('users/', UserList.as_view()),
     path('users/<pk>/', UserDetails.as_view()),
     path('groups/', GroupList.as_view()),
