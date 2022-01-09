@@ -13,159 +13,58 @@
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
     <style>
         body{
-            background-image:url('/static/img/background.png');
+            background-image:url('/static/img/background.jpg');
             background-repeat:no-repeat;
             background-attachment:fixed;
             background-size:cover;
         }
-        a{text-decoration:none;color:black;}
-        .row{height:10rem;}
-        .col{height:10rem;}
-        .card{height:8rem;background-color:rgba(256,256,256,0.2)}
-        .card-body{color:DarkGray;}
-        .card-body h5{color:black;}
-        .card-body i{color:orange;}
+        a{text-decoration:none;color:black;margin:0.1rem;}
+        .card{background-color:rgba(256,256,256,0.65);}
+        .card-title{color:black;}
+        .card-text{color:Gray;}
         .container{margin-top:2rem;}
     </style>
 </head>
 <body class="bg-light">
 <div class="container">
     <div class="row">
-        <div class="col">
-            <a class="card" href="/mynav/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">导航</h5>
-                    <i class="bi bi-card-heading"></i>
-                    进入本地导航页面
-                </div>
-            </a>
-        </div>
-        <div class="col">
-            <a class="card" href="/mdict/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">词典</h5>
-                    <i class="bi bi-file-break"></i>
-                    进入mdict词典查询页面
-                </div>
-            </a>
-        </div>
-        <div class="col">
-            <a class="card" href="/mdict/es/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">全文搜索</h5>
-                    <i class="bi bi-file-break-fill"></i>
-                    <span class="themes-sub">对mdict进行全文搜索</span>
-                </div>
-            </a>
-        </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <a class="card" href="/mdict/bujian/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">部件检索</h5>
-                    <i class="bi bi-columns-gap"></i>
-                    <span class="themes-sub">打开部件检索页面</span>
-                </div>
-            </a>
-        </div>
-        <div class="col">
-            <a class="card" href="/mdict/wordcloud/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">词云</h5>
-                    <i class="bi bi-book"></i>
-                    <span class="themes-sub">查询历史生成的词云</span>
-                </div>
-            </a>
-        </div>
-        <div class="col">
-            <a class="card" href="/admin" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">管理</h5>
-                    <i class="bi bi-wrench"></i>
-                    <span class="themes-sub">打开admin管理页面</span>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <a class="card" href="/mdict/shelf/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">书架</h5>
-                    <i class="bi bi-columns-gap"></i>
-                    <span class="themes-sub">在书架中浏览词典</span>
-                </div>
-            </a>
-        </div>
-        <div class="col">
-            <a class="card" href="/mdict/shelf2/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">书架2</h5>
-                    <i class="bi bi-columns-gap"></i>
-                    <span class="themes-sub">在书架中浏览词典</span>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <a class="card" href="/mdict/grouping/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">分组</h5>
-                    <i class="bi bi-book"></i>
-                    <span class="themes-sub">对词典进行分组</span>
-                </div>
-            </a>
-        </div>
-        <div class="col">
-            <a class="card" href="/mdict/characters/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">符号</h5>
-                    <i class="bi bi-book"></i>
-                    <span class="themes-sub">一些特殊符号</span>
-                </div>
-            </a>
-        </div>
-        <div class="col">
-            <a class="card" href="/mdict/doc/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">文档</h5>
-                    <i class="bi bi-book"></i>
-                    <span class="themes-sub">打开文档页面</span>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <a class="card" href="/mdict/network/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">内置词条</h5>
-                    <i class="bi bi-book"></i>
-                    <span class="themes-sub">显示内置词条的网状关系图</span>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <a class="card" href="/" target="_self">
-                <div class="card-body">
-                    <h5 class="card-title">主页1</h5>
-                    <i class="bi bi-book"></i>
-                    <span class="themes-sub">打开主页1</span>
-                </div>
-            </a>
-        </div>
-    </div>
-</div>
 </div>
 <script>
     if ('serviceWorker' in navigator) {
       // register service worker
       navigator.serviceWorker.register("/sw.js");
     }
+    $(document).ready(function(){
+        $.ajax({
+            url:"/get_index_sites/",
+            contentType:'json',
+            type:'GET',
+            success:function(data){
+                var site_list=$.parseJSON(data);
+                var site_eles='';
+                for(let i=0;i<site_list.length;i++){
+                    let title=site_list[i]["title"];
+                    let href=site_list[i]["href"];
+                    let brief=site_list[i]["brief"];
+                    let site_ele=`
+                        <div class="col-sm-6 col-lg-4 mb-4">
+                            <a class="card text-center" href="${href}" target="_self">
+                                <div class="card-body">
+                                    <h5 class="card-title">${title}</h5>
+                                    <p class="card-text">${brief}</p>
+                                </div>
+                            </a>
+                        </div>`;
+                    site_eles+=site_ele;
+                }
+                $(".container .row").append(site_eles);
+            },
+            error:function(jqXHR,textStatus,errorThrown){
+                alert(jqXHR.responseText);
+            },
+        });
+    });
 </script>
 </body>
 </html>

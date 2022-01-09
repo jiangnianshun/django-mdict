@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -73,6 +75,12 @@ def main2(request):
     return render(request, 'index2.html')
 
 
+def get_index_sites(request):
+    with open(settings.BASE_DIR + "/static/json/index.json", 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    return HttpResponse(json.dumps(data))
+
+
 def swView(request):
     with open(settings.BASE_DIR + "/static/js/sw.js") as fp:
         return HttpResponse(fp.read(), 'text/javascript')
@@ -81,6 +89,7 @@ def swView(request):
 urlpatterns = [
     path('', main, name='main'),
     path('index2/', main2, name='main2'),
+    path('get_index_sites/', get_index_sites),
     path('mynav/', include('mynav.urls')),
     path('api/', include(router.urls)),  # djangoresrframework生成的url
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
