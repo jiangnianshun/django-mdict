@@ -1295,7 +1295,7 @@ def get_dic_info(request):
 def mdict_index(request):
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
-    return render(request, 'mdict/index1.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
+    return render(request, 'mdict/index.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
 
 
 def wordcloud(request):
@@ -1887,7 +1887,7 @@ def getwordlist(request):
 def es_index(request):
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
-    return render(request, 'mdict/es-index1.html', {'query': query, 'type': 'es', 'is_mobile': is_mb})
+    return render(request, 'mdict/es-index.html', {'query': query, 'type': 'es', 'is_mobile': is_mb})
 
 
 def mdict_dic(request, *args):
