@@ -1,7 +1,7 @@
 from django.contrib import admin
 import subprocess
 from elasticsearch import Elasticsearch
-from mdict.mdict_utils.mdict_config import *
+from base.base_config import *
 from base.sys_utils import check_system
 from .models import MdictDic, MdictOnline, MyMdictEntry, MyMdictItem, MyMdictEntryType, MdictDicGroup
 

@@ -1,7 +1,6 @@
 import json
 import math
 import mimetypes
-import os
 import re
 import time
 import csv
@@ -21,20 +20,18 @@ from elasticsearch_dsl import Search, Index
 from elasticsearch_dsl.query import MultiMatch
 from elasticsearch.exceptions import ConnectionError, TransportError
 
-from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h, kh2f, print_log_info, \
-    ROOT_DIR
+from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h, kh2f, print_log_info
 from base.base_func2 import is_mobile
 from base.base_func3 import t2s, s2t
 from base.base_constant import builtin_dic_prefix
 from base.sys_utils import check_system
 
-from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs, check_xapian, \
-    clear_duplication
+from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs, check_xapian
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
 from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
 from mdict.mdict_utils.loop_decorator import loop_mdict_list, innerObject
 from mdict.mdict_utils.init_utils import init_vars, sound_list
-from mdict.mdict_utils.mdict_config import *
+from base.base_config import *
 from mdict.mdict_utils.search_object import SearchObject
 from mdict.mdict_utils.search_utils import search, search_bultin_dic_sug, search_mdx_sug, \
     search_revise, get_mdict_content
@@ -1298,7 +1295,7 @@ def get_dic_info(request):
 def mdict_index(request):
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
-    return render(request, 'mdict/index.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
+    return render(request, 'mdict/index1.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
 
 
 def wordcloud(request):
@@ -1890,7 +1887,7 @@ def getwordlist(request):
 def es_index(request):
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
-    return render(request, 'mdict/es-index.html', {'query': query, 'type': 'es', 'is_mobile': is_mb})
+    return render(request, 'mdict/es-index1.html', {'query': query, 'type': 'es', 'is_mobile': is_mb})
 
 
 def mdict_dic(request, *args):

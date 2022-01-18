@@ -35,7 +35,8 @@ default_config = {
         'builtin_dic_enable': True,  # 启用内置词典
         'es_host': 'http://127.0.0.1:9200/',
         'open_path_enable': True,  # 是否允许打开本地词典路径
-        'ws_server_port': 8766  # windows下启用ws_server的端口号，8765是anki connect的默认端口。
+        'ws_server_port': 8766,  # windows下启用ws_server的端口号，8765是anki connect的默认端口。
+        'index_id': 1,
     },
     'SEARCH': {
         'merge_entry_max_length': 1000,
@@ -137,17 +138,17 @@ def create_config():
         config_permission = False
 
 
-def add_or_edit_config_section(sec_name, sec):
-    global config_permission
-    con = get_config()
-    con[sec_name.upper()] = sec
-    try:
-        with open(user_config_path, 'w', encoding='utf-8') as f:
-            con.write(f)
-        os.chmod(user_config_path, 0o777)
-    except PermissionError as e:
-        print(e)
-        config_permission = False
+# def add_or_edit_config_section(sec_name, sec):
+#     global config_permission
+#     con = get_config()
+#     con[sec_name.upper()] = sec
+#     try:
+#         with open(user_config_path, 'w', encoding='utf-8') as f:
+#             con.write(f)
+#         os.chmod(user_config_path, 0o777)
+#     except PermissionError as e:
+#         print(e)
+#         config_permission = False
 
 
 def set_config(sec, save_config):
@@ -163,6 +164,19 @@ def set_config(sec, save_config):
     except PermissionError as e:
         print(e)
         config_permission = False
+
+
+def get_index_name():
+    index_id = get_config_con('index_id')
+    if isinstance(index_id, str):
+        index_id = 1
+    index_name = 'index' + str(index_id) + '.html'
+    index_path = os.path.join(ROOT_DIR, 'templates', index_name)
+    if os.path.exists(index_path):
+        return index_name
+    else:
+        set_config('COMMON', {'index_id': 1})
+        return 'index1.html'
 
 
 if not os.path.exists(user_config_path):

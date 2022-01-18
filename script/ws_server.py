@@ -9,10 +9,10 @@ root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(root_path)
 
 from mdict.mdict_utils.multi_process import multiprocess_search_mdx, create_process_pool, \
-    get_cpu_num, pre_pool_search
+    get_cpu_num
 from mdict.mdict_utils.object_coder import objectEncoder
 from mdict.mdict_utils.init_utils import init_mdict_list
-from mdict.mdict_utils.mdict_config import get_config_con
+from base.base_config import get_config_con
 
 prpool = None
 

@@ -1,9 +1,9 @@
 import copy
 import os
 from base.base_func import ROOT_DIR
-from .mdict_config import get_config_con
+from base.base_config import get_config_con
 from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
-from .init_utils import init_vars, read_pickle_file, sort_mdict_list
+from .init_utils import read_pickle_file, sort_mdict_list
 from .search_object import SearchObject
 from .mdict_func import get_dic_attrs
 from .dic_object import dicObject

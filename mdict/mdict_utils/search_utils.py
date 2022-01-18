@@ -13,10 +13,10 @@ from base.sys_utils import check_system
 from mdict.models import MyMdictEntry, MyMdictItem
 from .entry_object import entryObject
 from .loop_search import loop_search_sug
-from .mdict_config import get_config_con, get_cpu_num
+from base.base_config import get_config_con, get_cpu_num
 from .ws_client import ws_search
 
-from .multi_process import create_process_pool, multiprocess_search_mdx, pre_pool_search
+from .multi_process import create_process_pool, multiprocess_search_mdx
 from .multi_thread import create_thread_pool, multithread_search_mdx, multithread_search_sug
 
 prpool = None

@@ -156,11 +156,9 @@ url是[http://IP地址/api/mdict2/mdict/]()，参数是query:apple,page:1
 
 访问[http://IP地址/api/mdict2/mdict/?query=apple&page=2&format=json]()
 
-#### 主页2
+#### 切换主页
 
-替换主页2背景图：主页2通过替换/static/img/background.png来替换背景图片。
-
-交换主页1和主页2：交换/templates/下index.html和index2.html的名字。
+在config.ini中修改index_id的值（1或2）。
 
 ### 依赖
 

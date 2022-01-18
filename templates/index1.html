@@ -1,0 +1,67 @@
+{% extends "index-base.html" %}
+
+{% block style %}
+<style>
+    a{text-decoration:none;color:black;}
+    .row{height:10rem;}
+    .col{height:10rem;}
+    .card{height:8rem;}
+    .card-body{color:gray;}
+    .card-body h5{color:black;}
+    .card-body i{color:orange;}
+    .container{margin-top:2rem;}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container"></div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url:"/get_index_sites/",
+            contentType:'json',
+            type:'GET',
+            success:function(data){
+                var site_list=$.parseJSON(data);
+                var row_eles='';
+                var row_num=[3,3,2,3,1,1];
+                var site_num=0;
+                for(let r=0;r<row_num.length;r++){
+                    let tmp_eles='';
+                    for(let i=0;i<row_num[r];i++){
+                        if(site_num>=site_list.length){break;}
+                        let title=site_list[site_num]["title"];
+                        let href=site_list[site_num]["href"];
+                        let brief=site_list[site_num]["brief"];
+                        let site_ele=`
+                            <div class="col">
+                                <a class="card" href="${href}" target="_self">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${title}</h5>
+                                        <i class="bi bi-card-heading"></i>
+                                        <span class="card-text">${brief}</span>
+                                    </div>
+                                </a>
+                            </div>`;
+                        tmp_eles+=site_ele;
+                        site_num+=1;
+                    }
+                    let row_ele=`
+                    <div class="row">
+                        ${tmp_eles}
+                    </div>
+                    `
+                    row_eles+=row_ele;
+                }
+                $(".container").append(row_eles);
+            },
+            error:function(jqXHR,textStatus,errorThrown){
+                alert(jqXHR.responseText);
+            },
+        });
+    });
+</script>
+{% endblock %}

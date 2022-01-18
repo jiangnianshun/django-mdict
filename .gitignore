@@ -43,4 +43,5 @@ auto_tool.bat
 auto_tool.py
 /mdict/readlib/src/readmdict-py3/
 !/static/json/manifest.json
+!/static/json/index.json
 !/media/char/characters.json

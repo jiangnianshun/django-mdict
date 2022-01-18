@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='/static/mdict/img/shortcut.png' rel='shortcut icon' type='image/x-icon'/>
+    <link rel="apple-touch-icon" sizes="512x512" href="/static/mdict/img/book512_square.png">
+    <link rel="manifest" href="/static/json/manifest.json">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link href="/static/bootstrap/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="/static/jquery/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    {% block style %}{% endblock %}
+</head>
+<body class="bg-light">
+    {% block content %}{% endblock %}
+</body>
+<script>
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register("/sw.js");
+    }
+</script>
+{% block script %}{% endblock %}
+</html>

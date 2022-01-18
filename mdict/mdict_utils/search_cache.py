@@ -1,4 +1,4 @@
-from mdict.mdict_utils.mdict_config import get_config_con
+from base.base_config import get_config_con
 
 _key_cache = {}
 

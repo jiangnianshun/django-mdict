@@ -737,7 +737,7 @@ class ZIMFile:
     @staticmethod
     def search_articles(file, zim, location):
         is_article = True  # assume an article is requested, for now
-        if location in ["/", "/index.htm", "/index.html",
+        if location in ["/", "/index.htm", "/index1.html",
                         "/main.htm", "/main.html"]:
             # ... return the main page as the article
             article = zim.get_main_page(file)

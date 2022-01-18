@@ -1,25 +1,24 @@
 import json
 
-from django.contrib import admin
-from django.urls import path, include
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.contrib.auth.models import User, Group
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.shortcuts import render
+from django.urls import path, include
 # from django.conf.urls import url
 # url已被废弃，改用re_path。
 from django.urls import re_path
-from django.shortcuts import render
 from django.views.static import serve
-from django.contrib.auth.models import User, Group
-from django.http import HttpResponse
-
-from mysite.settings import MEDIA_ROOT
-
-from rest_framework import routers
 from rest_framework import generics, permissions, serializers
+from rest_framework import routers
 
+from base.base_config import get_index_name
 from mdict import views as views_mdict
+from mysite.settings import MEDIA_ROOT
 
 admin.autodiscover()
 
@@ -68,7 +67,7 @@ def redirect_font(request):  # url重定向
 
 
 def main(request):
-    return render(request, 'index.html')
+    return render(request, get_index_name())
 
 
 def main2(request):
@@ -88,7 +87,6 @@ def swView(request):
 
 urlpatterns = [
     path('', main, name='main'),
-    path('index2/', main2, name='main2'),
     path('get_index_sites/', get_index_sites),
     path('mynav/', include('mynav.urls')),
     path('api/', include(router.urls)),  # djangoresrframework生成的url

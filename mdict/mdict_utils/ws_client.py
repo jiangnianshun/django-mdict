@@ -4,7 +4,7 @@ import websockets
 import json
 
 from mdict.mdict_utils.object_coder import objectDecoder
-from mdict.mdict_utils.mdict_config import get_config_con
+from base.base_config import get_config_con
 
 
 async def search(params):
