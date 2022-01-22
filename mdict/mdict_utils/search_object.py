@@ -272,7 +272,7 @@ class SearchObject:
         if is_local:
             t_path = '/' + self.m_path + '/' + self.mdx.get_fname() + '.' + ext
         else:
-            t_path = '/mdict/exfile/?path=' + self.m_path + '/' + quote(self.mdx.get_fname()) + '.' + ext
+            t_path = '/mdict/getexfile/?path=' + self.m_path + '/' + quote(self.mdx.get_fname()) + '.' + ext
         return t_path
 
     def check_same_name_css_js(self, record):  # 加载同名css和js
@@ -513,7 +513,7 @@ class SearchObject:
         return matched.group(1) + '/' + self.m_path + '/' + matched.group(2)
 
     def substitute_css_path_2(self, matched):
-        return matched.group(1) + '/mdict/exfile/?path=' + self.m_path + '/' + matched.group(2)
+        return matched.group(1) + '/mdict/getexfile/?path=' + self.m_path + '/' + matched.group(2)
 
     # 处理LINK指向的词条内容还是LINK的情况
     # 有两种情况：
@@ -649,7 +649,7 @@ class SearchObject:
         #     if is_local:
         #         return str(matched.group(1)) + '/' + self.m_path + '/' + str(res_name) + str(matched.group(3))
         #     else:
-        #         return str(matched.group(1)) + '/mdict/exfile/?path=' + self.m_path + '/' + \
+        #         return str(matched.group(1)) + '/mdict/getexfile/?path=' + self.m_path + '/' + \
         #                str(res_name) + str(matched.group(3))
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
         return str(matched.group(1)) + '/mdict/' + str(self.dic_id) + '/' + quote(str(res_name)) + \
@@ -704,7 +704,7 @@ class SearchObject:
         #                str(res_name) + delimiter_r
         #     else:
         #         return str(matched.group(1)) + str(matched.group(2)) + \
-        #                delimiter_l + '/mdict/exfile/?path=' + self.m_path + '/' + str(res_name) + delimiter_r
+        #                delimiter_l + '/mdict/getexfile/?path=' + self.m_path + '/' + str(res_name) + delimiter_r
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
 
         # return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \

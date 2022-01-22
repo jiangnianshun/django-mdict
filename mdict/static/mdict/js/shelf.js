@@ -135,7 +135,7 @@ function init_cols(){
 function get_items(container,style){
     if(style==2){init_canvas();}
     $.ajax({
-        url:"/mdict/mdictlist/",
+        url:"/mdict/getmdictlist/",
         contentType:'json',
         type:'GET',
         success:function(data){
@@ -258,7 +258,7 @@ function get_header(container, dic_pk, dic_name, type){
 
     var data={"dic_pk":dic_pk,"is_dic":false};
     $.ajax({
-        url:"/mdict/header/",
+        url:"/mdict/getdicinfo/",
         contentType:'json',
         data:data,
         type:'GET',
@@ -416,7 +416,7 @@ function start_dic_filter(group_pk){
 
 function init_dropdown(){
     $.ajax({
-        url:"/mdict/dicgroup/",
+        url:"/mdict/getdicgroup/",
         contentType:'json',
         type:'GET',
         success:function(data){

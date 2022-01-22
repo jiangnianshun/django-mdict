@@ -945,7 +945,7 @@ function query_scroll(p1,p2,num,direction){
     var dic_pk=$("html").attr("data-dic-pk");
     var data={"p1":p1,"p2":p2,"num":num,"direction":direction,"dic_pk":dic_pk};
     $.ajax({
-        url:"/mdict/allentrys/",
+        url:"/mdict/getentrylist/",
         contentType:'json',
         type:'GET',
         data:data,
@@ -986,7 +986,7 @@ function query_scroll(p1,p2,num,direction){
 function set_mdict_enable(obj){
     var data={"mdict_pk":$(obj).attr("data-pk"),"mdict_enable":$(obj).prop("checked")};
     $.ajax({
-        url:"/mdict/mdictenable/",
+        url:"/mdict/setmdictenable/",
         contentType:'json',
         type:'GET',
         data:data,
@@ -1030,7 +1030,7 @@ function set_all_mdict_enable(obj){
 function set_all_mdict_ajax(dic_list,o_check){
     data={'dic_list':dic_list,"mdict_enable":o_check};
     $.ajax({
-        url:"/mdict/mdictenable/",
+        url:"/mdict/setmdictenable/",
         contentType:'json',
         type:'GET',
         traditional: true,
@@ -1046,7 +1046,7 @@ function set_all_mdict_ajax(dic_list,o_check){
 
 function get_mdict_list(container, es_icon_enable, es_page_enable){//载入词典列表
     $.ajax({
-        url:"/mdict/mdictlist/",
+        url:"/mdict/getmdictlist/",
         contentType:'json',
         type:'GET',
         success:function(data){
@@ -1186,7 +1186,7 @@ function get_index_status(){
 function get_header(container){
     var data={"dic_pk":$("html").attr("data-dic-pk")};
     $.ajax({
-        url:"/mdict/header/",
+        url:"/mdict/getdicinfo/",
         contentType:'json',
         data:data,
         type:'GET',

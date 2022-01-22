@@ -1026,7 +1026,7 @@ def get_icon_path(mdx, icon):
                 t_path = file
             else:
                 t_path = m_path + '/' + file
-            dic_icon = '/mdict/exfile/?path=' + t_path + '.' + icon
+            dic_icon = '/mdict/getexfile/?path=' + t_path + '.' + icon
     return dic_icon
 
 
@@ -1230,7 +1230,7 @@ def search_mdd(request, *args):
 
 
 @loop_mdict_list(return_type=1)
-class mdict_all_entrys_object(innerObject):
+class get_entry_list_object(innerObject):
     def inner_search(self, mdx, mdd_list, g_id, icon, dict_file, dic):
         if dic.pk == self.target_pk:
             entry_list, r_s_p1, r_s_p2, r_e_p1, r_e_p2 = SearchObject(mdx, mdd_list, get_dic_attrs(dic), '') \
@@ -1239,7 +1239,7 @@ class mdict_all_entrys_object(innerObject):
             self.break_tag = True
 
 
-def mdict_all_entrys(request):
+def get_entry_list(request):
     dic_pk = int(request.GET.get('dic_pk', -1))
     p1 = int(request.GET.get('p1', 0))
     p2 = float(request.GET.get('p2', 0))
@@ -1250,7 +1250,7 @@ def mdict_all_entrys(request):
     # if p1 == -1 or p2 == -1:
     #     return HttpResponse(json.dumps(entry_list))
 
-    return_dict = mdict_all_entrys_object(
+    return_dict = get_entry_list_object(
         {'target_pk': dic_pk, 'p1': p1, 'p2': p2, 'num': num, 'direction': direction})
     return HttpResponse(json.dumps(return_dict))
 

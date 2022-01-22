@@ -311,7 +311,7 @@ function init_dropdown(){
     $("#group-list").text("分组");
     $("#group-list").attr("data-pk",0);
     $.ajax({
-        url:"/mdict/dicgroup/",
+        url:"/mdict/getdicgroup/",
         contentType:'json',
         type:'GET',
         success:function(data){

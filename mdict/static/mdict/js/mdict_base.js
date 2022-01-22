@@ -229,11 +229,11 @@ function add_click_event(){
         $("#query").autocomplete("close");//按下enter键时关闭autocomplete下拉框
         document.activeElement.blur();//收回手机浏览器的软键盘
 
-        //var modal_brief=$('#modal-container-brief');
+        //var modal_brief=$('#mdict-modal-brief');
         //if(modal_brief.length>0){
             //modal_brief.modal('hide');
         //}
-        //当#modal-container-brief中的entry点击时，触发#mdictquery的点击查询，此时要关闭#modal-container-brief。
+        //当#mdict-modal-brief中的entry点击时，触发#mdictquery的点击查询，此时要关闭#mdict-modal-brief。
 
         var dic_pk=$("html").attr("data-dic-pk");
         var query=$('#query').val();
@@ -639,7 +639,7 @@ function get_pk_in_group(){
 
 function get_dic_group(container){//载入词典列表
     $.ajax({
-        url:"/mdict/dicgroup/",
+        url:"/mdict/getdicgroup/",
         contentType:'json',
         type:'GET',
         async:false,
@@ -1074,7 +1074,7 @@ function init_dic_range(){
 }
 
 function init_single_dic(){
-    get_header($("#modal-container-brief .modal-body"));
+    get_header($("#mdict-modal-brief .modal-body"));
 
     init_dic_range();
 
@@ -1088,7 +1088,7 @@ function init_single_dic(){
 }
 
 function init_es_dic(){
-    get_header($("#modal-container-brief .modal-body"));
+    get_header($("#mdict-modal-brief .modal-body"));
 
     init_common();
 
@@ -1114,7 +1114,7 @@ function get_main_page(){
 }
 
 function init_zim_dic(){
-    get_header($("#modal-container-brief .modal-body"));
+    get_header($("#mdict-modal-brief .modal-body"));
 
     init_common();
 
