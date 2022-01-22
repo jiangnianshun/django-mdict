@@ -31,7 +31,7 @@
             {% endif %}
             {% if type == 'dic' or type == 'esdic' or type == 'zim' %}
             <div class="input-group float-end">
-                <a class="btn" data-bs-toggle="modal" data-bs-target="#modal-container-brief" id="modal-brief">
+                <a class="btn" data-bs-toggle="modal" data-bs-target="#mdict-modal-brief" id="modal-brief">
                 {{ name }}</a>
             </div>
             {% endif %}
@@ -42,8 +42,8 @@
                     <span class="btn mdict-icon" id="btn-es">全</span>
                 {% endif %}
                 <span class="btn mdict-icon" id="btn-bujian">部</span>
-                <i class="bi bi-journal-bookmark-fill btn mdict-icon" id="modal-mdict" data-bs-toggle="modal" data-bs-target="#modal-container-mdict"></i>
-                <i class="bi bi-gear-fill btn mdict-icon" id="modal-config" data-bs-toggle="modal" data-bs-target="#modal-container-config"></i>
+                <i class="bi bi-journal-bookmark-fill btn mdict-icon" id="modal-mdict" data-bs-toggle="modal" data-bs-target="#mdict-modal-list"></i>
+                <i class="bi bi-gear-fill btn mdict-icon" id="modal-config" data-bs-toggle="modal" data-bs-target="#mdict-modal-config"></i>
                 {% if type == 'es' or type == 'dic' or type == 'esdic' or type == 'zim' %}
                     <i class="bi bi-house-door-fill btn mdict-icon" id="btn-home"></i>
                 {% endif %}

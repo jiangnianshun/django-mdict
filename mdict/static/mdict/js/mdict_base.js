@@ -527,7 +527,7 @@ function init_modal_config(){
 
     init_online_dic_var();
 
-    var modal_container_mdict = document.getElementById('modal-container-mdict')
+    var modal_container_mdict = document.getElementById('mdict-modal-list')
 
     modal_container_mdict.addEventListener('shown.bs.modal', function () {
         set_dic_num();
