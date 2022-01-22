@@ -13,18 +13,18 @@
 <script>
 function get_md(doc_path){
     $.ajax({
-		url:"/mdict/doc/"+doc_path,
-		contentType:'json',
-		type:'GET',
-		success:function(data){
-		    document.getElementById('content').innerHTML=marked(data);
-		    $("a").click(ihyperlink);
-		    $('html,body').animate({scrollTop:0},'fast');
-		},
-		error:function(jqXHR,textStatus,errorThrown){
-			alert(jqXHR.responseText);
-		},
-	});
+        url:"/mdict/doc/"+doc_path,
+        contentType:'json',
+        type:'GET',
+        success:function(data){
+            document.getElementById('content').innerHTML=marked(data);
+            $("a").click(ihyperlink);
+            $('html,body').animate({scrollTop:0},'fast');
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 function push_state(doc_path){
     window.history.pushState({'path':doc_path},doc_path,doc_path);

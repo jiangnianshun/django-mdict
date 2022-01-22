@@ -1295,7 +1295,7 @@ def get_dic_info(request):
 def mdict_index(request):
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
-    return render(request, 'mdict/index.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
+    return render(request, 'mdict/mdict-index.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
 
 
 def wordcloud(request):
@@ -1887,7 +1887,7 @@ def getwordlist(request):
 def es_index(request):
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
-    return render(request, 'mdict/es-index.html', {'query': query, 'type': 'es', 'is_mobile': is_mb})
+    return render(request, 'mdict/mdict-es-index.html', {'query': query, 'type': 'es', 'is_mobile': is_mb})
 
 
 def mdict_dic(request, *args):
@@ -1907,10 +1907,10 @@ def mdict_dic(request, *args):
     mdx = item.mdx
     if mdx.get_fpath().endswith('.zim'):
         # isinstance(mdx, ZIMFile)判断不可靠
-        return render(request, 'mdict/zim.html',
+        return render(request, 'mdict/mdict-zim.html',
                       {'dic_pk': dic_pk, 'name': dic_name, 'query': '', 'type': 'zim', 'is_mobile': is_mb})
     else:
-        return render(request, 'mdict/dic.html',
+        return render(request, 'mdict/mdict-dic.html',
                       {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'dic', 'is_mobile': is_mb})
 
 
@@ -1924,7 +1924,7 @@ def es_dic(request, *args):
     dic_name = MdictDic.objects.get(pk=dic_pk).mdict_name
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
-    return render(request, 'mdict/es-dic.html',
+    return render(request, 'mdict/mdict-es-dic.html',
                   {'dic_pk': dic_pk, 'name': dic_name, 'query': query, 'type': 'esdic', 'is_mobile': is_mb})
 
 
