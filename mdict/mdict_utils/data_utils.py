@@ -4,7 +4,7 @@ from django.core.exceptions import AppRegistryNotReady
 from django.db.utils import OperationalError as DjangoError
 from sqlite3 import OperationalError as Sqlite3Error
 from mdict.mdict_utils.init_utils import init_vars
-from base.base_func import read_from_sqlite, ROOT_DIR
+from base.base_func import read_from_sqlite, ROOT_DIR, print_log_info
 from base.sys_utils import check_module_import
 
 try:
@@ -62,7 +62,7 @@ def check_dic_in_group(group_pk, dic_pk):
 
 def init_database():
     try:
-        print('init database')
+        print_log_info('initializing database')
         update_list = []
         all_dics = MdictDic.objects.all()
         for k, v in init_vars.mdict_odict.items():

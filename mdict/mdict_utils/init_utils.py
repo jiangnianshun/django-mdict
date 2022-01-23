@@ -13,13 +13,13 @@ from .mdict_func import rename_history, check_xapian
 try:
     from mdict.readlib.lib.readzim import ZIMFile
 except ImportError as e:
-    print_log_info('loading readzim lib failed!', 1)
+    # print_log_info('loading readzim lib failed!', 1)
     from mdict.readlib.src.readzim import ZIMFile
 
 try:
     from mdict.readlib.lib.readmdict import MDX, MDD
 except ImportError as e:
-    print_log_info('loading readmdict lib failed!', 1)
+    # print_log_info('loading readmdict lib failed!', 1)
     from mdict.readlib.src.readmdict import MDX, MDD
 
 from .mdict_func import mdict_root_path, audio_path
@@ -317,8 +317,6 @@ def write_dir_change():
 def init_mdict_list(rewrite_cache):
     global init_vars
     t1 = time.perf_counter()
-    print_log_info(['media root path:', mdict_root_path])
-    print_log_info(['audio root path:', audio_path])
 
     rename_history()
 
@@ -346,6 +344,8 @@ def init_mdict_list(rewrite_cache):
         init_zim_list()
         print_log_info('reading from cache file', 0, t1, time.perf_counter())
 
+    print_log_info(['media root path:', mdict_root_path])
+    print_log_info(['audio root path:', audio_path])
     print_log_info(['dictionary counts', len(init_vars.mdict_odict)])
-    print_log_info('initializing', 0, t1, time.perf_counter())
+
     return init_vars

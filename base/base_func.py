@@ -30,6 +30,7 @@ def get_log_header(mod_name, debug_level, start=-1, end=-1):
 
 
 def print_log_info(log_content='', debug_level=0, start=-1, end=-1):
+    global glog
     prev_frame = inspect.getframeinfo(inspect.currentframe().f_back)
     # currentframe()是当前函数，f_back是上一帧，即调用函数
     # prev_frame,0是文件路径，1是行数，2是函数名（如果不在函数里，显示<module>），3显示调用本函数的那一行代码，4索引
@@ -49,6 +50,28 @@ def print_log_info(log_content='', debug_level=0, start=-1, end=-1):
         log_text = log_text[1:]
 
     print(get_log_header(mod_name, debug_level, start, end), log_text)
+
+
+def check_readlib():
+    try:
+        from mdict.readlib.lib.pureSalsa20 import Salsa20
+    except ImportError as e:
+        print_log_info('loading mdict.readlib.lib.pureSalsa20 failed!', 1)
+
+    try:
+        from mdict.readlib.lib.ripemd128 import ripemd128
+    except ImportError as e:
+        print_log_info('loading mdict.readlib.lib.ripemd128 failed!', 1)
+
+    try:
+        from mdict.readlib.lib.readmdict import MDX, MDD
+    except ImportError as e:
+        print_log_info('loading mdict.readlib.lib.readmdict failed!', 1)
+
+    try:
+        from mdict.readlib.lib.readzim import ZIMFile
+    except ImportError as e:
+        print_log_info('loading mdict.readlib.lib.readzim failed!', 1)
 
 
 def get_running_time(start, end):
@@ -235,8 +258,8 @@ def item_order(obj, mdl, type):
 
     for i in range(item_list_len):
         if i + 1 < priority:
-            if i + 1 != eval('item_list[i].'+attr1):
-                eval('item_list.filter(pk=item_list[i].pk).update('+attr1+'=i + 1)')
+            if i + 1 != eval('item_list[i].' + attr1):
+                eval('item_list.filter(pk=item_list[i].pk).update(' + attr1 + '=i + 1)')
         elif i + 1 >= priority:
-            if i + 2 != eval('item_list[i].'+attr1):
-                eval('item_list.filter(pk=item_list[i].pk).update('+attr1+'=i + 2)')
+            if i + 2 != eval('item_list[i].' + attr1):
+                eval('item_list.filter(pk=item_list[i].pk).update(' + attr1 + '=i + 2)')

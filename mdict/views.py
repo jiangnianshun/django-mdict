@@ -47,7 +47,7 @@ from .mdict_utils.anki import create_deck, get_decks, add_note
 try:
     from mdict.readlib.lib.readzim import ZIMFile
 except ImportError as e:
-    print_log_info('loading readzim lib failed!', 1)
+    # print_log_info('loading readzim lib failed!', 1)
     from mdict.readlib.src.readzim import ZIMFile
 
 if check_xapian():

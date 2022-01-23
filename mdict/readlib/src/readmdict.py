@@ -30,13 +30,13 @@ from struct import pack, unpack
 try:
     from mdict.readlib.lib.pureSalsa20 import Salsa20
 except ImportError as e:
-    print(e, 'loading pureSalsa20 lib failed!')
+    # print(e, 'loading pureSalsa20 lib failed!')
     from mdict.readlib.src.pureSalsa20 import Salsa20
 
 try:
     from mdict.readlib.lib.ripemd128 import ripemd128
 except ImportError as e:
-    print(e, 'loading ripemd128 lib failed!')
+    # print(e, 'loading ripemd128 lib failed!')
     from mdict.readlib.src.ripemd128 import ripemd128
 
 # from ripemd128 import ripemd128
