@@ -5,11 +5,10 @@ import time
 import os
 
 from base.base_func import print_log_info, guess_mime, ROOT_DIR
-from base.sys_utils import get_sys_name, print_sys_info
+from base.sys_utils import get_sys_name
 from base.base_config import set_cpu_num, get_cpu_num
 from .mdict_func import rename_history, check_xapian
 
-print_sys_info()
 
 try:
     from mdict.readlib.lib.readzim import ZIMFile
