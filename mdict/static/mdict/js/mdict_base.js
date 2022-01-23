@@ -949,7 +949,12 @@ function init_common(){
 
     init_dic_group();
 
-    init_anki_modal()
+    try{
+        init_anki_modal();
+        //cefpython中ckeditor5的Object.fromEntries不存在，进而导致报错ClassicEditor is not defined。
+    }catch(e){
+        console.log(e);
+    }
 
     init_resize_listener();
 

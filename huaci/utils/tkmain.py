@@ -75,6 +75,8 @@ class MainWindow:
         # 宽度x高度+左端距离+上端距离
 
         settings = {'cache_path': 'huaci.cache'}
+        # cefpython调试
+        # settings.update({'debug': True, "log_severity": cef.LOGSEVERITY_INFO})
 
         if 'auto_zooming' in cef_config.keys():
             settings.update({'auto_zooming': cef_config['auto_zooming']})
