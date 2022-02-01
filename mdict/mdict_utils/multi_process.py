@@ -21,11 +21,11 @@ def create_process_pool():
     return multiprocessing.Pool(processes=cnum)
 
 
-# def pre_pool_search(prpool, tinit_vars=None):
-#     # 预热，避免第一次查询等待。
-#     cnum = get_cpu_num()
-#     q_list = ((i, ['bananapie'], 0, True, tinit_vars) for i in range(cnum))
-#     prpool.starmap(multiprocess_search_mdx, q_list)
+def pre_pool_search(prpool):
+    # 预热，避免第一次查询等待。
+    cnum = get_cpu_num()
+    q_list = ((i, ['bananapie'], 0, True) for i in range(cnum))
+    prpool.starmap(multiprocess_search_mdx, q_list)
 
 
 def terminate_pool(pool):

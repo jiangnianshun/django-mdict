@@ -16,14 +16,14 @@ from .loop_search import loop_search_sug
 from base.base_config import get_config_con, get_cpu_num
 from .ws_client import ws_search
 
-from .multi_process import create_process_pool, multiprocess_search_mdx
+from .multi_process import create_process_pool, multiprocess_search_mdx, pre_pool_search
 
 prpool = None
 thpool = None
 
 if check_system() == 0:
     prpool = create_process_pool()
-    # pre_pool_search(prpool)
+    pre_pool_search(prpool)
 # else:
 #     thpool = create_thread_pool()
 

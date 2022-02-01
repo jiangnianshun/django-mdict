@@ -9,7 +9,7 @@ root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(root_path)
 
 from mdict.mdict_utils.multi_process import multiprocess_search_mdx, create_process_pool, \
-    get_cpu_num
+    get_cpu_num, pre_pool_search
 from mdict.mdict_utils.object_coder import objectEncoder
 from base.base_config import get_config_con
 
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     prpool = create_process_pool()
     cnum = get_cpu_num()
 
-    # pre_pool_search(prpool, init_vars)
+    pre_pool_search(prpool)
     # 当引用全局变量init_vars的时候
     # windows下ws_server第一次查询时
     # 1.在asyncio内且各进程独自读取缓存，占用内存一直大于正常值但不到100%；
