@@ -120,12 +120,12 @@ def search_mdx_sug(dic_pk, sug_list, group, flag):
             sug.extend(ws_search(sug_list, group, 'sug'))
         except Exception as e:
             print(e)
-            if thpool is None:
-                thpool = create_thread_pool()
-            q_list = ((i, sug_list, group) for i in range(cnum))
-            record_list = thpool.starmap(multithread_search_sug, q_list)
-            for r in record_list:
-                sug.extend(r)
+            # if thpool is None:
+            #     thpool = create_thread_pool()
+            # q_list = ((i, sug_list, group) for i in range(cnum))
+            # record_list = thpool.starmap(multithread_search_sug, q_list)
+            # for r in record_list:
+            #     sug.extend(r)
     else:  # 单个词典的查询提示
         sug.extend(loop_search_sug(dic_pk, sug_list, flag, group))
 

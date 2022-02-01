@@ -1,5 +1,6 @@
 import copy
 import os
+import gc
 from base.base_func import ROOT_DIR
 from base.base_config import get_config_con
 from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
@@ -19,6 +20,7 @@ all_dics = get_all_dics()
 pickle_file_path = os.path.join(ROOT_DIR, '.cache', '.Windows.cache')
 
 init_vars = initVars()
+k_list = []
 
 
 def merge_record(record_list):
@@ -88,29 +90,38 @@ def merge_record(record_list):
     return record_list
 
 
-def init_obj():
-    global init_vars
+def init_obj(proc_flag):
+    global init_vars, k_list
     init_vars.mdict_odict = read_pickle_file(pickle_file_path, mdict_root_path)
     init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
     init_vars.mtime = os.path.getmtime(pickle_file_path)
 
+    temp_list = []
+    k_list = []
+    for k in init_vars.indicator[proc_flag]:
+        k_list.append(k)
+        temp_list.append(init_vars.mdict_odict[k])
+
+    init_vars.mdict_odict = temp_list
+
 
 def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
-    global init_vars
+    global init_vars, k_list
     r_list = []
 
     if init_vars is None:
-        init_obj()
+        init_obj(n)
     else:
         if init_vars.mtime is None:
-            init_obj()
+            init_obj(n)
         else:
             now_mtime = os.path.getmtime(pickle_file_path)
             if init_vars.mtime < now_mtime:
-                init_obj()
+                init_obj(n)
 
-    for k in init_vars.indicator[n]:
-        temp_object = init_vars.mdict_odict[k]
+    for i in range(len(init_vars.mdict_odict)):
+        temp_object = init_vars.mdict_odict[i]
+        k = k_list[i]
         mdx = temp_object.mdx
         mdd_list = temp_object.mdd_list
         g_id = temp_object.g_id
