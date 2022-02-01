@@ -3,7 +3,7 @@ import os
 
 from base.base_func import ROOT_DIR
 from base.base_config import get_config_con
-from base.sys_utils import check_system
+from base.sys_utils import check_system, check_apache
 from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
 from .init_utils import initVars, sort_mdict_list, load_cache
 from .search_object import SearchObject
@@ -127,9 +127,10 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
         if init_vars.mtime is None:
             init_obj(n)
         else:
-            now_mtime = os.path.getmtime(pickle_file_path)
-            if init_vars.mtime < now_mtime:
-                init_obj(n)
+            if not check_apache():
+                now_mtime = os.path.getmtime(pickle_file_path)
+                if init_vars.mtime < now_mtime:
+                    init_obj(n)
 
     count = 0
     for k in k_list:

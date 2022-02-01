@@ -79,9 +79,22 @@ def check_module_import(mod_name):
         return False
 
 
+def check_apache():
+    try:
+        from mod_wsgi import version
+        return True
+    except:
+        return False
+
+
 def print_sys_info():
     print('[SYSTEM] System Version:', platform.platform(), platform.architecture()[0])
     print('[SYSTEM] Python Version:', platform.python_version(), platform.python_compiler())
+    if check_apache():
+        from mod_wsgi import version
+        print('[SYSTEM] Module mod_wsgi Version:', version)
+    else:
+        print('[SYSTEM] No mod_wsgi')
     print('[SYSTEM] CPU Physical Core Number:', psutil.cpu_count(logical=False))
     available_memory_size = round(psutil.virtual_memory().available / 1024 / 1024 / 1024, 2)
     total_memory_size = round(psutil.virtual_memory().total / 1024 / 1024 / 1024, 2)
