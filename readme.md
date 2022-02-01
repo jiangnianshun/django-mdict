@@ -6,9 +6,7 @@
 
 django-mdict是django实现的mdict词典查询工具（支持mdx、zim格式）。
 
-在线demo（已失效）：~~http://81.68.207.87/mdict/~~
-
-演示视频：https://pan.baidu.com/s/1bwv5TXZ7SpyVVjpSVi3h4g 
+百度网盘：https://pan.baidu.com/s/1bwv5TXZ7SpyVVjpSVi3h4g 
 
 提取码：76xe
 
@@ -87,9 +85,7 @@ apt-get install dos2unix
 dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 
-6. 更新后为了避免出问题，需要手动清除浏览器缓存（不需要清cookies）并删除根目录下的.cache和.dat缓存文件。
-
-7. 建议每个物理核心分配30-50本词典，查询词典数=物理核心数*(30~50)，如果查询词典数大于这个数量，建议分组。
+6. 更新后为了避免出问题，需要手动清除浏览器缓存（不需要清cookies），删除根目录下的.cache缓存文件夹，并重新运行一遍run_server.bat或run_server.sh脚本。
 
 ### 说明文档
 

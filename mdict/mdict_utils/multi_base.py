@@ -3,9 +3,9 @@ import os
 from base.base_func import ROOT_DIR
 from base.base_config import get_config_con
 from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
-from .init_utils import init_vars, read_pickle_file, sort_mdict_list
+from .init_utils import initVars, read_pickle_file, sort_mdict_list
 from .search_object import SearchObject
-from .mdict_func import get_dic_attrs
+from .mdict_func import get_dic_attrs, mdict_root_path
 from .dic_object import dicObject
 
 from .entry_object import entryObject
@@ -16,7 +16,9 @@ except Exception as e:
     pass
 
 all_dics = get_all_dics()
-pickle_file_path = os.path.join(ROOT_DIR, '.Windows.cache')
+pickle_file_path = os.path.join(ROOT_DIR, '.cache', '.Windows.cache')
+
+init_vars = initVars()
 
 
 def merge_record(record_list):
@@ -86,16 +88,26 @@ def merge_record(record_list):
     return record_list
 
 
-def multi_search_mdx(n, query_list, group_pk, is_mdx=True, tinit_vars=None):
+def init_obj():
+    global init_vars
+    init_vars.mdict_odict = read_pickle_file(pickle_file_path, mdict_root_path)
+    init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
+    init_vars.mtime = os.path.getmtime(pickle_file_path)
+
+
+def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
     global init_vars
     r_list = []
 
-    if not init_vars.mdict_odict:
-        if tinit_vars is None:
-            init_vars.mdict_odict = read_pickle_file(pickle_file_path)
-            init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
+    if init_vars is None:
+        init_obj()
+    else:
+        if init_vars.mtime is None:
+            init_obj()
         else:
-            init_vars = tinit_vars
+            now_mtime = os.path.getmtime(pickle_file_path)
+            if init_vars.mtime < now_mtime:
+                init_obj()
 
     for k in init_vars.indicator[n]:
         temp_object = init_vars.mdict_odict[k]

@@ -51,7 +51,7 @@ async def ws_search(websocket, path):
 
 
 if __name__ == '__main__':
-    init_vars = init_mdict_list(False)
+    init_vars = init_mdict_list()
     prpool = create_process_pool()
     cnum = get_cpu_num()
 

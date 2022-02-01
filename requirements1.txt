@@ -12,3 +12,4 @@ psutil
 zstandard
 cython
 nltk
+watchdog

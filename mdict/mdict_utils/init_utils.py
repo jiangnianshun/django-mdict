@@ -9,7 +9,6 @@ from base.sys_utils import get_sys_name
 from base.base_config import set_cpu_num, get_cpu_num
 from .mdict_func import rename_history, check_xapian
 
-
 try:
     from mdict.readlib.lib.readzim import ZIMFile
 except ImportError as e:
@@ -24,8 +23,11 @@ except ImportError as e:
 
 from .mdict_func import mdict_root_path, audio_path
 
-pickle_file_path = os.path.join(ROOT_DIR, '.' + get_sys_name() + '.cache')
-change_file_path = os.path.join(ROOT_DIR, '.' + get_sys_name() + '.dat')
+cache_dir = os.path.join(ROOT_DIR, '.cache')
+if not os.path.exists(cache_dir):
+    os.mkdir(cache_dir)
+pickle_file_path = os.path.join(cache_dir, '.' + get_sys_name() + '.cache')
+change_file_path = os.path.join(cache_dir, '.' + get_sys_name() + '.dat')
 uploads_path = os.path.join(ROOT_DIR, 'media', 'uploads')
 
 if not os.path.exists(uploads_path):
@@ -41,6 +43,7 @@ class initVars:
     zim_list = []
     indicator = []
     need_recreate = False
+    mtime = None
 
 
 init_vars = initVars()
@@ -60,7 +63,7 @@ class MdictItem:
 img_type = ['jpg', 'jpeg', 'png', 'webp', 'gif']
 
 
-def get_mdict_dict():
+def get_mdict_dict(tmdict_root_path):
     g_id = 0
 
     m_dict = collections.OrderedDict()
@@ -69,7 +72,7 @@ def get_mdict_dict():
     # 词典结尾是mdx或MDX
     # ntfs下文件名不区分大小写，但ext4下区分大小写
 
-    for root, dirs, files in os.walk(mdict_root_path):
+    for root, dirs, files in os.walk(tmdict_root_path):
         for file in files:
             if file.lower().endswith('.mdx'):
                 f_name = file[:file.rfind('.')]
@@ -176,12 +179,12 @@ def get_sound_list():
                 sound_list.append(MDD(path))
 
 
-def read_pickle_file(path):
+def read_pickle_file(path, tmdict_root_path):
     with open(path, 'rb') as f:
         try:
             pickle_list = pickle.load(f)
         except Exception:
-            pickle_list, zim_list = get_mdict_dict()
+            pickle_list, zim_list = get_mdict_dict(tmdict_root_path)
             write_pickle_file(path)
     return pickle_list
 
@@ -192,8 +195,8 @@ def write_pickle_file(path):
     os.chmod(path, 0o777)
 
 
-def load_cache():
-    init_vars.mdict_odict = read_pickle_file(pickle_file_path)
+def load_cache(tmdict_root_path):
+    init_vars.mdict_odict = read_pickle_file(pickle_file_path, tmdict_root_path)
     r = False
     if len(init_vars.mdict_odict) > 0:
         p = list(init_vars.mdict_odict.values())[0].mdx.get_fpath()
@@ -207,7 +210,7 @@ def load_cache():
         r = True
 
     if r:
-        init_vars.mdict_odict, init_vars.zim_list = get_mdict_dict()
+        init_vars.mdict_odict, init_vars.zim_list = get_mdict_dict(tmdict_root_path)
         if len(init_vars.mdict_odict) > 0:
             write_cache()
 
@@ -255,7 +258,7 @@ def read_change():
         with open(change_file_path, 'rb') as f:
             data = pickle.load(f)
         return data
-    except Exception:
+    except Exception as e:
         return None
 
 
@@ -314,33 +317,33 @@ def write_dir_change():
     write_change(new_dir)
 
 
-def init_mdict_list(rewrite_cache):
+def rewrite_cache(tmdict_root_path):
     global init_vars
+    t1 = time.perf_counter()
+    sound_list.clear()
+    get_sound_list()
+
+    init_vars.mdict_odict.clear()
+    init_vars.mdict_odict, init_vars.zim_list = get_mdict_dict(tmdict_root_path)
+    init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
+    t2 = time.perf_counter()
+    print_log_info('initializing mdict_list', 0, t1, t2)
+    write_cache()
+    write_dir_change()
+    print_log_info('creating cache file', 0, t2, time.perf_counter())
+
+
+def init_mdict_list():
+    global init_vars, mdict_root_path
     t1 = time.perf_counter()
 
     rename_history()
 
-    if rewrite_cache:
-        init_vars.need_recreate = True
-
-    if not os.path.exists(pickle_file_path) or os.path.getsize(pickle_file_path) == 0:
-        rewrite_cache = True
-
-    if rewrite_cache or check_dir_change():
-        sound_list.clear()
-        get_sound_list()
-
-        init_vars.mdict_odict.clear()
-        init_vars.mdict_odict, init_vars.zim_list = get_mdict_dict()
-        init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
-        t2 = time.perf_counter()
-        print_log_info('initializing mdict_list', 0, t1, t2)
-        write_cache()
-        write_dir_change()
-        print_log_info('creating cache file', 0, t2, time.perf_counter())
+    if check_dir_change():
+        rewrite_cache(mdict_root_path)
     else:
         get_sound_list()
-        load_cache()
+        load_cache(mdict_root_path)
         init_zim_list()
         print_log_info('reading from cache file', 0, t1, time.perf_counter())
 

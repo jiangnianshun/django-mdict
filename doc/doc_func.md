@@ -15,6 +15,11 @@
 ```
 django-mdict
 ├─.git
+├─.cache
+│  ├─.Linux.cache（linux下的缓存文件）
+│  ├─.Linux.dat（linux下的缓存文件）
+│  ├─.Windows.cache（windows下的缓存文件）
+│  └─.Windows.dat（windows下的缓存文件）
 ├─base（共用的一些函数）
 ├─doc（markdown文档）
 ├─export（mdx导出路径）
@@ -44,10 +49,6 @@ django-mdict
 ├─templates（共用的模板）
 ├─.gitattributes
 ├─.gitignore
-├─.Linux.cache（linux下的缓存文件）
-├─.Linux.dat（linux下的缓存文件）
-├─.Windows.cache（windows下的缓存文件）
-├─.Windows.dat（windows下的缓存文件）
 ├─config.ini（配置文件）
 ├─db.sqlite3（数据库文件）
 ├─django-mdict.conf（apache配置文件）

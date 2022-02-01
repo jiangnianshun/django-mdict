@@ -12,8 +12,8 @@ from .multi_base import multi_search_mdx
 #     return multi_search_mdx(n, sug_list, group, is_mdx=False)
 
 
-def multiprocess_search_mdx(n, query_list, group, is_mdx=True, tinit_vars=None):
-    return multi_search_mdx(n, query_list, group, is_mdx=is_mdx, tinit_vars=tinit_vars)
+def multiprocess_search_mdx(n, query_list, group, is_mdx=True):
+    return multi_search_mdx(n, query_list, group, is_mdx=is_mdx)
 
 
 def create_process_pool():
@@ -22,11 +22,11 @@ def create_process_pool():
     return multiprocessing.Pool(processes=cnum)
 
 
-def pre_pool_search(prpool, tinit_vars=None):
-    # 预热，避免第一次查询等待。
-    cnum = get_cpu_num()
-    q_list = ((i, ['bananapie'], 0, True, tinit_vars) for i in range(cnum))
-    prpool.starmap(multiprocess_search_mdx, q_list)
+# def pre_pool_search(prpool, tinit_vars=None):
+#     # 预热，避免第一次查询等待。
+#     cnum = get_cpu_num()
+#     q_list = ((i, ['bananapie'], 0, True, tinit_vars) for i in range(cnum))
+#     prpool.starmap(multiprocess_search_mdx, q_list)
 
 
 def terminate_pool(pool):

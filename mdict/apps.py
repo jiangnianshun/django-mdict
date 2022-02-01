@@ -19,12 +19,23 @@ def init_ws_server():
         print(e)
 
 
+def init_wd_server():
+    cmd = ['python', 'wd_server.py']
+    command = ' '.join(cmd)
+    print_log_info(['running watch dog server...'])
+    try:
+        subprocess.Popen(command, shell=False, cwd=script_path)
+    except Exception as e:
+        print(e)
+
+
 # 启动mdict时进行初始化
 class MdictConfig(AppConfig):
     name = 'mdict'
 
     def ready(self):
-        init_mdict_list(False)
+        init_mdict_list()
+
         # 函数在apps.py中会运行2次，在init_utils.py中运行次数更多。
         run_once = os.environ.get('CMDLINERUNNER_RUN_ONCE')
         if run_once is None:
@@ -33,3 +44,4 @@ class MdictConfig(AppConfig):
             check_readlib()
             if check_system() == 1:
                 init_ws_server()
+            init_wd_server()

@@ -7,57 +7,54 @@ from urllib.parse import quote
 from base.sys_utils import split_os_path, find_os_path
 from base.base_func import is_number, ROOT_DIR
 
-mdict_path = os.path.join('media', 'mdict', 'doc')
-mdict_root_path = os.path.join(ROOT_DIR, mdict_path)
-
 history_path = os.path.join(ROOT_DIR, 'history.dat')
-
-audio_path = os.path.join(ROOT_DIR, 'media', 'mdict', 'audio')
-
-mdict_path_list = []
-audio_path_list = []
-
-mdict_path_json = os.path.join(ROOT_DIR, 'mdict_path.json')
-
-if os.path.exists(mdict_path_json):
-    with open(mdict_path_json, 'r', encoding='utf-8') as f:
-        try:
-            data = json.load(f)
-            mdict_path_list.extend(data['mdict_path'])
-            audio_path_list.extend(data['audio_path'])
-        except Exception:
-            pass
-else:
-    con = {'mdict_path': [], 'audio_path': []}
-    with open(mdict_path_json, 'w', encoding='utf-8') as f:
-        json.dump(con, f, indent=4)
-    os.chmod(mdict_path_json, 0o777)
-
-mdict_path_list.append(mdict_root_path)
 
 
 def set_mdict_path():
-    global mdict_root_path, mdict_path_list, audio_path_list, audio_path
-    for p in mdict_path_list:
+    tmdict_path = os.path.join('media', 'mdict', 'doc')
+    tmdict_path_json = os.path.join(ROOT_DIR, 'mdict_path.json')
+    tmdict_root_path = os.path.join(ROOT_DIR, tmdict_path)
+    taudio_path = os.path.join(ROOT_DIR, 'media', 'mdict', 'audio')
+
+    tmdict_path_list = []
+    taudio_path_list = []
+
+    if os.path.exists(tmdict_path_json):
+        with open(tmdict_path_json, 'r', encoding='utf-8') as f:
+            try:
+                data = json.load(f)
+                tmdict_path_list.extend(data['mdict_path'])
+                taudio_path_list.extend(data['audio_path'])
+            except Exception:
+                pass
+    else:
+        con = {'mdict_path': [], 'audio_path': []}
+        with open(tmdict_path_json, 'w', encoding='utf-8') as f:
+            json.dump(con, f, indent=4)
+        os.chmod(tmdict_path_json, 0o777)
+
+    tmdict_path_list.append(tmdict_root_path)
+
+    for p in tmdict_path_list:
         t = False
         if os.path.exists(p):
             for root, dirs, files in os.walk(p):
                 for file in files:
                     if file.lower().endswith('.mdx') or file.lower().endswith('.zim'):
-                        mdict_root_path = p
+                        tmdict_root_path = p
                         t = True
                         break
                 if t:
                     break
         if t:
             break
-    for p in audio_path_list:
+    for p in taudio_path_list:
         t = False
         if os.path.exists(p):
             # for root, dirs, files in os.walk(p):
             #     for file in files:
             #         if file.lower().endswith('.mdd'):
-            #             audio_path = p
+            #             taudio_path = p
             #             t = True
             #             break
             #     if t:
@@ -68,7 +65,7 @@ def set_mdict_path():
                 file_path = os.path.join(p, file)
                 if os.path.isfile(file_path):
                     if file.lower().endswith('.mdd'):
-                        audio_path = p
+                        taudio_path = p
                         t = True
                         break
                 # else:
@@ -76,14 +73,15 @@ def set_mdict_path():
                 #         file2_path = os.path.join(file_path, file2)
                 #         if os.path.isfile(file2_path):
                 #             if file2.lower().endswith('.mdd'):
-                #                 audio_path = p
+                #                 taudio_path = p
                 #                 t = True
                 #                 break
         if t:
             break
+    return tmdict_root_path, taudio_path, tmdict_path_list, taudio_path_list
 
 
-set_mdict_path()
+mdict_root_path, audio_path, mdict_path_list, audio_path_list = set_mdict_path()
 
 reg = r'^\.+(\\|/)'
 regp = re.compile(reg)
