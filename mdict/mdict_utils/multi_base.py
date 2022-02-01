@@ -3,6 +3,7 @@ import os
 
 from base.base_func import ROOT_DIR
 from base.base_config import get_config_con
+from base.sys_utils import check_system
 from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
 from .init_utils import initVars, read_pickle_file, sort_mdict_list
 from .search_object import SearchObject
@@ -17,7 +18,10 @@ except Exception as e:
     pass
 
 all_dics = get_all_dics()
-pickle_file_path = os.path.join(ROOT_DIR, '.cache', '.Windows.cache')
+if check_system() == 0:
+    pickle_file_path = os.path.join(ROOT_DIR, '.cache', '.Linux.cache')
+else:
+    pickle_file_path = os.path.join(ROOT_DIR, '.cache', '.Windows.cache')
 
 init_vars = initVars()
 k_list = []

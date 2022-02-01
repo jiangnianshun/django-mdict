@@ -22,12 +22,15 @@ def init_ws_server():
 def init_wd_server():
     if check_system() == 0:
         cmd = ['python3', 'wd_server.py']
+        command = ' '.join(cmd)
+        shell = True
     else:
         cmd = ['python', 'wd_server.py']
-    command = ' '.join(cmd)
+        command = ' '.join(cmd)
+        shell = False
     print_log_info(['running watch dog server...'])
     try:
-        subprocess.Popen(command, shell=False, cwd=script_path)
+        subprocess.Popen(command, shell=shell, cwd=script_path)
     except Exception as e:
         print(e)
 

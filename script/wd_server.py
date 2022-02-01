@@ -68,7 +68,7 @@ class Handler(FileSystemEventHandler):
         global dir_status
         if not event.is_directory and event.event_type != 'deleted':
             if event.src_path.lower().endswith('.mdx'):
-                # print(event.event_type, event.src_path)
+                print(event.event_type, event.src_path)
                 dir_status = True
 
 
