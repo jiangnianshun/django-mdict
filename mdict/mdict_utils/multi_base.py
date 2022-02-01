@@ -1,6 +1,6 @@
 import copy
 import os
-import gc
+
 from base.base_func import ROOT_DIR
 from base.base_config import get_config_con
 from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
@@ -103,6 +103,7 @@ def init_obj(proc_flag):
         temp_list.append(init_vars.mdict_odict[k])
 
     init_vars.mdict_odict = temp_list
+    # 每个进程只保存自己的数据，其他数据会被gc掉，减少内存占用。
 
 
 def multi_search_mdx(n, query_list, group_pk, is_mdx=True):

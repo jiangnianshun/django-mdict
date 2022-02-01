@@ -20,7 +20,10 @@ def init_ws_server():
 
 
 def init_wd_server():
-    cmd = ['python', 'wd_server.py']
+    if check_system() == 0:
+        cmd = ['python3', 'wd_server.py']
+    else:
+        cmd = ['python', 'wd_server.py']
     command = ' '.join(cmd)
     print_log_info(['running watch dog server...'])
     try:

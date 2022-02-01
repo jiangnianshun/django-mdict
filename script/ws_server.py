@@ -11,7 +11,6 @@ sys.path.append(root_path)
 from mdict.mdict_utils.multi_process import multiprocess_search_mdx, create_process_pool, \
     get_cpu_num
 from mdict.mdict_utils.object_coder import objectEncoder
-from mdict.mdict_utils.init_utils import init_mdict_list
 from base.base_config import get_config_con
 
 prpool = None
@@ -51,11 +50,11 @@ async def ws_search(websocket, path):
 
 
 if __name__ == '__main__':
-    init_vars = init_mdict_list()
     prpool = create_process_pool()
     cnum = get_cpu_num()
 
     # pre_pool_search(prpool, init_vars)
+    # 当引用全局变量init_vars的时候
     # windows下ws_server第一次查询时
     # 1.在asyncio内且各进程独自读取缓存，占用内存一直大于正常值但不到100%；
     # 2.在asyncio外且各进程独自读取缓存，内存和硬盘占用100%，一段时间后内存和硬盘占用恢复到正常值；

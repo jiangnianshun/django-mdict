@@ -272,7 +272,7 @@ def check_dir_change():
     old_dir = read_change()
 
     if old_dir is None:
-        print_log_info('change.dat not exists.')
+        print_log_info('dat cache file not exists.')
         return True
 
     if old_dir['root_dir'] != mdict_root_path:

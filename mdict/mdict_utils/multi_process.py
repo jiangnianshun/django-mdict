@@ -3,7 +3,6 @@ import multiprocessing
 from base.base_func import print_log_info
 from .data_utils import get_or_create_dic
 from .loop_decorator import loop_mdict_list, innerObject
-from .init_utils import init_vars
 from base.base_config import get_cpu_num
 from .multi_base import multi_search_mdx
 
@@ -35,14 +34,14 @@ def terminate_pool(pool):
         pool.terminate()
 
 
-def check_pool_recreate(pool):
-    # 重建进程池
-    if init_vars.need_recreate:
-        terminate_pool(pool)
-        pool = create_process_pool()
-        print_log_info('recreating multiprocessing pool success.')
-        init_vars.need_recreate = False
-    return pool
+# def check_pool_recreate(pool):
+#     # 重建进程池
+#     if init_vars.need_recreate:
+#         terminate_pool(pool)
+#         pool = create_process_pool()
+#         print_log_info('recreating multiprocessing pool success.')
+#         init_vars.need_recreate = False
+#     return pool
 
 
 @loop_mdict_list()

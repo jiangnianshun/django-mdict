@@ -38,10 +38,14 @@ class DirWatch:
         try:
             while True:
                 mdict_root_path, audio_path, mdict_path_list, audio_path_list = set_mdict_path()
-                if mdict_root_path != self.target_dir or dir_status is True:
+                if mdict_root_path != self.target_dir:
                     print('mdict root path changed!')
                     rewrite_cache(mdict_root_path)
-
+                    self.target_dir = mdict_root_path
+                    dir_status = False
+                elif dir_status is True:
+                    print('watch dog changed!')
+                    rewrite_cache(mdict_root_path)
                     self.target_dir = mdict_root_path
                     dir_status = False
                 time.sleep(10)
