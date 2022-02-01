@@ -17,7 +17,6 @@ from base.base_config import get_config_con, get_cpu_num
 from .ws_client import ws_search
 
 from .multi_process import create_process_pool, multiprocess_search_mdx
-from .multi_thread import create_thread_pool, multithread_search_mdx, multithread_search_sug
 
 prpool = None
 thpool = None
@@ -269,12 +268,12 @@ def search_mdx_dic(query_list, record_list, group):
             record_list.extend(ws_search(query_list, group, 'dic'))
         except Exception as e:
             print('ws server connection failed', e)
-            if thpool is None:
-                thpool = create_thread_pool()
-            q_list = ((i, query_list, group) for i in range(cnum))
-            a_list = thpool.starmap(multithread_search_mdx, q_list)
-            for a in a_list:
-                record_list.extend(a)
+            # if thpool is None:
+            #     thpool = create_thread_pool()
+            # q_list = ((i, query_list, group) for i in range(cnum))
+            # a_list = thpool.starmap(multithread_search_mdx, q_list)
+            # for a in a_list:
+            #     record_list.extend(a)
 
     return record_list
 
