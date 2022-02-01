@@ -196,6 +196,7 @@ def write_pickle_file(path):
 
 
 def load_cache(tmdict_root_path):
+    global init_vars
     init_vars.mdict_odict = read_pickle_file(pickle_file_path, tmdict_root_path)
     r = False
     if len(init_vars.mdict_odict) > 0:
@@ -215,6 +216,8 @@ def load_cache(tmdict_root_path):
             write_cache()
 
     init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)  # 生成indicator
+    init_vars.mtime = os.path.getmtime(pickle_file_path)
+    return init_vars
 
 
 def write_cache():
@@ -330,6 +333,7 @@ def rewrite_cache(tmdict_root_path):
     print_log_info('initializing mdict_list', 0, t1, t2)
     write_cache()
     write_dir_change()
+    init_vars.mtime = os.path.getmtime(pickle_file_path)
     print_log_info('creating cache file', 0, t2, time.perf_counter())
 
 

@@ -1217,8 +1217,10 @@ def search_mdd(request, *args):
                         # zim跳转的而非查询的.html页面需要插入脚本
                         res_content = regpz.sub(sobj.substitute_hyper_link, res_content)
                         res_content = zim_script + res_content
+        else:
+            mdx = None
 
-        if res_content == '':
+        if res_content == '' and mdx is not None:
             if res_name[0] == '\\' or res_name[0] == '/':
                 res_name = res_name[1:]
             file_path = os.path.join(mdict_root_path, get_m_path(mdx, False), res_name)

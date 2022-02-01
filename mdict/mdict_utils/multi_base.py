@@ -5,7 +5,7 @@ from base.base_func import ROOT_DIR
 from base.base_config import get_config_con
 from base.sys_utils import check_system
 from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
-from .init_utils import initVars, read_pickle_file, sort_mdict_list
+from .init_utils import initVars, sort_mdict_list, load_cache
 from .search_object import SearchObject
 from .mdict_func import get_dic_attrs, mdict_root_path
 from .dic_object import dicObject
@@ -20,10 +20,10 @@ except Exception as e:
 all_dics = get_all_dics()
 if check_system() == 0:
     pickle_file_path = os.path.join(ROOT_DIR, '.cache', '.Linux.cache')
+    from .init_utils import init_vars
 else:
     pickle_file_path = os.path.join(ROOT_DIR, '.cache', '.Windows.cache')
-
-init_vars = initVars()
+    init_vars = initVars()
 k_list = []
 
 
@@ -96,24 +96,31 @@ def merge_record(record_list):
 
 def init_obj(proc_flag):
     global init_vars, k_list
-    init_vars.mdict_odict = read_pickle_file(pickle_file_path, mdict_root_path)
+
+    # init_vars.mdict_odict = read_pickle_file(pickle_file_path, mdict_root_path)
+    init_vars = load_cache(mdict_root_path)
     init_vars.mdict_odict, init_vars.indicator = sort_mdict_list(init_vars.mdict_odict)
     init_vars.mtime = os.path.getmtime(pickle_file_path)
 
     temp_list = []
     k_list = []
-    for k in init_vars.indicator[proc_flag]:
-        k_list.append(k)
-        temp_list.append(init_vars.mdict_odict[k])
+    if check_system() == 0:
+        k_list = init_vars.indicator[proc_flag]
+    else:
+        for k in init_vars.indicator[proc_flag]:
+            k_list.append(k)
+            temp_list.append(init_vars.mdict_odict[k])
 
-    init_vars.mdict_odict = temp_list
-    # 每个进程只保存自己的数据，其他数据会被gc掉，减少内存占用。
+        init_vars.mdict_odict = temp_list
+        # 每个进程只保存自己的数据，其他数据会被gc掉，减少windows下内存占用。但是ubuntu apache2下会导致占用内存暴增。
 
 
 def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
     global init_vars, k_list
     r_list = []
 
+    if check_system() == 0:
+        k_list = init_vars.indicator[n]
     if init_vars is None:
         init_obj(n)
     else:
@@ -124,9 +131,14 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
             if init_vars.mtime < now_mtime:
                 init_obj(n)
 
-    for i in range(len(init_vars.mdict_odict)):
-        temp_object = init_vars.mdict_odict[i]
-        k = k_list[i]
+    count = 0
+    for k in k_list:
+        if check_system() == 0:
+            temp_object = init_vars.mdict_odict[k]
+        else:
+            temp_object = init_vars.mdict_odict[count]
+            count += 1
+
         mdx = temp_object.mdx
         mdd_list = temp_object.mdd_list
         g_id = temp_object.g_id
