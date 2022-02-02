@@ -1,12 +1,12 @@
 ### 更新
 
-* 如果需要保存旧数据，运行git pull更新项目，并清除浏览器缓存（不需要清cookie）。如果models.py文件发生改动，应尽量用git clone重新下载。
+1. 重新git clone或者原项目git pull。
+2. 删除根目录下的.cache缓存文件夹，并清除浏览器缓存（不需要清cookie）。
+3. 如果需要保存旧数据（词典排序，词典分组，内置词条，导航网站等），将旧的db.sqlite3文件复制过来（可能会有不兼容，需要手动处理）。
+4. 如果需保存查询历史，将旧的根目录下所有history开头的dat文件移动到新的django-mdict根目录。
+5. 然后运行一次run_server.bat（run_server.sh），这将安装新添加的依赖并重新cython编译。
 
-```
-git pull
-```
-
-删除根目录下的.cache和.dat缓存，然后运行一次run_server.bat或run_server.sh，这将安装新添加的依赖并重新cython编译。
+### 读取数据库报错
 
 * 如果修改了models.py文件，旧数据库可能无法正常使用，尝试运行
 
@@ -30,9 +30,3 @@ python manage.py migrate mdict
 如果第2步没有删除mdict_path.json，导致新的数据库又导入了词典信息，那么这里应当手动将新数据库中mdict_mdictdic数据表中的记录都清空。
 
 打开新数据库，导入刚才的sql文件，是否创建新数据库选择no，导入完成后保存数据库。
-
-### 重新下载
-
-* 如果不需要保存旧数据（词典排序，词典分组，内置词条），重新git clone，并清除浏览器缓存（不需要清cookie）。
-
-如果需要转移保存的查询历史，将旧的django-mdict根目录下所有history开头的dat文件移动到新的django-mdict根目录。

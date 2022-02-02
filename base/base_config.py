@@ -50,7 +50,6 @@ default_config = {
         'disable_iframe_click': True,  # 屏蔽iframe中的默认点击事件
         'history_enable': False,  # 保存查询历史
         'suggestion_num': 30,  # 查询提示显示的数目
-        'link_new_label': False,
         'force_font': False,  # 强制使用全宋体
         'card_show': False,  # 允许一次展开多个词典
         'default_group': 0,

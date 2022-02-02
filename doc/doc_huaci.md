@@ -24,6 +24,6 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 2. 打开划词工具的设置界面，选择OCR查词。按ctrl+c+c，鼠标点击两次，框选OCR的范围。
 
-如果划词工具显示混乱，尝试删除huaci/huaci.cache缓存文件夹。
+如果划词工具出现问题，尝试删除huaci/huaci.cache缓存文件夹。
 
 页面缩放比例，设置huaci/utils/huaci.ini中auto_zooming，-1.0是75%;0.0是100%;1.0是125%;2.0是150%。

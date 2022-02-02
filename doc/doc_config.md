@@ -36,35 +36,59 @@
 
 django-mdict/config.ini
 
-cache_num 查询提示缓存数目
+#### [COMMON]
 
-search_cache_num 查询缓存数目
+cache_num：查询提示缓存的个数
 
-builtin_dic_enable 启用内置词典
+search_cache_num：查询（分页）缓存的个数
 
-merge_entry_max_length 默认值1000，同名词条合并，同一词典有多个查询结果时，长度小于1000的词条会被合并。如果完全不合并，设置为0。
+builtin_dic_enable：启用内置词典
 
-st_enable 启用繁简转化
+es_host：elasticsearch启动url（包括端口）
 
-chaizi_enable 启用拆字反查
+open_path_enable：是否允许打开本地词典文件夹（仅本地访问有效）
 
-fh_char_enable 启用全角字符转换
+ws_server_port：windows下启用ws_server的端口号（默认值8766，8765是anki connect的默认端口）
 
-kana_enable 启用假名转换
+index_id：选择主页（目前只有1和2）
+#### [SEARCH]
 
-force_refresh 启用强制刷新，启用后会重新查询，而不是从缓存中读取。
+merge_entry_max_length：默认值1000，同名词条合并，同一词典有多个查询结果时，长度小于1000的词条会被合并。如果完全不合并，设置为0。
 
-select_btn_enable 启用文字选择菜单
+st_enable：启用繁简转化
 
-disable_iframe_click 屏蔽iframe中的默认点击事件，关闭词典的自动发音和解决点击发重音的问题。但可能带来其他的问题，比如在低版本浏览器内核中可能导致页面空白。
-重新查询后生效。
+chaizi_enable：启用拆字反查
 
-suggestion_num 查询提示数目
+fh_char_enable：启用全角字符转换（全角英文转换为半角英文）
 
-link_new_label entry链接打开新标签页
+kana_enable：启用假名转换（平假名和片假名相互转换）
 
-force_font 强制使用全宋体
+romaji_enable：启用罗马字假名转换
 
-card_show 允许同时展开多个词典
+force_refresh：启用强制刷新（启用后会重新查询，而不是从缓存中读取）
 
-new_label_link 新标签页查询，True打开正查，False打开当前页查询。
+select_btn_enable：启用文字选择菜单（在词条中选择文字后的弹出框，仅PC有效）
+
+disable_iframe_click：屏蔽iframe中的默认点击事件（关闭词典的自动发音和解决点击发重音的问题，下一次查询生效）
+
+history_enable：是否保存查询历史
+
+suggestion_num：查询提示数目
+
+force_font：强制所有词条使用全宋体（下一次查询生效）
+
+card_show：允许同时展开多个词条（下一次查询生效）
+
+default_group：默认分组
+
+new_label_link：打开新标签页（点击entry词条跳转时不在本页跳转而是打开新标签页查询，下一次查询生效）
+
+compute_every_element：计算iframe的每一个元素来计算总高度
+
+fixed_height：所有词条固定高度显示
+
+copy_with_tag：复制时包含html标签和css样式
+
+magnifier_enable：启用图片放大镜
+
+hide-bottom-bar：隐藏底部工具栏

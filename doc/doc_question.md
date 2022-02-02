@@ -1,31 +1,32 @@
 1. 加入新的词典没有显示
 
 重启django-mdict，只有启动时才会检查文件夹变动。
-如果重启无效，尝试手动删除根目录下的.Windows.cache，.Windows.dat，.Linux.cache，.Linex.dat文件后再重启。
+如果重启无效，尝试手动删除根目录下的.cache缓存文件夹后再重启。
 
-2. 部署在wsl上，前端的js、css等无法更新。
+2. 前端页面的js、css无效。
 
-因为django-mdict.conf里设置了expires_module，使得浏览器长期缓存文件，手动删除浏览器的缓存文件（不需要清cookie）。
+手动删除浏览器的缓存文件（不需要清cookie）。
 
-3. 显示\[INIT_UTILS WARNING\] loading readmdict lib failed!
+3. 显示\[BASE_FUNC.CHECK_READLIB WARNING\]
 
-出现该提示说明没有进行cython编译。
+提示没有进行cython编译。
 
 windows下运行django-mdict/mdict/readlib/pyx/build.bat，linux下运行django-mdict/mdict/readlib/pyx/build.sh。
 
 这将对readmdict.py进行编译，编译后的pyd或so运行库在django-mdict/mdict/readlib/lib/下，编译后相比于没有编译，速度提升约1/3。
 
-4. 403错误和Operation not permitted
+4. 403错误，500错误和Operation not permitted
 
-权限问题，提升django-mdict文件夹及子文件的权限。
+权限问题
+
+4.1 尝试删除.cache缓存文件夹。
+
+4.2 尝试提升django-mdict文件夹及所有子文件的权限。
 
 ```
 chmod -R 777 django-mdict
 ```
-
-可能需要手动删除.Linux.cache和.Linux.dat等缓存文件。
-
-可能需要提升词典库中zim文件抽取出的idx文件的权限。
+4.3 尝试提升词典库中从zim文件抽取出的idx文件的权限。
 
 5. Failed to enable APR_TCP_DEFER_ACCEPT
 
@@ -61,7 +62,7 @@ chmod +x /bin/sleep
 
 10. windows下关闭djnago-mdict后，后台残留僵尸进程。
 
-注销或重启系统。
+在任务管理器手动结束python进程，或者注销或重启系统。
 
 11. run_server.sh: line 16: syntax error: unexpected end of file
 
@@ -69,7 +70,7 @@ chmod +x /bin/sleep
 
 12. Error: [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。
 
-默认端口8000被占用，尝试使用其他端口。
+默认端口8000被占用，尝试使用其他端口，或者重启电脑。
 
 ```
 python manage.py runserver 0.0.0.0:7000
@@ -89,4 +90,4 @@ python manage.py runserver 0.0.0.0:7000
 
 16. ipad safari在悬浮窗口状态下经常输入框无法唤出键盘。
 
-将ipad键盘类型改为浮动键盘。
+将ipad键盘类型改为浮动键盘，并且收回悬浮窗后重新拉出。

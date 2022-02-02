@@ -36,7 +36,7 @@ Microsoft C++ Build Tools地址：
 
 3. （可跳过）安装python-lzo，python-lzo在windows下需要手动安装。
 
-跳过后采用lzo编码的mdx词典无法读取。
+不建议跳过，跳过后采用lzo编码的mdx词典无法读取。
 
 [https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo)
 
@@ -54,9 +54,9 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 git clone https://github.com/jiangnianshun/django-mdict.git --depth=1
 ```
 
-Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。
+Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译，生成数据库）。
 
-初始化过程中首先会弹出文件夹选择框，第一次选择字典库路径，第二次选择发音库路径（没有就跳过）。
+初始化过程中首先会弹出文件夹选择框，第一次选择词典库路径，第二次选择发音库路径（没有就跳过）。
 
 路径信息保存在mdict_path.json文件中。
 
@@ -77,7 +77,7 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 
 4. 不建议使用pypy，有时候查询快，有时候反而更慢。
 
-5. linux下可能需要转换脚本格式
+5. linux下可能需要转换脚本格式才能正常运行。
 
 ```
 apt-get update
@@ -85,7 +85,7 @@ apt-get install dos2unix
 dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 
-6. 更新后为了避免出问题，需要手动清除浏览器缓存（不需要清cookies），删除根目录下的.cache缓存文件夹，并重新运行一遍run_server.bat或run_server.sh脚本。
+6. 每次更新为了避免出问题，需要手动清除浏览器缓存（不需要清cookies），删除根目录下的.cache缓存文件夹，并重新运行一遍run_server.bat或run_server.sh脚本。
 
 ### 说明文档
 

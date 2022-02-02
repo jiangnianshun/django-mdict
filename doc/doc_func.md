@@ -157,9 +157,7 @@ WFG博客：[https://fgwang.blogspot.com/](https://fgwang.blogspot.com/)
 
 pdawiki部件检索和全宋体：[https://www.pdawiki.com/forum/forum.php?mod=viewthread&tid=23133&highlight=%E9%83%A8%E4%BB%B6%E6%A3%80%E7%B4%A2](https://www.pdawiki.com/forum/forum.php?mod=viewthread&tid=23133&highlight=%E9%83%A8%E4%BB%B6%E6%A3%80%E7%B4%A2)
 
-集成了部件检索和全宋体，由于chrome不支持大于30MB的字体，因此将FSung-2.ttf和FSung-F.ttf进行了拆分。
-
-建议部署到apache，并设置浏览器文件缓存时长（expires_module模块），这样只有第一次需要下载字体，全宋体大小126MB。
+集成了部件检索和全宋体，由于chrome不支持大于30MB的字体，因此将FSung-2.ttf和FSung-F.ttf进行了拆分。全宋体大小138MB。
 
 部件检索相比于拆字反查更准确，比如输入山鸟，得到嶋、嶌和㠀。
 

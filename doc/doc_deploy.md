@@ -1,63 +1,11 @@
-  * [在windows上运行测试服务器](#在windows上运行测试服务器)
   * [在wsl上运行测试服务器](#在wsl上运行测试服务器)
   * [部署到wsl apache](#部署到wsl-apache)
 
-### 在windows上运行测试服务器
-
-1. 安装python3。
-
-2. （可跳过）安装Visual Studio（同时安装C++开发组件），或者安装Microsoft C++ Build Tools（安装时勾选C++开发组件）。
-
-在进行cython编译时需要C++编译器，跳过后无法进行cython编译，查询速度变慢。
-
-Visual Studio地址：
-
-[https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/)
-
-Microsoft C++ Build Tools地址：
-
-[https://visualstudio.microsoft.com/visual-cpp-build-tools/
-](https://visualstudio.microsoft.com/visual-cpp-build-tools/
-)
-
-3. （可跳过）安装python-lzo，python-lzo在windows下需要手动安装。
-
-跳过后采用lzo编码的mdx词典无法读取。
-
-[https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo)
-
-python版本3.7就选cp37，python是32位选择win32，是64位选择win_amd64。
-
-比如下载了python_lzo-1.12-cp37-cp37m-win_amd64.whl，在当前目录运行以下命令安装
-
-```
-pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
-```
-
-4. 下载django-mdict
-
-```
-git clone https://github.com/jiangnianshun/django-mdict.git --depth=1
-```
-
-Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译）。
-
-初始化过程中首先会弹出文件夹选择框，第一次选择字典库路径，第二次选择发音库路径（没有就跳过）。
-
-路径信息保存在mdict_path.json文件中。
-
-最后要求设置django的用户名和密码，邮箱不需要填写。
-
-5. django服务器默认端口8000
-<br />本地电脑访问http://127.0.0.1:8000/mdict/
-<br />其他设备访问http://本机ip:8000/mdict/
-<br />可能需要设置防火墙入站链接，开放8000端口。
-
 ### 在wsl上运行测试服务器
 
-windows下建议部署到wsl1(ubuntu)，wsl2读取windows文件要慢于wsl1，导致查询速度会慢大约1/20-1/10，此外还要解决ip的问题。
+windows下建议部署到wsl1(ubuntu)，wsl2读取windows文件要慢于wsl1，导致查询速度会慢大约1/20-1/10，此外还要解决ip访问的问题。
 
-1. 安装wsl，系统ubuntu，建议使用18.04。
+1. 安装wsl，系统ubuntu。
 
 [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 
@@ -92,9 +40,9 @@ bash run_server.sh
 
 ### 部署到wsl apache
 
-windows下建议部署到wsl1(ubuntu)。部署到apache后的启动速度远慢于启动自带的测试服务器。
+部署到apache后启动速度慢于启动测试服务器（manage.py），且占用内存增大。
 
-1. 安装wsl，系统ubuntu，建议使用18.04。
+1. 安装wsl，系统ubuntu。
 
 [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 
