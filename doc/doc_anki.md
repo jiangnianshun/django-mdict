@@ -12,6 +12,6 @@ anki-connect：[https://github.com/FooSoft/anki-connect](https://github.com/FooS
 手动复制：手动选择内容复制，粘贴时ctrl+v是带样式粘贴，ctrl+shift+v是纯文本粘贴，
 或者鼠标右键选择粘贴或粘贴为纯文本，再手机上通过长按调出鼠标右键。
 
-带样式复制会丢失部分样式。且仅能显示在线图片，不支持图片和音频的插入，anki不支持base64图片的显示。不支持bootstrap5的浏览器中无法使用（cefpython无法使用）。
+带样式复制会丢失部分样式。且仅能显示在线图片，不支持图片和音频的插入，anki不支持base64图片的显示。不支持ckeditor5的浏览器中无法使用（cefpython无法使用）。
 
 ![图片](img/img080901.png?raw=true)

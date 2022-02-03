@@ -27,10 +27,14 @@ if check_system() == 0:
 # else:
 #     thpool = create_thread_pool()
 
-nltk_path.append(os.path.join(ROOT_DIR, 'media', 'nltk_data'))
-lemmatizer = WordNetLemmatizer()
-lemmatizer.lemmatize('a')
-# WordNetLemmatizer()第一次运行lemmatize()慢，需要初始化，将本地语料库调入内存，耗时1秒多，因此这里要预加载。
+try:
+    nltk_path.append(os.path.join(ROOT_DIR, 'media', 'nltk_data'))
+    lemmatizer = WordNetLemmatizer()
+    lemmatizer.lemmatize('a')
+    # WordNetLemmatizer()第一次运行lemmatize()慢，需要初始化，将本地语料库调入内存，耗时1秒多，因此这里要预加载。
+except Exception as e:
+    lemmatizer = None
+    print(e)
 
 
 spell = SpellChecker(distance=1)
@@ -301,17 +305,18 @@ def lemmatize_func(query, record_list, is_en):
 
 
 def lemmatize_word(query):  # 使用nltk的WordNetLemmatizer()获得单词变体的原形
-    query = query.lower()
-    words_list = list()
-    # n名词,a形容词,r副词,v动词
-    words_list.append((lemmatizer.lemmatize(query, pos='n'), 'n.'))
-    words_list.append((lemmatizer.lemmatize(query, pos='a'), 'adj.'))
-    words_list.append((lemmatizer.lemmatize(query, pos='r'), 'adv.'))
-    words_list.append((lemmatizer.lemmatize(query, pos='v'), 'v.'))
     r_list = []
-    for w in words_list:
-        if w[0] != query and not w[0] in r_list:
-            r_list.append(w)
+    if lemmatizer is not None:
+        query = query.lower()
+        words_list = list()
+        # n名词,a形容词,r副词,v动词
+        words_list.append((lemmatizer.lemmatize(query, pos='n'), 'n.'))
+        words_list.append((lemmatizer.lemmatize(query, pos='a'), 'adj.'))
+        words_list.append((lemmatizer.lemmatize(query, pos='r'), 'adv.'))
+        words_list.append((lemmatizer.lemmatize(query, pos='v'), 'v.'))
+        for w in words_list:
+            if w[0] != query and not w[0] in r_list:
+                r_list.append(w)
 
     return r_list
 
