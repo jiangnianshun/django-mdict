@@ -128,6 +128,8 @@ huaci/ 删除后无法使用划词脚本
 
 media/font/ 删除后无法显示全宋体
 
+media/nltk_data/ 删除后没有英文单词原形推测功能
+
 mdict/readlib/pyx/build/ cython编译生成的中间文件
 
 mdict/readlib/pyx/mdict/ cython编译生成的中间文件

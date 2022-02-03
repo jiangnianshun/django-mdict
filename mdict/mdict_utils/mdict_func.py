@@ -40,7 +40,7 @@ def set_mdict_path():
         if os.path.exists(p):
             p = p
         else:
-            if p[0] == '~':
+            if len(p) > 1 and p[0] == '~':
                 p = os.path.join(os.path.expanduser('~'), p[2:])
                 if not os.path.exists(p):
                     p = None
@@ -63,7 +63,7 @@ def set_mdict_path():
         if os.path.exists(p):
             p = p
         else:
-            if p[0] == '~':
+            if len(p) > 1 and p[0] == '~':
                 p = os.path.join(os.path.expanduser('~'), p[2:])
                 if not os.path.exists(p):
                     p = None

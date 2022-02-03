@@ -91,3 +91,7 @@ python manage.py runserver 0.0.0.0:7000
 16. ipad safari在悬浮窗口状态下经常输入框无法唤出键盘。
 
 将ipad键盘类型改为浮动键盘，并且收回悬浮窗后重新拉出。
+
+17. urlopen error \[WinError 10061\] 由于目标计算机积极拒绝，无法连接。
+
+windows下ws_server的端口8766被占用，启动失败。修改config.ini中的ws_server_port。
