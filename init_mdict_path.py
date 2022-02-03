@@ -53,6 +53,8 @@ def process_list(path_list):
             del path_list[i]
         elif not isinstance(path_list[i], str):
             del path_list[i]
+        elif path_list[i][0] == '~':
+            path_list[i] = os.path.join(os.path.expanduser('~'), path_list[i][2:])
     return path_list
 
 

@@ -38,6 +38,16 @@ def set_mdict_path():
     for p in tmdict_path_list:
         t = False
         if os.path.exists(p):
+            p = p
+        else:
+            if p[0] == '~':
+                p = os.path.join(os.path.expanduser('~'), p[2:])
+                if not os.path.exists(p):
+                    p = None
+            else:
+                p = None
+
+        if p is not None:
             for root, dirs, files in os.walk(p):
                 for file in files:
                     if file.lower().endswith('.mdx') or file.lower().endswith('.zim'):
@@ -51,6 +61,16 @@ def set_mdict_path():
     for p in taudio_path_list:
         t = False
         if os.path.exists(p):
+            p = p
+        else:
+            if p[0] == '~':
+                p = os.path.join(os.path.expanduser('~'), p[2:])
+                if not os.path.exists(p):
+                    p = None
+            else:
+                p = None
+
+        if p is not None:
             # for root, dirs, files in os.walk(p):
             #     for file in files:
             #         if file.lower().endswith('.mdd'):
