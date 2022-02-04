@@ -6,7 +6,7 @@ import requests
 from requests.exceptions import ConnectionError, ReadTimeout, TooManyRedirects
 from multiprocessing import Process
 
-from base.base_func import ROOT_DIR
+from base.base_utils import ROOT_DIR
 
 icon_root_path = os.path.join(ROOT_DIR, 'media', 'icon')
 

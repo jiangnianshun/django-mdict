@@ -4,8 +4,8 @@ import re
 import time
 from urllib.parse import quote
 
-from base.sys_utils import split_os_path, find_os_path
-from base.base_func import is_number, ROOT_DIR
+from base.base_sys import split_os_path, find_os_path
+from base.base_utils import is_number, ROOT_DIR
 
 history_path = os.path.join(ROOT_DIR, 'history.dat')
 

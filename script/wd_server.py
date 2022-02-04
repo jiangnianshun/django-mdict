@@ -8,9 +8,9 @@ from watchdog.events import FileSystemEventHandler
 root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(root_path)
 
-from base.base_func import ROOT_DIR
-from base.sys_utils import check_system
-from mdict.mdict_utils.mdict_func import set_mdict_path
+from base.base_utils import ROOT_DIR
+from base.base_sys import check_system
+from mdict.mdict_utils.mdict_utils import set_mdict_path
 from mdict.mdict_utils.init_utils import rewrite_cache
 
 if check_system() == 0:

@@ -10,7 +10,7 @@ import django
 
 django.setup()
 
-from base.base_func import ROOT_DIR
+from base.base_utils import ROOT_DIR
 
 time_str = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
 

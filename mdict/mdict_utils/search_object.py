@@ -24,9 +24,9 @@ except Exception as e:
 
 from .entry_object import entryObject
 from .init_utils import init_vars
-from .mdict_func import replace_res_name, is_local, get_m_path, replace_res_name2, clear_duplication
+from .mdict_utils import replace_res_name, is_local, get_m_path, replace_res_name2, clear_duplication
 from .exception_decorator import search_exception
-from base.base_func import guess_mime, print_log_info
+from base.base_utils import guess_mime, print_log_info
 
 try:
     from mdict.readlib.lib.readzim import ZIMFile

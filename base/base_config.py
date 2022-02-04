@@ -2,7 +2,7 @@ import configparser
 import os
 import psutil
 
-from base.base_func import is_number, ROOT_DIR
+from base.base_utils import is_number, ROOT_DIR
 
 cpu_num = psutil.cpu_count(False)
 

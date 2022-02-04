@@ -20,13 +20,13 @@ from elasticsearch_dsl import Search, Index
 from elasticsearch_dsl.query import MultiMatch
 from elasticsearch.exceptions import ConnectionError, TransportError
 
-from base.base_func import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h, kh2f, print_log_info
-from base.base_func2 import is_mobile
-from base.base_func3 import t2s, s2t
+from base.base_utils import is_en_func, strQ2B, request_body_serialze, guess_mime, h2k, k2h, kh2f, print_log_info
+from base.base_utils2 import is_mobile
+from base.base_utils3 import t2s, s2t
 from base.base_constant import builtin_dic_prefix
-from base.sys_utils import check_system
+from base.base_sys import check_system
 
-from mdict.mdict_utils.mdict_func import write_to_history, get_history_file, compare_time, get_dic_attrs, check_xapian
+from mdict.mdict_utils.mdict_utils import write_to_history, get_history_file, compare_time, get_dic_attrs, check_xapian
 from mdict.mdict_utils.chaizi_reverse import HanziChaizi
 from mdict.mdict_utils.data_utils import get_or_create_dic, init_database
 from mdict.mdict_utils.loop_decorator import loop_mdict_list, innerObject
@@ -40,7 +40,7 @@ from mdict.mdict_utils.romkan import to_hiragana, to_katakana, to_hepburn, to_ku
 
 from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline, MyMdictItem, MyMdictEntryType
 from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
-from .mdict_utils.mdict_func import mdict_root_path, is_local, get_m_path
+from .mdict_utils.mdict_utils import mdict_root_path, is_local, get_m_path
 from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
 from .mdict_utils.anki import create_deck, get_decks, add_note
 

@@ -4,8 +4,8 @@ from django.core.exceptions import AppRegistryNotReady
 from django.db.utils import OperationalError as DjangoError
 from sqlite3 import OperationalError as Sqlite3Error
 from mdict.mdict_utils.init_utils import init_vars
-from base.base_func import read_from_sqlite, ROOT_DIR, print_log_info
-from base.sys_utils import check_module_import
+from base.base_utils import read_from_sqlite, ROOT_DIR, print_log_info
+from base.base_sys import check_module_import
 
 try:
     from mdict.models import MdictDic, MdictDicGroup

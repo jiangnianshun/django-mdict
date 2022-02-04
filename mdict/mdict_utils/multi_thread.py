@@ -1,5 +1,5 @@
 from multiprocessing.pool import ThreadPool
-from base.base_func import print_log_info
+from base.base_utils import print_log_info
 from .data_utils import get_or_create_dic
 from .loop_decorator import loop_mdict_list, innerObject
 from .init_utils import init_vars

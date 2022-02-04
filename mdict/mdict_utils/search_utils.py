@@ -7,13 +7,13 @@ from nltk.data import path as nltk_path
 from nltk.stem import WordNetLemmatizer
 from spellchecker import SpellChecker
 
-from base.base_func import ROOT_DIR
+from base.base_utils import ROOT_DIR
 from base.base_constant import builtin_dic_prefix, regp
-from base.sys_utils import check_system
+from base.base_sys import check_system
+from base.base_config import get_config_con, get_cpu_num
 from mdict.models import MyMdictEntry, MyMdictItem
 from .entry_object import entryObject
 from .loop_search import loop_search_sug
-from base.base_config import get_config_con, get_cpu_num
 from .ws_client import ws_search
 
 from .multi_process import create_process_pool, multiprocess_search_mdx, pre_pool_search
@@ -35,7 +35,6 @@ try:
 except Exception as e:
     lemmatizer = None
     print(e)
-
 
 spell = SpellChecker(distance=1)
 # 默认距离为2，比较慢，大概1.6秒左右，设置距离为1后，大约0.001秒左右。
@@ -88,7 +87,7 @@ def process_link(matched):
 
 
 def process_link2(matched):
-    return '<details><summary>点击展开</summary>'+matched.group(1)+'</details>'
+    return '<details><summary>点击展开</summary>' + matched.group(1) + '</details>'
 
 
 def search_bultin_dic_sug(query):

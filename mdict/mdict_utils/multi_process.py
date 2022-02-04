@@ -1,9 +1,9 @@
 import multiprocessing
 
-from base.base_func import print_log_info
+from base.base_utils import print_log_info
 from .data_utils import get_or_create_dic
 from .loop_decorator import loop_mdict_list, innerObject
-from base.base_config import get_cpu_num
+from base.base_config import get_cpu_num, set_cpu_num
 from .multi_base import multi_search_mdx
 
 
@@ -15,7 +15,9 @@ def multiprocess_search_mdx(n, query_list, group, is_mdx=True):
     return multi_search_mdx(n, query_list, group, is_mdx=is_mdx)
 
 
-def create_process_pool():
+def create_process_pool(dic_num=-1):
+    if dic_num > 0:
+        set_cpu_num(dic_num)
     cnum = get_cpu_num()
     print_log_info(['creating multiprocessing pool. process number is ', cnum, '.'])
     return multiprocessing.Pool(processes=cnum)

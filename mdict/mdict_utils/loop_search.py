@@ -1,6 +1,6 @@
 from .loop_decorator import loop_mdict_list, innerObject
 from .search_object import SearchObject
-from .mdict_func import get_dic_attrs
+from .mdict_utils import get_dic_attrs
 from mdict.models import MdictDicGroup
 
 

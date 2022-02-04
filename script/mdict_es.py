@@ -18,7 +18,7 @@ django.setup()
 from mdict.mdict_utils.search_object import SearchObject
 from mdict.models import MdictDic
 from mdict.mdict_utils.init_utils import init_vars
-from mdict.mdict_utils.mdict_func import get_dic_attrs
+from mdict.mdict_utils.mdict_utils import get_dic_attrs
 
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import parallel_bulk

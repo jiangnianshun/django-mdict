@@ -1,7 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from base.base_constant import regp
-from base.base_func import item_order
+from base.base_utils import item_order
 
 
 class MdictOnline(models.Model):

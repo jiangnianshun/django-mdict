@@ -1,13 +1,14 @@
 import copy
 import os
 
-from base.base_func import ROOT_DIR
+from base.base_utils import ROOT_DIR
 from base.base_config import get_config_con
-from base.sys_utils import check_system, check_apache
+from base.base_sys import check_system, check_apache
 from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
-from .init_utils import initVars, sort_mdict_list, load_cache
+from .init_utils import initVars, load_cache
 from .search_object import SearchObject
-from .mdict_func import get_dic_attrs, mdict_root_path
+from .mdict_utils import get_dic_attrs, mdict_root_path
+from .mdict_utils2 import sort_mdict_list
 from .dic_object import dicObject
 
 from .entry_object import entryObject

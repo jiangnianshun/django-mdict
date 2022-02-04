@@ -1,21 +1,27 @@
 #!/usr/bin/env python
-import os
-import sys
 import asyncio
 import json
+import os
+import pickle
+import sys
+
 import websockets
 
 root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(root_path)
 
 from mdict.mdict_utils.multi_process import multiprocess_search_mdx, create_process_pool, \
-    get_cpu_num, pre_pool_search
+    get_cpu_num, pre_pool_search, set_cpu_num
 from mdict.mdict_utils.object_coder import objectEncoder
 from base.base_config import get_config_con
+from base.base_sys import get_sys_name
 
 prpool = None
 
 cnum = 1
+
+cache_dir = os.path.join(root_path, '.cache')
+pickle_file_path = os.path.join(cache_dir, '.' + get_sys_name() + '.cache')
 
 
 async def ws_search(websocket, path):
@@ -50,9 +56,12 @@ async def ws_search(websocket, path):
 
 
 if __name__ == '__main__':
-    prpool = create_process_pool()
+    if os.path.exists(pickle_file_path):
+        with open(pickle_file_path, 'rb') as f:
+            tmp_list = pickle.load(f)
+        set_cpu_num(len(tmp_list))
     cnum = get_cpu_num()
-
+    prpool = create_process_pool()
     pre_pool_search(prpool)
     # 当引用全局变量init_vars的时候
     # windows下ws_server第一次查询时

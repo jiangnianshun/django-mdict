@@ -2,8 +2,8 @@ import os
 import subprocess
 from django.apps import AppConfig
 
-from base.base_func import print_log_info, check_readlib
-from base.sys_utils import check_system, print_sys_info, check_apache
+from base.base_utils import print_log_info, check_readlib
+from base.base_sys import check_system, print_sys_info, check_apache
 from mdict.mdict_utils.init_utils import init_mdict_list
 
 script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'script')

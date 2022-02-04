@@ -10,7 +10,7 @@ import django
 
 django.setup()
 
-from base.base_func import ROOT_DIR
+from base.base_utils import ROOT_DIR
 from mdict.mdict_utils.search_utils import get_mdict_content
 from mdict.models import MyMdictEntry
 
