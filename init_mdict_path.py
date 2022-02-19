@@ -3,8 +3,8 @@ import os
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-m', '--mdict', default="", help='mdict path')
-parser.add_argument('-a', '--audio', default="", help='audio path')
+parser.add_argument('-m', '--mdict', default="", help='input mdict path')
+parser.add_argument('-a', '--audio', default="", help='input audio path')
 
 args = parser.parse_args()
 
@@ -39,6 +39,9 @@ else:
         config.update({'mdict_path': [mdict_path]})
     if audio_path != '':
         config.update({'audio_path': [audio_path]})
+
+    if mdict_path == '' and audio_path == '':
+        print('require -m or -a parameter, use -h to show help.')
 
 
 def write_json_file(con, file, mode='w'):
