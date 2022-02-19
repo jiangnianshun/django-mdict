@@ -98,4 +98,4 @@ def print_sys_info():
     print('[SYSTEM] CPU Physical Core Number:', psutil.cpu_count(logical=False))
     available_memory_size = round(psutil.virtual_memory().available / 1024 / 1024 / 1024, 2)
     total_memory_size = round(psutil.virtual_memory().total / 1024 / 1024 / 1024, 2)
-    print('[SYSTEM] Memory Size:', available_memory_size, '/', total_memory_size, 'GB')
+    print('[SYSTEM] Available Memory Size:', available_memory_size, '/', total_memory_size, 'GB')

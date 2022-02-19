@@ -94,4 +94,8 @@ python manage.py runserver 0.0.0.0:7000
 
 17. urlopen error \[WinError 10061\] 由于目标计算机积极拒绝，无法连接。
 
-windows下ws_server的端口8766被占用，启动失败。修改config.ini中的ws_server_port。
+windows下ws_server的端口8766被占用，启动失败。重启电脑解除占用，或者修改config.ini中的ws_server_port。
+
+18. 新的nltk版本报错Resource omw-1.4 not found.
+
+下载omw1.4.zip放置到django-mdict/media/nltk_data/corpora/文件夹下。
