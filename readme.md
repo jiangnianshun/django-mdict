@@ -6,10 +6,6 @@
 
 django-mdict是django实现的mdict词典查询工具（支持mdx、zim格式）。
 
-百度网盘：https://pan.baidu.com/s/1bwv5TXZ7SpyVVjpSVi3h4g 
-
-提取码：76xe
-
 ### 适用情景
 
 局域网内，将django-mdict部署在服务器上，其他电脑、平板、手机可只保留少量词典，当离开局域网时，查询本地词典，当进入局域网时，可通过浏览器对全部词典进行查词。
@@ -102,3 +98,11 @@ dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readli
 [样式](doc/doc_style.md)
 
 [可能的问题](doc/doc_question.md)
+
+### 分流
+
+百度网盘：https://pan.baidu.com/s/1bwv5TXZ7SpyVVjpSVi3h4g 
+
+提取码：76xe
+
+GoogleDrive：https://drive.google.com/drive/folders/1Zbf-tix4Nkz8MDgSA9yK2b0EdihCo_Lv?usp=sharing

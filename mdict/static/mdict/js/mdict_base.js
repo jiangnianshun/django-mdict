@@ -386,8 +386,8 @@ function init_online_dic_var(){
 }
 
 //'compute-every-element':'精确计算高度'
-common_config={'force-refresh':'强制刷新','st-enable':'繁简转化','chaizi-enable':'拆字反查','fh-char-enable':'英文全角转半角',
-'kana-enable':'平片假名转化','romaji-enable':'罗马字假名转化','link-new-label':'跳转新标签页','force-font':'强制使用全宋体',
+common_config={'force-refresh':'强制刷新','st-enable':'繁简转换','chaizi-enable':'拆字反查','fh-char-enable':'英文全角转半角',
+'kana-enable':'平片假名转换','romaji-enable':'罗马字假名转换','link-new-label':'跳转新标签页','force-font':'强制全宋体',
 'card-show':'展开多个词典','select-btn-enable':'启用查询菜单','new-label-link':'新标签页正查','fixed-height':'固定高度',
 'magnifier-enable':'启用放大镜','hide-bottom-bar':'隐藏底部栏'}
 //'copy-with-tag':'复制包含样式'

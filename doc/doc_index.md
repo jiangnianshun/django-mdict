@@ -136,13 +136,21 @@ mdict/readlib/pyx/mdict/ cython编译生成的中间文件
 
 #### 查词API
 
-1. 使用GET方法获取查词的json结果
+1. 在marginnote3中调用查词页面
 
-url是[http://IP地址/api/mdict2/mdict/]()，参数是query:apple,page:1
+设置/研究/自定义URL
 
-2. 使用url获取查词的json结果
+[http://IP地址:8000/mdict/?query={keyword}]()
 
-访问[http://IP地址/api/mdict2/mdict/?query=apple&page=2&format=json]()
+2. 使用GET方法获取查词的json结果
+
+[http://IP地址:8000/api/mdict2/mdict/]()
+
+参数是query:apple,page:1
+
+3. 使用url获取查词的json结果
+
+[http://IP地址:8000/api/mdict2/mdict/?query=apple&page=2&format=json]()
 
 #### 切换主页
 
