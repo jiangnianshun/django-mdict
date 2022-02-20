@@ -1,4 +1,5 @@
 import copy
+import gc
 import os
 
 from base.base_utils import ROOT_DIR
@@ -113,6 +114,7 @@ def init_obj(proc_flag):
             temp_list.append(init_vars.mdict_odict[k])
 
         init_vars.mdict_odict = temp_list
+        gc.collect()
         # 每个进程只保存自己的数据，其他数据会被gc掉，减少windows下内存占用。但是ubuntu apache2下会导致占用内存暴增。
 
 
@@ -130,7 +132,8 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
         else:
             if not check_apache():
                 now_mtime = os.path.getmtime(pickle_file_path)
-                if init_vars.mtime < now_mtime:
+                cache_size = os.path.getsize(pickle_file_path)
+                if init_vars.mtime < now_mtime and cache_size > 0:
                     init_obj(n)
 
     count = 0
