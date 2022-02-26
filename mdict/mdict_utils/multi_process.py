@@ -25,9 +25,13 @@ def create_process_pool(dic_num=-1):
 
 def pre_pool_search(prpool):
     # 预热，避免第一次查询等待。
-    cnum = get_cpu_num()
-    q_list = ((i, ['bananapie'], 0, True) for i in range(cnum))
-    prpool.starmap(multiprocess_search_mdx, q_list)
+    try:
+        cnum = get_cpu_num()
+        q_list = ((i, ['bananapie'], 0, True) for i in range(cnum))
+        prpool.starmap(multiprocess_search_mdx, q_list)
+    except Exception as e:
+        # 当db.sqlite3不存在时，会导致django无法运行。
+        print(e)
 
 
 def terminate_pool(pool):

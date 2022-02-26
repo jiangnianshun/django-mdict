@@ -76,8 +76,8 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 5. linux下可能需要转换脚本格式才能正常运行。
 
 ```
-apt-get update
-apt-get install dos2unix
+sudo apt-get update
+sudo apt-get install dos2unix
 dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 

@@ -17,15 +17,15 @@ su root
 3. cd到django-mdict目录，运行下列命令，转换脚本格式。
 
 ```
-apt-get update
-apt-get install dos2unix
+sudo apt-get update
+sudo apt-get install dos2unix
 dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 
 4. 运行run_server.sh，默认端口8000，该脚本仅适用于ubuntu，不适用于centos。
 
 ```
-bash run_server.sh
+sudo bash run_server.sh
 ```
 
 第一次运行会进行初始化。
@@ -54,15 +54,15 @@ su root
 3. cd到django-mdict目录，运行下列命令，转换脚本格式。
 
 ```
-apt-get update
-apt-get install dos2unix
+sudo apt-get update
+sudo apt-get install dos2unix
 dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 
 4. 运行init_wsl.sh，默认端口80，该脚本仅适用于ubuntu，不适用于centos。
 
 ```
-bash init_wsl.sh
+sudo bash init_wsl.sh
 ```
 
 首先要求从命令行输入词典库路径和发音库路径，没有就跳过。
