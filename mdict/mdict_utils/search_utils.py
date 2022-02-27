@@ -3,8 +3,6 @@ import os
 import re
 
 from django.db.models.functions import Length
-from nltk.data import path as nltk_path
-from nltk.stem import WordNetLemmatizer
 from spellchecker import SpellChecker
 
 from base.base_utils import ROOT_DIR
@@ -28,6 +26,8 @@ if check_system() == 0:
 #     thpool = create_thread_pool()
 
 try:
+    from nltk.data import path as nltk_path
+    from nltk.stem import WordNetLemmatizer
     nltk_path.append(os.path.join(ROOT_DIR, 'media', 'nltk_data'))
     lemmatizer = WordNetLemmatizer()
     lemmatizer.lemmatize('a')

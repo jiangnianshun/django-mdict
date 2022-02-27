@@ -28,20 +28,30 @@ if tk_exist:
     root.withdraw()  # 隐藏主界面
 
     _path = askdirectory()
-    config.update({'mdict_path': [_path]})
-    print('mdict_path', _path)
+    # 如果用户点击取消和关闭选择框，返回值都是空字符串。
+    if _path != '':
+        config.update({'mdict_path': [_path]})
+        print('mdict_path', _path)
+    else:
+        print('mdict_path is empty.')
     _path = askdirectory()
-    # 如果用户关闭了选择框，那么返回值是什么？
-    config.update({'audio_path': [_path]})
-    print('audio_path', _path)
+    if _path != '':
+        config.update({'audio_path': [_path]})
+        print('audio_path', _path)
+    else:
+        print('audio_path is empty.')
 else:
     if mdict_path != '':
         config.update({'mdict_path': [mdict_path]})
+        print('mdict_path', mdict_path)
+    else:
+        print('mdict_path is empty. require -m parameter, use -h to show help.')
+
     if audio_path != '':
         config.update({'audio_path': [audio_path]})
-
-    if mdict_path == '' and audio_path == '':
-        print('require -m or -a parameter, use -h to show help.')
+        print('audio_path', audio_path)
+    else:
+        print('audio_path is empty.')
 
 
 def write_json_file(con, file, mode='w'):
