@@ -4,7 +4,8 @@ from django.core.exceptions import AppRegistryNotReady
 from django.db.utils import OperationalError as DjangoError
 from sqlite3 import OperationalError as Sqlite3Error
 from mdict.mdict_utils.init_utils import init_vars
-from base.base_utils import read_from_sqlite, ROOT_DIR, print_log_info
+from mdict.mdict_utils.dic_object import dicObject
+from base.base_utils import exec_sqlite3, ROOT_DIR, print_log_info
 from base.base_sys import check_module_import
 
 try:
@@ -22,21 +23,32 @@ def get_all_dics():
         return MdictDic.objects.all()
     else:
         dics_dict = {}
-        all_dics = read_from_sqlite(sql3_path, 'select * from mdict_mdictdic')
+        all_dics = exec_sqlite3(sql3_path, 'select * from mdict_mdictdic')
         for tdic in all_dics:
             if tdic[2] not in dics_dict.keys():
                 dics_dict.update({tdic[2]: tdic})
         return dics_dict
 
 
-def get_or_create_dic(dict_file):
-    dics = MdictDic.objects.filter(mdict_file=dict_file)
-    if len(dics) == 0:
-        dic = MdictDic.objects.create(mdict_name=dict_file, mdict_file=dict_file)
+def get_or_create_dic(dict_file, dict_name=''):
+    if check_module_import('mdict.models'):
+        dics = MdictDic.objects.filter(mdict_file=dict_file)
+        if len(dics) == 0:
+            dic = MdictDic.objects.create(mdict_name=dict_file, mdict_file=dict_file)
+        else:
+            dic = dics[0]
+        return dic
     else:
-        dic = dics[0]
-
-    return dic
+        if dict_name == '':
+            dict_name = dict_file
+        exec_cmd = "insert into mdict_mdictdic (mdict_name,mdict_file,mdict_enable,mdict_priority) values ('{}','{}',1,1)" \
+            .format(dict_name, dict_file)
+        exec_sqlite3(sql3_path, exec_cmd)
+        dics = exec_sqlite3(sql3_path, "select * from mdict_mdictdic where mdict_file='{}'".format(dict_file))
+        if len(dics) > 0:
+            return dicObject(*dics[0])
+        else:
+            return None
 
 
 def check_dic_in_group(group_pk, dic_pk):
@@ -51,9 +63,9 @@ def check_dic_in_group(group_pk, dic_pk):
         else:
             return False
     else:
-        dic_in_group = read_from_sqlite(sql3_path,
-                                        'select * from mdict_mdictdicgroup_mdict_group where mdictdicgroup_id='
-                                        + str(group_pk) + ' AND mdictdic_id=' + str(dic_pk))
+        dic_in_group = exec_sqlite3(sql3_path,
+                                    'select * from mdict_mdictdicgroup_mdict_group where mdictdicgroup_id={} AND mdictdic_id={}'
+                                    .format(group_pk, dic_pk))
         if len(dic_in_group) > 0:
             return True
         else:

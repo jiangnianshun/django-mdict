@@ -119,7 +119,7 @@ def init_obj(proc_flag):
 
 
 def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
-    global init_vars, k_list
+    global init_vars, k_list, all_dics
     r_list = []
 
     if check_system() == 0:
@@ -151,9 +151,11 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
 
         if isinstance(all_dics, dict):
             if k not in all_dics.keys():
-                continue
-            dic_tuple = all_dics[k]
-            dic = dicObject(*dic_tuple)
+                dic = get_or_create_dic(dict_file)
+                all_dics = get_all_dics()
+            else:
+                dic_tuple = all_dics[k]
+                dic = dicObject(*dic_tuple)
         else:
             dic_list = all_dics.filter(mdict_file=dict_file)
             if len(dic_list) == 0:
@@ -161,7 +163,7 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
             else:
                 dic = dic_list[0]
 
-        if dic.mdict_enable:
+        if dic is not None and dic.mdict_enable:
             params = (mdx, mdd_list, get_dic_attrs(dic), copy.copy(query_list))
             # query_list需要浅拷贝
             if group_pk == 0:  # 默认查询全部词典
