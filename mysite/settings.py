@@ -46,13 +46,13 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    # 'django.middleware.security.SecurityMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
 ]
 
@@ -150,7 +150,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = False
 # django.middleware.security.SecurityMiddleware
 # django3.0 SECURE_CONTENT_TYPE_NOSNIFF默认为True
 
-# X_FRAME_OPTIONS = 'SAMEORIGIN'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 # django.middleware.clickjacking.XFrameOptionsMiddleware
 # django3.0 X_FRAME_OPTIONS默认为DENY
 

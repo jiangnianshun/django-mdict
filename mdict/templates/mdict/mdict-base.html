@@ -90,6 +90,8 @@
     </div>
 </div>
 
+{% csrf_token %}
+
 {% include "mdict/mdict-modal-list.html" %}
 
 {% include "mdict/mdict-modal-config.html" %}
@@ -105,6 +107,20 @@
 <script src="/static/jquery/jquery.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/static/jquery-ui/jquery-ui.min.js"></script>
+<script>
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>>
 <script src="/static/mdict/iframe-resizer/js/iframeResizer.min.js"></script>
 <script src="/static/mdict/ckeditor5/ckeditor.js"></script>
 <script src="/static/mdict/transform/transform.js"></script>
