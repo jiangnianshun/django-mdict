@@ -63,12 +63,15 @@ def get_sys_name(set_system=''):
 
 def check_system():
     sys_name = get_sys_name()
-    if sys_name == 'Linux':  # 下一步区分linux和wsl
+    if sys_name == 'Linux':
         return 0
     elif sys_name == 'Windows':
         return 1
+    elif sys_name == 'Darwin':
+        # macos
+        return 0
     else:
-        print('unknown system')
+        print('Unknown System', sys_name)
         return 1
 
 
