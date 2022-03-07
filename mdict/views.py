@@ -9,6 +9,7 @@ from urllib.parse import quote, unquote
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
@@ -1300,6 +1301,7 @@ def mdict_index(request):
     return render(request, 'mdict/mdict-index.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
 
 
+@login_required()
 def wordcloud(request):
     return render(request, 'mdict/wordcloud.html')
 
@@ -1352,6 +1354,7 @@ def characters(request):
     return render(request, 'mdict/characters.html', {'data': data})
 
 
+@login_required()
 def network(request):
     return render(request, 'mdict/builtin-network.html')
 

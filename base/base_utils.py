@@ -30,7 +30,6 @@ def get_log_header(mod_name, debug_level, start=-1, end=-1):
 
 
 def print_log_info(log_content='', debug_level=0, start=-1, end=-1):
-    global glog
     prev_frame = inspect.getframeinfo(inspect.currentframe().f_back)
     # currentframe()是当前函数，f_back是上一帧，即调用函数
     # prev_frame,0是文件路径，1是行数，2是函数名（如果不在函数里，显示<module>），3显示调用本函数的那一行代码，4索引
