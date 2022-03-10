@@ -58,7 +58,10 @@ def get_sys_name(set_system=''):
         default_system = set_system
     if default_system != '':
         return default_system
-    return platform.system()
+    if platform.system() == "Darwin":
+        return "Linux"
+    else:
+        return platform.system()
 
 
 def check_system():

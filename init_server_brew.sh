@@ -1,10 +1,9 @@
-#!/bin/bash
 #!/usr/bin/env python3
 cd `dirname  $0`
 echo "installing dependencies..."
-apt-get install -y python3 python3-pip zlib1g-dev liblzo2-dev python3-xapian libxapian-dev
-pip3 install -r requirements1.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip3 install -r requirements2.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+brew install lzo
+pip3 install --user -r requirements1.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip3 install --user -r requirements2.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 file="db.sqlite3"
 if [ ! -f $file ]
 then

@@ -2,14 +2,14 @@ django
 djangorestframework
 django-ckeditor
 websockets
-elasticsearch
-elasticsearch_dsl
 requests
 opencc-python-reimplemented
 pyspellchecker
 pillow
 psutil
 zstandard
+watchdog
+elasticsearch
+elasticsearch_dsl
 cython
 nltk
-watchdog

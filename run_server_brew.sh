@@ -10,5 +10,5 @@ if [ $audio_path ]; then
 python3 init_mdict_path.py -a $audio_path
 fi
 fi
-source init_server.sh
+source init_server_brew.sh
 python3 manage.py runserver 0.0.0.0:8000 --noreload

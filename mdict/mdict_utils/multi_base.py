@@ -19,7 +19,12 @@ try:
 except Exception as e:
     pass
 
-all_dics = get_all_dics()
+try:
+    all_dics = get_all_dics()
+except Exception as e:
+    all_dics = None
+    print(e)
+
 if check_system() == 0:
     pickle_file_path = os.path.join(ROOT_DIR, '.cache', '.Linux.cache')
     from .init_utils import init_vars
@@ -121,6 +126,9 @@ def init_obj(proc_flag):
 def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
     global init_vars, k_list, all_dics
     r_list = []
+
+    if all_dics is None:
+        return r_list
 
     if check_system() == 0:
         k_list = init_vars.indicator[n]
