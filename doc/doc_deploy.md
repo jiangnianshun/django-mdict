@@ -40,7 +40,7 @@ sudo bash run_server.sh
 
 ### 部署到wsl apache
 
-部署到apache后启动速度慢于启动测试服务器（manage.py），且占用内存增大。
+部署到apache后启动速度远慢于启动测试服务器（manage.py），且占用内存增大，因为MPM导致创建了多个进程池。
 
 1. 安装wsl，系统ubuntu。
 

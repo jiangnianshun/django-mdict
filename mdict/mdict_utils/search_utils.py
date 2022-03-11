@@ -13,6 +13,7 @@ from mdict.models import MyMdictEntry, MyMdictItem
 from .entry_object import entryObject
 from .loop_search import loop_search_sug
 from .ws_client import ws_search
+from .data_utils import get_all_dics
 
 from .multi_process import create_process_pool, multiprocess_search_mdx, pre_pool_search
 
@@ -20,8 +21,13 @@ prpool = None
 thpool = None
 
 if check_system() == 0:
-    prpool = create_process_pool()
-    pre_pool_search(prpool)
+    try:
+        # 数据表不存在时，不创建进程池。
+        all_dics = get_all_dics()
+        prpool = create_process_pool()
+        pre_pool_search(prpool)
+    except Exception as e:
+        print(e)
 # else:
 #     thpool = create_thread_pool()
 

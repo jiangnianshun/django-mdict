@@ -130,8 +130,6 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
     if all_dics is None:
         return r_list
 
-    if check_system() == 0:
-        k_list = init_vars.indicator[n]
     if init_vars is None:
         init_obj(n)
     else:
@@ -143,6 +141,9 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
                 cache_size = os.path.getsize(pickle_file_path)
                 if init_vars.mtime < now_mtime and cache_size > 0:
                     init_obj(n)
+
+    if check_system() == 0:
+        k_list = init_vars.indicator[n]
 
     count = 0
     for k in k_list:
