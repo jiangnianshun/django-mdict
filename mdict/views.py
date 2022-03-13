@@ -155,8 +155,10 @@ class MdictEntryViewSet(viewsets.ViewSet):
                 query = query[:query.find('.htm')]
                 record_list = search(query, group)
                 # 二十五史词典有些词条比如 史记_06但在超链接错误写成了史记_06.htm
-
-            record_list.sort(key=lambda k: k.mdx_pror)
+            try:
+                record_list.sort(key=lambda k: k.mdx_pror)
+            except Exception as e:
+                print(e)
 
         return record_list
 
