@@ -1,7 +1,6 @@
 1. 加入新的词典没有显示
 
-重启django-mdict，只有启动时才会检查文件夹变动。
-如果重启无效，尝试手动删除根目录下的.cache缓存文件夹后再重启。
+尝试手动删除根目录下的.cache缓存文件夹后再重启。
 
 2. 前端页面的js、css无效。
 
@@ -99,3 +98,7 @@ windows下ws_server的端口8766被占用，启动失败。重启电脑解除占
 18. 新的nltk版本报错Resource omw-1.4 not found.
 
 下载omw1.4.zip放置到django-mdict/media/nltk_data/corpora/文件夹下。
+
+19. sqlite3.9.0 or later is required
+
+升级sqlite版本

@@ -1,9 +1,9 @@
   * [在wsl上运行测试服务器](#在wsl上运行测试服务器)
   * [部署到wsl apache](#部署到wsl-apache)
 
-### 在wsl上运行测试服务器
+### 在wsl上运行
 
-windows下建议部署到wsl1(ubuntu)，wsl2读取windows文件要慢于wsl1，导致查询速度会慢大约1/20-1/10，此外还要解决ip访问的问题。
+windows下建议部署到wsl1，wsl2读取windows文件要慢于wsl1，导致查询速度会慢大约1/20-1/10，此外还要解决ip访问的问题。
 
 1. 安装wsl，系统ubuntu。
 
@@ -22,7 +22,7 @@ sudo apt-get install dos2unix
 dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
 ```
 
-4. 运行run_server.sh，默认端口8000，该脚本仅适用于ubuntu，不适用于centos。
+4. 运行run_server.sh，默认端口8000，该脚本适用于ubuntu（centos需要运行run_server_yum.sh）。
 
 ```
 sudo bash run_server.sh

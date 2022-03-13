@@ -63,9 +63,12 @@ django-mdict
 ├─requirements1.txt（django-mdict需要的依赖）
 ├─requirements2.txt（django-mdict需要的依赖）
 ├─requirements3.txt（划词脚本需要的依赖）
-├─run_server.bat（windows下运行django-mdict）
-├─run_server.sh（linux下运行django-mdict）
-├─run_server.vbs（windows下运行django-mdict-不显示窗口）
+├─run_server.bat（windows下初始化django-mdict）
+├─run_server.sh（调用run_server_apt.sh）
+├─run_server_apt.sh（ubuntu下初始化django-mdict）
+├─run_server_brew.sh（macos下初始化django-mdict）
+├─run_server_yum.sh（centos下初始化django-mdict）
+├─run_server.vbs（windows下初始化django-mdict-不显示窗口）
 ├─run_server_no_check.bat（windows下运行django-mdict-启动时不检查）
 └─run_server_no_check.sh（linux下运行django-mdict-启动时不检查）
 ```

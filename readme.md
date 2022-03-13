@@ -50,18 +50,20 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 git clone https://github.com/jiangnianshun/django-mdict.git --depth=1
 ```
 
-Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译，生成数据库）。
+Windows下双击运行run_server.bat，第一次运行会进行初始化（安装依赖，cython编译，创建数据库db.sqlite3）。
 
-初始化过程中首先会弹出文件夹选择框，第一次选择词典库路径，第二次选择发音库路径（没有就跳过）。
+运行过程中会弹出两次文件夹选择框，第一次选择词典库路径（可跳过），第二次选择发音库路径（可跳过）。
 
 路径信息保存在mdict_path.json文件中。
 
-最后要求设置django的用户名和密码，邮箱不需要填写。
+最后要求输入django的用户名、邮箱和密码，邮箱不需要填写。
 
 5. django服务器默认端口8000
 <br />本地电脑访问http://127.0.0.1:8000/mdict/
 <br />其他设备访问http://本机ip:8000/mdict/
 <br />可能需要设置防火墙入站链接，开放8000端口。
+
+6. 完成初始化后每次运行run_server_no_check.bat启动即可。
    
 ### 注意
 
