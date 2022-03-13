@@ -249,6 +249,10 @@ def exec_sqlite3(db_path, exec_cmd, exec_param=None):
         print(e)
         conn.close()
         return []
+    except sqlite3.OperationalError as e:
+        print(e)
+        conn.close()
+        return []
 
 
 def item_order(obj, mdl, type):

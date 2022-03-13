@@ -24,9 +24,19 @@ def get_all_dics():
     else:
         dics_dict = {}
         all_dics = exec_sqlite3(sql3_path, 'select * from mdict_mdictdic')
+
+        # 字段mdict_file顺序不能保证固定
+        exec_cmd = "PRAGMA table_info(mdict_mdictdic)"
+        tflag = 1
+        colum_list = exec_sqlite3(sql3_path, exec_cmd)
+        for colum in colum_list:
+            if colum[1] == 'mdict_file':
+                tflag = colum[0]
+                break
+
         for tdic in all_dics:
-            if tdic[2] not in dics_dict.keys():
-                dics_dict.update({tdic[2]: tdic})
+            if tdic[tflag] not in dics_dict.keys():
+                dics_dict.update({tdic[tflag]: tdic})
         return dics_dict
 
 
