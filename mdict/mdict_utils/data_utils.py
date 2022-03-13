@@ -102,9 +102,5 @@ def init_database():
         if update_list:
             MdictDic.objects.bulk_create(update_list, batch_size=100)
             print('add new dictionary', len(update_list))
-    except Sqlite3Error as e:
-        print(e)
-    except DjangoError as e:
-        print(e)
-    except NameError as e:
-        pass
+    except Exception as e:
+        print('initializing database failed', e)
