@@ -41,10 +41,10 @@ def get_or_create_dic(dict_file, dict_name=''):
     else:
         if dict_name == '':
             dict_name = dict_file
-        exec_cmd = "insert into mdict_mdictdic (mdict_name,mdict_file,mdict_enable,mdict_priority) values ('{}','{}',1,1)" \
-            .format(dict_name, dict_file)
-        exec_sqlite3(sql3_path, exec_cmd)
-        dics = exec_sqlite3(sql3_path, "select * from mdict_mdictdic where mdict_file='{}'".format(dict_file))
+        exec_cmd = "insert into mdict_mdictdic (mdict_name,mdict_file,mdict_enable,mdict_priority) values (?,?,1,1)"
+        exec_param = (dict_name, dict_file)
+        exec_sqlite3(sql3_path, exec_cmd, exec_param)
+        dics = exec_sqlite3(sql3_path, "select * from mdict_mdictdic where mdict_file=?", (dict_file,))
         if len(dics) > 0:
             return dicObject(*dics[0])
         else:

@@ -232,11 +232,14 @@ def kh2f(words):
     return trans_words
 
 
-def exec_sqlite3(db_path, exec_cmd):
+def exec_sqlite3(db_path, exec_cmd, exec_param=None):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     conn.row_factory = sqlite3.Row
-    cursor.execute(exec_cmd)
+    if exec_param is None:
+        cursor.execute(exec_cmd)
+    else:
+        cursor.execute(exec_cmd, exec_param)
     rows = cursor.fetchall()
     conn.commit()
     conn.close()
