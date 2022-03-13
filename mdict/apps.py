@@ -2,11 +2,13 @@ import os
 import subprocess
 from django.apps import AppConfig
 
-from base.base_utils import print_log_info, check_readlib
+from base.base_utils import print_log_info, check_readlib, exec_sqlite3
 from base.base_sys import check_system, print_sys_info, check_apache
 from mdict.mdict_utils.init_utils import init_mdict_list
 
-script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'script')
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+script_path = os.path.join(root_dir, 'script')
+sql3_path = os.path.join(root_dir, 'db.sqlite3')
 
 
 def init_ws_server():
@@ -49,6 +51,11 @@ class MdictConfig(AppConfig):
             print_sys_info()
             check_readlib()
             if check_system() == 1:
-                init_ws_server()
+                try:
+                    # 数据表不存在时，不创建进程池。
+                    all_dics = exec_sqlite3(sql3_path, 'select * from mdict_mdictdic')
+                    init_ws_server()
+                except Exception as e:
+                    print(e)
             if not check_apache():
                 init_wd_server()
