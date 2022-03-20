@@ -14,7 +14,7 @@ sql3_path = os.path.join(root_dir, 'db.sqlite3')
 def init_ws_server():
     cmd = ['python', 'ws_server.py']
     command = ' '.join(cmd)
-    print_log_info(['running ws server...'])
+    print_log_info(['running websockets...'])
     try:
         subprocess.Popen(command, shell=False, cwd=script_path)
     except Exception as e:
@@ -30,7 +30,7 @@ def init_wd_server():
         cmd = ['python', 'wd_server.py']
         command = ' '.join(cmd)
         shell = False
-    print_log_info(['running watch dog server...'])
+    print_log_info(['running watch dog...'])
     try:
         subprocess.Popen(command, shell=shell, cwd=script_path)
     except Exception as e:

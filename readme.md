@@ -80,7 +80,7 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 ```
 sudo apt-get update
 sudo apt-get install dos2unix
-dos2unix init_wsl.sh init_server.sh init_server_brew.sh django-mdict.conf run_server.sh run_server_brew.sh mdict/readlib/pyx/build.sh
+dos2unix init_wsl.sh init_server.sh init_server_brew.sh init_server_yum.sh django-mdict.conf run_server.sh run_server_brew.sh run_server_yum.sh mdict/readlib/pyx/build.sh
 ```
 
 6. 每次更新为了避免出问题，需要手动清除浏览器缓存（不需要清cookies），删除根目录下的.cache缓存文件夹，并重新运行一遍run_server.bat或run_server.sh脚本。对于PWA或添加到桌面图标，需要删除后重新添加。

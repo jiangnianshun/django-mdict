@@ -69,11 +69,15 @@ chmod +x /bin/sleep
 
 12. Error: [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。
 
-默认端口8000被占用，尝试使用其他端口，或者重启电脑。
+默认端口8000端口被占用，或者ws_server.py运行的18766端口被占用，尝试使用其他端口，或者重启电脑。
+
+8000端口被占用
 
 ```
-python manage.py runserver 0.0.0.0:7000
+python manage.py runserver 0.0.0.0:另一个端口号
 ```
+
+18766端口被占用，修改config.ini中的ws_server_port。
 
 13. 载入词典报错mdx loading failed 'Encoding'或mdd loading failed 'GeneratedByEngineVersion'。
 
