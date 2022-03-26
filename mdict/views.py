@@ -39,11 +39,11 @@ from mdict.mdict_utils.search_utils import search, search_bultin_dic_sug, search
 from .mdict_utils.entry_object import entryObject
 from mdict.mdict_utils.romkan import to_hiragana, to_katakana, to_hepburn, to_kunrei
 
-from .models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline, MyMdictItem, MyMdictEntryType
-from .serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
-from .mdict_utils.mdict_utils import mdict_root_path, is_local, get_m_path
-from .mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
-from .mdict_utils.anki import create_deck, get_decks, add_note
+from mdict.models import MdictDic, MyMdictEntry, MdictDicGroup, MdictOnline, MyMdictItem, MyMdictEntryType
+from mdict.serializers import MdictEntrySerializer, MyMdictEntrySerializer, MdictOnlineSerializer
+from mdict.mdict_utils.mdict_utils import mdict_root_path, is_local, get_m_path
+from mdict.mdict_utils.search_cache import sug_cache, MdictPage, key_paginator
+from mdict.mdict_utils.anki import create_deck, get_decks, add_note
 
 try:
     from mdict.readlib.lib.readzim import ZIMFile

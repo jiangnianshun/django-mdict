@@ -1,8 +1,6 @@
 import os
 import html
 from django.core.exceptions import AppRegistryNotReady
-from django.db.utils import OperationalError as DjangoError
-from sqlite3 import OperationalError as Sqlite3Error
 from mdict.mdict_utils.init_utils import init_vars
 from mdict.mdict_utils.dic_object import dicObject
 from base.base_utils import exec_sqlite3, ROOT_DIR, print_log_info

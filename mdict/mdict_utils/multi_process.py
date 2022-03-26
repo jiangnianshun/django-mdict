@@ -1,10 +1,10 @@
 import multiprocessing
 
 from base.base_utils import print_log_info
-from .data_utils import get_or_create_dic
-from .loop_decorator import loop_mdict_list, innerObject
 from base.base_config import get_cpu_num, set_cpu_num
-from .multi_base import multi_search_mdx
+from mdict.mdict_utils.data_utils import get_or_create_dic
+from mdict.mdict_utils.loop_decorator import loop_mdict_list, innerObject
+from mdict.mdict_utils.multi_base import multi_search_mdx
 
 
 # def multiprocess_search_sug(n, sug_list, group):

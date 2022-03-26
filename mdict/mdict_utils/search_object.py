@@ -22,10 +22,10 @@ except AppRegistryNotReady:
 except Exception as e:
     pass
 
-from .entry_object import entryObject
-from .init_utils import init_vars
-from .mdict_utils import replace_res_name, is_local, get_m_path, replace_res_name2, clear_duplication
-from .exception_decorator import search_exception
+from mdict.mdict_utils.entry_object import entryObject
+from mdict.mdict_utils.init_utils import init_vars
+from mdict.mdict_utils.mdict_utils import replace_res_name, is_local, get_m_path, replace_res_name2, clear_duplication
+from mdict.mdict_utils.exception_decorator import search_exception
 from base.base_utils import guess_mime, print_log_info
 
 try:

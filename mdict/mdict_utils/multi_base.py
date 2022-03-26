@@ -5,14 +5,14 @@ import os
 from base.base_utils import ROOT_DIR
 from base.base_config import get_config_con
 from base.base_sys import check_system, check_apache
-from .data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
-from .init_utils import initVars, load_cache
-from .search_object import SearchObject
-from .mdict_utils import get_dic_attrs, mdict_root_path
-from .mdict_utils2 import sort_mdict_list
-from .dic_object import dicObject
+from mdict.mdict_utils.data_utils import get_or_create_dic, get_all_dics, check_dic_in_group
+from mdict.mdict_utils.init_utils import initVars, load_cache
+from mdict.mdict_utils.search_object import SearchObject
+from mdict.mdict_utils.mdict_utils import get_dic_attrs, mdict_root_path
+from mdict.mdict_utils.mdict_utils2 import sort_mdict_list
+from mdict.mdict_utils.dic_object import dicObject
 
-from .entry_object import entryObject
+from mdict.mdict_utils.entry_object import entryObject
 
 try:
     from mdict.models import MdictDicGroup

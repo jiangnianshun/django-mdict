@@ -1,11 +1,10 @@
 import json
-import os
 
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import Webgroup, Website
-from .icon_utils import get_icons_set, get_icon
+from mynav.models import Webgroup, Website
+from mynav.icon_utils import get_icons_set, get_icon
 
 
 def mynav_index(request):

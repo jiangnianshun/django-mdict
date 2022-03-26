@@ -5,8 +5,8 @@ import os
 
 from base.base_utils import print_log_info, ROOT_DIR
 from base.base_sys import get_sys_name
-from .mdict_utils import rename_history, mdict_root_path
-from .mdict_utils2 import get_mdict_dict, sort_mdict_list
+from mdict.mdict_utils.mdict_utils import rename_history, mdict_root_path
+from mdict.mdict_utils.mdict_utils2 import get_mdict_dict, sort_mdict_list
 
 try:
     from mdict.readlib.lib.readzim import ZIMFile

@@ -1,5 +1,5 @@
 from json import JSONEncoder
-from .entry_object import entryObject
+from mdict.mdict_utils.entry_object import entryObject
 
 
 class objectEncoder(JSONEncoder):

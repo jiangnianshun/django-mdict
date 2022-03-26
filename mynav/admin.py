@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Webgroup, Website
+from mynav.models import Webgroup, Website
 
 
 # Register your models here.

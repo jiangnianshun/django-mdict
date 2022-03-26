@@ -10,12 +10,12 @@ from base.base_constant import builtin_dic_prefix, regp
 from base.base_sys import check_system
 from base.base_config import get_config_con, get_cpu_num
 from mdict.models import MyMdictEntry, MyMdictItem
-from .entry_object import entryObject
-from .loop_search import loop_search_sug
-from .ws_client import ws_search
-from .data_utils import get_all_dics
+from mdict.mdict_utils.entry_object import entryObject
+from mdict.mdict_utils.loop_search import loop_search_sug
+from mdict.mdict_utils.ws_client import ws_search
+from mdict.mdict_utils.data_utils import get_all_dics
 
-from .multi_process import create_process_pool, multiprocess_search_mdx, pre_pool_search
+from mdict.mdict_utils.multi_process import create_process_pool, multiprocess_search_mdx, pre_pool_search
 
 prpool = None
 thpool = None

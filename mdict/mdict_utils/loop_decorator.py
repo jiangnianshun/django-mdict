@@ -8,8 +8,8 @@ try:
 except Exception as e:
     pass
 
-from .data_utils import get_or_create_dic
-from .init_utils import init_vars
+from mdict.mdict_utils.data_utils import get_or_create_dic
+from mdict.mdict_utils.init_utils import init_vars
 
 values_list = init_vars.mdict_odict.values()
 

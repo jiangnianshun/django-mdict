@@ -3,7 +3,7 @@ import subprocess
 from elasticsearch import Elasticsearch
 from base.base_config import *
 from base.base_sys import check_system
-from .models import MdictDic, MdictOnline, MyMdictEntry, MyMdictItem, MyMdictEntryType, MdictDicGroup
+from mdict.models import MdictDic, MdictOnline, MyMdictEntry, MyMdictItem, MyMdictEntryType, MdictDicGroup
 
 
 def EnableAllDics(modeladmin, request, queryset):
