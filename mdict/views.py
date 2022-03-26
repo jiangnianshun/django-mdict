@@ -1009,9 +1009,10 @@ def search_mdx_record(request):
     else:
         return_list = search_mdx_record_object({'query': query, 'target_pk': dic_pk, 'start': s, 'end': e})
 
-    history_enable = get_config_con('history_enable')
-    if history_enable:
-        write_to_history(query)
+    # 单词典查询不记录历史
+    # history_enable = get_config_con('history_enable')
+    # if history_enable:
+    #     write_to_history(query)
 
     return HttpResponse(json.dumps(return_list))
 
@@ -1111,9 +1112,10 @@ def search_zim_dic(request):
     else:
         return_list = search_zim_dic_object({'query': query, 'target_pk': dic_pk})
 
-    history_enable = get_config_con('history_enable')
-    if history_enable:
-        write_to_history(query)
+    # 单词典查询不记录历史
+    # history_enable = get_config_con('history_enable')
+    # if history_enable:
+    #     write_to_history(query)
 
     return HttpResponse(json.dumps(return_list))
 
