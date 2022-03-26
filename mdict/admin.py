@@ -111,13 +111,23 @@ class MyMdictItemAdmin(admin.StackedInline):
 
 class MyMdictEntryAdmin(admin.ModelAdmin):
     inlines = [MyMdictItemAdmin]
-    list_display = ('id', 'mdict_entry')
+    list_display = ('id', 'mdict_entry', 'get_mymdictentry_num')
     search_fields = ['mdict_entry']
     list_editable = ['mdict_entry']
 
+    @staticmethod
+    def get_mymdictentry_num(obj):
+        return obj.mymdictitem_set.all().count()
+
 
 class MyMdictEntryTypeAdmin(admin.ModelAdmin):
-    ordering = ('mdict_type',)
+    ordering = ('mdict_type', )
+    list_display = ('id', 'mdict_type', 'get_mymdictitem_num')
+    list_editable = ('mdict_type', )
+
+    @staticmethod
+    def get_mymdictitem_num(obj):
+        return obj.mymdictitem_set.all().count()
 
 
 class MdictOnlineAdmin(admin.ModelAdmin):
@@ -127,9 +137,13 @@ class MdictOnlineAdmin(admin.ModelAdmin):
 
 
 class MdictDicGroupAdmin(admin.ModelAdmin):
-    list_display = ('id', 'dic_group_name')
+    list_display = ('id', 'dic_group_name', 'get_mdictdic_num')
     list_editable = ('dic_group_name',)
     filter_horizontal = ('mdict_group',)
+
+    @staticmethod
+    def get_mdictdic_num(obj):
+        return obj.mdict_group.all().count()
 
 
 # Register your models here.

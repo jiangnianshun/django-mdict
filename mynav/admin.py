@@ -14,9 +14,13 @@ class WebsiteAdmin(admin.ModelAdmin):
 
 
 class WebgroupAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'group_name', 'group_priority')
+    list_display = ('pk', 'group_name', 'group_priority', 'get_website_num')
     ordering = ('group_priority',)
     list_editable = ('group_name', 'group_priority')
+
+    @staticmethod
+    def get_website_num(obj):
+        return obj.website_set.all().count()
 
 
 admin.site.register(Webgroup, WebgroupAdmin)
