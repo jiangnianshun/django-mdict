@@ -114,7 +114,8 @@ def init_obj(proc_flag):
     if check_system() == 0:
         k_list = init_vars.indicator[proc_flag]
     else:
-        for k in init_vars.indicator[proc_flag]:
+        indicator_set = set(init_vars.indicator[proc_flag])
+        for k in indicator_set:
             k_list.append(k)
             temp_list.append(init_vars.mdict_odict[k])
 

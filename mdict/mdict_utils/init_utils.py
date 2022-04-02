@@ -92,17 +92,22 @@ def load_cache(tmdict_root_path):
     init_vars.mdict_odict = read_pickle_file(pickle_file_path, tmdict_root_path)
     r = False
     if len(init_vars.mdict_odict) > 0:
-        p = list(init_vars.mdict_odict.values())[0].mdx.get_fpath()
-        if p[0] == '/':
-            if get_sys_name() == 'Windows':
-                r = True
-        else:
-            if get_sys_name() == 'Linux':
-                r = True
+        try:
+            p = list(init_vars.mdict_odict.values())[0].mdx.get_fpath()
+            if p[0] == '/':
+                if get_sys_name() == 'Windows':
+                    r = True
+            else:
+                if get_sys_name() == 'Linux':
+                    r = True
+        except Exception as e:
+            print(e)
+            r = True
     else:
         r = True
 
     if r:
+        print('rewriting cache...')
         init_vars.mdict_odict, init_vars.zim_list = get_mdict_dict(tmdict_root_path)
         if len(init_vars.mdict_odict) > 0:
             write_cache()

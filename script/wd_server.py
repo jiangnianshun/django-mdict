@@ -49,9 +49,9 @@ class DirWatch:
                     self.target_dir = mdict_root_path
                     dir_status = False
                 time.sleep(10)
-        except:
+        except Exception as e:
             self.observer.stop()
-            print("Wd Observer Stopped")
+            print("Wd Observer Stopped", e)
         self.observer.join()
 
     def stop(self):
@@ -66,8 +66,8 @@ class Handler(FileSystemEventHandler):
     @staticmethod
     def on_any_event(event):
         global dir_status
-        if not event.is_directory and event.event_type != 'deleted':
-            if event.src_path.lower().endswith('.mdx'):
+        if not event.is_directory and event.src_path.lower().endswith('.mdx'):
+            if event.event_type == 'moved' or event.event_type == 'created':
                 print(event.event_type, event.src_path)
                 dir_status = True
 
