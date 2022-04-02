@@ -197,13 +197,16 @@ kana_half = {
 }
 
 invert_kana = {value: key for key, value in kana.items()}
+kana_keys = kana.keys()
+invert_kana_keys = invert_kana.keys()
+kana_half_keys = kana_half.keys()
 
 
 def h2k(words):
     # 平假名转片假名
     trans_words = ''
     for w in words:
-        if w in kana.keys():
+        if w in kana_keys:
             trans_words += kana[w]
         else:
             trans_words += w
@@ -214,7 +217,7 @@ def k2h(words):
     # 片假名转平假名
     trans_words = ''
     for w in words:
-        if w in invert_kana.keys():
+        if w in invert_kana_keys:
             trans_words += invert_kana[w]
         else:
             trans_words += w
@@ -225,7 +228,7 @@ def kh2f(words):
     # 半角片假名转全角片假名
     trans_words = ''
     for w in words:
-        if w in kana_half.keys():
+        if w in kana_half_keys:
             trans_words += kana_half[w]
         else:
             trans_words += w
