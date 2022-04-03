@@ -10,7 +10,7 @@ django-mdict是django实现的mdict词典查询工具（支持mdx、zim格式）
 
 局域网内，将django-mdict部署在服务器上，其他电脑、平板、手机可只保留少量词典，当离开局域网时，查询本地词典，当进入局域网时，可通过浏览器对全部词典进行查词。
 
-django-mdict不是词典软件，是词典查询的脚本工具，主要目的是解决词典数量多，手机容量不足的问题，是对其他词典软件局域网在线查询功能的补充。
+django-mdict不是词典软件，是词典查询的脚本工具，主要目的是解决词典数量多，手机容量不足的问题，是对其他词典软件局域网在线查询功能的补充。优先使用正式软件，如goldendict、mdict、欧陆、dicttango等。
 
 ### 在windows上运行测试服务器
 
@@ -67,15 +67,13 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
    
 ### 注意
 
-1. 目前windows下存在僵尸进程和占用内存大的问题。windows下建议部署到wsl1(ubuntu)。
+1. 保证文件夹名是django-mdict而不是django-mdict-master或其他名字以确保脚本运行正确。
 
-2. 保证文件夹名是django-mdict而不是django-mdict-master或其他名字以确保脚本运行正确。
+2. 确保当前用户对django-mdict及所有子文件拥有权限，ubuntu上使用chmod -R 777 django-mdict，windows上在django-mdict文件夹上右键，在属性/安全中将本机账户添加进去并设置权限为完全控制。
 
-3. 确保当前用户对django-mdict及所有子文件拥有权限，ubuntu上使用chmod -R 777 django-mdict，windows上在django-mdict文件夹上右键，在属性/安全中将本机账户添加进去并设置权限为完全控制。
+3. 不建议使用pypy，有时候查询快，有时候反而更慢。
 
-4. 不建议使用pypy，有时候查询快，有时候反而更慢。
-
-5. linux下可能需要转换脚本格式才能正常运行。
+4. linux下可能需要转换脚本格式才能正常运行。
 
 ```
 sudo apt-get update
