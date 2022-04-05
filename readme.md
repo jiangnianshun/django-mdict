@@ -83,6 +83,8 @@ dos2unix init_wsl.sh init_server.sh init_server_brew.sh init_server_yum.sh djang
 
 6. 每次更新为了避免出问题，需要手动清除浏览器缓存（不需要清cookies），删除根目录下的.cache缓存文件夹，并重新运行一遍run_server.bat或run_server.sh脚本。对于PWA或添加到桌面图标，需要删除后重新添加。
 
+7. 本机浏览器可以打开，但局域网下其他设备无法打开。检查防火墙入站连接是否开放了8000端口，检查当前网络为专用网络而非公用网络，检查设备接入的是否是同一局域网。
+
 ### 说明文档
 
 [功能实现](doc/doc_func.md)
