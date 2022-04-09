@@ -19,7 +19,7 @@ su root
 ```
 sudo apt-get update
 sudo apt-get install dos2unix
-dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
+dos2unix init_wsl.sh init_server.sh init_server_brew.sh init_server_yum.sh init_server_apt.sh django-mdict.conf run_server.sh run_server_brew.sh run_server_yum.sh run_server_apt.sh mdict/readlib/pyx/build.sh
 ```
 
 4. 运行run_server.sh，默认端口8000，该脚本适用于ubuntu（centos需要运行run_server_yum.sh）。
@@ -56,7 +56,7 @@ su root
 ```
 sudo apt-get update
 sudo apt-get install dos2unix
-dos2unix init_wsl.sh init_server.sh django-mdict.conf run_server.sh mdict/readlib/pyx/build.sh
+dos2unix init_wsl.sh init_server.sh init_server_brew.sh init_server_yum.sh init_server_apt.sh django-mdict.conf run_server.sh run_server_brew.sh run_server_yum.sh run_server_apt.sh mdict/readlib/pyx/build.sh
 ```
 
 4. 运行init_wsl.sh，默认端口80，该脚本仅适用于ubuntu，不适用于centos。
