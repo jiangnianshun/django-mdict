@@ -145,34 +145,38 @@ def replace_res_name2(res_name):
 is_local = False
 
 
-def is_mdict_media_local():
+def set_media_is_local():
     global is_local
-    path1_dict = split_os_path(mdict_root_path)
-    local_mdict_media = os.path.join(ROOT_DIR, 'media', 'mdict', 'doc')
-    path2_dict = split_os_path(local_mdict_media)
-
-    ab1 = path1_dict['absolute']
-    ab2 = path2_dict['absolute']
-
-    if ab1 == '' and ab2 != '':
-        is_local = False
-    elif ab1 != '' and ab2 == '':
-        is_local = False
-    elif ab1 != '' and ab2 != '':
-        if ab1 != ab2:
-            is_local = False
-
-    path1 = path1_dict['path']
-    path2 = path2_dict['path']
-
-    s, e = find_os_path(path1, path2)
-    if s == -1:
+    if ROOT_DIR == '/code':
+        # 当前在docker中运行
         is_local = False
     else:
-        is_local = True
+        path1_dict = split_os_path(mdict_root_path)
+        local_mdict_media = os.path.join(ROOT_DIR, 'media', 'mdict', 'doc')
+        path2_dict = split_os_path(local_mdict_media)
+
+        ab1 = path1_dict['absolute']
+        ab2 = path2_dict['absolute']
+
+        if ab1 == '' and ab2 != '':
+            is_local = False
+        elif ab1 != '' and ab2 == '':
+            is_local = False
+        elif ab1 != '' and ab2 != '':
+            if ab1 != ab2:
+                is_local = False
+
+        path1 = path1_dict['path']
+        path2 = path2_dict['path']
+
+        s, e = find_os_path(path1, path2)
+        if s == -1:
+            is_local = False
+        else:
+            is_local = True
 
 
-is_mdict_media_local()
+set_media_is_local()
 
 
 def get_m_path(mdx, enable_quote=True):
