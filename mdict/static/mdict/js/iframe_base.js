@@ -318,7 +318,7 @@ function create_tooltip(e){
                 href=href.substring(0,mark);
             }
 
-            url=href+'mdict?query='+select_words;
+            url=href+'mdict/?query='+select_words;
         }
 
         var t_copy="<span id='t_copy'><a href='javascript:'>复制</a></span>";

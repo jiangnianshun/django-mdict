@@ -415,7 +415,7 @@ function add_iframes(data,container,need_clear,is_list){
             //iframe.height="auto";
             iframe.id="iframe-"+s_id;
             iframe.setAttribute("data-name", mdx_name);
-            iframe.sandbox="allow-same-origin allow-scripts allow-popups allow-downloads";
+            iframe.sandbox="allow-same-origin allow-scripts allow-popups allow-downloads allow-popups-to-escape-sandbox";
             //禁止iframe中js操作父页面的location
             //iframe.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
             //html中的#号会被截断，导致iframe读取不完整，因此要编码，而encodeURIComponent()会编码#号，但是encodeURI()不会编码，问题是使用encodeURIComponent()载入的子页面，css无法载入。
