@@ -126,6 +126,13 @@ def init_obj(proc_flag):
 
 def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
     global init_vars, k_list, all_dics
+
+    try:
+        # 获取最新数据
+        all_dics = get_all_dics()
+    except Exception as e:
+        print(e)
+
     r_list = []
 
     if all_dics is None:
