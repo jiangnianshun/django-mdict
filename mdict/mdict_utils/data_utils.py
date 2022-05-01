@@ -86,8 +86,14 @@ def get_or_create_dic(dict_file, dict_name=''):
         exec_sqlite3(sql3_path, exec_cmd, exec_param)
         dics = exec_sqlite3(sql3_path, "select * from mdict_mdictdic where mdict_file=?", (dict_file,))
         if len(dics) > 0:
-            dics = resort_dics(dics)
-            return dicObject(*dics[0])
+            if column_resort:
+                dic = dics[0]
+                params = (dic[column_names['id']], dic[column_names['mdict_name']], dic[column_names['mdict_file']],
+                          dic[column_names['mdict_enable']], dic[column_names['mdict_priority']],
+                          dic[column_names['mdict_es_enable']], dic[column_names['mdict_md5']])
+                return dicObject(*params)
+            else:
+                return dicObject(*dics[0])
         else:
             return None
 

@@ -85,7 +85,7 @@ deleteAllIndex.short_description = "删除es索引"
 
 class MdictDicAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'mdict_file', 'mdict_name', 'get_mdict_groups', 'mdict_enable', 'mdict_es_enable', 'mdict_priority')
+        'id', 'mdict_file', 'mdict_name', 'mdict_priority', 'mdict_enable', 'mdict_es_enable', 'get_mdict_groups')
     # list_display不能是manytomanyfield
     list_filter = ['mdictdicgroup', 'mdict_enable', 'mdict_es_enable']
     search_fields = ['mdict_name', 'mdict_file', 'id']
