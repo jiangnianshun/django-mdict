@@ -16,45 +16,45 @@ except Exception as e:
 sql3_path = os.path.join(ROOT_DIR, 'db.sqlite3')
 
 
-def get_columns():
-    # 字段mdict_file顺序不能保证固定
-    exec_cmd = "PRAGMA table_info(mdict_mdictdic)"
-    column_list = exec_sqlite3(sql3_path, exec_cmd)
-    tmp_dict = {}
-    for column in column_list:
-        tmp_dict.update({column[1]: column[0]})
-    resort_dic = False
-    if tmp_dict['id'] != 0 or tmp_dict['mdict_name'] != 1 or tmp_dict['mdict_file'] != 2 or \
-            tmp_dict['mdict_enable'] != 3 or tmp_dict['mdict_priority'] != 4 or tmp_dict['mdict_es_enable'] != 5 or \
-            tmp_dict['mdict_md5'] != 6:
-        resort_dic = True
-    return tmp_dict, resort_dic
-
-
-column_names, column_resort = get_columns()
-mdict_file_flag = column_names['mdict_file']
-
-
-def resort_dics(dics):
-    if len(dics) > 0:
-        if column_resort:
-            tmp_dics = []
-            for dic in dics:
-                item = (dic[column_names['id']], dic[column_names['mdict_name']], dic[column_names['mdict_file']],
-                        dic[column_names['mdict_enable']], dic[column_names['mdict_priority']],
-                        dic[column_names['mdict_es_enable']], dic[column_names['mdict_md5']])
-                tmp_dics.append(item)
-            return tmp_dics
-
-    return dics
-
-
+# def get_columns():
+#     # 字段mdict_file顺序不能保证固定
+#     exec_cmd = "PRAGMA table_info(mdict_mdictdic)"
+#     column_list = exec_sqlite3(sql3_path, exec_cmd)
+#     tmp_dict = {}
+#     for column in column_list:
+#         tmp_dict.update({column[1]: column[0]})
+#     resort_dic = False
+#     if tmp_dict['id'] != 0 or tmp_dict['mdict_name'] != 1 or tmp_dict['mdict_file'] != 2 or \
+#             tmp_dict['mdict_enable'] != 3 or tmp_dict['mdict_priority'] != 4 or tmp_dict['mdict_es_enable'] != 5 or \
+#             tmp_dict['mdict_md5'] != 6:
+#         resort_dic = True
+#     return tmp_dict, resort_dic
+#
+#
+# column_names, column_resort = get_columns()
+# mdict_file_flag = column_names['mdict_file']
+#
+#
+# def resort_dics(dics):
+#     if len(dics) > 0:
+#         if column_resort:
+#             tmp_dics = []
+#             for dic in dics:
+#                 item = (dic[column_names['id']], dic[column_names['mdict_name']], dic[column_names['mdict_file']],
+#                         dic[column_names['mdict_enable']], dic[column_names['mdict_priority']],
+#                         dic[column_names['mdict_es_enable']], dic[column_names['mdict_md5']])
+#                 tmp_dics.append(item)
+#             return tmp_dics
+#
+#     return dics
+#
+#
 def convert_dics(dics):
     dics_dict = {}
 
     for tdic in dics:
-        if tdic[mdict_file_flag] not in dics_dict.keys():
-            dics_dict.update({tdic[mdict_file_flag]: tdic})
+        if tdic[2] not in dics_dict.keys():
+            dics_dict.update({tdic[2]: tdic})
     return dics_dict
 
 
@@ -62,9 +62,10 @@ def get_all_dics():
     if check_module_import('mdict.models'):
         return MdictDic.objects.all()
     else:
-
-        all_dics = exec_sqlite3(sql3_path, 'select * from mdict_mdictdic')
-        all_dics = resort_dics(all_dics)
+        cmd = 'select id,mdict_name,mdict_file,mdict_enable,mdict_priority,mdict_es_enable,mdict_md5 from mdict_mdictdic'
+        # select * from mdict_mdictdic和PRAGMA table_info(mdict_mdictdic)取得的列順序不一致，需要指定字段名
+        all_dics = exec_sqlite3(sql3_path, cmd)
+        # all_dics = resort_dics(all_dics)
         dics_dict = convert_dics(all_dics)
 
         return dics_dict
@@ -86,14 +87,14 @@ def get_or_create_dic(dict_file, dict_name=''):
         exec_sqlite3(sql3_path, exec_cmd, exec_param)
         dics = exec_sqlite3(sql3_path, "select * from mdict_mdictdic where mdict_file=?", (dict_file,))
         if len(dics) > 0:
-            if column_resort:
-                dic = dics[0]
-                params = (dic[column_names['id']], dic[column_names['mdict_name']], dic[column_names['mdict_file']],
-                          dic[column_names['mdict_enable']], dic[column_names['mdict_priority']],
-                          dic[column_names['mdict_es_enable']], dic[column_names['mdict_md5']])
-                return dicObject(*params)
-            else:
-                return dicObject(*dics[0])
+            # if column_resort:
+            #     dic = dics[0]
+            #     params = (dic[column_names['id']], dic[column_names['mdict_name']], dic[column_names['mdict_file']],
+            #               dic[column_names['mdict_enable']], dic[column_names['mdict_priority']],
+            #               dic[column_names['mdict_es_enable']], dic[column_names['mdict_md5']])
+            #     return dicObject(*params)
+            # else:
+            return dicObject(*dics[0])
         else:
             return None
 
