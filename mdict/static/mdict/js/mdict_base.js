@@ -432,6 +432,7 @@ function init_common_config(){//这里后面改成从后台取数据
                 $('#bottom-button-group').show();
             }
         })
+        $('#function-checkbox').attr('data-init',1);
 //        var copy_with_tag=$('#config-copy-with-tag').prop("checked");
 //        $("#copy-with-tag2").prop("checked",copy_with_tag);
 //        $("#copy-with-tag2").parent().show();

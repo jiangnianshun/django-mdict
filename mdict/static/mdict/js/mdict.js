@@ -603,16 +603,21 @@ function query_mdict(query,container,page,need_clear,is_over){
     clear_alert_info();
     var dic_group=$('#dic-group option:selected').attr('data-pk');
 
-    var force_refresh=$('#config-force-refresh').prop('checked');
-    var fh_char_enable=$('#config-fh-char-enable').prop("checked");
-    var st_enable=$('#config-st-enable').prop("checked");
-    var chaizi_enable=$('#config-chaizi-enable').prop("checked");
-    var kana_enable=$('#config-kana-enable').prop("checked");
-    var romaji_enable=$('#config-romaji-enable').prop("checked");
-    var magnifier_enable=$('#config-magnifier-enable').prop("checked");
+    if($('#function-checkbox').attr('data-init')==1){
+        //当url中带query时，此时配置还未更新，都是false。
+        var force_refresh=$('#config-force-refresh').prop('checked');
+        var fh_char_enable=$('#config-fh-char-enable').prop("checked");
+        var st_enable=$('#config-st-enable').prop("checked");
+        var chaizi_enable=$('#config-chaizi-enable').prop("checked");
+        var kana_enable=$('#config-kana-enable').prop("checked");
+        var romaji_enable=$('#config-romaji-enable').prop("checked");
+        var magnifier_enable=$('#config-magnifier-enable').prop("checked");
 
-    var data={"query":query,"dic_group":dic_group,"page":page,"force_refresh":force_refresh,"fh_char_enable":fh_char_enable,"st_enable":st_enable,
-    "chaizi_enable":chaizi_enable,"kana_enable":kana_enable,"romaji_enable":romaji_enable,"magnifier_enable":magnifier_enable};
+        var data={"query":query,"dic_group":dic_group,"page":page,"force_refresh":force_refresh,"fh_char_enable":fh_char_enable,"st_enable":st_enable,
+        "chaizi_enable":chaizi_enable,"kana_enable":kana_enable,"romaji_enable":romaji_enable,"magnifier_enable":magnifier_enable};
+    }else{
+        var data={"query":query,"dic_group":dic_group,"page":page}
+    }
     $.ajax({
         url:"/api/mdict2/mdict/",
         contentType:'json',
