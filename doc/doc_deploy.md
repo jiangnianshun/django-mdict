@@ -1,5 +1,6 @@
-  * [在wsl上运行测试服务器](#在wsl上运行测试服务器)
+  * [在wsl上运行](#在wsl上)
   * [部署到wsl apache](#部署到wsl-apache)
+  * [删除数据库中重复词典](#删除数据库中重复词典)
 
 ### 在wsl上运行
 
@@ -94,3 +95,24 @@ sudo service apache2 stop
 ```
 
 ubuntu上apache错误日志的位置/var/log/apache2/error.log
+
+### 删除数据库中重复词典
+
+1. 运行django shell
+
+```
+python manage.py shell
+```
+
+2. 运行下列代码，删除db.sqlite3数据库中词典文件名重复的词典
+
+```
+from mdict.models import MdictDic
+all_dics = MdictDic.objects.all()
+temp_dics = {}
+for dic in all_dics:
+    if dic.mdict_file in temp_dics.keys():
+        dic.delete()
+    else:
+        temp_dics.update({dic.mdict_file: None})
+```
