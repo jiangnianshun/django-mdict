@@ -40,6 +40,11 @@
     "brief":"在书架（样式2）中浏览词典"
 },
 {
+    "title":"书架3",
+    "href":"/mdict/shelf3/",
+    "brief":"书架（样式3）随机"
+},
+{
     "title":"分组",
     "href":"/mdict/grouping/",
     "brief":"管理词典分组"

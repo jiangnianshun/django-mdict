@@ -49,6 +49,7 @@ urlpatterns = [
     path('getprior/', views.get_prior),
     path('shelf/', views.shelf),
     path('shelf2/', views.shelf2),
+    path('shelf3/', views.shelf3),
     path('doc/', views.doc),
     re_path('doc/(.+)', views.doc_md),
     path('addtogroup/', views.add_to_group),

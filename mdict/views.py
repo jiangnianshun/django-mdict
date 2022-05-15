@@ -1328,6 +1328,15 @@ def shelf2(request):
     return render(request, 'mdict/shelf2.html', {'address': address})
 
 
+def shelf3(request):
+    request_url = request.META['REMOTE_ADDR']
+    if request_url == "127.0.0.1":
+        address = 'local'
+    else:
+        address = 'nonlocal'
+    return render(request, 'mdict/shelf3.html', {'address': address})
+
+
 def doc(request):
     return render(request, 'mdict/md.html')
 

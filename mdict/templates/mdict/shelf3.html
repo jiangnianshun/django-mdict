@@ -1,0 +1,251 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>书架</title>
+    <link rel="manifest" href="/static/json/manifest.json">
+    <link rel="apple-touch-icon" sizes="512x512" href="/static/mdict/img/book512_square.png">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/font/bootstrap-icons.css">
+<style>
+body { margin: 0; padding: 0; font-family: "Georgia", serif; color: #444; }
+</style>
+</head>
+
+<body>
+
+<canvas id="textCanvas1" style="display:none;width:110px;height:150px;" width="110" height="150"></canvas>
+<canvas id="textCanvas2" style="display:none;width:110px;height:150px;" width="110" height="150"></canvas>
+<canvas id="textCanvas3" style="display:none;width:110px;height:150px;" width="110" height="150"></canvas>
+
+{% include "mdict/shelf-filter3.html" %}
+</body>
+
+<script src="/static/jquery/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="/static/three/three.min.js"></script>
+<script type="text/javascript" src="/static/three/OrbitControls.js"></script>
+<script type="text/javascript" src="/static/mdict/js/shelf.js"></script>
+<script type="text/javascript">
+var canvas3 = document.getElementById('textCanvas3');
+var tCtx3 = canvas3.getContext('2d');
+
+function draw_canvas3(){
+    var clg = tCtx3.createLinearGradient(0,0,0,150);
+    clg.addColorStop(0,'#1e1e1e'); // 第一个参数可以设定渐变位置 数字0~1之间
+    clg.addColorStop(1,'#4f4f4f');
+    tCtx3.fillStyle = clg;
+    tCtx3.fillRect(0,0,img_width*devicePixelRatio,img_height*devicePixelRatio);
+    tCtx3.fillStyle = '#1e1e1e';
+    tCtx3.fillRect(img_width*devicePixelRatio-5*devicePixelRatio,0,1*devicePixelRatio,img_height*devicePixelRatio);
+}
+
+
+function init_canvas3(){
+    tCtx3.canvas.width = parseInt(getComputedStyle(canvas3, null)['width']) * devicePixelRatio;
+    tCtx3.canvas.height = parseInt(getComputedStyle(canvas3, null)['height']) * devicePixelRatio;
+    set_canvas('textCanvas3');
+    draw_canvas3();
+}
+
+function create_back_cover(){
+    return tCtx3.canvas.toDataURL();
+}
+
+function create_front_cover(dic_name,dic_id){
+    var canvas2 = document.getElementById('textCanvas2');
+    var tCtx2 = canvas2.getContext('2d');
+    tCtx2.canvas.width = parseInt(getComputedStyle(canvas2, null)['width']) * devicePixelRatio;
+    tCtx2.canvas.height = parseInt(getComputedStyle(canvas2, null)['height']) * devicePixelRatio;
+    set_canvas('textCanvas2');
+    tCtx2.drawImage(document.getElementById('textCanvas1'),0,0);
+    tCtx2.fillStyle = '#ffffff';
+    tCtx2.font = 12*devicePixelRatio+'px Arial';
+
+    var new_text_array = new Array();
+    var row_width = 0;
+    var row_text = "";
+    var row_max_width = (img_width-7-15)*devicePixelRatio;
+
+    for(var ti=0;ti<dic_name.length;ti++){
+        row_width+=tCtx2.measureText(dic_name[ti]).width;
+        row_text+=dic_name[ti];
+        if(row_width>=row_max_width){
+            new_text_array.push(row_text);
+            row_width=0;
+            row_text="";
+        }else if(ti==dic_name.length-1){
+            new_text_array.push(row_text);
+        }
+    }
+
+    var text_height=55*devicePixelRatio;
+    if(new_text_array.length>1){
+        var text_height=(parseInt((150-15)/new_text_array.length))*devicePixelRatio;
+        if(text_height>55){text_height=55;}
+    }
+
+    for(var ti=0;ti<new_text_array.length;ti++){
+        tCtx2.fillText(new_text_array[ti], 8*devicePixelRatio, (ti+1)*text_height, img_width*devicePixelRatio);
+    }
+
+    return tCtx2.canvas.toDataURL();
+}
+
+function empty(elem) {
+    while (elem.lastChild) elem.removeChild(elem.lastChild);
+}
+
+function render_book(front_cover,back_cover,book_spine){
+    var renderer = new THREE.WebGLRenderer( { alpha: true } );
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.domElement.id='glrenderer';
+    document.body.appendChild( renderer.domElement );
+
+  // Create the scene to hold the object
+  var scene = new THREE.Scene();
+
+  // Create the camera
+  var camera = new THREE.PerspectiveCamera(
+    35,                                     // Field of view
+    window.innerWidth / window.innerHeight, // Aspect ratio
+    0.1,                                    // Near plane distance
+    1000                                    // Far plane distance
+  );
+
+  // Position the camera
+  camera.position.set( -15, 10, 20 );
+
+
+  // Add the lights
+
+  var light = new THREE.PointLight( 0xffffff, .4 );
+  light.position.set( 10, 10, 10 );
+  scene.add( light );
+
+  ambientLight = new THREE.AmbientLight( 0xbbbbbb );
+  scene.add( ambientLight );
+
+
+  // Load the textures (book images)
+  var textureLoader = new THREE.TextureLoader();
+  var bookCoverTexture = textureLoader.load( front_cover );
+  var bookSpineTexture = textureLoader.load( book_spine );
+  var bookBackTexture = textureLoader.load( back_cover );
+  var bookPagesTexture = textureLoader.load( '/static/mdict/img/shelf3/book_pages.png' );
+  var bookPagesTopBottomTexture = textureLoader.load( '/static/mdict/img/shelf3/book_top_bottom.png' );
+
+
+  // Use the linear filter for the textures to avoid blurriness
+  bookCoverTexture.minFilter
+    = bookSpineTexture.minFilter
+    = bookBackTexture.minFilter
+    = bookPagesTexture.minFilter
+    = bookPagesTopBottomTexture.minFilter
+    = THREE.LinearFilter;
+
+
+  // Create the materials
+
+  var bookCover = new THREE.MeshLambertMaterial( { color: 0xffffff, map: bookCoverTexture } );
+  var bookSpine = new THREE.MeshLambertMaterial( { color: 0xffffff, map: bookSpineTexture } );
+  var bookBack = new THREE.MeshLambertMaterial( { color: 0xffffff, map: bookBackTexture } );
+  var bookPages = new THREE.MeshLambertMaterial( { color: 0xffffff, map: bookPagesTexture } );
+  var bookPagesTopBottom = new THREE.MeshLambertMaterial( { color: 0xffffff, map: bookPagesTopBottomTexture } );
+
+  var materials = [
+    bookPages,          // Right side
+    bookSpine,          // Left side
+    bookPagesTopBottom, // Top side
+    bookPagesTopBottom, // Bottom side
+    bookCover,          // Front side
+    bookBack            // Back side
+  ];
+
+  // Create the book and add it to the scene
+  var book = new THREE.Mesh( new THREE.BoxGeometry( 7, 10, 1.2, 4, 4, 1 ), materials );
+  scene.add( book );
+
+  // Create the orbit controls for the camera
+  controls = new THREE.OrbitControls( camera, renderer.domElement );
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.25;
+  controls.enablePan = false;
+  controls.enableZoom = false;
+
+  // Begin the animation
+  return animate();
+
+
+  /*
+    Animate a frame
+  */
+
+  function animate() {
+
+    // Update the orbit controls
+    controls.update();
+
+    // Render the frame
+    renderer.render( scene, camera );
+
+    // Keep the animation going
+    return requestAnimationFrame( animate );
+  }
+}
+
+anime_id=null;
+
+function random_book() {
+$.ajax({
+        url:"/mdict/getmdictlist/",
+        contentType:'json',
+        type:'GET',
+        success:function(data){
+            var gdata=$.parseJSON(data);
+            var ts="";
+            if(gdata.length>0){
+              data=gdata[Math.floor(Math.random() * gdata.length)]
+              var dic_name=data["dic_name"];
+              var dic_file=data["dic_file"];
+              var dic_icon=data["dic_icon"];
+              var dic_pror=data["dic_pror"];
+              var dic_pk=data["dic_pk"];
+              var dic_enable=data["dic_enable"];
+              var dic_es_enable=data["dic_es_enable"]
+              var dic_type=data["dic_type"];
+
+              $('#dic-name').text(dic_name);
+
+              if(anime_id!=null){
+                cancelAnimationFrame(anime_id);
+                $('#glrenderer').remove();
+              }
+
+              if(dic_icon.indexOf("/static")==0){
+                init_canvas();
+                init_canvas3();
+
+                front_cover=create_front_cover(dic_name,dic_pk);
+                back_cover=create_back_cover();
+                anime_id=render_book(front_cover,back_cover,back_cover);
+              }else{
+                anime_id=render_book(dic_icon,dic_icon,dic_icon);
+              }
+            }
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
+
+}
+
+$(document).ready(function(){
+random_book();
+});
+
+</script>
+</html>
+
