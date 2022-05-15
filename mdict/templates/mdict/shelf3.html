@@ -33,6 +33,26 @@ body { margin: 0; padding: 0; font-family: "Georgia", serif; color: #444; }
 var canvas3 = document.getElementById('textCanvas3');
 var tCtx3 = canvas3.getContext('2d');
 
+function get_entry_num(){
+    var dic_pk=$('#dic-name').attr('data-pk');;
+    var data={"dic_pk":dic_pk,"is_dic":false};
+    $.ajax({
+        url:"/mdict/getdicinfo/",
+        contentType:'json',
+        data:data,
+        async:false,
+        type:'GET',
+        success:function(data){
+            var d=$.parseJSON(data);
+            var num=d['num_entrys'];
+            $('#dic-name').attr('data-num',num);
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
+}
+
 function draw_canvas3(){
     var clg = tCtx3.createLinearGradient(0,0,0,150);
     clg.addColorStop(0,'#1e1e1e'); // 第一个参数可以设定渐变位置 数字0~1之间
@@ -167,7 +187,20 @@ function render_book(front_cover,back_cover,book_spine){
   ];
 
   // Create the book and add it to the scene
-  var book = new THREE.Mesh( new THREE.BoxGeometry( 7, 10, 1.2, 4, 4, 1 ), materials );
+  get_entry_num();
+  num=$('#dic-name').attr('data-num');
+  if(num==0){
+    book_thickness=1.2;
+  }else{
+    book_thickness=Math.floor(Math.sqrt(num)/200);
+    if(book_thickness<0.1){
+        book_thickness=0.1
+    }else if(book_thickness>7){
+        book_thickness=7
+    }
+  }
+
+  var book = new THREE.Mesh( new THREE.BoxGeometry( 7, 10, book_thickness, 4, 4, 1 ), materials );
   scene.add( book );
 
   // Create the orbit controls for the camera
