@@ -17,6 +17,7 @@ body { margin: 0; padding: 0; font-family: "Georgia", serif; color: #444; }
 <canvas id="textCanvas1" style="display:none;width:110px;height:150px;" width="110" height="150"></canvas>
 <canvas id="textCanvas2" style="display:none;width:110px;height:150px;" width="110" height="150"></canvas>
 <canvas id="textCanvas3" style="display:none;width:110px;height:150px;" width="110" height="150"></canvas>
+<canvas id="textCanvas4" style="display:none;width:110px;height:150px;" width="110" height="150"></canvas>
 
 {% include "mdict/shelf-filter3.html" %}
 {% include "mdict/shelf-modal-brief.html" %}
@@ -32,6 +33,8 @@ body { margin: 0; padding: 0; font-family: "Georgia", serif; color: #444; }
 <script type="text/javascript">
 var canvas3 = document.getElementById('textCanvas3');
 var tCtx3 = canvas3.getContext('2d');
+var canvas4 = document.getElementById('textCanvas4');
+var tCtx4 = canvas4.getContext('2d');
 
 function get_entry_num(){
     var dic_pk=$('#dic-name').attr('data-pk');;
@@ -63,6 +66,14 @@ function draw_canvas3(){
     tCtx3.fillRect(img_width*devicePixelRatio-5*devicePixelRatio,0,1*devicePixelRatio,img_height*devicePixelRatio);
 }
 
+function draw_canvas4(){
+    var clg = tCtx4.createLinearGradient(0,0,0,150);
+    clg.addColorStop(0,'#1e1e1e'); // 第一个参数可以设定渐变位置 数字0~1之间
+    clg.addColorStop(1,'#4f4f4f');
+    tCtx4.fillStyle = clg;
+    tCtx4.fillRect(0,0,img_width*devicePixelRatio,img_height*devicePixelRatio);
+}
+
 
 function init_canvas3(){
     tCtx3.canvas.width = parseInt(getComputedStyle(canvas3, null)['width']) * devicePixelRatio;
@@ -71,8 +82,19 @@ function init_canvas3(){
     draw_canvas3();
 }
 
+function init_canvas4(){
+    tCtx4.canvas.width = parseInt(getComputedStyle(canvas4, null)['width']) * devicePixelRatio;
+    tCtx4.canvas.height = parseInt(getComputedStyle(canvas4, null)['height']) * devicePixelRatio;
+    set_canvas('textCanvas4');
+    draw_canvas4();
+}
+
 function create_back_cover(){
     return tCtx3.canvas.toDataURL();
+}
+
+function create_book_spine(){
+    return tCtx4.canvas.toDataURL();
 }
 
 function create_front_cover(dic_name,dic_id){
@@ -263,10 +285,12 @@ $.ajax({
               if(dic_icon.indexOf("/static")==0){
                 init_canvas();
                 init_canvas3();
+                init_canvas4();
 
                 front_cover=create_front_cover(dic_name,dic_pk);
                 back_cover=create_back_cover();
-                anime_id=render_book(front_cover,back_cover,back_cover);
+                book_spine=create_book_spine();
+                anime_id=render_book(front_cover,back_cover,book_spine);
               }else{
                 anime_id=render_book(dic_icon,dic_icon,dic_icon);
               }
