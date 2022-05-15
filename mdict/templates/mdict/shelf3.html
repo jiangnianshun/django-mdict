@@ -19,13 +19,16 @@ body { margin: 0; padding: 0; font-family: "Georgia", serif; color: #444; }
 <canvas id="textCanvas3" style="display:none;width:110px;height:150px;" width="110" height="150"></canvas>
 
 {% include "mdict/shelf-filter3.html" %}
+{% include "mdict/shelf-modal-brief.html" %}
 </body>
 
 <script src="/static/jquery/jquery.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="/static/three/three.min.js"></script>
-<script type="text/javascript" src="/static/three/OrbitControls.js"></script>
-<script type="text/javascript" src="/static/mdict/js/shelf.js"></script>
+<script src="/static/mdict/iframe-resizer/js/iframeResizer.min.js"></script>
+<script src="/static/three/three.min.js"></script>
+<script src="/static/three/OrbitControls.js"></script>
+<script src="/static/mdict/js/base_func.js"></script>
+<script src="/static/mdict/js/shelf.js"></script>
 <script type="text/javascript">
 var canvas3 = document.getElementById('textCanvas3');
 var tCtx3 = canvas3.getContext('2d');
@@ -217,6 +220,7 @@ $.ajax({
               var dic_type=data["dic_type"];
 
               $('#dic-name').text(dic_name);
+              $('#dic-name').attr('data-pk',dic_pk);
 
               if(anime_id!=null){
                 cancelAnimationFrame(anime_id);
