@@ -215,8 +215,8 @@ function render_book(front_cover,back_cover,book_spine){
     book_thickness=1.2;
   }else{
     book_thickness=Math.floor(Math.sqrt(num)/200);
-    if(book_thickness<0.1){
-        book_thickness=0.1
+    if(book_thickness<0.2){
+        book_thickness=0.2
     }else if(book_thickness>7){
         book_thickness=7
     }

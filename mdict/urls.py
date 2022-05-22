@@ -15,6 +15,7 @@ urlpatterns = [
     re_path(r'^esdic/(\d+)/(.+)$', views.search_mdd),
     re_path(r'^shelf/(\d+)/(.+)$', views.search_mdd),
     re_path(r'^shelf2/(\d+)/(.+)$', views.search_mdd),
+    re_path(r'^shelf3/(\d+)/(.+)$', views.search_mdd),
     path('getexfile/', views.get_external_file),
     re_path('getexfile/(.+)', views.get_external_file),
     path('es/getexfile/', views.get_external_file),

@@ -239,3 +239,5 @@ blowup.js：[https://github.com/paulkr/blowup.js](https://github.com/paulkr/blow
 内置词条的网状图显示使用vis-network实现。
 
 vis-network：[https://github.com/visjs/vis-network](https://github.com/visjs/vis-network)
+
+书架（样式3）：[https://www.elated.com/rotatable-3d-product-boxshot-threejs/](https://www.elated.com/rotatable-3d-product-boxshot-threejs/)

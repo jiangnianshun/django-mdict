@@ -32,17 +32,17 @@
 {
     "title":"书架",
     "href":"/mdict/shelf/",
-    "brief":"在书架（样式1）中浏览词典"
+    "brief":"书架（样式1）-全部"
 },
 {
     "title":"书架2",
     "href":"/mdict/shelf2/",
-    "brief":"在书架（样式2）中浏览词典"
+    "brief":"书架（样式2）-全部"
 },
 {
     "title":"书架3",
     "href":"/mdict/shelf3/",
-    "brief":"书架（样式3）随机"
+    "brief":"书架（样式3）-随机"
 },
 {
     "title":"分组",
