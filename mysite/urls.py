@@ -81,8 +81,13 @@ def get_index_sites(request):
 
 
 def swView(request):
-    with open(settings.BASE_DIR + "/static/js/sw.js") as fp:
-        return HttpResponse(fp.read(), 'text/javascript')
+    try:
+        with open(settings.BASE_DIR + "/static/js/sw.js", encoding='utf-8') as fp:
+            return HttpResponse(fp.read(), 'text/javascript')
+    except Exception as e:
+        print(e)
+        return HttpResponse('')
+
 
 
 urlpatterns = [

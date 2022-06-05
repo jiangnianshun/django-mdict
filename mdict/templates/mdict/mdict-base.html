@@ -131,7 +131,11 @@
 <script>
     if ('serviceWorker' in navigator) {
       // register service worker
-      navigator.serviceWorker.register("/sw.js");
+      navigator.serviceWorker.register("/sw.js").then(function(registration){
+        console.log('ServiceWorker registration successful with scope:', registration.scope);
+      }).catch(function(err){
+        console.log('ServiceWorker registration failed:', err);
+      });
     }
     function call_query(entry){
         $('html,body').animate({scrollTop:0},'fast');
