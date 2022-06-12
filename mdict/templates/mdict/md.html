@@ -4,11 +4,20 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>文档</title>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/bootstrap/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        #btn-index{position:fixed;right:65px;top:20px;color:black;font-size:36px;}
+    </style>
 </head>
 <body>
-<div id="content"></div>
+<div class="container-fluid">
+    <div id="content"></div>
+</div>
+<i class="bi bi-house-door btn mdict-icon" id="btn-index"></i>
 </body>
 <script src="/static/jquery/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/static/mdict/marked/marked.min.js"></script>
 <script>
 function get_md(doc_path){
@@ -45,6 +54,9 @@ $(window).bind('popstate', function(e){
         var dpath=state['path'];
         if(dpath!=""){get_md(dpath);}
     }
+});
+$("#btn-index").click(function(){
+    window.location.href="/";
 });
 </script>
 </html>
