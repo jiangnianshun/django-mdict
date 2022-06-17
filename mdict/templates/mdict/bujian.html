@@ -89,7 +89,7 @@ button:hover{color:#FF00FF}
 <!-- UI 畫面區 -->
 <div class="Header">
 <hr size=10 color=#C0C0C0>
-<span class="Line"><span class="Title">部件檢索 - </span><span class="Total">173334</span>字</span>
+<span class="Line"><span class="Title">部件檢索 - </span><a href="/" class="Title">🏠</a><span class="Total">173334</span>字</span>
 <hr color=#C0C0C0>
 <span class="Line Options"><span class="LabelB">部件</span>：<input class="Editor" id="input" oninput="FindMatch(0, true)" onkeydown="OnKey(event.keyCode)"></input><button class="Button" title="清除" onclick="ClearFind()"><b>X</b></button><button class="Button" title="倒退" onclick="Backspace()">◃</button><button class="Button" title="解構" onclick="Decompose()"><b>\</b></button><button class="Button" title="獨體" onclick="ClearFind();Key('#')"><b>#</b></button><button class="Button" title="查詢" onclick="FindMatch(0, false)">▶</button>　⌘ <span id="FnKey"></span></span>
 <span class="Line Options"><span class="LabelR">選項</span>：<input type="checkbox" id="variant" onclick="OnVar()">包容異體</input> <input type="checkbox" id="subdivide" onclick="OnSdv()">無理拆分</input> <input type="checkbox" id="ucodeonly" onclick="OnUco()">限標準字</input> <input type="checkbox" id="onthefly" onclick="OnFly()">即時查詢</input> <input type="checkbox" id="largefont" onclick="OnFnt()">較大字形</input> <input type="checkbox" id="copymode" onclick="OnCpy()">複製模式</input></span>
