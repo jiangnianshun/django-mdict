@@ -12,7 +12,17 @@ var urls_to_cache = [
     "/mdict/getdicgroup/",
     "/mdict/getmdictlist/",
     "/mdict/retrieveconfig/",
+    "/mdict/es/",
     "/api/mdictonline/",
+    "/mdict/doc/",
+    "/mdict/doc/readme.md",
+    "/mdict/doc/doc/doc_func.md",
+    "/mdict/doc/doc/doc_op.md",
+    "/mdict/doc/doc/doc_index.md",
+    "/mdict/doc/doc/doc_deploy.md",
+    "/mdict/doc/doc/doc_update.md",
+    "/mdict/doc/doc/doc_style.md",
+    "/mdict/doc/doc/doc_question.md",
     "/static/bootstrap/css/bootstrap.min.css",
     "/static/bootstrap/font/bootstrap-icons.css",
     "/static/bootstrap/js/bootstrap.bundle.min.js",
@@ -29,7 +39,8 @@ var urls_to_cache = [
     "/static/mdict/js/mdict_base.js",
     "/static/mdict/js/mdict.js",
     "/static/mdict/mark/mark.min.js",
-    "/static/mdict/img/book.png"
+    "/static/mdict/img/book.png",
+    "/static/mdict/img/book152.png"
 ]
 
 self.addEventListener('install', event => {
@@ -79,7 +90,8 @@ self.addEventListener('fetch', event => {
                 })
             });
         }));
-    }else{
+    }else if(!requestURL.pathname.startsWith('/admin/')){
+        //admin不缓存
         //Stale-while-revalidate
         event.respondWith(
             caches.open(CACHE_NAME).then(function(cache) {
