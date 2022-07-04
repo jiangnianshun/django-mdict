@@ -5,7 +5,6 @@ var urls_to_cache = [
     "/getindexsites/",
     "/mynav/",
     "/mynav/getsite/",
-    "/mdict/",
     "/mdict/shelf/",
     "/mdict/shelf2/",
     "/mdict/bujian/",
@@ -90,8 +89,9 @@ self.addEventListener('fetch', event => {
                 })
             });
         }));
-    }else if(!requestURL.pathname.startsWith('/admin/')){
+    }else if(!requestURL.pathname.startsWith('/admin/')&&requestURL.pathname!='/mdict/'){
         //admin不缓存
+        //mdict缓存会导致csrf token被缓存
         //Stale-while-revalidate
         event.respondWith(
             caches.open(CACHE_NAME).then(function(cache) {
