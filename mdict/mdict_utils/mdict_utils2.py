@@ -37,7 +37,7 @@ def get_mdict_dict(tmdict_root_path):
                         try:
                             mdd_list.append(MDD(mdd_path))
                         except Exception as e:
-                            print_log_info([f_name, 'mdd loading failed', e])
+                            print_log_info([mdd_path, 'mdd loading failed', e])
 
                 if mdx_path.find('.part') != -1:
                     for item in m_dict.values():
@@ -61,7 +61,7 @@ def get_mdict_dict(tmdict_root_path):
                     mdx = MDX(mdx_path)
                     m_dict.update({f_name: MdictItem(mdx, tuple(mdd_list), g_id, icon, mdx.get_len())})
                 except Exception as e:
-                    print_log_info([f_name, 'mdx loading failed', e])
+                    print_log_info([mdx_path, 'mdx loading failed', e])
 
                 g_id += 1
             elif file.lower().endswith('.zim'):

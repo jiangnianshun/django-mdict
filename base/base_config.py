@@ -36,7 +36,7 @@ default_config = {
         'es_host': 'http://127.0.0.1:9200/',
         'open_path_enable': True,  # 是否允许打开本地词典路径
         'ws_server_port': 18766,  # windows下启用ws_server的端口号，8765是anki connect的默认端口。
-        'index_id': 1,
+        'index_id': 2,
     },
     'SEARCH': {
         'merge_entry_max_length': 1000,
