@@ -6,6 +6,6 @@ services:
   command: "python3 manage.py runserver 0.0.0.0:8000 --noreload"
   volumes:
    - .:/code
-   - /path/to/mdict/library:/code/mdict
+   - /path/to/mdict/library:/library
   ports:
    - "8000:8090"
