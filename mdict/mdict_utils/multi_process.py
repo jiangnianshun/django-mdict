@@ -19,7 +19,7 @@ def create_process_pool(dic_num=-1):
     if dic_num > 0:
         set_cpu_num(dic_num)
     cnum = get_cpu_num()
-    print_log_info(['creating multiprocessing pool. ( ', cnum, ')'])
+    print_log_info(['creating multiprocessing pool. (', cnum, ')'])
     return multiprocessing.Pool(processes=cnum)
 
 
