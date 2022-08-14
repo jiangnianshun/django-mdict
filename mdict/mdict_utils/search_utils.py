@@ -9,6 +9,7 @@ from base.base_utils import ROOT_DIR
 from base.base_constant import builtin_dic_prefix, regp
 from base.base_sys import check_system
 from base.base_config import get_config_con, get_cpu_num
+from base.base_utils import print_log_info
 from mdict.models import MyMdictEntry, MyMdictItem
 from mdict.mdict_utils.entry_object import entryObject
 from mdict.mdict_utils.loop_search import loop_search_sug
@@ -25,6 +26,7 @@ if check_system() == 0:
         # 数据表不存在时，不创建进程池。
         all_dics = get_all_dics()
         prpool = create_process_pool()
+        print_log_info('pool has been created.')
         pre_pool_search(prpool)
     except Exception as e:
         print(e)

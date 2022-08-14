@@ -2,10 +2,11 @@ version: "3"
 services:
  app:
   restart: always
-  build: .
+  build: ./
+  image: jiangnianshun/django-mdict
   command: "python3 manage.py runserver 0.0.0.0:8000 --noreload"
   volumes:
    - .:/code
-   - /home/jns/Documents/mdict:/code/media/mdict/doc
+   - /path/to/mdict/library:/code/mdict
   ports:
-   - "8000:8000"
+   - "8000:8090"
