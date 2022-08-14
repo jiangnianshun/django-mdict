@@ -11,4 +11,4 @@ python3 -m ensurepip && \
 pip3 install --no-cache --upgrade pip setuptools && \
 pip3 install -r requirements1.txt && \
 pip3 install -r requirements2.txt
-
+RUN ./init_server.sh

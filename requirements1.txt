@@ -13,3 +13,4 @@ elasticsearch
 elasticsearch_dsl
 cython
 nltk
+tzdata
