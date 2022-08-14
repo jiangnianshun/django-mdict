@@ -2,7 +2,7 @@ FROM alpine:3.15
 ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 WORKDIR /code
-ADD . /code/
+COPY . /code/
 RUN apk update && \
 apk add --update gcc libc-dev linux-headers && rm -rf /var/cache/apk/* && \
 apk add zlib lzo-dev && \
