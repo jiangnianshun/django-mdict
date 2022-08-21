@@ -1,6 +1,7 @@
 import copy
 import gc
 import os
+import time
 
 from base.base_utils import ROOT_DIR
 from base.base_config import get_config_con
@@ -154,6 +155,9 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
         k_list = init_vars.indicator[n]
 
     count = 0
+    pcount = 0
+    kcount = len(k_list)
+    t1 = time.perf_counter()
     for k in k_list:
         if check_system() == 0:
             temp_object = init_vars.mdict_odict[k]
@@ -194,6 +198,11 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
                         r_list.extend(SearchObject(*params, g_id=g_id).search_entry_list())
                     else:
                         r_list.extend(SearchObject(*params).search_sug_list(3))
+        pcount += 1
+        t2 = time.perf_counter()
+        if t2 - t1 > 10:
+            # 在nas（开启固态加速）上第一次查词非常慢，需要显示进度。
+            print('Process', n, 'has completed', pcount / kcount, '...')
 
     if is_mdx:
         r_list = merge_record(r_list)

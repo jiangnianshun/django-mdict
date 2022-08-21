@@ -26,7 +26,6 @@ if check_system() == 0:
         # 数据表不存在时，不创建进程池。
         all_dics = get_all_dics()
         prpool = create_process_pool()
-        print_log_info('pool has been created.')
         pre_pool_search(prpool)
     except Exception as e:
         print(e)
