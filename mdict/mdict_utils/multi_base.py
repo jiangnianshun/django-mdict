@@ -202,6 +202,7 @@ def multi_search_mdx(n, query_list, group_pk, is_mdx=True):
         t2 = time.perf_counter()
         if t2 - t1 > 10:
             # 在nas（开启固态加速）上第一次查词非常慢，需要显示进度。
+            t1 = t2
             print('Process', n, 'has completed', pcount / kcount, '...')
 
     if is_mdx:

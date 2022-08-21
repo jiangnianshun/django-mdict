@@ -116,3 +116,59 @@ for dic in all_dics:
     else:
         temp_dics.update({dic.mdict_file: None})
 ```
+
+### 威联通部署docker
+
+1. 打开container station/创建，搜索django-mdict，点击安装。
+
+2. 容器设置：
+
+命令设置填写以下命令，8000可以替换为别的端口，进入点设置留空。
+
+```
+python3 manage.py runserver 0.0.0.0:8000 --noreload
+```
+
+高级设置/网络：网络模式选择host
+
+高级设置/共享文件夹：
+
+点击第一个新增：新增存储空间填写dmdict，挂载路径填写/code
+
+点击第二个新增：挂载本机共享文件夹选择词典所在的路径，挂载路径填写/code/media/mdict/doc
+
+点击创建
+
+3. 其他设备访问nas ip:端口
+
+### 生成docker镜像（windows）
+
+1. 安装docker并运行
+
+2. 删除根目录下的.git和huaci文件夹
+
+3. 在wsl中运行以下命令进行格式转换（或者notepad++手动转换格式）
+
+```
+sudo apt-get update
+sudo apt-get install dos2unix
+dos2unix init_wsl.sh init_server.sh init_server_brew.sh init_server_yum.sh init_server_apt.sh django-mdict.conf run_server.sh run_server_brew.sh run_server_yum.sh run_server_apt.sh mdict/readlib/pyx/build.sh
+```
+
+5. 在wsl中运行以下命令生成数据库文件db.sqlite3并设置用户名和密码
+
+```
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py makemigrations mdict
+python3 manage.py migrate mdict
+python3 manage.py makemigrations mynav
+python3 manage.py migrate mynav
+python3 manage.py createsuperuser
+```
+
+6. 运行以下命令进行编译
+
+```
+docker compose build --progress=plain
+```
