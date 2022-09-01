@@ -106,3 +106,13 @@ windows下ws_server的端口8766被占用，启动失败。重启电脑解除占
 19. sqlite3.9.0 or later is required
 
 升级sqlite版本
+
+20. django升级到4.1版本后，ckeditor无效且js的引用显示为字符串。
+
+升级django-js-asset
+
+```
+pip install -U django-js-asset
+```
+
+[https://github.com/django-ckeditor/django-ckeditor/issues/727](https://github.com/django-ckeditor/django-ckeditor/issues/727)
