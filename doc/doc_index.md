@@ -15,6 +15,7 @@
   * [运行](#运行)
   * [更新](#更新)
   * [可能的问题](#可能的问题)
+  * [分流](#分流)
 
 ### PWA支持
 
@@ -218,3 +219,11 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 ### 可能的问题
 
 [可能的问题](doc_question.md)
+
+### 分流
+
+百度网盘：https://pan.baidu.com/s/1bwv5TXZ7SpyVVjpSVi3h4g 
+
+提取码：76xe
+
+GoogleDrive：https://drive.google.com/drive/folders/1Zbf-tix4Nkz8MDgSA9yK2b0EdihCo_Lv?usp=sharing

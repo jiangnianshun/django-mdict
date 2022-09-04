@@ -1,6 +1,8 @@
   * [在wsl上运行](#在wsl上)
   * [部署到wsl apache](#部署到wsl-apache)
   * [删除数据库中重复词典](#删除数据库中重复词典)
+  * [威联通部署docker](威联通部署docker)
+  * [生成docker镜像（windows）](生成docker镜像（windows）)
 
 ### 在wsl上运行
 
