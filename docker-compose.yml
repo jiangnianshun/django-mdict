@@ -3,9 +3,9 @@ services:
  app:
   restart: always
   build: .
-  command: "python3 manage.py runserver 0.0.0.0:8000 --noreload"
+  command: "python3 manage.py runserver 0.0.0.0:18000 --noreload"
   volumes:
    - .:/code
    - /path/to/mdict/library:/library
   ports:
-   - "8000:8090"
+   - "18000:8090"

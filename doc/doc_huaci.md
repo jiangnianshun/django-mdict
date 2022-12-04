@@ -10,7 +10,7 @@ pip install -r requirements3.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 3. 双击运行，右下角出现托盘图标。
 
-4. 默认url是http://127.0.0.1:8000/mdict/?query=%WORD%，在huaci/utils/huaci.ini中修改url。
+4. 默认url是http://127.0.0.1:18000/mdict/?query=%WORD%，在huaci/utils/huaci.ini中修改url。
 
 如果查词结果是空白，查看huaci/utils/huaci.ini中的ip和端口是否正确。
 

@@ -44,8 +44,8 @@ class Huaci:
         self.t2 = 0
 
         self.url_dict = collections.OrderedDict()
-        self.url_dict['查询'] = 'http://127.0.0.1:8000/mdict/?query=%WORD%'
-        self.url_dict['全文查询'] = 'http://127.0.0.1:8000/mdict/es/?query=%WORD%'
+        self.url_dict['查询'] = 'http://127.0.0.1:18000/mdict/?query=%WORD%'
+        self.url_dict['全文查询'] = 'http://127.0.0.1:18000/mdict/es/?query=%WORD%'
 
         self.p = None
 

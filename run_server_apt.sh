@@ -11,4 +11,4 @@ python3 init_mdict_path.py -a $audio_path
 fi
 fi
 source init_server_apt.sh
-python3 manage.py runserver 0.0.0.0:8000 --noreload
+python3 manage.py runserver 0.0.0.0:18000 --noreload

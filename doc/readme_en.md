@@ -45,7 +45,7 @@ git clone https://github.com/jiangnianshun/django-mdict.git --depth=1
 4.3 finally enter username and password
 
 5. Django dafault port 8000
-<br />local url: http://127.0.0.1:8000/mdict/
+<br />local url: http://127.0.0.1:18000/mdict/
    
 ### Recommendation
 

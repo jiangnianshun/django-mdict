@@ -22,8 +22,8 @@ tkwidth,tkheight:窗口宽高
 
 default_url_dict = collections.OrderedDict()
 default_url_dict.update({
-    '查询': 'http://127.0.0.1:8000/mdict/?query=%WORD%',
-    '全文查询': 'http://127.0.0.1:8000/mdict/es/?query=%WORD%'
+    '查询': 'http://127.0.0.1:18000/mdict/?query=%WORD%',
+    '全文查询': 'http://127.0.0.1:18000/mdict/es/?query=%WORD%'
 })
 
 cef_settings = {

@@ -1,6 +1,7 @@
 ## 说明文档
 
 - [说明文档](#说明文档)
+  * [设备测试](设备测试)
   * [PWA支持](#PWA支持)
   * [格式支持](#格式支持)
   * [不支持](#不支持)
@@ -16,6 +17,29 @@
   * [更新](#更新)
   * [可能的问题](#可能的问题)
   * [分流](#分流)
+
+### 设备测试
+
+#### 设备测试
+
+测试词典库，共1248本词典，大小（mdx+mdd+zim）761GB。
+
+测试设备1：腾讯云4核云服务器，50G硬盘。
+
+硬盘容量和CPU性能均不足，只能运行50本左右的词典，连接速度有时快，有时很慢。
+
+测试设备2：威联通464C（开启固态缓存加速）。
+
+运行测试词典库，第一次查询会耗时几个小时，之后的查询耗时在30秒-60秒之间，每次查词CPU占用100%。
+
+测试设备3：台式机（CPU3900X12核锁频3.8GHz），固态硬盘。
+
+运行测试词典库，查词耗时3-4秒左右。
+
+#### 网络测试
+
+光猫无公网IP，有IPv6，手机使用流量访问。采用威联通DDNS无法联通；采用zerotier，在IPv4下速度约30KB/s，查词极慢；路由器开启IPv6后，速度约2MB/s，和局域网下查词速度一样。
+
 
 ### PWA支持
 
@@ -111,7 +135,7 @@ windows下的d盘在wsl下为/mnt/d/。 注意输入规范的路径，用双引�
 
 #### 修改服务器端口
 
-测试服务器修改启动脚本（run_server.bat,run_server_no_check.bat,run_server.sh,run_server_no_check.sh）中的0.0.0.0:8000。
+测试服务器修改启动脚本（run_server.bat,run_server_no_check.bat,run_server.sh,run_server_no_check.sh）中的0.0.0.0:18000。
 
 apache修改配置文件django-mdict.conf中的VirtualHost *:80。
 
@@ -141,17 +165,17 @@ mdict/readlib/pyx/mdict/ cython编译生成的中间文件
 
 设置/研究/自定义URL
 
-[http://IP地址:8000/mdict/?query={keyword}]()
+[http://IP地址:18000/mdict/?query={keyword}]()
 
 2. 使用GET方法获取查词的json结果
 
-[http://IP地址:8000/api/mdict2/mdict/]()
+[http://IP地址:18000/api/mdict2/mdict/]()
 
 参数是query:apple,page:1
 
 3. 使用url获取查词的json结果
 
-[http://IP地址:8000/api/mdict2/mdict/?query=apple&page=2&format=json]()
+[http://IP地址:18000/api/mdict2/mdict/?query=apple&page=2&format=json]()
 
 #### 切换主页
 

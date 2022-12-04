@@ -49,7 +49,7 @@ pip install elasticsearch-dsl
    
    或
 
-   [http://127.0.0.1:8000/mdict/es/](http://127.0.0.1:8000/mdict/es/)
+   [http://127.0.0.1:18000/mdict/es/](http://127.0.0.1:18000/mdict/es/)
 
    在进行全文查询时，eselasticsearch.bat需要一直运行，否则查询无结果，如果需要一直开启，需设置开机启动。
 

@@ -37,7 +37,7 @@ sudo bash run_server.sh
 
 最后要求输入django用户名和密码。
 
-5. 本机访问http://127.0.0.1:8000/mdict
+5. 本机访问http://127.0.0.1:18000/mdict
 
 已知问题：在ubuntu20.04下，由于多进程的原因，run_server.sh运行过程中，migrate等命令无法自动结束，需要手动ctrl+c结束，在ubuntu18.04下正常。
 
@@ -128,7 +128,7 @@ for dic in all_dics:
 命令设置填写以下命令，8000可以替换为别的端口，进入点设置留空。
 
 ```
-python3 manage.py runserver 0.0.0.0:8000 --noreload
+python3 manage.py runserver 0.0.0.0:18000 --noreload
 ```
 
 高级设置/网络：网络模式选择host
