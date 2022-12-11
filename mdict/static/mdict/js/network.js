@@ -336,8 +336,8 @@ function set_data(data){
             },
             color: {
                 color:'#848484',
-                highlight:'#848484',
-                hover: '#848484',
+                highlight:'#5555FF',
+                hover: '#5555FF',
                 inherit: 'from',
                 opacity:1.0
             },
