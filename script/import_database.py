@@ -131,16 +131,17 @@ def import_all():
     print('import starting...')
     if 'mymdictentry' in json_data_keys:
         import_database(json_data['mymdictentry'], 'mymdictentry')
-        print('mymdictentry import has finished.')
+        print('mymdictentry import has been finished.')
     if 'mdictdic' in json_data_keys:
         import_database(json_data['mdictdic'], 'mdictdic')
-        print('mdictdic import has finished.')
+        print('mdictdic import has been finished.')
     if 'mdictonline' in json_data_keys:
         import_database(json_data['mdictonline'], 'mdictonline')
-        print('mdictonline import has finished.')
+        print('mdictonline import has been finished.')
     if 'website' in json_data_keys:
         import_database(json_data['website'], 'website')
-        print('website import has finished.')
+        print('website import has been finished.')
 
 
-import_all()
+if __name__ == '__main__':
+    import_all()

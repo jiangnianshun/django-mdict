@@ -14,10 +14,10 @@ from base.base_utils import ROOT_DIR
 
 time_str = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
 
-export_root_path = os.path.join(ROOT_DIR, 'export')
+export_root_path = os.path.join(ROOT_DIR, 'export', 'export_database')
 
 if not os.path.exists(export_root_path):
-    os.mkdir(export_root_path)
+    os.makedirs(export_root_path)
 
 
 def except_decorator(func):
@@ -89,7 +89,7 @@ def export_database(mdl, jtype):
 
 def write_json(export_data, jtype):
     export_file = "export_" + time_str + '_' + jtype + '.json'
-    export_json_path = os.path.join(ROOT_DIR, 'export', export_file)
+    export_json_path = os.path.join(export_root_path, export_file)
     with open(export_json_path, 'w', encoding='utf-8') as f:
         f.write(json.dumps(export_data, indent=4, ensure_ascii=False))
 
@@ -99,7 +99,7 @@ def export_mymdictentry():
     from mdict.models import MyMdictEntry
     export_data = export_database(MyMdictEntry, 'mymdictentry')
     write_json(export_data, 'mymdictentry')
-    print('mymdictentry export has finished.')
+    print('mymdictentry export has been finished.')
 
 
 # @except_decorator
@@ -107,7 +107,7 @@ def export_mdictdic():
     from mdict.models import MdictDic
     export_data = export_database(MdictDic, 'mdictdic')
     write_json(export_data, 'mdictdic')
-    print('mdictdic export has finished.')
+    print('mdictdic export has been finished.')
 
 
 # @except_decorator
@@ -115,7 +115,7 @@ def export_mdictonline():
     from mdict.models import MdictOnline
     export_data = export_database(MdictOnline, 'mdictonline')
     write_json(export_data, 'mdictonline')
-    print('mdictonline export has finished.')
+    print('mdictonline export has been finished.')
 
 
 # @except_decorator
@@ -123,7 +123,8 @@ def export_website():
     from mynav.models import Website
     export_data = export_database(Website, 'website')
     write_json(export_data, 'website')
-    print('website export has finished.')
+    print('website export has been finished.')
+
 
 def exprot_all():
     export_mymdictentry()
@@ -132,4 +133,7 @@ def exprot_all():
     export_website()
 
 
-exprot_all()
+if __name__ == '__main__':
+    exprot_all()
+    print('databse info has been export to json.')
+

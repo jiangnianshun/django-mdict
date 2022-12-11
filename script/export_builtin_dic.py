@@ -36,17 +36,17 @@ static_list = [r'static\bootstrap\css\bootstrap.min.css', r'mdict\static\mdict\c
 
 time_str = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
 
-export_file = 'export'+time_str+'.txt'
-export_root_path = os.path.join(ROOT_DIR, 'export')
-export_txt_path = os.path.join(ROOT_DIR, 'export', export_file)
+export_file = 'export' + time_str + '.txt'
+export_root_path = os.path.join(ROOT_DIR, 'export', 'export_builtin_dic')
+export_txt_path = os.path.join(export_root_path, export_file)
 export_data_path = os.path.join(export_root_path, 'data')
 export_uploads_path = os.path.join(export_data_path, 'media', 'uploads')
 import_uploads_path = os.path.join(ROOT_DIR, 'media', 'uploads')
 
 if not os.path.exists(export_root_path):
-    os.mkdir(export_root_path)
+    os.makedirs(export_root_path)
 if not os.path.exists(import_uploads_path):
-    os.mkdir(import_uploads_path)
+    os.makedirs(import_uploads_path)
 
 
 def export_to_txt():
@@ -72,23 +72,24 @@ def export_to_txt():
     with open(export_txt_path, 'w', encoding='utf-8') as f:
         f.write('\n'.join(mdict_list))
     os.chmod(export_txt_path, 0o777)
+    print(export_txt_path, 'has been exported.')
 
     for s in static_list:
         data_path = os.path.join(ROOT_DIR, s)
         if os.path.isfile(data_path):
             s_name = os.path.basename(data_path)
             target_path = os.path.join(export_data_path, s_name)
-            print(target_path)
             shutil.copy(data_path, target_path)
+            print(target_path, 'has been exported.')
         else:
             a = s[s.find('static'):]
             target_path = os.path.join(export_data_path, a)
-            print(target_path)
             shutil.copytree(data_path, target_path)
-    print(import_uploads_path)
+            print(target_path, 'has been exported.')
     shutil.copytree(import_uploads_path, export_uploads_path)
+    print(export_uploads_path, 'has been exported.')
 
-    print('已导出到mynav/export，导出完成。')
 
-
-export_to_txt()
+if __name__ == '__main__':
+    export_to_txt()
+    print('已导出为mdict格式的txt，请用Mdxbuilder或mdict-utils等编译为mdx。')
