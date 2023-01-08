@@ -788,7 +788,8 @@ function convert_img_absolute(item){
 
 function convert_css_inline(item) {
     item.each(function(idx, el) {
-        var style = el.style;
+//        var style = el.style;
+        var style = getComputedStyle(el);
         var properties = [];
         for(var property in style) {
             if(!start_with(property,'width')&&!start_with(property,'height')){

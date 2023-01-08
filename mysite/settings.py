@@ -124,6 +124,7 @@ CKEDITOR_CONFIGS = {
             'mruby',
             'mbox',
         ]),
+        'removePlugins': 'stylesheetparser',
         'allowedContent': True,  # 关闭筛选，否则插入的ruby标签会被丢弃。
     }
 }
