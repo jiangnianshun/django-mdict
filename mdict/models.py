@@ -25,7 +25,7 @@ class MdictOnline(models.Model):
 
 
 class MdictDic(models.Model):
-    mdict_name = models.CharField('词典名', max_length=100, db_index=True)
+    mdict_name = models.CharField('词典名', max_length=150, db_index=True)
     mdict_file = models.CharField('文件名', max_length=150, db_index=True)
     # mdict_file设置unique=True会导致UNIQUE constraint failed
     mdict_enable = models.BooleanField('启用', default=True)
