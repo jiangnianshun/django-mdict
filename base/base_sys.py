@@ -94,14 +94,14 @@ def check_apache():
 
 
 def print_sys_info():
-    print('[SYSTEM] System Version:', platform.platform(), platform.architecture()[0])
-    print('[SYSTEM] Python Version:', platform.python_version(), platform.python_compiler())
+    print('[SYSTEM] System Version:' + ' ' + str(platform.platform()) + ' ' + str(platform.architecture()[0]))
+    print('[SYSTEM] Python Version:' + ' ' + str(platform.python_version()) + ' ' + str(platform.python_compiler()))
     if check_apache():
         from mod_wsgi import version
-        print('[SYSTEM] Module mod_wsgi Version:', version)
+        print('[SYSTEM] Module mod_wsgi Version:' + ' ' + str(version))
     else:
         print('[SYSTEM] No mod_wsgi')
-    print('[SYSTEM] CPU Physical Core Number:', psutil.cpu_count(logical=False))
+    print('[SYSTEM] CPU Physical Core Number:' + ' ' + str(psutil.cpu_count(logical=False)))
     available_memory_size = round(psutil.virtual_memory().available / 1024 / 1024 / 1024, 2)
     total_memory_size = round(psutil.virtual_memory().total / 1024 / 1024 / 1024, 2)
-    print('[SYSTEM] Available Memory Size:', available_memory_size, '/', total_memory_size, 'GB')
+    print('[SYSTEM] Available Memory Size:' + ' ' + str(available_memory_size) + '/' + str(total_memory_size) + 'GB')
