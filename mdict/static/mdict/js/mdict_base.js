@@ -710,7 +710,7 @@ function change_modal(){
             $("#right-container").hide();
             $("#modal-container-config .modal-content").append($("#config-content"));
             $("#modal-container-history .modal-body").append($("#history-content"));
-            if($("html").attr("data-is-simple")==0){
+            if($("html").attr("data-is-simple")!=1){
                 $("#modal-mdict").show();
                 $("#modal-config").show();
             }

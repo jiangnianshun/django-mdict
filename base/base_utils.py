@@ -48,7 +48,7 @@ def print_log_info(log_content='', debug_level=0, start=-1, end=-1):
             log_text = log_text + ' ' + str(content)
         log_text = log_text[1:]
 
-    print(get_log_header(mod_name, debug_level, start, end), log_text)
+    print(get_log_header(mod_name, debug_level, start, end) + ' ' + log_text)
 
 
 def check_readlib():
