@@ -2,10 +2,10 @@ var CACHE_NAME = 'django-mdict-caches'
 
 var urls_to_cache = [
     "/",
-    "/simple/",
     "/getindexsites/",
     "/mynav/",
     "/mynav/getsite/",
+    "/mdict/simple/",
     "/mdict/shelf/",
     "/mdict/shelf2/",
     "/mdict/bujian/",

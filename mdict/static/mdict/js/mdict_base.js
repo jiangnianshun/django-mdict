@@ -140,6 +140,9 @@ function speaker_func(c_blue){
 
 function check_speak(query){
     var url='/mdict/audio/?query='+query;
+    if($("html").attr("data-is-simple")==1){
+        var url='/mdict/simple/audio/?query='+query;
+    }
     query_audio($("#sound-speaker"),url,false,speaker_func);
 }
 
