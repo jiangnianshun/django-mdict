@@ -1304,6 +1304,10 @@ def mdict_index(request):
     is_mb = is_mobile(request)
     return render(request, 'mdict/mdict-index.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
 
+def mdict_index_simple(request):
+    query = request.GET.get('query', '')
+    is_mb = is_mobile(request)
+    return render(request, 'mdict/mdict-index-simple.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
 
 @login_required()
 def wordcloud(request):

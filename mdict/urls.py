@@ -6,6 +6,7 @@ from . import views
 app_name = 'mdict'
 urlpatterns = [
     path('', views.mdict_index),
+    path('simple/', views.mdict_index_simple),
     path('sug/', views.search_suggestion),
     re_path(r'^(\d+)/(.+)/$', views.search_mdd),
     re_path(r'^(\d+)/(.+)$', views.search_mdd),

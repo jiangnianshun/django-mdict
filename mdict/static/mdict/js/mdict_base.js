@@ -710,9 +710,10 @@ function change_modal(){
             $("#right-container").hide();
             $("#modal-container-config .modal-content").append($("#config-content"));
             $("#modal-container-history .modal-body").append($("#history-content"));
-
-            $("#modal-mdict").show();
-            $("#modal-config").show();
+            if($("html").attr("data-is-simple")==0){
+                $("#modal-mdict").show();
+                $("#modal-config").show();
+            }
             $("#history-btn").show();
         }
     }

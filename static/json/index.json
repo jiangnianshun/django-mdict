@@ -10,6 +10,11 @@
     "brief":"打开词典查询页面"
 },
 {
+    "title":"词典（简化）",
+    "href":"/mdict/simple/",
+    "brief":"打开词典查询页面（隐藏部分图标）"
+},
+{
     "title":"全文搜索",
     "href":"/mdict/es/",
     "brief":"打开全文搜索页面"
