@@ -317,8 +317,11 @@ function create_tooltip(e){
             if(mark>-1){
                 href=href.substring(0,mark);
             }
-
-            url=href+'mdict/?query='+select_words;
+            if($("html",parent.document).attr("data-is-simple")==1){
+                url=href+'mdict/simple/?query='+select_words;
+            }else{
+                url=href+'mdict/?query='+select_words;
+            }
         }
 
         var t_copy="<span id='t_copy'><a href='javascript:'>复制</a></span>";

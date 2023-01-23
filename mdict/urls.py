@@ -47,6 +47,7 @@ urlpatterns = [
     path('getwordlist/', views.getwordlist),
     re_path(r'^esdic/(\d+)/$', views.es_dic),
     re_path(r'^zim/(\d+)/(.+)$', views.search_zim),
+    re_path(r'^simple/zim/(\d+)/(.+)$', views.search_zim),
     re_path(r'^dic/zim/(\d+)/(.+)$', views.search_zim),
     re_path(r'^es/zim/(\d+)/(.+)$', views.search_zim),
     re_path(r'^zim/$', views.search_zim_dic),
