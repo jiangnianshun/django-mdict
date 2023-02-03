@@ -41,7 +41,10 @@ class MdictDic(models.Model):
         return self.mdict_name
 
     def save(self, *args, **kwargs):
-        item_order(self, MdictDic, 'mdict')
+        try:
+            item_order(self, MdictDic, 'mdict')
+        except Exception as e:
+            print(e)
 
         super(MdictDic, self).save()
 
