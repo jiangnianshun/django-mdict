@@ -61,10 +61,14 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-    if(!event.request.url.startsWith('http')){
+    const requestObj = event.request;
+    if(!requestObj.url.startsWith('http')){
         return;
     }
-    let requestURL=new URL(event.request.url);
+    if(requestObj.method=='POST'){
+        return;
+    }
+    let requestURL=new URL(requestObj.url);
     if(requestURL.pathname.endsWith('.ttf')){
         //全宋体优先缓存，然后网络
         event.respondWith(caches.match(event.request).then(function (cache) {
