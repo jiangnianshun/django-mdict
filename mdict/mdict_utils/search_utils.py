@@ -336,8 +336,9 @@ def spellcheck(query):  # 使用SpellChecker()来实现拼写检查
 
         # Get a list of `likely` options
         ca = spell.candidates(word)
-        c_list.extend(list(ca))
-        if co not in c_list:
-            c_list.insert(0, co)
+        if ca is not None:
+            c_list.extend(list(ca))
+            if co not in c_list:
+                c_list.insert(0, co)
 
     return c_list
