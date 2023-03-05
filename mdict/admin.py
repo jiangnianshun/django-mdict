@@ -101,7 +101,7 @@ class MdictDicAdmin(admin.ModelAdmin):
 
     @staticmethod
     def get_mdict_groups(obj):
-        return "|".join([g.dic_group_name for g in obj.mdictdicgroup_set.all()])
+        return "♦".join([g.dic_group_name for g in obj.mdictdicgroup_set.all()])
 
 
 class MyMdictItemAdmin(admin.StackedInline):
@@ -111,13 +111,24 @@ class MyMdictItemAdmin(admin.StackedInline):
 
 class MyMdictEntryAdmin(admin.ModelAdmin):
     inlines = [MyMdictItemAdmin]
-    list_display = ('id', 'mdict_entry', 'get_mymdictentry_num')
-    search_fields = ['mdict_entry']
+    list_display = ('id', 'mdict_entry', 'get_mymdictentry_num', 'get_mymdictentry_label',)
+    list_filter = ['mymdictitem__item_type']
+    search_fields = ['mdict_entry', 'mymdictitem__item_entry']
     list_editable = ['mdict_entry']
 
     @staticmethod
     def get_mymdictentry_num(obj):
         return obj.mymdictitem_set.all().count()
+
+    @staticmethod
+    def get_mymdictentry_label(obj):
+        t_list = []
+        for o in obj.mymdictitem_set.all():
+            if o.item_type is not None:
+                mdict_type = o.item_type.mdict_type
+                if mdict_type not in t_list:
+                    t_list.append(mdict_type)
+        return "♦".join(t_list)
 
 
 class MyMdictEntryTypeAdmin(admin.ModelAdmin):
