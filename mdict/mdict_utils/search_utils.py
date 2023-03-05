@@ -35,6 +35,7 @@ if check_system() == 0:
 try:
     from nltk.data import path as nltk_path
     from nltk.stem import WordNetLemmatizer
+
     nltk_path.append(os.path.join(ROOT_DIR, 'media', 'nltk_data'))
     lemmatizer = WordNetLemmatizer()
     lemmatizer.lemmatize('a')
@@ -213,6 +214,10 @@ def extract_bultin_dic_all(r_list):
         return None
 
 
+def sort_key(item):
+    return item.mdict_entry.lower()
+
+
 def search_builtin(query):
     # 查询内置词典
     query = regp.sub('', query).lower()
@@ -239,8 +244,9 @@ def search_builtin(query):
         if e_item.item_mdict is not None:
             i_mdict = e_item.item_mdict
             r_dict.update({i_mdict.mdict_entry: i_mdict})
-
-    return list(r_dict.values())
+    r_list2 = list(r_dict.values())
+    r_list2.sort(key=sort_key)
+    return r_list2
 
 
 def search_bultin_dic(required, record_list):
