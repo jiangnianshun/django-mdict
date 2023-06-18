@@ -821,7 +821,7 @@ function createEditor(elementId) {
     //xinshijirihan的ばか词条，复制时的类名导致ckeditor报错e[n] is not iterable。
     return ClassicEditor
         .create(document.getElementById(elementId),{
-            extraPlugins: ["MediaEmbed", "GeneralHtmlSupport"],
+        //需要GeneralHtmlSupport插件，启用htmlsupport后牛津等词典的Html在编辑器中无法显示，导出到anki正常显示，中日双解在编辑器和anki中都能正常显示
             htmlSupport: {
                 allow: [
                     {
@@ -838,6 +838,14 @@ function createEditor(elementId) {
         })
         .catch(err => console.error(err.stack));
 }
+
+function show_anki_contents(contents){
+    iframe = document.getElementById("iframe-anki");
+    iframe.contentWindow.document.open();
+    iframe.contentWindow.document.write(contents);
+    iframe.contentWindow.document.close();
+}
+
 
 function init_anki_modal(){
     init_anki_dropdown();
@@ -922,6 +930,7 @@ function init_anki_modal(){
             
             //$("#card-back").val(card_html);
             editors.ckeditor2.setData(card_html);
+            show_anki_contents(editors.ckeditor2.getData());
         }
     });
 }
