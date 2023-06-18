@@ -817,6 +817,7 @@ function convert_css_inline(item) {
 const editors = {};
 
 function createEditor(elementId) {
+    //配置ckeditor5
     //xinshijirihan的ばか词条，复制时的类名导致ckeditor报错e[n] is not iterable。
     return ClassicEditor
         .create(document.getElementById(elementId),{
