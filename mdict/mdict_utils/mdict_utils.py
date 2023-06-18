@@ -55,7 +55,12 @@ def set_mdict_path():
                         t = True
                         break
                 if t:
+                    print('[MDICT_UTILS.SET_MDICT_PATH]', p, 'is root dir.')
                     break
+                else:
+                    print('[MDICT_UTILS.SET_MDICT_PATH]', p, 'does not have .mdx or .zim files.')
+        else:
+            print('[MDICT_UTILS.SET_MDICT_PATH]', p, 'does not exits.')
         if t:
             break
     for p in taudio_path_list:

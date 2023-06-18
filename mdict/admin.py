@@ -142,7 +142,6 @@ class EntryLengthListFilter(admin.SimpleListFilter):
             return queryset.filter(mdict_entry__regex='^.{21,}$')
 
 
-
 class MyMdictEntryAdmin(admin.ModelAdmin):
     inlines = [MyMdictItemAdmin]
     list_display = ('id', 'mdict_entry', 'get_mymdictentry_num', 'get_mymdictentry_label',)
