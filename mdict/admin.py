@@ -109,10 +109,44 @@ class MyMdictItemAdmin(admin.StackedInline):
     extra = 1
 
 
+class EntryLengthListFilter(admin.SimpleListFilter):
+    title = '词条长度'
+    parameter_name = 'entrylen'
+
+    def lookups(self, request, model_admin):
+        return [('len1', '长度1'),
+                ('len2', '长度2'),
+                ('len3', '长度3'),
+                ('len4', '长度4-6'),
+                ('len7', '长度7-10'),
+                ('len11', '长度11-15'),
+                ('len16', '长度16-20'),
+                ('len21', '长度21以上')]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'len1':
+            return queryset.filter(mdict_entry__regex='^.{1}$')
+        elif self.value() == 'len2':
+            return queryset.filter(mdict_entry__regex='^.{2}$')
+        elif self.value() == 'len3':
+            return queryset.filter(mdict_entry__regex='^.{3}$')
+        elif self.value() == 'len4':
+            return queryset.filter(mdict_entry__regex='^.{4,6}$')
+        elif self.value() == 'len7':
+            return queryset.filter(mdict_entry__regex='^.{7,10}$')
+        elif self.value() == 'len11':
+            return queryset.filter(mdict_entry__regex='^.{11,15}$')
+        elif self.value() == 'len16':
+            return queryset.filter(mdict_entry__regex='^.{16,20}$')
+        elif self.value() == 'len21':
+            return queryset.filter(mdict_entry__regex='^.{21,}$')
+
+
+
 class MyMdictEntryAdmin(admin.ModelAdmin):
     inlines = [MyMdictItemAdmin]
     list_display = ('id', 'mdict_entry', 'get_mymdictentry_num', 'get_mymdictentry_label',)
-    list_filter = ['mymdictitem__item_type']
+    list_filter = ['mymdictitem__item_type', EntryLengthListFilter]
     search_fields = ['mdict_entry', 'mymdictitem__item_entry']
     list_editable = ['mdict_entry']
 
@@ -132,9 +166,9 @@ class MyMdictEntryAdmin(admin.ModelAdmin):
 
 
 class MyMdictEntryTypeAdmin(admin.ModelAdmin):
-    ordering = ('mdict_type', )
+    ordering = ('mdict_type',)
     list_display = ('id', 'mdict_type', 'get_mymdictitem_num')
-    list_editable = ('mdict_type', )
+    list_editable = ('mdict_type',)
 
     @staticmethod
     def get_mymdictitem_num(obj):
