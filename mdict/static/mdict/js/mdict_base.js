@@ -921,9 +921,7 @@ function init_anki_modal(){
             //card_html=card_html.replace(/<style>.*?<\/style>/ig,"");
             
             //$("#card-back").val(card_html);
-            console.log(111111111,editors.ckeditor2)
             editors.ckeditor2.setData(card_html);
-            console.log(2222222222,editors.ckeditor2.getData())
         }
     });
 }
