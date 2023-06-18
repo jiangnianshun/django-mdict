@@ -846,6 +846,10 @@ function show_anki_contents(contents){
     iframe.contentWindow.document.close();
 }
 
+function clear_anki_contents(){
+    show_anki_contents("");
+}
+
 
 function init_anki_modal(){
     init_anki_dropdown();
@@ -875,6 +879,7 @@ function init_anki_modal(){
         //$("#card-back").val("");
         //editors.ckeditor1.setData('');
         editors.ckeditor2.setData('');
+        clear_anki_contents();
     });
     
     $("#add-to-deck").click(function(){
