@@ -821,6 +821,7 @@ function createEditor(elementId) {
     //xinshijirihan的ばか词条，复制时的类名导致ckeditor报错e[n] is not iterable。
     return ClassicEditor
         .create(document.getElementById(elementId),{
+            extraPlugins: ["MediaEmbed", "GeneralHtmlSupport"],
             htmlSupport: {
                 allow: [
                     {
@@ -920,7 +921,9 @@ function init_anki_modal(){
             //card_html=card_html.replace(/<style>.*?<\/style>/ig,"");
             
             //$("#card-back").val(card_html);
+            console.log(111111111,editors.ckeditor2)
             editors.ckeditor2.setData(card_html);
+            console.log(2222222222,editors.ckeditor2.getData())
         }
     });
 }
