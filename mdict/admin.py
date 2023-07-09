@@ -145,7 +145,7 @@ class EntryLengthListFilter(admin.SimpleListFilter):
 class MyMdictEntryAdmin(admin.ModelAdmin):
     inlines = [MyMdictItemAdmin]
     list_display = ('id', 'mdict_entry', 'get_mymdictentry_num', 'get_mymdictentry_label',)
-    list_filter = ['mymdictitem__item_type', EntryLengthListFilter]
+    list_filter = [EntryLengthListFilter, 'mymdictitem__item_type']
     search_fields = ['mdict_entry', 'mymdictitem__item_entry']
     list_editable = ['mdict_entry']
 

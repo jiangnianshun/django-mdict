@@ -38,20 +38,21 @@ class DirWatch:
         try:
             while True:
                 mdict_root_path, audio_path, mdict_path_list, audio_path_list = set_mdict_path()
+                print('[WD_SERVER] check mdict root path...')
                 if mdict_root_path != self.target_dir:
-                    print('mdict root path changed!')
+                    print('[WD_SERVER] mdict root path changed!')
                     rewrite_cache(mdict_root_path)
                     self.target_dir = mdict_root_path
                     dir_status = False
                 elif dir_status is True:
-                    print('watch dog changed!')
+                    print('[WD_SERVER] watch dog changed!')
                     rewrite_cache(mdict_root_path)
                     self.target_dir = mdict_root_path
                     dir_status = False
-                time.sleep(10)
+                time.sleep(20)
         except Exception as e:
             self.observer.stop()
-            print("Wd Observer Stopped", e)
+            print("[WD_SERVER] Wd Observer Stopped", e)
         self.observer.join()
 
     def stop(self):

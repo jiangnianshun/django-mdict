@@ -822,6 +822,7 @@ function createEditor(elementId) {
     return ClassicEditor
         .create(document.getElementById(elementId),{
         //需要GeneralHtmlSupport插件，启用htmlsupport后牛津等词典的Html在编辑器中无法显示，导出到anki正常显示，中日双解在编辑器和anki中都能正常显示
+            removePlugins: [ 'RestrictedEditingMode' ],
             htmlSupport: {
                 allow: [
                     {
@@ -830,7 +831,8 @@ function createEditor(elementId) {
                         classes: false,
                         styles: true
                     }
-                ]
+                ],
+                disallow: [{name:'link'}]
             }
         })
         .then(editor => {
@@ -862,7 +864,7 @@ function init_anki_modal(){
             type:'GET',
             data:data,
             success:function(data){
-                console.log(data);
+                //console.log(data);
                 init_anki_dropdown();
             },
             error:function(jqXHR,textStatus,errorThrown){
