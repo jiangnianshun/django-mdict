@@ -814,7 +814,7 @@ function convert_css_inline(item) {
     });
 }
 
-const editors = {};
+editors = {};
 
 function createEditor(elementId) {
     //配置ckeditor5

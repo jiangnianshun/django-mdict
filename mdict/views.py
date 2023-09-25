@@ -1304,10 +1304,18 @@ def mdict_index(request):
     is_mb = is_mobile(request)
     return render(request, 'mdict/mdict-index.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
 
+
 def mdict_index_simple(request):
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
     return render(request, 'mdict/mdict-index-simple.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
+
+
+def mdict_index_simple2(request):
+    query = request.GET.get('query', '')
+    is_mb = is_mobile(request)
+    return render(request, 'mdict/mdict-index-simple2.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
+
 
 @login_required()
 def wordcloud(request):
@@ -1591,11 +1599,11 @@ def create_li(content, is_dir, file_type=''):
             icon_path = get_icon_path(mdx, icon)
             if file_type == 'mdd':
                 return '<li class="path-file" data-path="' + str(content) + '" data-jstree=\'{"disabled":true,"icon":"' \
-                       + icon_path + '"}\'>' + str(content) + '</li>'
+                    + icon_path + '"}\'>' + str(content) + '</li>'
             else:
                 return '<li class="path-file" data-path="' + str(content) + '" data-jstree=\'{"icon":"' \
-                       + icon_path + '"}\'>' + str(
-                    content) + '</li>'
+                    + icon_path + '"}\'>' + str(
+                        content) + '</li>'
         else:
             return ''
 
@@ -1609,12 +1617,12 @@ def create_li2(group_name, group_pk):
 def create_li3(mdict_name, mdict_file, mdict_pk):
     if mdict_name == mdict_file:
         return '<li class="dic-item" data-pk="' + str(mdict_pk) \
-               + '" data-jstree=\'{"icon":"bi-file-earmark-fill"}\'>' \
-               + str(mdict_name) + '</li>'
+            + '" data-jstree=\'{"icon":"bi-file-earmark-fill"}\'>' \
+            + str(mdict_name) + '</li>'
     else:
         return '<li class="dic-item" data-pk="' + str(mdict_pk) \
-               + '" data-jstree=\'{"icon":"bi-file-earmark-fill"}\'>' \
-               + str(mdict_name) + '<span style="color:red;"> (' + mdict_file + ')</span></li>'
+            + '" data-jstree=\'{"icon":"bi-file-earmark-fill"}\'>' \
+            + str(mdict_name) + '<span style="color:red;"> (' + mdict_file + ')</span></li>'
 
 
 def create_ul(path):

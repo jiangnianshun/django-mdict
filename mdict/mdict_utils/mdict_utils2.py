@@ -67,11 +67,14 @@ def get_mdict_dict(tmdict_root_path):
             elif file.lower().endswith('.zim'):
                 f_name = file[:file.rfind('.')]
                 zim_path = os.path.join(root, file)
-                zim = ZIMFile(zim_path, encoding='utf-8')
-                m_dict.update({f_name: MdictItem(zim, [], -1, 'none', len(zim))})
-                zim_list.append(zim)
+                try:
+                    zim = ZIMFile(zim_path, encoding='utf-8')
+                    m_dict.update({f_name: MdictItem(zim, [], -1, 'none', len(zim))})
+                    zim_list.append(zim)
 
-                idx_list.append((root, zim))
+                    idx_list.append((root, zim))
+                except Exception as e:
+                    print_log_info([zim_path, 'zim loading failed', e])
 
     if idx_list and check_xapian():
         # 抽取zim内置索引

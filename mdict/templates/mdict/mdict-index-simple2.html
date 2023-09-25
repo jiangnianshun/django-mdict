@@ -1,0 +1,27 @@
+{% extends "mdict/mdict-base.html" %}
+
+{% block content %}
+<style>
+    #btn-es{display:none;}
+    #btn-bujian{display:none;}
+    #modal-mdict{display:none;}
+    #modal-config{display:none;}
+    .nav-item .scaleup{display:none;}
+    .nav-item .scaledown{display:none;}
+</style>
+{% include "mdict/mdict-navbar.html" %}
+<div id="alert-box"></div>
+<div id="card-container"></div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="qwebchannel.js"></script>
+<script>
+    //外部js文件无法使用django模板
+    $("html").attr("data-dic-pk",-1);
+    $("html").attr("data-first-query","{{ query }}");
+    $("html").attr("data-is-simple",1);
+
+    init_mdict();
+</script>
+{% endblock %}
