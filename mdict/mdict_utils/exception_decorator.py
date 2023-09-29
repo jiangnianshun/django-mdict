@@ -5,7 +5,7 @@ def search_exception(default_value=[]):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            # return func(*args, **kwargs)
+            # return func(*args, **kwargs)  # 关闭屏蔽，进行调试
             try:
                 return func(*args, **kwargs)
             except FileNotFoundError as e:

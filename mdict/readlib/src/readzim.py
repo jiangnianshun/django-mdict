@@ -695,7 +695,11 @@ class ZIMFile:
         metadata_dict = {}
         if ind_list:  # we found an index and return the article at that index
             for entry, idx in ind_list:
-                metadata_dict.update({entry['url']: self._get_article_by_index(file, idx)[0].decode('utf-8')})
+                entry_url = self._get_article_by_index(file, idx)[0]
+                try:
+                    metadata_dict.update({entry['url']: entry_url.decode('utf-8')})
+                except Exception as e:
+                    print('entry url decode', e)
         return metadata_dict
 
     def get_article_by_url(self, file, namespace, url, follow_redirect=True):
