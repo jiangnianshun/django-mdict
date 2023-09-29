@@ -226,7 +226,9 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 
 ### 划词脚本
 
-[划词](doc_huaci.md)
+win10系统使用[Django Mdict Tool](https://github.com/jiangnianshun/django-mdict-tool)进行划词
+
+~~[划词](doc_huaci.md)~~
 
 ### 设置
 

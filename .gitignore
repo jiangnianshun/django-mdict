@@ -22,8 +22,8 @@ build/
 /.git/
 /venv/
 /media/uploads/
-/huaci/error.log
-/huaci/debug.log
+/deprecated/huaci/error.log
+/deprecated/huaci/debug.log
 /init_manga_path.py
 /log/
 /manga/
@@ -34,9 +34,9 @@ build/
 /export/
 /base/extract_zip.py
 /base/update_zip.py
-/huaci/blob_storage/
-/huaci/webrtc_event_logs/
-/huaci/huaci.cache/
+/deprecated/huaci/blob_storage/
+/deprecated/huaci/webrtc_event_logs/
+/deprecated/huaci/huaci.cache/
 /collect_static/
 manga.md
 auto_tool.bat
