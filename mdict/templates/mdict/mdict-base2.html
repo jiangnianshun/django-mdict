@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="never" name="referrer">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link rel="manifest" href="/static/json/manifest.json">
+
+    <title>{% block title %}词典{% endblock %}</title>
+    <link href='/static/mdict/img/shortcut.png' rel='shortcut icon' type='image/x-icon'/>
+    <link rel="apple-touch-icon" sizes="512x512" href="/static/mdict/img/book512_square.png">
+
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/bootstrap/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/static/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link href="/static/mdict/css/mdict.css" rel="stylesheet">
+    <link href="/static/mdict/css/night.css" rel="stylesheet">
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 300px;
+        }
+        @font-face {
+        font-family: FSung-m;
+        src: url(/media/font/FSung-m.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-1;
+        src: url(/media/font/FSung-1.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-2-1;
+        src: url(/media/font/FSung-2-1.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-2-2;
+        src: url(/media/font/FSung-2-2.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-3;
+        src: url(/media/font/FSung-3.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-F-1;
+        src: url(/media/font/FSung-F-1.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-F-2;
+        src: url(/media/font/FSung-F-2.ttf);
+        font-display:swap;
+        }
+        @font-face {
+        font-family: FSung-X;
+        src: url(/media/font/FSung-X.ttf);
+        font-display:swap;
+        }
+        #query,span.badge,.ui-autocomplete,#display_list li{font-family:Arial,kaixinsong,FSung-p,FSung-m,FSung-1,FSung-2-1,FSung-2-2,FSung-3,FSung-F-1,FSung-F-2;}
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div id="left-col" class="display:none;">
+        </div>
+        <div class="w-100">
+            {% block content %}{% endblock %}
+        </div>
+        <div id="right-col" class="display:none;">
+        </div>
+    </div>
+    <div id="left-container" style="position:fixed;top:0;left:0;width:400px;height:100%;overflow-y:scroll;display:none;"></div>
+    <div id="right-container" style="position:fixed;top:0;right:0;width:400px;height:100%;overflow-y:scroll;display:none;"></div>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
+        <div id="live-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">通知</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div id="live-toast-body" class="toast-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% csrf_token %}
+
+{% include "mdict/mdict-modal-list.html" %}
+
+{% include "mdict/mdict-modal-config.html" %}
+
+{% include "mdict/mdict-modal-history.html" %}
+
+{% include "mdict/mdict-modal-anki.html" %}
+
+{% include "mdict/mdict-bottom-button-group.html" %}
+
+{% block modal %}{% endblock %}
+
+<script src="/static/jquery/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/jquery-ui/jquery-ui.min.js"></script>
+<script>
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>
+<script src="/static/mdict/iframe-resizer/js/iframeResizer.min.js"></script>
+<script src="/static/mdict/ckeditor5/ckeditor.js"></script>
+<script src="/static/mdict/transform/transform.js"></script>
+<script src="/static/mdict/js/base_func.js"></script>
+<script src="/static/mdict/js/mdict_base.js"></script>
+<script src="/static/mdict/js/mdict.js"></script>
+<script src="/static/mdict/mark/mark.min.js"></script>
+<script>
+    if ('serviceWorker' in navigator) {
+      // register service worker
+      navigator.serviceWorker.register("/sw.js").then(function(registration){
+        console.log('ServiceWorker registration successful with scope:', registration.scope);
+      }).catch(function(err){
+        console.log('ServiceWorker registration failed:', err);
+      });
+    }
+    function call_query(entry){
+        $('html,body').animate({scrollTop:0},'fast');
+        $('#query').val(html_unescape(entry));
+        $('#mdict-query').trigger("click");
+    }
+</script>
+{% block script %}{% endblock %}
+
+</body>
+</html>
