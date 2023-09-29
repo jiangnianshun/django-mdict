@@ -116,7 +116,10 @@ def sort_mdict_list(t_list):
 def extract_index(idx_list):
     t1 = time.perf_counter()
     for root, zim in idx_list:
-        extract_index_from_zim(root, zim)
+        try:
+            extract_index_from_zim(root, zim)
+        except Exception as e:
+            print_log_info(e)
     t2 = time.perf_counter()
     print_log_info('all indexes extracting completed.', start=t1, end=t2)
 

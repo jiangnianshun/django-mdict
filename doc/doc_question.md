@@ -116,3 +116,5 @@ pip install -U django-js-asset
 ```
 
 [https://github.com/django-ckeditor/django-ckeditor/issues/727](https://github.com/django-ckeditor/django-ckeditor/issues/727)
+
+21. 如果设置了文件夹同步，可能会有OSError: Permission denied报错（需等待同步结束）或database disk image is malformed报错（需修复db.sqlite3数据库）。
