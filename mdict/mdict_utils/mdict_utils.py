@@ -5,7 +5,7 @@ import time
 from urllib.parse import quote
 
 from base.base_sys import split_os_path, find_os_path
-from base.base_utils import is_number, ROOT_DIR
+from base.base_utils import is_number, ROOT_DIR, print_log_info
 
 history_path = os.path.join(ROOT_DIR, 'history.dat')
 
@@ -25,8 +25,8 @@ def set_mdict_path():
                 data = json.load(f)
                 tmdict_path_list.extend(data['mdict_path'])
                 taudio_path_list.extend(data['audio_path'])
-            except Exception:
-                pass
+            except Exception as e:
+                print_log_info(f'mdict path json({tmdict_path_json}) read failed.{str(e)}')
     else:
         con = {'mdict_path': [], 'audio_path': []}
         with open(tmdict_path_json, 'w', encoding='utf-8') as f:

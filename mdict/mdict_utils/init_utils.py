@@ -144,11 +144,11 @@ def check_dir_change():
         return True
 
     if old_dir['root_dir'] != mdict_root_path:
-        print_log_info('mdict_root_path has changed.')
+        print_log_info(f'mdict_root_path({mdict_root_path}) has changed.')
         return True
 
     if not os.path.exists(mdict_root_path):
-        print_log_info('mdict_root_path not exists.')
+        print_log_info(f'mdict_root_path({mdict_root_path}) is not exists.')
         return True
 
     files_total_num = 1
