@@ -68,12 +68,12 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div id="left-col" class="display:none;">
+        <div id="left-col" style="display:none;width:0px;">
         </div>
-        <div class="w-100">
+        <div style="width:100%;margin-left:0px !important;margin-right:0px !important;padding-left:0px !important;padding-right:0px !important;">
             {% block content %}{% endblock %}
         </div>
-        <div id="right-col" class="display:none;">
+        <div id="right-col" style="display:none;width:0px;">
         </div>
     </div>
     <div id="left-container" style="position:fixed;top:0;left:0;width:400px;height:100%;overflow-y:scroll;display:none;"></div>

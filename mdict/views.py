@@ -1314,7 +1314,7 @@ def mdict_index_simple(request):
 def mdict_index_simple2(request):
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
-    return render(request, 'mdict/mdict-index-simple2.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
+    return render(request, 'mdict/mdict-index-simple2.html', {'query': query, 'is_mobile': is_mb, 'type': 'simple2'})
 
 
 @login_required()

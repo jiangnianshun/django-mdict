@@ -1017,6 +1017,12 @@ function init_mdict(){
     first_query();
 }
 
+function init_simple2(){
+    init_common();
+
+    first_query();
+}
+
 function init_es(){
     init_common();
 
