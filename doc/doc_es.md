@@ -24,7 +24,7 @@ pip install elasticsearch
 pip install elasticsearch-dsl
 ```
 
-2. 下载elasticsearch并解压，版本7.10.2或7.10.1。
+2. 下载elasticsearch并解压。
 
 [https://www.elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/elasticsearch)
 
@@ -35,6 +35,9 @@ pip install elasticsearch-dsl
 [https://github.com/medcl/elasticsearch-analysis-ik/releases](https://github.com/medcl/elasticsearch-analysis-ik/releases)
 
 4. （可跳过）建议查询和索引时es分配4g或以上内存，修改config/jvm.options中的参数-Xms1g和-Xmx1g，将1改为4，重启es生效。
+
+8.10.2需要关闭SSL，config/elasticsearch.yml以下均设置为false，xpack.security.enabled，xpack.security.enrollment.enabled，xpack.security.http.ssl:
+xpack.security.transport.ssl。
 
 5. 运行elasticsearch/bin/elasticsearch.bat启动es。
 
