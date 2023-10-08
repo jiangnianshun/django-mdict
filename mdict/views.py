@@ -353,12 +353,15 @@ def get_zim_results(query, dic_pk, result_num, result_page, frag_size, frag_num,
                 dic = dics[0]
             else:
                 continue
-            t_result, url_list, total_num, ttotal_page_z = search_xapian(zim, index_path, query, dic_pk, dic,
-                                                                         result_page, result_num, total_num,
-                                                                         tquery_list, frag_num, frag_size, url_list)
-            if ttotal_page_z > total_page_z:
-                total_page_z = ttotal_page_z
-            result.extend(t_result)
+            try:
+                t_result, url_list, total_num, ttotal_page_z = search_xapian(zim, index_path, query, dic_pk, dic,
+                                                                             result_page, result_num, total_num,
+                                                                             tquery_list, frag_num, frag_size, url_list)
+                if ttotal_page_z > total_page_z:
+                    total_page_z = ttotal_page_z
+                result.extend(t_result)
+            except Exception as e:
+                print(e)
 
     return result, total_num, tokens, total_page_z
 
