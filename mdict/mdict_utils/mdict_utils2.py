@@ -121,7 +121,7 @@ def extract_index(idx_list):
         except Exception as e:
             print_log_info(e)
     t2 = time.perf_counter()
-    print_log_info('all indexes extracting completed.', start=t1, end=t2)
+    print_log_info('all xapian indexes of zim has been extracted.', start=round(t1, 2), end=round(t2, 2))
 
 
 def extract_index_from_zim(root, zim):

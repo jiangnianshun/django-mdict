@@ -268,6 +268,7 @@ def check_xapian():
         import xapian
         database = xapian.Database()
     except Exception:
+        print('xapian does not exists!')
         return False
 
     return True

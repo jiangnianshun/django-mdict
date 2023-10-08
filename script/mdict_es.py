@@ -364,7 +364,7 @@ def create_es_with_pk(dic_pk):
 
                 create_es(dic, mdx, md5)
                 t2 = time.perf_counter()
-                print(t2 - t1, mdx.get_fname(), mdx.get_len())
+                print(round(t2 - t1, 2), mdx.get_fname(), mdx.get_len())
         else:
             print(dic.pk, dic.mdict_name, 'not exists in cache. maybe the mdict root path is not correct.')
     else:
@@ -445,7 +445,7 @@ def create_all_es(pk_list=[]):
             print(mdx.get_fname(), 'not exists in database.')
 
     t3 = time.perf_counter()
-    print('indexing time', t3 - t0)
+    print('indexing time', round(t3 - t0, 2))
 
 
 if __name__ == '__main__':
@@ -473,6 +473,6 @@ if __name__ == '__main__':
             create_all_es()
         elif deleteall_param:
             delete_all_es()
-        print('index operation has completed.')
+        print('es index operation has completed.')
     except ConnectionError as e:
         print(e)
