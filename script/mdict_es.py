@@ -392,10 +392,12 @@ def create_all_es(pk_list=[]):
     t0 = time.perf_counter()
     odict = init_vars.mdict_odict
     odict_len = len(odict)
-    i = 1
+    i = 0
     for k in odict.keys():
         item = odict[k]
         mdx = item.mdx
+        i += 1
+
         if check_zim(mdx):
             continue
         md5 = get_md5(mdx)
@@ -442,7 +444,6 @@ def create_all_es(pk_list=[]):
         else:
             print(mdx.get_fname(), 'not exists in database.')
 
-        i += 1
     t3 = time.perf_counter()
     print('indexing time', t3 - t0)
 
