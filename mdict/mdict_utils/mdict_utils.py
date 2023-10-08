@@ -37,6 +37,7 @@ def set_mdict_path():
 
     for p in tmdict_path_list:
         t = False
+        p_name = p
         if os.path.exists(p):
             p = p
         else:
@@ -60,7 +61,7 @@ def set_mdict_path():
                 else:
                     print('[MDICT_UTILS.SET_MDICT_PATH]', p, 'does not have .mdx or .zim files.')
         else:
-            print('[MDICT_UTILS.SET_MDICT_PATH]', p, 'does not exits.')
+            print('[MDICT_UTILS.SET_MDICT_PATH]', p_name, 'does not exits.')
         if t:
             break
     for p in taudio_path_list:
