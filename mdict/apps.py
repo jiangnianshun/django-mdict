@@ -59,5 +59,6 @@ class MdictConfig(AppConfig):
                     init_ws_server()
                 except Exception as e:
                     print(e)
-            if not check_apache():
-                init_wd_server()
+            # if not check_apache():
+            #     # 定时任务，检测词典库路径是否改变
+            #     init_wd_server()

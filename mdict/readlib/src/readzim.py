@@ -698,8 +698,11 @@ class ZIMFile:
                 entry_url = self._get_article_by_index(file, idx)[0]
                 try:
                     metadata_dict.update({entry['url']: entry_url.decode('utf-8')})
+                except UnicodeDecodeError:
+                    # 某些Url没有encode，比如png。
+                    metadata_dict.update({entry['url']: entry_url})
                 except Exception as e:
-                    print('entry url decode', e)
+                    print(e)
         return metadata_dict
 
     def get_article_by_url(self, file, namespace, url, follow_redirect=True):

@@ -74,6 +74,7 @@ class Handler(FileSystemEventHandler):
 
 
 if __name__ == '__main__':
+    # 定时任务，检测词典库路径是否改变
     if cache_name != '' and os.path.exists(cache_path):
         with open(cache_path, 'rb') as f:
             data = pickle.load(f)
