@@ -744,8 +744,7 @@ class ZIMFile:
     @staticmethod
     def search_articles(file, zim, location):
         is_article = True  # assume an article is requested, for now
-        if location in ["/", "/index.htm", "/index.html",
-                        "/main.htm", "/main.html"]:
+        if location in ["/", "/index.htm", "/index.html", "/main.htm", "/main.html"]:
             # ... return the main page as the article
             article = zim.get_main_page(file)
         else:
@@ -776,7 +775,11 @@ class ZIMFile:
         if is_article:
             result = article.data  # we have an actual article
             # decode its contents into a string using its encoding
-            result = result.decode(encoding='utf-8')
+            try:
+                result = result.decode(encoding='utf-8')
+            except UnicodeDecodeError:
+                # wikihow_en_maxi_2023-03 的文章和图片都在C类下
+                result = result
         else:
             # just a binary blob, so use it as such
             result = article.data

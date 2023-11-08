@@ -1211,6 +1211,7 @@ def search_mdd(request, *args):
                 res_name = res_name.replace('/', '\\')
                 if res_name[0] != '\\':
                     res_name = '\\' + res_name
+
             mdd_list = item.mdd_list
             sobj = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name, is_dic=True)
             res_content, mime_type = sobj.search_mdd()
@@ -1218,6 +1219,14 @@ def search_mdd(request, *args):
                 # 韩国国立国语院韩汉学习词典中资源链接以\data开头，但实际mdd中文件夹结构中没有data。
                 sobj = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name[5:], is_dic=True)
                 res_content, mime_type = sobj.search_mdd()
+            if len(res_content) == 0 and sobj.is_zim:
+                # wikihow_en_maxi_2023-03的文章和图片都在C类下，但路径里没有C，需要手动添加
+                if '.jpg' in res_name or '.png' in res_name or '.svg' in res_name or 'webp' in res_name:
+                    if res_name.startswith('images'):
+                        res_name = 'C/' + res_name
+                        sobj = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name, is_dic=True)
+                        res_content, mime_type = sobj.search_mdd()
+
             if sobj.is_zim:
                 if mime_type is not None:
                     from .mdict_utils.search_object import regpz
