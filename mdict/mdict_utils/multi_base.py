@@ -67,20 +67,20 @@ def merge_record(record_list):
         if mdx_name == name:
             if len(mdx_record) < merge_entry_max_length:
                 if mdx_entry.strip() not in entry:
-                    entry = entry + '｜' + mdx_entry
-                record = record + '<br/>' + mdx_record
+                    entry = f'{entry}｜{mdx_entry}'
+                record = f'{record}<br/>{mdx_record}'
                 pror = mdx_pror
                 counter += 1
                 old_mdx_pk = mdx_pk
                 del_item.append(i)
         else:
             if counter > 1:
-                entry = entry[1:] + '【' + str(counter) + '】'
+                entry = f'{entry[1:]}【{counter}】'
                 t_list.append(entryObject(name, entry, record, pror, old_mdx_pk, -1, -1, -1))
                 del_list.append(del_item.copy())
 
             name = mdx_name
-            entry = '/' + mdx_entry
+            entry = f'/{mdx_entry}'
             record = mdx_record
             pror = mdx_pror
             counter = 1
@@ -90,7 +90,7 @@ def merge_record(record_list):
 
         if i == 0:
             if counter > 1:
-                entry = entry[1:] + '【' + str(counter) + '】'
+                entry = f'{entry[1:]}【{counter}】'
                 t_list.append(entryObject(name, entry, record, pror, old_mdx_pk, -1, -1, -1))
                 del_list.append(del_item.copy())
 

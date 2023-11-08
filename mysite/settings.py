@@ -15,7 +15,7 @@ import sys
 import mimetypes
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print('[MYSITE.SETTINGS] settings path:' + ' ' + os.path.abspath(__file__))
+print(f'[MYSITE.SETTINGS] settings path: {os.path.abspath(__file__)}')
 
 # # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'frh*4wr$jh5j(ny99*i=-gur7d)(=-#ldipq@m2gbpmsw1ast$'

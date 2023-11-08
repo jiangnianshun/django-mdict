@@ -1299,6 +1299,15 @@ def get_dic_info(request):
     dic_pk = int(request.GET.get('dic_pk', -1))
     is_dic = json.loads(request.GET.get('is_dic', "true"))
     return_dict = get_dic_info_object({'target_pk': dic_pk, 'is_dic': is_dic})
+
+    # zim的info中含有图片导致json序列化失败
+    for k1, v1 in return_dict.items():
+        if isinstance(v1, bytes):
+            return_dict[k1] = ''
+        elif isinstance(v1, dict):
+            for k2, v2 in v1.items():
+                if isinstance(v2, bytes):
+                    return_dict[k1][k2] = ''
     return HttpResponse(json.dumps(return_dict))
 
 

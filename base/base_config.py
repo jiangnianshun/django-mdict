@@ -169,7 +169,7 @@ def get_index_name():
     index_id = get_config_con('index_id')
     if isinstance(index_id, str):
         index_id = 1
-    index_name = 'index' + str(index_id) + '.html'
+    index_name = f'index{index_id}.html'
     index_path = os.path.join(ROOT_DIR, 'templates', index_name)
     if os.path.exists(index_path):
         return index_name

@@ -127,7 +127,7 @@ def extract_index(idx_list):
 def extract_index_from_zim(root, zim):
     for url, index in zim.index_list:
         url = url.replace('/', '_')
-        idx_name = zim.get_fname() + '_' + url + '.idx'
+        idx_name = f'{zim.get_fname()}_{url}.idx'
         idx_path = os.path.join(root, idx_name)
         if not os.path.exists(idx_path):
             t1 = time.perf_counter()

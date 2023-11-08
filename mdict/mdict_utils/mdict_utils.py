@@ -206,7 +206,7 @@ def get_m_path(mdx, enable_quote=True):
 
 def write_to_history(query):
     time_str = time.strftime("%Y.%m.%d:%H:%M:%S", time.localtime(time.time()))
-    history_str = time_str + '\t' + query + '\n'
+    history_str = f'{time_str}\t{query}\n'
     if os.path.exists(history_path):
         try:
             with open(history_path, 'a', encoding='utf-8') as f:

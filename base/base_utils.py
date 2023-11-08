@@ -74,7 +74,8 @@ def check_readlib():
 
 
 def get_running_time(start, end):
-    return '[' + str(round(abs(end - start), 4)) + 's' + ']'
+    # return '[' + str(round(abs(end - start), 4)) + 's' + ']'
+    return f'[{str(round(abs(end - start), 4))}s]'
 
 
 def is_en_func(s):
@@ -259,9 +260,9 @@ def exec_sqlite3(db_path, exec_cmd, exec_param=None):
 
 
 def item_order(obj, mdl, type):
-    attr1 = type + '_priority'
-    attr2 = type + '_name'
-    priority = eval('obj.' + attr1)
+    attr1 = f'{type}_priority'
+    attr2 = f'{type}_name'
+    priority = eval(f'obj.{attr1}')
     if priority < 1:
         priority = 1
 
@@ -274,8 +275,8 @@ def item_order(obj, mdl, type):
 
     for i in range(item_list_len):
         if i + 1 < priority:
-            if i + 1 != eval('item_list[i].' + attr1):
-                eval('item_list.filter(pk=item_list[i].pk).update(' + attr1 + '=i + 1)')
+            if i + 1 != eval(f'item_list[i].{attr1}'):
+                eval(f'item_list.filter(pk=item_list[i].pk).update({attr1}=i + 1)')
         elif i + 1 >= priority:
-            if i + 2 != eval('item_list[i].' + attr1):
-                eval('item_list.filter(pk=item_list[i].pk).update(' + attr1 + '=i + 2)')
+            if i + 2 != eval(f'item_list[i].{attr1}'):
+                eval(f'item_list.filter(pk=item_list[i].pk).update({attr1}=i + 2)')

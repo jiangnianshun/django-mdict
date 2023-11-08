@@ -73,7 +73,7 @@ def search_revise(query, record_list, is_en):
         if len(words_list) == 0 and len(c_list) == 0:
             return record_list
 
-        mdict = [builtin_dic_prefix, '<div>' + query + '</div>']
+        mdict = [builtin_dic_prefix, f'<div>{query}</div>']
         if len(words_list) > 0:
             for w in words_list:
                 mdict.append(
@@ -95,7 +95,7 @@ def process_link(matched):
 
 
 def process_link2(matched):
-    return '<details><summary>点击展开</summary>' + matched.group(1) + '</details>'
+    return f'<details><summary>点击展开</summary>{matched.group(1)}</details>'
 
 
 def search_bultin_dic_sug(query):
@@ -195,7 +195,7 @@ def extract_bultin_dic_all(r_list):
     for i in range(0, r_list_len):
         r = r_list[i]
         if i < r_list_len - 1:
-            mdx_entry.append(r.mdict_entry + '｜')
+            mdx_entry.append(f'{r.mdict_entry}｜')
         else:
             mdx_entry.append(r.mdict_entry)
 
@@ -206,7 +206,7 @@ def extract_bultin_dic_all(r_list):
         mdict.append(''.join(mdict_content))
 
     if r_list_len > 1:
-        mdx_entry.append('【' + str(len(r_list)) + '】')
+        mdx_entry.append(f'【{len(r_list)}】')
 
     if r_list_len > 0:
         return entryObject(builtin_dic_name, ''.join(mdx_entry), ''.join(mdict), 0, -1, -1, -1, -1)

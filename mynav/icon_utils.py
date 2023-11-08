@@ -25,17 +25,17 @@ def get_icon_root_path():
 def add_url_protocol(url, prefix='https'):
     if not url.startswith('http'):
         if url.startswith('//'):
-            url = prefix + ':' + url
+            url = f'{prefix}:{url}'
         else:
-            url = prefix + '://' + url
+            url = f'{prefix}://{url}'
     return url
 
 
 def get_icon_url(url):
     if url.endswith('/'):
-        url = url + 'favicon.ico'
+        url = f'{url}favicon.ico'
     else:
-        url = url + '/favicon.ico'
+        url = f'{url}/favicon.ico'
     return url
 
 

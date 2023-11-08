@@ -70,7 +70,6 @@ def loop_mdict_list(return_type=0, timer=False, digit=5):
 class innerObject:
     def __init__(self, params={}):
         """
-
         @param params: put all variables in the params that you need in loop
         """
         if 'inner_odict' not in params.keys():
@@ -91,7 +90,7 @@ class innerObject:
         @param mdx: MDX file object
         @param mdd_list: MDD file object list
         @param g_id: dictionary group id
-        @param icon: dictionary icon type, it is jpb, png or none.
+        @param icon: dictionary icon type, it is jpg, png or none.
         @param dict_file: dictionary file name, not contain extension
         @param dic: dictionary object in database
         @return: search results, it's a list or a dict, using the decorator variable return_is_dict to control it.

@@ -264,21 +264,21 @@ class SearchObject:
     def add_async_to_script(self, matched):
         m = matched.group(0)
         if m.find('http') > -1 and m.find('async') == -1:
-            return m[:len(m) - 1] + ' async>'
+            return f'{m[:len(m) - 1]} async>'
         else:
             return m
 
     def substitute_same_name_path(self, ext):
         if is_local:
-            t_path = '/' + self.m_path + '/' + self.mdx.get_fname() + '.' + ext
+            t_path = f'/{self.m_path}/{self.mdx.get_fname()}.{ext}'
         else:
-            t_path = '/mdict/getexfile/?path=' + self.m_path + '/' + quote(self.mdx.get_fname()) + '.' + ext
+            t_path = f'/mdict/getexfile/?path={self.m_path}/{quote(self.mdx.get_fname())}.{ext}'
         return t_path
 
     def check_same_name_css_js(self, record):  # 加载同名css和js
         base_path = self.mdx.get_fpath()
-        js_path = base_path[:-3] + 'js'
-        css_path = base_path[:-3] + 'css'
+        js_path = f'{base_path[:-3]}js'
+        css_path = f'{base_path[:-3]}css'
 
         if os.path.exists(js_path):
             js_static = self.substitute_same_name_path('js')
@@ -295,8 +295,8 @@ class SearchObject:
     def check_same_name_font(self, record):  # 加载同名字体
         global css_prefix
         mdx_path = self.mdx.get_fpath()
-        ttf_path = mdx_path[:len(mdx_path) - 3] + 'ttf'
-        woff_path = mdx_path[:len(mdx_path) - 3] + 'woff'
+        ttf_path = f'{mdx_path[:len(mdx_path) - 3]}ttf'
+        woff_path = f'{mdx_path[:len(mdx_path) - 3]}woff'
 
         ttf_name = os.path.basename(ttf_path)
         woff_name = os.path.basename(woff_path)
@@ -510,10 +510,10 @@ class SearchObject:
         return record
 
     def substitute_css_path(self, matched):
-        return matched.group(1) + '/' + self.m_path + '/' + matched.group(2)
+        return f'{matched.group(1)}/{self.m_path}/{matched.group(2)}'
 
     def substitute_css_path_2(self, matched):
-        return matched.group(1) + '/mdict/getexfile/?path=' + self.m_path + '/' + matched.group(2)
+        return f'{matched.group(1)}/mdict/getexfile/?path={self.m_path}/{matched.group(2)}'
 
     # 处理LINK指向的词条内容还是LINK的情况
     # 有两种情况：
@@ -652,8 +652,7 @@ class SearchObject:
         #         return str(matched.group(1)) + '/mdict/getexfile/?path=' + self.m_path + '/' + \
         #                str(res_name) + str(matched.group(3))
         # 浏览器会将反斜杠自动替换成斜杠，因此这里要对url进行编码。
-        return str(matched.group(1)) + '/mdict/' + str(self.dic_id) + '/' + quote(str(res_name)) + \
-               str(matched.group(3))
+        return f'{matched.group(1)}/mdict/{self.dic_id}/{quote(str(res_name))}{matched.group(3)}'
 
     def substitute_hyper_link(self, matched):  # 处理html词条，获取图片和css
         if self.is_zim:
@@ -719,18 +718,14 @@ class SearchObject:
                 if res_name[flag + 1:].strip() == 'html':
                     is_entry = True
             if is_entry:
-                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
-                       'entry://' + str(res_name) + delimiter_r
+                return f'{matched.group(1)}{matched.group(2)}{delimiter_l}entry://{res_name}{delimiter_r}'
             else:
                 if self.is_dic:
-                    return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + quote(
-                        str(res_name)) + delimiter_r
+                    return f'{matched.group(1)}{matched.group(2)}{delimiter_l}{quote(str(res_name))}{delimiter_r}'
                 else:
-                    return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
-                           'zim' + '/' + str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
+                    return f'{matched.group(1)}{matched.group(2)}{delimiter_l}zim/{self.dic_id}/{quote(str(res_name))}{delimiter_r}'
         else:
             if self.is_dic:
-                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + quote(str(res_name)) + delimiter_r
+                return f'{matched.group(1)}{matched.group(2)}{delimiter_l}{quote(str(res_name))}{delimiter_r}'
             else:
-                return str(matched.group(1)) + str(matched.group(2)) + delimiter_l + \
-                       str(self.dic_id) + '/' + quote(str(res_name)) + delimiter_r
+                return f'{matched.group(1)}{matched.group(2)}{delimiter_l}{self.dic_id}/{quote(str(res_name))}{delimiter_r}'

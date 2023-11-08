@@ -25,8 +25,8 @@ from .mdict_utils import audio_path
 cache_dir = os.path.join(ROOT_DIR, '.cache')
 if not os.path.exists(cache_dir):
     os.mkdir(cache_dir)
-pickle_file_path = os.path.join(cache_dir, '.' + get_sys_name() + '.cache')
-change_file_path = os.path.join(cache_dir, '.' + get_sys_name() + '.dat')
+pickle_file_path = os.path.join(cache_dir, f'.{get_sys_name()}.cache')
+change_file_path = os.path.join(cache_dir, f'.{get_sys_name()}.dat')
 uploads_path = os.path.join(ROOT_DIR, 'media', 'uploads')
 
 if not os.path.exists(uploads_path):
