@@ -735,7 +735,7 @@ class ZIMFile:
         for idx in range(self.header_fields['articleCount']):
             # get the Directory Entry
             entry = self.read_directory_entry_by_index(file, idx)
-            if entry['namespace'] == "A":
+            if entry['namespace'] == "A" or entry['namespace'] == "C":
                 # add the full url to the entry
                 entry['fullUrl'] = full_url(entry['namespace'], entry['url'])
                 r_list.append((entry['fullUrl'], entry['title'], idx))
@@ -768,7 +768,7 @@ class ZIMFile:
             article = zim.get_article_by_url(file, namespace, url)
             # we have an article when the namespace is A
             # (i.e. not a photo, etc.)
-            is_article = (namespace == "A")
+            is_article = (namespace == "A") or (namespace == "C")
             if url.endswith('.js') or url.endswith('.css'):
                 is_article = True
         if article is None:

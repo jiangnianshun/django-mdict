@@ -361,6 +361,10 @@ class SearchObject:
                 if tquery not in self.query_list:
                     self.query_list.insert(0, tquery)
 
+            if tquery1.startswith('Category'):
+                tquery = 'C/'+tquery1
+                self.query_list.insert(0, tquery)
+
     @search_exception()
     def search_entry_list(self):
         # 查询一组词
