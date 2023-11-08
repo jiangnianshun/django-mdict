@@ -41,7 +41,7 @@ regp = re.compile(reg, re.IGNORECASE)
 # 漢字音形義字典20191017词条泉的图片href中有=，[^"\'>=]改[^"\'>]。
 # 字海(葉典)20210618中的图片href中字符串没有用引号包裹，用空格判断结束。
 
-regz = r'([ <\n])((src[ ]*=[ ]*("| )*)|(href[ ]*=[ ]*("| )*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^">]+)([" >])'
+regz = r'([ <\n])((src[ ]*=[ ]*("| |\.)*)|(href[ ]*=[ ]*("| |\.)*))(?!entry://)(?!sound://)(?!http://)(?!https://)(?!www\.)(?!//)(?!#)(?!data:)(?!mailto:)(?!javascript:)(file://)*([^">]+)([" >])'
 regpz = re.compile(regz, re.IGNORECASE)
 # zim中src有单引号，Flag_of_the_People's_Republic_of_China.svg.png.webp
 # Anime & Manga Stack Exchange.zim中src = "../I/favicon.png"，等号前后有空格。
@@ -330,13 +330,13 @@ class SearchObject:
             self.query_list.insert(0, '/main.html')
         else:
             if self.query.startswith('A/'):
-                tquery = self.query[2:]
+                tquery1 = self.query[2:]
             elif self.query.startswith('/'):
-                tquery = self.query[1:]
+                tquery1 = self.query[1:]
             else:
-                tquery = self.query
+                tquery1 = self.query
 
-            tqlist = tquery.split(' ')
+            tqlist = tquery1.split(' ')
             tqlist2 = copy.copy(tqlist)
             for i in range(len(tqlist)):
                 tqlist[i] = tqlist[i].lower()
@@ -456,10 +456,10 @@ class SearchObject:
             res_content = self.mdx.search_articles(self.f_mdx, self.mdx, self.query)
             if res_content is None:
                 return '', mime_type
-            if mime_type is not None:
-                if 'javascript' in mime_type:
-                    # 临时性修复gutenberg.zim新增script的src重定向
-                    res_content = res_content.replace('../', '')
+            # if mime_type is not None:
+            #     if 'javascript' in mime_type:
+            #         # 临时性修复gutenberg.zim新增script的src重定向
+            #         res_content = res_content.replace('../', '')
         else:
             res_content, mime_type = self.get_mdd_cache()
 
@@ -671,10 +671,16 @@ class SearchObject:
         temp_3 = matched.group(9)
         delimiter_l, delimiter_r = '', '"'
 
+        matched_group2 = matched.group(2)
+
         if temp_1 == '\'' or temp_2 == '\'':
             delimiter_r = '\''
         elif temp_1 is None and temp_2 is None:
             delimiter_l = '"'
+        elif temp_1 == '.' or temp_2 == '.':
+            matched_group2 = matched_group2.replace('.', '')
+            if '"' not in matched_group2 and '\'' not in matched_group2:
+                delimiter_l = '"'
 
         if temp_3[-1] == '>':
             delimiter_r += '>'
@@ -718,14 +724,14 @@ class SearchObject:
                 if res_name[flag + 1:].strip() == 'html':
                     is_entry = True
             if is_entry:
-                return f'{matched.group(1)}{matched.group(2)}{delimiter_l}entry://{res_name}{delimiter_r}'
+                return f'{matched.group(1)}{matched_group2}{delimiter_l}entry://{res_name}{delimiter_r}'
             else:
                 if self.is_dic:
-                    return f'{matched.group(1)}{matched.group(2)}{delimiter_l}{quote(str(res_name))}{delimiter_r}'
+                    return f'{matched.group(1)}{matched_group2}{delimiter_l}{quote(str(res_name))}{delimiter_r}'
                 else:
-                    return f'{matched.group(1)}{matched.group(2)}{delimiter_l}zim/{self.dic_id}/{quote(str(res_name))}{delimiter_r}'
+                    return f'{matched.group(1)}{matched_group2}{delimiter_l}zim/{self.dic_id}/{quote(str(res_name))}{delimiter_r}'
         else:
             if self.is_dic:
-                return f'{matched.group(1)}{matched.group(2)}{delimiter_l}{quote(str(res_name))}{delimiter_r}'
+                return f'{matched.group(1)}{matched_group2}{delimiter_l}{quote(str(res_name))}{delimiter_r}'
             else:
-                return f'{matched.group(1)}{matched.group(2)}{delimiter_l}{self.dic_id}/{quote(str(res_name))}{delimiter_r}'
+                return f'{matched.group(1)}{matched_group2}{delimiter_l}{self.dic_id}/{quote(str(res_name))}{delimiter_r}'
