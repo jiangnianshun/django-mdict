@@ -28,8 +28,8 @@ for libfile in lib_list:
     libfile2 = libfile + '.pyx'
     if not os.path.exists('mdict/readlib/pyx') or not cmp_md5(libfile1, libfile2):
         shutil.copy(libfile1, libfile2)
-
-os.makedirs('mdict/readlib/pyx')
+if not os.path.exists('mdict/readlib/pyx'):
+    os.makedirs('mdict/readlib/pyx')
 
 for libfile in lib_list:
     libfile1 = '../src/' + libfile + '.py'
