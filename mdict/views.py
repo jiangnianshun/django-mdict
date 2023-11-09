@@ -1222,7 +1222,7 @@ def search_mdd(request, *args):
             if len(res_content) == 0 and sobj.is_zim:
                 # wikihow_en_maxi_2023-03的文章和图片都在C类下，但路径里没有C，需要手动添加
                 if '.jpg' in res_name or '.png' in res_name or '.svg' in res_name or 'webp' in res_name:
-                    if res_name.startswith('images'):
+                    if res_name.startswith('images') or res_name.startswith('videos') or res_name.startswith('assets'):
                         res_name = 'C/' + res_name
                         sobj = SearchObject(mdx, mdd_list, get_dic_attrs(dic), res_name, is_dic=True)
                         res_content, mime_type = sobj.search_mdd()
