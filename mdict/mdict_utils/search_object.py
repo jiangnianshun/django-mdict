@@ -361,9 +361,9 @@ class SearchObject:
                 if tquery not in self.query_list:
                     self.query_list.insert(0, tquery)
 
-            if tquery1.startswith('Category') or tquery1.startswith('assets') or tquery1.startswith('images') or tquery1.startswith('videos'):
-                tquery = 'C/'+tquery1
-                self.query_list.insert(0, tquery)
+            # 新旧版本的zim的文章分别属于A类和C类，暂时先这样处理
+            tquery = 'C/'+tquery1
+            self.query_list.append(tquery)
 
     @search_exception()
     def search_entry_list(self):
