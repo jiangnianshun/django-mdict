@@ -361,7 +361,7 @@ class SearchObject:
                 if tquery not in self.query_list:
                     self.query_list.insert(0, tquery)
 
-            if tquery1.startswith('Category'):
+            if tquery1.startswith('Category') or tquery1.startswith('assets') or tquery1.startswith('images') or tquery1.startswith('videos'):
                 tquery = 'C/'+tquery1
                 self.query_list.insert(0, tquery)
 
