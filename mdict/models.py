@@ -30,7 +30,7 @@ class MdictDic(models.Model):
     # mdict_file设置unique=True会导致UNIQUE constraint failed
     mdict_enable = models.BooleanField('启用', default=True)
     mdict_priority = models.PositiveIntegerField('词典排序', default=1)  # 优先级显示，validator设置范围
-    mdict_es_enable = models.BooleanField('启用es索引', default=False, null=True)
+    mdict_es_enable = models.BooleanField('启用es索引', default=True, null=True)
     mdict_md5 = models.CharField('MD5值', max_length=35, default='', null=True, blank=True)
 
     class Meta:
