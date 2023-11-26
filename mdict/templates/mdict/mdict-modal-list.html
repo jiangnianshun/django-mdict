@@ -1,3 +1,4 @@
+{% load i18n %}
 <div aria-hidden="true" class="modal fade" id="mdict-modal-list" role="dialog">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
@@ -11,14 +12,14 @@
                     {% if type == 'es' %}
                     <div class="d-grid gap-2">
                         <button class="btn btn-outline-primary" type="button" id="open-close-index">
-                            启停索引
+                            {% trans "Disable Index" %}
                         </button>
                     </div>
                     {% endif %}
                     <br/>
                     <div id='enable-all-dic' class="form-checkbox" style="display:inline;">
                         <input class="form-check-input" type="checkbox" id="enableAllCheck" onchange="set_all_mdict_enable(this)">
-                        <label class="form-check-label mdict-list-mark" for="enableAllCheck" style="margin:0px 0px 10px 5px"><b>启停全部词典▷<span id="dic_num"></span></b></label>
+                        <label class="form-check-label mdict-list-mark" for="enableAllCheck" style="margin:0px 0px 10px 5px"><b>{% trans "Disable All" %}▷<span id="dic_num"></span></b></label>
                         {% if type == 'es' %}
                             <span id="init-index-spinner" class="spinner-border text-primary spinner-grow-sm" role="status" style="display:none;"></span>
                         {% endif %}
@@ -27,7 +28,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
-                    关闭
+                    {% trans "Close" %}
                 </button>
             </div>
         </div>

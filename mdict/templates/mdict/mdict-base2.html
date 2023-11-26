@@ -8,7 +8,7 @@
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link rel="manifest" href="/static/json/manifest.json">
 
-    <title>{% block title %}词典{% endblock %}</title>
+    <title>{% block title %}{% trans "Dictionaries" %}{% endblock %}</title>
     <link href='/static/mdict/img/shortcut.png' rel='shortcut icon' type='image/x-icon'/>
     <link rel="apple-touch-icon" sizes="512x512" href="/static/mdict/img/book512_square.png">
 
@@ -41,7 +41,7 @@
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
         <div id="live-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
-                <strong class="me-auto">通知</strong>
+                <strong class="me-auto">{% trans "Notification" %}</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div id="live-toast-body" class="toast-body">

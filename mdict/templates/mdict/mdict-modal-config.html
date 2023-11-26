@@ -1,3 +1,4 @@
+{% load i18n %}
 <div aria-hidden="true" class="modal fade" id="mdict-modal-config" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -13,19 +14,19 @@
                     {% include "mdict/mdict-modal-config-group.html" %}
                     <div id="function-checkbox" style="margin-top:0.5rem;" data-init=0></div>
                     <div>
-                        <span class="btn mdict-icon" id="t-to-s" title="文字转简体">简</span>
-                        <span class="btn mdict-icon" id="s-to-t" title="文字转简体">繁</span>
-                        <i class="bi bi-moon-fill btn mdict-icon" id="night-mode" title="夜间模式"></i>
-                        <i class="bi bi-sun-fill btn mdict-icon" id="day-mode" title="日间模式"></i>
-                        <i class="bi bi-arrow-clockwise btn mdict-icon" id="rotate-page" title="旋转页面"></i>
-                        <i class="bi bi-shuffle btn mdict-icon" id="random-search" title="随机查询"></i>
-                        <a href="/mdict/downloadhistory"><i class="bi bi-download btn mdict-icon" title="下载查询历史"></i></a>
+                        <span class="btn mdict-icon" id="t-to-s" title="to Chinese Simplified">简</span>
+                        <span class="btn mdict-icon" id="s-to-t" title="to Chinese Traditional">繁</span>
+                        <i class="bi bi-moon-fill btn mdict-icon" id="night-mode" title="Night Mode"></i>
+                        <i class="bi bi-sun-fill btn mdict-icon" id="day-mode" title="Day Mode"></i>
+                        <i class="bi bi-arrow-clockwise btn mdict-icon" id="rotate-page" title="Rotate Page"></i>
+                        <i class="bi bi-shuffle btn mdict-icon" id="random-search" title="Random Search"></i>
+                        <a href="/mdict/downloadhistory"><i class="bi bi-download btn mdict-icon" title="Download Search History"></i></a>
                     </div>
                     <div id="online-mdict-checkbox"></div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="button" id="save_as_default">
-                        保存设置
+                        {% trans "Save" %}
                     </button>
                 </div>
             </div>

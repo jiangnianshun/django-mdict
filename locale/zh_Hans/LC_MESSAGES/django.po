@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-26 09:54+0800\n"
-"PO-Revision-Date: 2023-11-26 09:57+0800\n"
+"POT-Creation-Date: 2023-11-26 11:50+0800\n"
+"PO-Revision-Date: 2023-11-26 12:02+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh\n"
@@ -82,6 +82,7 @@ msgid "Dictionary Name"
 msgstr "词典名"
 
 #: .\mdict\models.py:10 .\mynav\models.py:25
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:28
 msgid "URL"
 msgstr "网址"
 
@@ -90,7 +91,8 @@ msgid "Enable"
 msgstr "启用"
 
 #: .\mdict\models.py:12 .\mdict\models.py:33 .\mynav\models.py:7
-#: .\mynav\models.py:29
+#: .\mynav\models.py:29 .\mynav\templates\mynav\mynav-modal-addgroup.html:19
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:32
 msgid "Priority"
 msgstr "优先级"
 
@@ -142,7 +144,7 @@ msgstr "词典分组"
 msgid "Label Name"
 msgstr "标签名"
 
-#: .\mdict\models.py:69
+#: .\mdict\models.py:69 .\mdict\templates\mdict\builtin-network.html:54
 msgid "Label"
 msgstr "标签"
 
@@ -158,7 +160,8 @@ msgstr "词条名"
 msgid "Strip Entry"
 msgstr "Strip词条"
 
-#: .\mdict\models.py:81
+#: .\mdict\models.py:81 .\mdict\templates\mdict\builtin-container-entry.html:7
+#: .\mdict\templates\mdict\builtin-network.html:7
 msgid "Built-in Entry"
 msgstr "内置词条"
 
@@ -166,7 +169,7 @@ msgstr "内置词条"
 msgid "Built-in Entries"
 msgstr "内置词条"
 
-#: .\mdict\models.py:103
+#: .\mdict\models.py:103 .\mdict\templates\mdict\mdict-navbar.html:66
 msgid "Entry"
 msgstr "词条"
 
@@ -190,11 +193,237 @@ msgstr "义项内容"
 msgid "Subentries"
 msgstr "词条义项"
 
+#: .\mdict\templates\mdict\builtin-container-config.html:7
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:8
+msgid "Settings"
+msgstr "设置"
+
+#: .\mdict\templates\mdict\builtin-container-config.html:15
+msgid "Show Nodes with Connections"
+msgstr "显示带连接的节点"
+
+#: .\mdict\templates\mdict\builtin-container-config.html:19
+msgid "Show Labels"
+msgstr "显示标签"
+
+#: .\mdict\templates\mdict\builtin-container-config.html:23
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:38
+msgid "Apply"
+msgstr "应用"
+
+#: .\mdict\templates\mdict\builtin-container-config.html:24
+#: .\mdict\templates\mdict\builtin-container-entry.html:15
+#: .\mdict\templates\mdict\mdict-modal-brief.html:16
+#: .\mdict\templates\mdict\mdict-modal-list.html:31
+#: .\mdict\templates\mdict\shelf-modal-brief.html:23
+msgid "Close"
+msgstr "关闭"
+
+#: .\mdict\templates\mdict\builtin-container-entry.html:14
+msgid "Edit or Create"
+msgstr "编辑或创建"
+
+#: .\mdict\templates\mdict\builtin-network.html:41
+msgid "Entry name"
+msgstr "词条名"
+
+#: .\mdict\templates\mdict\builtin-network.html:43
+#: .\mynav\templates\mynav\mynav-modal-addgroup.html:25
+msgid "Create"
+msgstr "创建"
+
+#: .\mdict\templates\mdict\builtin-network.html:57
+msgid "All"
+msgstr "全部"
+
+#: .\mdict\templates\mdict\builtin-network.html:67
+#: .\mdict\templates\mdict\mdict-base.html:85
+#: .\mdict\templates\mdict\mdict-base2.html:44
+msgid "Notification"
+msgstr "通知"
+
+#: .\mdict\templates\mdict\characters.html:7
+msgid "Special Characters"
+msgstr "特殊符号"
+
+#: .\mdict\templates\mdict\grouping.html:7
+#: .\mdict\templates\mdict\grouping.html:46
+#: .\mdict\templates\mdict\shelf-filter.html:6
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:18
+msgid "Group"
+msgstr "分组"
+
+#: .\mdict\templates\mdict\grouping.html:43
+msgid "Add Dictionary to"
+msgstr "添加到分组"
+
+#: .\mdict\templates\mdict\grouping.html:53
+#: .\mynav\templates\mynav\mynav-modal-addgroup.html:7
+msgid "Create Group"
+msgstr "创建分组"
+
+#: .\mdict\templates\mdict\grouping.html:58
+msgid "Filter"
+msgstr "筛选"
+
+#: .\mdict\templates\mdict\md.html:7
+msgid "Documentation"
+msgstr "文档"
+
+#: .\mdict\templates\mdict\mdict-base.html:11
+#: .\mdict\templates\mdict\mdict-base2.html:11
+#: .\mynav\templates\mynav\mynav-navbar.html:13
+msgid "Dictionaries"
+msgstr "词典"
+
+#: .\mdict\templates\mdict\mdict-es-dic.html:27
+msgid "Full-text Search"
+msgstr "全文搜索"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:7
+msgid "New Card"
+msgstr "新卡片"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:14
+msgid "Create Deck"
+msgstr "创建牌组"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:19
+msgid "Add Card to"
+msgstr "添加到牌组"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:22
+msgid "Deck"
+msgstr "牌组"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:34
+msgid "Front of Card"
+msgstr "卡片正面"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:39
+msgid "Back of Card"
+msgstr "卡片背面"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:44
+msgid "Back of Card (Editor)"
+msgstr "卡片背面（编辑器）"
+
+#: .\mdict\templates\mdict\mdict-modal-brief.html:7
+#: .\mdict\templates\mdict\shelf-modal-brief.html:7
+msgid "Dictionary Description"
+msgstr "词典简介"
+
+#: .\mdict\templates\mdict\mdict-modal-config-group.html:5
+#: .\mdict\templates\mdict\shelf-filter.html:9
+msgid "All Dictionaries"
+msgstr "全部词典"
+
+#: .\mdict\templates\mdict\mdict-modal-config.html:29
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:42
+msgid "Save"
+msgstr "保存"
+
+#: .\mdict\templates\mdict\mdict-modal-history.html:7
+msgid "Search History"
+msgstr "查询历史"
+
+#: .\mdict\templates\mdict\mdict-modal-list.html:15
+msgid "Disable Index"
+msgstr "关闭索引"
+
+#: .\mdict\templates\mdict\mdict-modal-list.html:22
+msgid "Disable All"
+msgstr "全部关闭"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:43
+msgid "Full"
+msgstr "全"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:70
+msgid "Contents"
+msgstr "内容"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:76
+msgid "AND Search"
+msgstr "AND查询"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:80
+msgid "Phrase Search"
+msgstr "词组查询"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:86
+msgid "Highlight"
+msgstr "高亮显示"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:90
+msgid "Zim Search"
+msgstr "查询zim"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:95
+msgid "Abstract Number"
+msgstr "摘要数量"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:99
+msgid "Abstract Length"
+msgstr "摘要长度"
+
+#: .\mdict\templates\mdict\shelf-base.html:8
+#: .\mdict\templates\mdict\shelf3.html:6
+#: .\mynav\templates\mynav\mynav-navbar.html:19
+#: .\mynav\templates\mynav\mynav-navbar.html:20
+#: .\mynav\templates\mynav\mynav-navbar.html:21
+msgid "Shelf"
+msgstr "书架"
+
+#: .\mdict\templates\mdict\shelf-modal-brief.html:13
+#: .\mdict\templates\mdict\shelf-offcanvas.html:8
+msgid "Search"
+msgstr "查询"
+
+#: .\mdict\templates\mdict\shelf-modal-brief.html:14
+#: .\mdict\templates\mdict\shelf-offcanvas.html:9
+msgid "Full-text"
+msgstr "全文搜索"
+
+#: .\mdict\templates\mdict\shelf-modal-brief.html:15
+#: .\mdict\templates\mdict\shelf-offcanvas.html:10
+msgid "Edit"
+msgstr "编辑"
+
+#: .\mdict\templates\mdict\shelf-modal-brief.html:17
+#: .\mdict\templates\mdict\shelf-offcanvas.html:12
+msgid "Open folder"
+msgstr "打开文件夹"
+
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:15
+msgid "Start Time"
+msgstr "开始时间"
+
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:19
+msgid "End Time"
+msgstr "结束时间"
+
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:23
+msgid "Word Number"
+msgstr "单词数量"
+
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:28
+msgid "Scale Ratio"
+msgstr "缩放比例"
+
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:35
+msgid "Save Image"
+msgstr "保存图片"
+
+#: .\mdict\templates\mdict\wordcloud.html:7
+msgid "Word Cloud"
+msgstr "词云"
+
 #: .\mynav\admin.py:28
 msgid "Administrator"
 msgstr "管理员"
 
-#: .\mynav\admin.py:30
+#: .\mynav\admin.py:30 .\mynav\templates\mynav\mynav-navbar.html:25
 msgid "Administration"
 msgstr "管理"
 
@@ -210,7 +439,7 @@ msgstr "网站分组"
 msgid "Website Name"
 msgstr "网站名称"
 
-#: .\mynav\models.py:28
+#: .\mynav\models.py:28 .\mynav\templates\mynav\mynav-modal-addsite.html:36
 msgid "Annotation"
 msgstr "备注"
 
@@ -221,6 +450,23 @@ msgstr "网站"
 #: .\mynav\models.py:33
 msgid "Websites"
 msgstr "网站"
+
+#: .\mynav\templates\mynav\mynav-modal-addgroup.html:15
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:15
+msgid "Name"
+msgstr "名称"
+
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:7
+msgid "Add Website"
+msgstr "添加网站"
+
+#: .\mynav\templates\mynav\mynav-navbar.html:16
+msgid "Open"
+msgstr "打开"
+
+#: .\mynav\templates\mynav\mynav.html:10
+msgid "My Navigation"
+msgstr "我的导航"
 
 #: .\mysite\settings.py:138
 msgid "English"

@@ -1,14 +1,15 @@
+{% load i18n %}
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas-shelf-dic">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvas-shelf-dic-title">Offcanvas</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="input-group">
-        <button type="button" class="btn btn-light" onclick="shelf_dic_btn(2,0)">正查</button>
-        <button type="button" class="btn btn-light" onclick="shelf_dic_btn(2,1)">全文查询</button>
-        <button type="button" class="btn btn-light" onclick="shelf_dic_btn(2,2)">编辑</button>
+        <button type="button" class="btn btn-light" onclick="shelf_dic_btn(2,0)">{% trans "Search" %}</button>
+        <button type="button" class="btn btn-light" onclick="shelf_dic_btn(2,1)">{% trans "Full-text" %}</button>
+        <button type="button" class="btn btn-light" onclick="shelf_dic_btn(2,2)">{% trans "Edit" %}</button>
         {% if address == 'local' %}
-            <button type="button" class="btn btn-light" onclick="open_path(2)">打开路径</button>
+            <button type="button" class="btn btn-light" onclick="open_path(2)">{% trans "Open folder" %}</button>
         {% endif %}
     </div>
     <div class="offcanvas-body"></div>

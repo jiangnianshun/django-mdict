@@ -1,9 +1,10 @@
+{% load i18n %}
 <div aria-hidden="true" class="modal fade" id="mynav-modal-addsite" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="mynav-modal-addsite-title">
-                    添加网址
+                    {% trans "Add Website" %}
                 </h5>
                 <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close">
                 </button>
@@ -11,10 +12,10 @@
             <div class="modal-body">
                 <!--autocomplete='off'使得input中的输入在刷新页面后不保存。-->
                 <div class="input-group">
-                    <span class="btn">名称</span>
+                    <span class="btn">{% trans "Name" %}</span>
                     <input autocomplete="off" id="site-name" class="form-control" type="text">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="group-list" data-bs-toggle="dropdown" aria-expanded="false" data-pk=0>
-                        分组
+                        {% trans "Group" %}
                     </button>
                     <ul class="dropdown-menu" id="site-group">
                         {% for group in webgroup %}
@@ -24,21 +25,21 @@
                     <i class="bi bi-arrow-clockwise btn" id="refresh-addsite"></i>
                 </div>
                 <div class="input-group">
-                    <span class="btn">网址</span>
+                    <span class="btn">{% trans "URL" %}</span>
                     <input autocomplete="off" id="site-url" class="form-control" type="text">
                 </div>
                 <div class="input-group">
-                    <span class="btn">排序</span>
+                    <span class="btn">{% trans "Priority" %}</span>
                     <input autocomplete="off" id="site-priority" class="form-control" type="text" oninput="value=value.replace(/[^\d]/g,'')" value="1">
                 </div>
                 <div class="input-group">
-                    <span class="btn">备注</span>
+                    <span class="btn">{% trans "Annotation" %}</span>
                     <textarea autocomplete="off" id="site-brief" class="form-control" rows="3"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" data-bs-dismiss="modal" type="button" onclick="addsite();">
-                    保存
+                    {% trans "Save" %}
                 </button>
             </div>
         </div>

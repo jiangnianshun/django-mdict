@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+{% load i18n %}
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>内置词条</title>
+    <title>{% trans "Built-in Entry" %}</title>
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/bootstrap/font/bootstrap-icons.css" rel="stylesheet">
     <link href="/static/mdict/css/mdict.css" rel="stylesheet">
@@ -37,9 +38,9 @@
     <div class="card" id="mytooltip" style="positon:absolute;z-index:999;display:none;">
         <div class="card-body text-center">
             <div class="input-group">
-                <span class="btn">词条名</span>
+                <span class="btn">{% trans "Entry name" %}</span>
                 <input autocomplete="off" id="myentry-name" class="form-control" type="text">
-                <button id="create-myentry" class="btn mdict-icon">创建</button>
+                <button id="create-myentry" class="btn mdict-icon">{% trans "Create" %}</button>
             </div>
         </div>
     </div>
@@ -47,13 +48,13 @@
     <div class="card" id="myfilter" style="positon:absolute;z-index:999;display:none;">
         <div class="card-body text-center">
             <div class="input-group">
-                <input autocomplete="off" id="myfilter-name" class="form-control" type="text" placeholder="筛选1">
-                <input autocomplete="off" id="myfilter-name2" class="form-control" type="text" placeholder="筛选2">
+                <input autocomplete="off" id="myfilter-name" class="form-control" type="text" placeholder="filter1">
+                <input autocomplete="off" id="myfilter-name2" class="form-control" type="text" placeholder="filter2">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="label-filter" data-bs-toggle="dropdown" aria-expanded="false" data-pk=0>
-                    标签
+                    {% trans "Label" %}
                 </button>
                 <ul class="dropdown-menu" id="label-list">
-                    <li onclick="fill_dropdown(this)"><span class="dropdown-item" data-pk=0>全部</span></li>
+                    <li onclick="fill_dropdown(this)"><span class="dropdown-item" data-pk=0>{% trans "All" %}</span></li>
                 </ul>
                 <span id="close-myfilter" class="bi-x btn"></span>
             </div>
@@ -63,7 +64,7 @@
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
         <div id="live-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
-                <strong class="me-auto">通知</strong>
+                <strong class="me-auto">{% trans "Notification" %}</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div id="live-toast-body" class="toast-body">

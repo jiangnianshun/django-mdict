@@ -1,3 +1,4 @@
+{% load i18n %}
 <nav class="navbar navbar-expand-md navbar-light bg-light">
     <div class="container-fluid">
         <!--form自动提交后刷新页面，因此onsubmit要返回false，阻止提交，在浏览器扩展中不能用onsubmit，导致不断刷新，或者有时候js错误，导致点击查询后，页面刷新，后面考虑去掉form，换成div。-->
@@ -39,7 +40,7 @@
         <div class="d-flex float-end">
             <div class="input-group">
                 {% if type == 'index' or type == 'dic' or type == 'esdic' or type == 'zim' %}
-                    <span class="btn mdict-icon" id="btn-es">全</span>
+                    <span class="btn mdict-icon" id="btn-es">{% trans "Full" %}</span>
                 {% endif %}
                 <span class="btn mdict-icon" id="btn-bujian">部</span>
                 <i class="bi bi-journal-bookmark-fill btn mdict-icon" id="modal-mdict" data-bs-toggle="modal" data-bs-target="#mdict-modal-list"></i>
@@ -62,40 +63,40 @@
                 <div class="col">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="es-filter-entry" checked>
-                        <label class="form-check-label" for="es-filter-entry">词头</label>
+                        <label class="form-check-label" for="es-filter-entry">{% trans "Entry" %}</label>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="es-filter-content" checked>
-                        <label class="form-check-label" for="es-filter-content">内容</label>
+                        <label class="form-check-label" for="es-filter-content">{% trans "Contents" %}</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="es-filter-and" checked>
-                        <label class="form-check-label" for="es-filter-and">AND查询</label>
+                        <label class="form-check-label" for="es-filter-and">{% trans "AND Search" %}</label>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="es-filter-phrase">
-                        <label class="form-check-label" for="es-filter-phrase">词组查询</label>
+                        <label class="form-check-label" for="es-filter-phrase">{% trans "Phrase Search" %}</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="highlight-content" checked>
-                        <label class="form-check-label" for="es-filter-phrase">正文高亮</label>
+                        <label class="form-check-label" for="es-filter-phrase">{% trans "Highlight" %}</label>
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="search-zim" checked>
-                        <label class="form-check-label" for="es-filter-phrase">查询zim</label>
+                        <label class="form-check-label" for="es-filter-phrase">{% trans "Zim Search" %}</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="input-group input-group-sm">
-                        <span class="input-group-text">摘要个数</span>
+                        <span class="input-group-text">{% trans "Abstract Number" %}</span>
                         <input type="text" class="form-control" placeholder="" oninput = "value=value.replace(/[^\d]/g,'')" value="3" id="frag-num">
                     </div>
                     <div class="input-group input-group-sm">
-                        <span class="input-group-text">摘要长度</span>
+                        <span class="input-group-text">{% trans "Abstract Length" %}</span>
                         <input type="text" class="form-control" placeholder="" oninput = "value=value.replace(/[^\d]/g,'')" value="50" id="frag-size">
                     </div>
                 </div>

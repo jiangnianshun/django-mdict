@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+{% load i18n %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>分组</title>
+    <title>{% trans "Group" %}</title>
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/mdict/jstree/themes/default/style.min.css" />
     <link rel="stylesheet" href="/static/bootstrap/font/bootstrap-icons.css">
@@ -39,24 +40,24 @@
         <div class="row" style="margin-bottom:2rem;">
             <div class="col col-md-5">
                 <div class="input-group">
-                    <button  id="add-to-group" class="btn btn-secondary" type="button" title="添加到分组">添加词典到</button>
-                    <i class="btn bi-chevron-double-right mdict-icon" title="添加到分组"></i>
+                    <button  id="add-to-group" class="btn btn-secondary" type="button" title="to Group">{% trans "Add Dictionary to" %}</button>
+                    <i class="btn bi-chevron-double-right mdict-icon" title="to Group"></i>
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="group-list" data-bs-toggle="dropdown" aria-expanded="false" data-pk=0>
-                        分组
+                        {% trans "Group" %}
                     </button>
                     <ul class="dropdown-menu" id="dic-group">
                     </ul>
-                    <i id="home" class="btn bi-house-door mdict-icon" title="返回首页"></i>
+                    <i id="home" class="btn bi-house-door mdict-icon" title="Return Home"></i>
                 </div>
                 <div class="input-group">
-                    <span class="btn">创建分组</span>
+                    <span class="btn">{% trans "Create Group" %}</span>
                     <input autocomplete="off" id="group-name" class="form-control" type="text">
-                    <i id="create-group" class="btn bi-plus-lg mdict-icon" title="创建分组"></i>
+                    <i id="create-group" class="btn bi-plus-lg mdict-icon" title="Create Group"></i>
                 </div>
                 <div class="input-group">
-                    <span class="btn">词典筛选</span>
+                    <span class="btn">{% trans "Filter" %}</span>
                     <input autocomplete="off" id="grouping-filter" class="form-control" type="text">
-                    <i id="expand-all" class="btn bi-arrows-fullscreen mdict-icon" title="全部展开"></i>
+                    <i id="expand-all" class="btn bi-arrows-fullscreen mdict-icon" title="All Show"></i>
                 </div>
             </div>
         </div>

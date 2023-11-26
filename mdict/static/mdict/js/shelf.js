@@ -272,7 +272,8 @@ function get_header(container, dic_pk, dic_name, type){
             var h_line="<div style='width:100%;height:1px;border:0;margin-top:1em;margin-bottom:1em;background-color:gray;'></div>";
             var title="";
             var description="";
-            var num_entrys="词条数量："+thousands(num);
+            //var num_entrys="词条数量："+thousands(num);
+            var num_entrys=thousands(num);
             var other_attributes="";
             for(var key in header){
                 if(key!="StyleSheet"&&header[key].length>0){//不显示StyleSheet属性和空属性

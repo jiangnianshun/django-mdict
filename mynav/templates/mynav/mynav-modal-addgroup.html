@@ -1,9 +1,10 @@
+{% load i18n %}
 <div aria-hidden="true" class="modal fade" id="mynav-modal-addgroup" role="dialog">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="mynav-modal-addgroup-title">
-                    创建分组
+                    {% trans "Create Group" %}
                 </h5>
                 <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close">
                 </button>
@@ -11,17 +12,17 @@
             <div class="modal-body">
                 <!--autocomplete='off'使得input中的输入在刷新页面后不保存。-->
                 <div class="input-group">
-                    <span class="btn">名称</span>
+                    <span class="btn">{% trans "Name" %}</span>
                     <input autocomplete="off" id="group-name" class="form-control" type="text">
                 </div>
                 <div class="input-group">
-                    <span class="btn">排序</span>
+                    <span class="btn">{% trans "Priority" %}</span>
                     <input autocomplete="off" id="group-priority" class="form-control" type="text" oninput="value=value.replace(/[^\d]/g,'')" value="1">
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" data-bs-dismiss="modal" type="button" onclick="addgroup();">
-                    创建
+                    {% trans "Create" %}
                 </button>
             </div>
         </div>

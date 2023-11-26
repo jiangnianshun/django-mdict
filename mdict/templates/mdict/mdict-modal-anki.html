@@ -1,24 +1,25 @@
+{% load i18n %}
 <div aria-hidden="true" class="modal fade" id="mdict-modal-anki" role="dialog">
     <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="myModalanki">
-                    新建anki卡片
+                    {% trans "New Card" %}
                 </h5>
                 <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close">
                 </button>
             </div>
             <div class="modal-body">
                 <div class="input-group" style="margin-bottom:20px;">
-                    <span class="btn">创建牌组</span>
+                    <span class="btn">{% trans "Create Deck" %}</span>
                     <input autocomplete="off" id="deck-name" class="form-control" type="text">
                     <i id="create-deck" class="btn bi-plus-lg mdict-icon" title="创建牌组"></i>
                 </div>
                 <div class="input-group" style="margin-bottom:20px;">
-                    <button  id="add-to-deck" class="btn btn-secondary" type="button" title="添加到牌组">添加卡片到</button>
+                    <button  id="add-to-deck" class="btn btn-secondary" type="button" title="添加到牌组">{% trans "Add Card to" %}</button>
                     <i class="btn bi-chevron-double-right mdict-icon" title="添加到牌组"></i>
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="deck-list" data-bs-toggle="dropdown" aria-expanded="false">
-                        牌组
+                        {% trans "Deck" %}
                     </button>
                     <ul class="dropdown-menu" id="deck-group">
                     </ul>
@@ -30,17 +31,17 @@
                     <i id="auto-create-card" class="btn bi-box-arrow-in-right mdict-icon" title="自动复制"></i>
                 </div>
                 <div style="margin-bottom:20px;">
-                    <label class="form-label">卡片正面</label>
+                    <label class="form-label">{% trans "Front of Card" %}</label>
 <!--                    <div id="ckeditor1"></div>-->
                     <textarea class="form-control" id="card-front" rows="2"></textarea>
                 </div>
                 <div style="margin-bottom:20px;">
-                    <label class="form-label">卡片背面</label>
+                    <label class="form-label">{% trans "Back of Card" %}</label>
                     <iframe id="iframe-anki" sandbox="allow-same-origin allow-scripts allow-popups allow-downloads allow-popups-to-escape-sandbox" height="500px"></iframe>
 <!--                    <textarea class="form-control" id="card-back" rows="12"></textarea>-->
                 </div>
                 <div style="margin-bottom:20px;">
-                    <label class="form-label">卡片背面（编辑器）</label>
+                    <label class="form-label">{% trans "Back of Card (Editor)" %}</label>
                     <div id="ckeditor2"></div>
 <!--                    <textarea class="form-control" id="card-back" rows="12"></textarea>-->
                 </div>

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-26 09:54+0800\n"
-"PO-Revision-Date: 2023-11-26 09:55+0800\n"
+"POT-Creation-Date: 2023-11-26 11:50+0800\n"
+"PO-Revision-Date: 2023-11-26 11:54+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -83,6 +83,7 @@ msgid "Dictionary Name"
 msgstr "Dictionary Name"
 
 #: .\mdict\models.py:10 .\mynav\models.py:25
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:28
 msgid "URL"
 msgstr "URL"
 
@@ -91,7 +92,8 @@ msgid "Enable"
 msgstr "Enable"
 
 #: .\mdict\models.py:12 .\mdict\models.py:33 .\mynav\models.py:7
-#: .\mynav\models.py:29
+#: .\mynav\models.py:29 .\mynav\templates\mynav\mynav-modal-addgroup.html:19
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:32
 msgid "Priority"
 msgstr "Priority"
 
@@ -143,7 +145,7 @@ msgstr "Dictionary Groups"
 msgid "Label Name"
 msgstr "Label Name"
 
-#: .\mdict\models.py:69
+#: .\mdict\models.py:69 .\mdict\templates\mdict\builtin-network.html:54
 msgid "Label"
 msgstr "Label"
 
@@ -159,7 +161,8 @@ msgstr "Entry Name"
 msgid "Strip Entry"
 msgstr "Strip Entry"
 
-#: .\mdict\models.py:81
+#: .\mdict\models.py:81 .\mdict\templates\mdict\builtin-container-entry.html:7
+#: .\mdict\templates\mdict\builtin-network.html:7
 msgid "Built-in Entry"
 msgstr "Built-in Entry"
 
@@ -167,7 +170,7 @@ msgstr "Built-in Entry"
 msgid "Built-in Entries"
 msgstr "Built-in Entries"
 
-#: .\mdict\models.py:103
+#: .\mdict\models.py:103 .\mdict\templates\mdict\mdict-navbar.html:66
 msgid "Entry"
 msgstr "Entry"
 
@@ -191,11 +194,237 @@ msgstr "Subentry Contents"
 msgid "Subentries"
 msgstr "Subentries"
 
+#: .\mdict\templates\mdict\builtin-container-config.html:7
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:8
+msgid "Settings"
+msgstr "Settings"
+
+#: .\mdict\templates\mdict\builtin-container-config.html:15
+msgid "Show Nodes with Connections"
+msgstr "Show Nodes with Connections"
+
+#: .\mdict\templates\mdict\builtin-container-config.html:19
+msgid "Show Labels"
+msgstr "Show Labels"
+
+#: .\mdict\templates\mdict\builtin-container-config.html:23
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:38
+msgid "Apply"
+msgstr "Apply"
+
+#: .\mdict\templates\mdict\builtin-container-config.html:24
+#: .\mdict\templates\mdict\builtin-container-entry.html:15
+#: .\mdict\templates\mdict\mdict-modal-brief.html:16
+#: .\mdict\templates\mdict\mdict-modal-list.html:31
+#: .\mdict\templates\mdict\shelf-modal-brief.html:23
+msgid "Close"
+msgstr "Close"
+
+#: .\mdict\templates\mdict\builtin-container-entry.html:14
+msgid "Edit or Create"
+msgstr "Edit or Create"
+
+#: .\mdict\templates\mdict\builtin-network.html:41
+msgid "Entry name"
+msgstr "Entry Name"
+
+#: .\mdict\templates\mdict\builtin-network.html:43
+#: .\mynav\templates\mynav\mynav-modal-addgroup.html:25
+msgid "Create"
+msgstr "Create"
+
+#: .\mdict\templates\mdict\builtin-network.html:57
+msgid "All"
+msgstr "All"
+
+#: .\mdict\templates\mdict\builtin-network.html:67
+#: .\mdict\templates\mdict\mdict-base.html:85
+#: .\mdict\templates\mdict\mdict-base2.html:44
+msgid "Notification"
+msgstr "Notification"
+
+#: .\mdict\templates\mdict\characters.html:7
+msgid "Special Characters"
+msgstr "Special Characters"
+
+#: .\mdict\templates\mdict\grouping.html:7
+#: .\mdict\templates\mdict\grouping.html:46
+#: .\mdict\templates\mdict\shelf-filter.html:6
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:18
+msgid "Group"
+msgstr "Group"
+
+#: .\mdict\templates\mdict\grouping.html:43
+msgid "Add Dictionary to"
+msgstr "Add Dictionary to"
+
+#: .\mdict\templates\mdict\grouping.html:53
+#: .\mynav\templates\mynav\mynav-modal-addgroup.html:7
+msgid "Create Group"
+msgstr "Create Group"
+
+#: .\mdict\templates\mdict\grouping.html:58
+msgid "Filter"
+msgstr "Filter"
+
+#: .\mdict\templates\mdict\md.html:7
+msgid "Documentation"
+msgstr "Documentation"
+
+#: .\mdict\templates\mdict\mdict-base.html:11
+#: .\mdict\templates\mdict\mdict-base2.html:11
+#: .\mynav\templates\mynav\mynav-navbar.html:13
+msgid "Dictionaries"
+msgstr "Dictionaries"
+
+#: .\mdict\templates\mdict\mdict-es-dic.html:27
+msgid "Full-text Search"
+msgstr "Full-text Search"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:7
+msgid "New Card"
+msgstr "New Card"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:14
+msgid "Create Deck"
+msgstr "Create Deck"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:19
+msgid "Add Card to"
+msgstr "Add Card to"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:22
+msgid "Deck"
+msgstr "Deck"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:34
+msgid "Front of Card"
+msgstr "Front of Card"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:39
+msgid "Back of Card"
+msgstr "Back of Card"
+
+#: .\mdict\templates\mdict\mdict-modal-anki.html:44
+msgid "Back of Card (Editor)"
+msgstr "Back of Card (Editor)"
+
+#: .\mdict\templates\mdict\mdict-modal-brief.html:7
+#: .\mdict\templates\mdict\shelf-modal-brief.html:7
+msgid "Dictionary Description"
+msgstr "Dictionary Description"
+
+#: .\mdict\templates\mdict\mdict-modal-config-group.html:5
+#: .\mdict\templates\mdict\shelf-filter.html:9
+msgid "All Dictionaries"
+msgstr "All Dictionaries"
+
+#: .\mdict\templates\mdict\mdict-modal-config.html:29
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:42
+msgid "Save"
+msgstr "Save"
+
+#: .\mdict\templates\mdict\mdict-modal-history.html:7
+msgid "Search History"
+msgstr "Search History"
+
+#: .\mdict\templates\mdict\mdict-modal-list.html:15
+msgid "Disable Index"
+msgstr "Disable Index"
+
+#: .\mdict\templates\mdict\mdict-modal-list.html:22
+msgid "Disable All"
+msgstr "Disable All"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:43
+msgid "Full"
+msgstr "Full"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:70
+msgid "Contents"
+msgstr "Contents"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:76
+msgid "AND Search"
+msgstr "AND Search"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:80
+msgid "Phrase Search"
+msgstr "Phrase Search"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:86
+msgid "Highlight"
+msgstr "Highlight"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:90
+msgid "Zim Search"
+msgstr "Zim Search"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:95
+msgid "Abstract Number"
+msgstr "Abstract Number"
+
+#: .\mdict\templates\mdict\mdict-navbar.html:99
+msgid "Abstract Length"
+msgstr "Abstract Length"
+
+#: .\mdict\templates\mdict\shelf-base.html:8
+#: .\mdict\templates\mdict\shelf3.html:6
+#: .\mynav\templates\mynav\mynav-navbar.html:19
+#: .\mynav\templates\mynav\mynav-navbar.html:20
+#: .\mynav\templates\mynav\mynav-navbar.html:21
+msgid "Shelf"
+msgstr "Shelf"
+
+#: .\mdict\templates\mdict\shelf-modal-brief.html:13
+#: .\mdict\templates\mdict\shelf-offcanvas.html:8
+msgid "Search"
+msgstr "Search"
+
+#: .\mdict\templates\mdict\shelf-modal-brief.html:14
+#: .\mdict\templates\mdict\shelf-offcanvas.html:9
+msgid "Full-text"
+msgstr "Full-text"
+
+#: .\mdict\templates\mdict\shelf-modal-brief.html:15
+#: .\mdict\templates\mdict\shelf-offcanvas.html:10
+msgid "Edit"
+msgstr "Edit"
+
+#: .\mdict\templates\mdict\shelf-modal-brief.html:17
+#: .\mdict\templates\mdict\shelf-offcanvas.html:12
+msgid "Open folder"
+msgstr "Open folder"
+
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:15
+msgid "Start Time"
+msgstr "Start Time"
+
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:19
+msgid "End Time"
+msgstr "End Time"
+
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:23
+msgid "Word Number"
+msgstr "Word Number"
+
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:28
+msgid "Scale Ratio"
+msgstr "Scale Ratio"
+
+#: .\mdict\templates\mdict\wordcloud-modal-config.html:35
+msgid "Save Image"
+msgstr "Save Image"
+
+#: .\mdict\templates\mdict\wordcloud.html:7
+msgid "Word Cloud"
+msgstr "Word Cloud"
+
 #: .\mynav\admin.py:28
 msgid "Administrator"
 msgstr "Administrator"
 
-#: .\mynav\admin.py:30
+#: .\mynav\admin.py:30 .\mynav\templates\mynav\mynav-navbar.html:25
 msgid "Administration"
 msgstr "Administration"
 
@@ -211,7 +440,7 @@ msgstr "Website Groups"
 msgid "Website Name"
 msgstr "Website Name"
 
-#: .\mynav\models.py:28
+#: .\mynav\models.py:28 .\mynav\templates\mynav\mynav-modal-addsite.html:36
 msgid "Annotation"
 msgstr "Annotation"
 
@@ -222,6 +451,23 @@ msgstr "Website"
 #: .\mynav\models.py:33
 msgid "Websites"
 msgstr "Websites"
+
+#: .\mynav\templates\mynav\mynav-modal-addgroup.html:15
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:15
+msgid "Name"
+msgstr "Name"
+
+#: .\mynav\templates\mynav\mynav-modal-addsite.html:7
+msgid "Add Website"
+msgstr "Add Website"
+
+#: .\mynav\templates\mynav\mynav-navbar.html:16
+msgid "Open"
+msgstr "Open"
+
+#: .\mynav\templates\mynav\mynav.html:10
+msgid "My Navigation"
+msgstr "My Navigation"
 
 #: .\mysite\settings.py:138
 msgid "English"
