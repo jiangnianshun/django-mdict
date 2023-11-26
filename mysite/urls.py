@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
+from django.utils.translation import get_language
 # from django.conf.urls import url
 # url已被废弃，改用re_path。
 from django.urls import re_path
@@ -67,7 +68,12 @@ def redirect_font(request):  # url重定向
     return redirect('/media/font')
 
 
+main_cur_language = 'en'
+
+
 def main(request):
+    global main_cur_language
+    main_cur_language = get_language()
     return render(request, get_index_name())
 
 
@@ -76,8 +82,14 @@ def main2(request):
 
 
 def get_index_sites(request):
-    with open(settings.BASE_DIR + "/static/json/index.json", 'r', encoding='utf-8') as f:
-        data = json.load(f)
+    global main_cur_language
+    # url修改语言，但是前端请求没改变
+    if main_cur_language == 'zh-hans':
+        with open(settings.BASE_DIR + "/static/json/index_zh_hans.json", 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    else:
+        with open(settings.BASE_DIR + "/static/json/index_en.json", 'r', encoding='utf-8') as f:
+            data = json.load(f)
     return HttpResponse(json.dumps(data))
 
 
@@ -88,7 +100,6 @@ def swView(request):
     except Exception as e:
         print(e)
         return HttpResponse('')
-
 
 
 urlpatterns = i18n_patterns(
