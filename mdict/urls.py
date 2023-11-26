@@ -42,6 +42,7 @@ urlpatterns = [
     path('getdicgroup/', views.get_dic_group),
     path('setmdictenable/', views.set_mdict_enable),
     path('retrieveconfig/', views.retrieve_config),
+    path('retrieveconfigdict/', views.retrieve_config_dict),
     path('saveconfig/', views.save_config),
     path('bujian/', views.bujianjiansuo),
     path('es/', views.es_index),

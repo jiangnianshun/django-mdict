@@ -402,6 +402,8 @@ function init_common_config(){//这里后面改成从后台取数据
     var i=1;
     var col_num=7;
 
+    retrieveconfigdict(false, function(){});
+
     for(var key in common_config){
         var c_id="config-"+key;
         var c_text=common_config[key];
@@ -447,6 +449,22 @@ function init_common_config(){//这里后面改成从后台取数据
 //        })
     })
 
+}
+
+function retrieveconfigdict(async, func){
+    $.ajax({
+        url:"/mdict/retrieveconfigdict/",
+        contentType:'json',
+        type:'GET',
+        async:async,
+        success:function(data){
+            var configdict=$.parseJSON(data);
+            common_config = configdict;
+        },
+        error:function(jqXHR,textStatus,errorThrown){
+            alert(jqXHR.responseText);
+        },
+    });
 }
 
 function retrieveconfig(async,func){

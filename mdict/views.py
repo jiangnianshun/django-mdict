@@ -10,6 +10,7 @@ from urllib.parse import quote, unquote
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import get_language
 
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
@@ -55,6 +56,8 @@ if check_xapian():
     import xapian
 else:
     xapian = None
+
+main_cur_language = 'en'
 
 init_database()
 
@@ -1321,18 +1324,24 @@ def get_dic_info(request):
 
 
 def mdict_index(request):
+    global main_cur_language
+    main_cur_language = get_language()
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
     return render(request, 'mdict/mdict-index.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
 
 
 def mdict_index_simple(request):
+    global main_cur_language
+    main_cur_language = get_language()
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
     return render(request, 'mdict/mdict-index-simple.html', {'query': query, 'is_mobile': is_mb, 'type': 'index'})
 
 
 def mdict_index_simple2(request):
+    global main_cur_language
+    main_cur_language = get_language()
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
     return render(request, 'mdict/mdict-index-simple2.html', {'query': query, 'is_mobile': is_mb, 'type': 'simple2'})
@@ -1936,12 +1945,16 @@ def getwordlist(request):
 
 
 def es_index(request):
+    global main_cur_language
+    main_cur_language = get_language()
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
     return render(request, 'mdict/mdict-es-index.html', {'query': query, 'type': 'es', 'is_mobile': is_mb})
 
 
 def mdict_dic(request, *args):
+    global main_cur_language
+    main_cur_language = get_language()
     # dic_pk = int(request.GET.get('dic_pk', -1))
     dic_pk = args[0]
 
@@ -2168,6 +2181,28 @@ def retrieve_config(request):
             r_config.update({k2: con['SEARCH'].getint(k2)})
         else:
             print('error configuration ', k2, v2, type(v2))
+
+    return HttpResponse(json.dumps(r_config))
+
+
+def retrieve_config_dict(request):
+    global main_cur_language
+    if main_cur_language == 'zh-hans':
+        r_config = {'force-refresh': '强制刷新', 'st-enable': '繁简转换', 'chaizi-enable': '拆字反查',
+                    'fh-char-enable': '英文全角转半角',
+                    'kana-enable': '平片假名转换', 'romaji-enable': '罗马字假名转换', 'link-new-label': '跳转新标签页',
+                    'force-font': '强制全宋体',
+                    'card-show': '展开多个词典', 'select-btn-enable': '启用查询菜单', 'new-label-link': '新标签页正查',
+                    'fixed-height': '固定高度',
+                    'magnifier-enable': '启用放大镜', 'hide-bottom-bar': '隐藏底部栏'}
+    else:
+        r_config = {'force-refresh': 'Force Refresh', 'st-enable': 'Chinese Simplified/Traditional', 'chaizi-enable': '拆字反查',
+                    'fh-char-enable': 'Full-width to Half-width',
+                    'kana-enable': 'Katakana/Hiragana', 'romaji-enable': 'Romaji Convert', 'link-new-label': 'Open Link in New Tab',
+                    'force-font': 'Force 全宋体',
+                    'card-show': 'Show Multiple Tabs', 'select-btn-enable': 'Enable Select Menu', 'new-label-link': 'New Tab in Search Page',
+                    'fixed-height': 'Iframe Fixed Height',
+                    'magnifier-enable': 'Enable Magnifier', 'hide-bottom-bar': 'Hide Bottom Bar'}
 
     return HttpResponse(json.dumps(r_config))
 

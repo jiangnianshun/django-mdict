@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-26 11:50+0800\n"
-"PO-Revision-Date: 2023-11-26 12:02+0800\n"
+"POT-Creation-Date: 2023-11-26 16:13+0800\n"
+"PO-Revision-Date: 2023-11-26 16:14+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh\n"
@@ -328,12 +328,12 @@ msgid "Search History"
 msgstr "查询历史"
 
 #: .\mdict\templates\mdict\mdict-modal-list.html:15
-msgid "Disable Index"
-msgstr "关闭索引"
+msgid "Enable Disable Index"
+msgstr "启用/停止索引"
 
 #: .\mdict\templates\mdict\mdict-modal-list.html:22
-msgid "Disable All"
-msgstr "全部关闭"
+msgid "Enable Disable All"
+msgstr "全部启用/停止"
 
 #: .\mdict\templates\mdict\mdict-navbar.html:43
 msgid "Full"
@@ -475,6 +475,9 @@ msgstr "英语"
 #: .\mysite\settings.py:139
 msgid "Chinese Simplified"
 msgstr "简体中文"
+
+#~ msgid "Disable Index"
+#~ msgstr "关闭索引"
 
 #~ msgid "Dictionary Online"
 #~ msgstr "在线词典"
