@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-26 09:32+0800\n"
-"PO-Revision-Date: 2023-11-26 09:34+0800\n"
+"POT-Creation-Date: 2023-11-26 09:54+0800\n"
+"PO-Revision-Date: 2023-11-26 09:55+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -17,6 +17,66 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4.1\n"
+
+#: .\mdict\admin.py:14
+msgid "Enable selected dictionaries"
+msgstr "Enable selected dictionaries"
+
+#: .\mdict\admin.py:21
+msgid "Disable selected dictionaries"
+msgstr "Disable selected dictionaries"
+
+#: .\mdict\admin.py:28 .\mdict\models.py:34
+msgid "Enable es index"
+msgstr "Enable es index"
+
+#: .\mdict\admin.py:35
+msgid "Disable es index"
+msgstr "Disable es index"
+
+#: .\mdict\admin.py:65
+msgid "Create es index"
+msgstr "Create es index"
+
+#: .\mdict\admin.py:84
+msgid "Delete es index"
+msgstr "Delete es index"
+
+#: .\mdict\admin.py:114
+msgid "Entry Length"
+msgstr "Entry Length"
+
+#: .\mdict\admin.py:118
+msgid "Length 1"
+msgstr "Length 1"
+
+#: .\mdict\admin.py:119
+msgid "Length 2"
+msgstr "Length 2"
+
+#: .\mdict\admin.py:120
+msgid "Length 3"
+msgstr "Length 3"
+
+#: .\mdict\admin.py:121
+msgid "Length 4-6"
+msgstr "Length 4-6"
+
+#: .\mdict\admin.py:122
+msgid "Length 7-10"
+msgstr "Length 7-10"
+
+#: .\mdict\admin.py:123
+msgid "Length 11-15"
+msgstr "Length 11-15"
+
+#: .\mdict\admin.py:124
+msgid "Length 16-20"
+msgstr "Length 16-20"
+
+#: .\mdict\admin.py:125
+msgid "Length more than 20"
+msgstr "Length more than 20"
 
 #: .\mdict\models.py:9 .\mdict\models.py:29
 msgid "Dictionary Name"
@@ -50,10 +110,6 @@ msgstr "Online Dictionaries"
 #: .\mdict\models.py:30
 msgid "File Name"
 msgstr "File Name"
-
-#: .\mdict\models.py:34
-msgid "Enable es index"
-msgstr "Enable es index"
 
 #: .\mdict\models.py:35
 msgid "MD5"
@@ -134,6 +190,14 @@ msgstr "Subentry Contents"
 #: .\mdict\models.py:115
 msgid "Subentries"
 msgstr "Subentries"
+
+#: .\mynav\admin.py:28
+msgid "Administrator"
+msgstr "Administrator"
+
+#: .\mynav\admin.py:30
+msgid "Administration"
+msgstr "Administration"
 
 #: .\mynav\models.py:10 .\mynav\models.py:26
 msgid "Website Group"

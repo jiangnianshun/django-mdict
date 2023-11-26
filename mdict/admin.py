@@ -4,34 +4,35 @@ from elasticsearch import Elasticsearch
 from base.base_config import *
 from base.base_sys import check_system
 from mdict.models import MdictDic, MdictOnline, MyMdictEntry, MyMdictItem, MyMdictEntryType, MdictDicGroup
+from django.utils.translation import gettext_lazy as _
 
 
 def EnableAllDics(modeladmin, request, queryset):
     queryset.update(mdict_enable=True)
 
 
-EnableAllDics.short_description = "启用选择的词典"
+EnableAllDics.short_description = _('Enable selected dictionaries')
 
 
 def DisableAllDics(modeladmin, request, queryset):
     queryset.update(mdict_enable=False)
 
 
-DisableAllDics.short_description = "关闭选择的词典"
+DisableAllDics.short_description = _('Disable selected dictionaries')
 
 
 def EnableAllEs(modeladmin, request, queryset):
     queryset.update(mdict_es_enable=True)
 
 
-EnableAllEs.short_description = "开启es索引"
+EnableAllEs.short_description = _('Enable es index')
 
 
 def DisableAllEs(modeladmin, request, queryset):
     queryset.update(mdict_es_enable=False)
 
 
-DisableAllEs.short_description = "禁止es索引"
+DisableAllEs.short_description = _("Disable es index")
 
 script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'script')
 
@@ -61,7 +62,7 @@ def createAllIndex(modeladmin, request, queryset):
         print(e)
 
 
-createAllIndex.short_description = "创建es索引"
+createAllIndex.short_description = _('Create es index')
 
 
 def deleteAllIndex(modeladmin, request, queryset):
@@ -80,7 +81,7 @@ def deleteAllIndex(modeladmin, request, queryset):
         print(e)
 
 
-deleteAllIndex.short_description = "删除es索引"
+deleteAllIndex.short_description = _('Delete es index')
 
 
 class MdictDicAdmin(admin.ModelAdmin):
@@ -110,18 +111,18 @@ class MyMdictItemAdmin(admin.StackedInline):
 
 
 class EntryLengthListFilter(admin.SimpleListFilter):
-    title = '词条长度'
+    title = _('Entry Length')
     parameter_name = 'entrylen'
 
     def lookups(self, request, model_admin):
-        return [('len1', '长度1'),
-                ('len2', '长度2'),
-                ('len3', '长度3'),
-                ('len4', '长度4-6'),
-                ('len7', '长度7-10'),
-                ('len11', '长度11-15'),
-                ('len16', '长度16-20'),
-                ('len21', '长度21以上')]
+        return [('len1', _('Length 1')),
+                ('len2', _('Length 2')),
+                ('len3', _('Length 3')),
+                ('len4', _('Length 4-6')),
+                ('len7', _('Length 7-10')),
+                ('len11', _('Length 11-15')),
+                ('len16', _('Length 16-20')),
+                ('len21', _('Length more than 20'))]
 
     def queryset(self, request, queryset):
         if self.value() == 'len1':

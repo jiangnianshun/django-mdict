@@ -1,6 +1,6 @@
 from django.contrib import admin
 from mynav.models import Webgroup, Website
-
+from django.utils.translation import gettext_lazy as _
 
 # Register your models here.
 
@@ -25,7 +25,7 @@ class WebgroupAdmin(admin.ModelAdmin):
 
 admin.site.register(Webgroup, WebgroupAdmin)
 admin.site.register(Website, WebsiteAdmin)
-admin.site.site_header = '管理员'
+admin.site.site_header = _('Administrator')
 # site_header是admin界面最上面的标题，原内容为Django 管理。
-admin.site.site_title = '管理'
+admin.site.site_title = _('Administration')
 # site_title是admin页面标签的内容，原内容为Django 站点管理员。
