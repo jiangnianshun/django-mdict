@@ -1,0 +1,77 @@
+[
+{
+    "title":"Navigation",
+    "href":"/mynav/",
+    "brief":"Open local navigation"
+},
+{
+    "title":"Dictionaries",
+    "href":"/mdict/",
+    "brief":"Open dictionaries"
+},
+{
+    "title":"Dictionaries(simple1)",
+    "href":"/mdict/simple/",
+    "brief":"Open dictionaries without some icons"
+},
+{
+    "title":"Dictionaries(simple2)",
+    "href":"/mdict/simple2/",
+    "brief":"Open dictionaries without some icons"
+},
+{
+    "title":"Full-text Search",
+    "href":"/mdict/es/",
+    "brief":"Open full-text search."
+},
+{
+    "title":"Components Search",
+    "href":"/mdict/bujian/",
+    "brief":"Open components of Chinese character search"
+},
+{
+    "title":"Word Cloud",
+    "href":"/mdict/wordcloud/",
+    "brief":"Word cloud of search history"
+},
+{
+    "title":"Administration",
+    "href":"/admin/",
+    "brief":"Open administration"
+},
+{
+    "title":"Shelf1",
+    "href":"/mdict/shelf/",
+    "brief":"Shelf (style1)-Full dictionaries"
+},
+{
+    "title":"Shelf2",
+    "href":"/mdict/shelf2/",
+    "brief":"Shelf (style2)-Full dictionaries"
+},
+{
+    "title":"Shelf3",
+    "href":"/mdict/shelf3/",
+    "brief":"Shelf (style3)-A random dictionary"
+},
+{
+    "title":"Dictionariy Groups",
+    "href":"/mdict/grouping/",
+    "brief":"management of dictionariy groups"
+},
+{
+    "title":"Special Characters",
+    "href":"/mdict/characters/",
+    "brief":"Some special characters"
+},
+{
+    "title":"Documentations",
+    "href":"/mdict/doc/",
+    "brief":"Open documentations"
+},
+{
+    "title":"Built-in Entrys",
+    "href":"/mdict/network/",
+    "brief":"Relations between built-in entrys"
+}
+]

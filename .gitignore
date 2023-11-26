@@ -43,5 +43,6 @@ auto_tool.bat
 auto_tool.py
 /mdict/readlib/src/readmdict-py3/
 !/static/json/manifest.json
-!/static/json/index.json
+!/static/json/index_en.json
+!/static/json/index_zh_hans.json
 !/media/char/characters.json
