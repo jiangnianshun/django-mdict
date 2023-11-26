@@ -911,7 +911,8 @@ function init_anki_modal(){
         if(deck_name!=""&&front_content!=""&&back_content!=""){
             data={"deck_name":deck_name,"front":front_content,"back":back_content}
             $.ajax({//传递数据大，在apache上报414错误，应当用POST传递。contentType应当为默认或者application/x-www-form-urlencoded。
-                url:"/mdict/addtodeck/",
+                // addtodeck/是POST，url经过i18n_patterns转换后变为GET且数据丢失，强制加/en前缀避免进行转换
+                url:"/en/mdict/addtodeck/",
                 contentType:'application/x-www-form-urlencoded',
                 type:'POST',
                 data:data,
