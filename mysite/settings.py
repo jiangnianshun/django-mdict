@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import sys
 import mimetypes
+from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 print(f'[MYSITE.SETTINGS] settings path: {os.path.abspath(__file__)}')
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -132,10 +134,18 @@ CKEDITOR_CONFIGS = {
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # 新版django会报警告Auto-created primary key used when not defining a primary key type
 
-LANGUAGE_CODE = 'zh-hans'
+LANGUAGES = (
+    ('en', _('English')),
+    ('zh-Hans', _('Chinese Simplified')),
+)
 
-TIME_ZONE = 'Asia/Shanghai'
-# 原语言为en-us，原时区为UTC。
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
+
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 

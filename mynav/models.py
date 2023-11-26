@@ -1,14 +1,14 @@
 from django.db import models
 from base.base_utils import item_order
-
+from django.utils.translation import gettext_lazy as _
 
 class Webgroup(models.Model):
-    group_name = models.CharField('分组', max_length=15, unique=True)
-    group_priority = models.PositiveIntegerField('分组排序', default=1)
+    group_name = models.CharField(_('Group Name'), max_length=15, unique=True)
+    group_priority = models.PositiveIntegerField(_('Priority'), default=1)
 
     class Meta:
-        verbose_name = '分组'
-        verbose_name_plural = '分组'
+        verbose_name = _('Website Group')
+        verbose_name_plural = _('Website Groups')
         # 修改显示在admin界面上的模块名
 
     def save(self, *args, **kwargs):
@@ -21,16 +21,16 @@ class Webgroup(models.Model):
 
 
 class Website(models.Model):
-    site_name = models.CharField('名称', max_length=25)
-    site_url = models.URLField('网址', unique=True)
-    site_group = models.ForeignKey(Webgroup, verbose_name='分组', on_delete=models.SET_NULL, null=True, blank=True)
+    site_name = models.CharField(_('Website Name'), max_length=25)
+    site_url = models.URLField(_('URL'), unique=True)
+    site_group = models.ForeignKey(Webgroup, verbose_name=_('Website Group'), on_delete=models.SET_NULL, null=True, blank=True)
     # 将外键指向group_name会导致修改group_name时报错FOREIGN KEY constraint failed。
-    site_brief = models.TextField('备注', blank=True)
-    site_priority = models.PositiveIntegerField('网站排序', default=1)
+    site_brief = models.TextField(_('Annotation'), blank=True)
+    site_priority = models.PositiveIntegerField(_('Priority'), default=1)
 
     class Meta:
-        verbose_name = '网站'
-        verbose_name_plural = '网站'
+        verbose_name = _('Website')
+        verbose_name_plural = _('Websites')
 
     def __str__(self):
         return self.site_name

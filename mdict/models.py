@@ -2,18 +2,19 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from base.base_constant import regp
 from base.base_utils import item_order
+from django.utils.translation import gettext_lazy as _
 
 
 class MdictOnline(models.Model):
-    mdict_name = models.CharField('词典名', max_length=20)
-    mdict_url = models.URLField('网址')
-    mdict_enable = models.BooleanField('启用', default=False)
-    mdict_priority = models.PositiveIntegerField('词典排序', default=1)  # 优先级显示，validator设置范围
-    mdict_isiframe = models.BooleanField('在iframe中打开', default=True)
+    mdict_name = models.CharField(_('Dictionary Name'), max_length=20)
+    mdict_url = models.URLField(_('URL'))
+    mdict_enable = models.BooleanField(_('Enable'), default=False)
+    mdict_priority = models.PositiveIntegerField(_('Priority'), default=1)  # 优先级显示，validator设置范围
+    mdict_isiframe = models.BooleanField(_('open in iframe'), default=True)
 
     class Meta:
-        verbose_name = '在线词典'
-        verbose_name_plural = '在线词典'
+        verbose_name = _('Online Dictionary')
+        verbose_name_plural = _('Online Dictionaries')
 
     def __str__(self):
         return self.mdict_name
@@ -25,17 +26,17 @@ class MdictOnline(models.Model):
 
 
 class MdictDic(models.Model):
-    mdict_name = models.CharField('词典名', max_length=150, db_index=True)
-    mdict_file = models.CharField('文件名', max_length=150, db_index=True)
+    mdict_name = models.CharField(_('Dictionary Name'), max_length=150, db_index=True)
+    mdict_file = models.CharField(_('File Name'), max_length=150, db_index=True)
     # mdict_file设置unique=True会导致UNIQUE constraint failed
-    mdict_enable = models.BooleanField('启用', default=True)
-    mdict_priority = models.PositiveIntegerField('词典排序', default=1)  # 优先级显示，validator设置范围
-    mdict_es_enable = models.BooleanField('启用es索引', default=True, null=True)
-    mdict_md5 = models.CharField('MD5值', max_length=35, default='', null=True, blank=True)
+    mdict_enable = models.BooleanField(_('Enable'), default=True)
+    mdict_priority = models.PositiveIntegerField(_('Priority'), default=1)  # 优先级显示，validator设置范围
+    mdict_es_enable = models.BooleanField(_('Enable es index'), default=True, null=True)
+    mdict_md5 = models.CharField(_('MD5'), max_length=35, default='', null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Mdict词典'
-        verbose_name_plural = 'Mdict词典'
+        verbose_name = _('Local Dictionary')
+        verbose_name_plural = _('Local Dictionaries')
 
     def __str__(self):
         return self.mdict_name
@@ -50,35 +51,35 @@ class MdictDic(models.Model):
 
 
 class MdictDicGroup(models.Model):
-    dic_group_name = models.CharField('分组名', max_length=100, unique=True)
-    mdict_group = models.ManyToManyField('MdictDic', verbose_name='词典', blank=True)
+    dic_group_name = models.CharField(_('Group Name'), max_length=100, unique=True)
+    mdict_group = models.ManyToManyField('MdictDic', verbose_name=_('Dictionaries in Group'), blank=True)
 
     class Meta:
-        verbose_name = '词典分组'
-        verbose_name_plural = '词典分组'
+        verbose_name = _('Dictionary Group')
+        verbose_name_plural = _('Dictionary Groups')
 
     def __str__(self):
         return self.dic_group_name
 
 
 class MyMdictEntryType(models.Model):
-    mdict_type = models.CharField('标签', max_length=100, blank=True, null=True, unique=True)
+    mdict_type = models.CharField(_('Label Name'), max_length=100, blank=True, null=True, unique=True)
 
     class Meta:
-        verbose_name = '标签'
-        verbose_name_plural = '标签'
+        verbose_name = _('Label')
+        verbose_name_plural = _('Labels')
 
     def __str__(self):
         return self.mdict_type
 
 
 class MyMdictEntry(models.Model):
-    mdict_entry = models.CharField('词条', max_length=100, db_index=True, unique=True)
-    mdict_entry_strip = models.CharField('STRIP词条', max_length=100, blank=True, null=True, editable=False)
+    mdict_entry = models.CharField(_('Entry Name'), max_length=100, db_index=True, unique=True)
+    mdict_entry_strip = models.CharField(_('Strip Entry'), max_length=100, blank=True, null=True, editable=False)
 
     class Meta:
-        verbose_name = '内置词条'
-        verbose_name_plural = '内置词条'
+        verbose_name = _('Built-in Entry')
+        verbose_name_plural = _('Built-in Entries')
 
     def __str__(self):
         return self.mdict_entry
@@ -99,19 +100,19 @@ ckeditor_ext_plugins = [
 
 
 class MyMdictItem(models.Model):
-    item_mdict = models.ForeignKey('MyMdictEntry', verbose_name='词条', null=True, blank=True, on_delete=models.SET_NULL)
-    item_entry = models.CharField('义项', max_length=100, blank=True, null=True)
-    item_entry_strip = models.CharField('STRIP义项', max_length=100, blank=True, null=True, editable=False)
-    item_type = models.ForeignKey('MyMdictEntryType', verbose_name='义项类别', null=True, blank=True,
+    item_mdict = models.ForeignKey('MyMdictEntry', verbose_name=_('Entry'), null=True, blank=True, on_delete=models.SET_NULL)
+    item_entry = models.CharField(_('Subentry'), max_length=100, blank=True, null=True)
+    item_entry_strip = models.CharField(_('Strip Subentry'), max_length=100, blank=True, null=True, editable=False)
+    item_type = models.ForeignKey('MyMdictEntryType', verbose_name=_('Subentry Type'), null=True, blank=True,
                                   on_delete=models.SET_NULL)
-    item_content = RichTextUploadingField('义项内容', null=True, blank=True,
+    item_content = RichTextUploadingField(_('Subentry Contents'), null=True, blank=True,
                                           external_plugin_resources=ckeditor_ext_plugins, )
 
     # RichTextField只能插入网络图片，如果要本地上传图片，需要用RichTextUploadingField
 
     class Meta:
-        verbose_name = '义项'
-        verbose_name_plural = '义项'
+        verbose_name = _('Subentry')
+        verbose_name_plural = _('Subentries')
 
     def save(self, *args, **kwargs):
         if self.item_entry is not None:

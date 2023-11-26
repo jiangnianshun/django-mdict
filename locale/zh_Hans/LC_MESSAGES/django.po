@@ -1,0 +1,176 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-26 09:32+0800\n"
+"PO-Revision-Date: 2023-11-26 09:35+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.1\n"
+
+#: .\mdict\models.py:9 .\mdict\models.py:29
+msgid "Dictionary Name"
+msgstr "词典名"
+
+#: .\mdict\models.py:10 .\mynav\models.py:25
+msgid "URL"
+msgstr "网址"
+
+#: .\mdict\models.py:11 .\mdict\models.py:32
+msgid "Enable"
+msgstr "启用"
+
+#: .\mdict\models.py:12 .\mdict\models.py:33 .\mynav\models.py:7
+#: .\mynav\models.py:29
+msgid "Priority"
+msgstr "优先级"
+
+#: .\mdict\models.py:13
+msgid "open in iframe"
+msgstr "在iframe中打开"
+
+#: .\mdict\models.py:16
+msgid "Online Dictionary"
+msgstr "在线词典"
+
+#: .\mdict\models.py:17
+msgid "Online Dictionaries"
+msgstr "在线词典"
+
+#: .\mdict\models.py:30
+msgid "File Name"
+msgstr "文件名"
+
+#: .\mdict\models.py:34
+msgid "Enable es index"
+msgstr "启用es索引"
+
+#: .\mdict\models.py:35
+msgid "MD5"
+msgstr "MD5"
+
+#: .\mdict\models.py:38
+msgid "Local Dictionary"
+msgstr "本地词典"
+
+#: .\mdict\models.py:39
+msgid "Local Dictionaries"
+msgstr "本地词典"
+
+#: .\mdict\models.py:54 .\mynav\models.py:6
+msgid "Group Name"
+msgstr "分组名"
+
+#: .\mdict\models.py:55
+msgid "Dictionaries in Group"
+msgstr "分组内词典"
+
+#: .\mdict\models.py:58
+msgid "Dictionary Group"
+msgstr "词典分组"
+
+#: .\mdict\models.py:59
+msgid "Dictionary Groups"
+msgstr "词典分组"
+
+#: .\mdict\models.py:66
+msgid "Label Name"
+msgstr "标签名"
+
+#: .\mdict\models.py:69
+msgid "Label"
+msgstr "标签"
+
+#: .\mdict\models.py:70
+msgid "Labels"
+msgstr "标签"
+
+#: .\mdict\models.py:77
+msgid "Entry Name"
+msgstr "词条名"
+
+#: .\mdict\models.py:78
+msgid "Strip Entry"
+msgstr "Strip词条"
+
+#: .\mdict\models.py:81
+msgid "Built-in Entry"
+msgstr "内置词条"
+
+#: .\mdict\models.py:82
+msgid "Built-in Entries"
+msgstr "内置词条"
+
+#: .\mdict\models.py:103
+msgid "Entry"
+msgstr "词条"
+
+#: .\mdict\models.py:104 .\mdict\models.py:114
+msgid "Subentry"
+msgstr "词条义项"
+
+#: .\mdict\models.py:105
+msgid "Strip Subentry"
+msgstr "Strip义项"
+
+#: .\mdict\models.py:106
+msgid "Subentry Type"
+msgstr "义项类别"
+
+#: .\mdict\models.py:108
+msgid "Subentry Contents"
+msgstr "义项内容"
+
+#: .\mdict\models.py:115
+msgid "Subentries"
+msgstr "词条义项"
+
+#: .\mynav\models.py:10 .\mynav\models.py:26
+msgid "Website Group"
+msgstr "网站分组"
+
+#: .\mynav\models.py:11
+msgid "Website Groups"
+msgstr "网站分组"
+
+#: .\mynav\models.py:24
+msgid "Website Name"
+msgstr "网站名称"
+
+#: .\mynav\models.py:28
+msgid "Annotation"
+msgstr "备注"
+
+#: .\mynav\models.py:32
+msgid "Website"
+msgstr "网站"
+
+#: .\mynav\models.py:33
+msgid "Websites"
+msgstr "网站"
+
+#: .\mysite\settings.py:138
+msgid "English"
+msgstr "英语"
+
+#: .\mysite\settings.py:139
+msgid "Chinese Simplified"
+msgstr "简体中文"
+
+#~ msgid "Related Dictionaries"
+#~ msgstr "组内词典"
+
+#~ msgid "Dictionary Online"
+#~ msgstr "在线词典"
+
+#~ msgid "Chinese"
+#~ msgstr "中文简体"

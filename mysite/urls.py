@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import path, include
+from django.conf.urls.i18n import i18n_patterns
 # from django.conf.urls import url
 # url已被废弃，改用re_path。
 from django.urls import re_path
@@ -90,7 +91,7 @@ def swView(request):
 
 
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     path('', main, name='main'),
     path('getindexsites/', get_index_sites),
     path('mynav/', include('mynav.urls')),
@@ -105,7 +106,7 @@ urlpatterns = [
     path('users/<pk>/', UserDetails.as_view()),
     path('groups/', GroupList.as_view()),
     path('sw.js', swView)
-]
+)
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
