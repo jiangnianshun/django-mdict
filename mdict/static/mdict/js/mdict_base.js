@@ -1039,6 +1039,15 @@ function init_mdict(){
 function init_simple2(){
     init_common();
 
+    $('.go-prev').click(function(){//上一次查询
+        history.back();
+    });
+    $('.go-after').click(function(){//下一次查询
+        history.forward();
+    });
+    $('.go-prev').parent().show();
+    $('.go-after').parent().show();
+
     first_query();
 }
 
