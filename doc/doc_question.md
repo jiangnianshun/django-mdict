@@ -117,4 +117,14 @@ pip install -U django-js-asset
 
 [https://github.com/django-ckeditor/django-ckeditor/issues/727](https://github.com/django-ckeditor/django-ckeditor/issues/727)
 
-21. 如果设置了文件夹同步，可能会有OSError: Permission denied报错（需等待同步结束）或database disk image is malformed报错（需修复db.sqlite3数据库）。
+21. django-mdict文件夹以及词典所在文件夹内的文件被占用，可能出现以下报错
+
+报错：OSError: Permission denied（需等待文件解除占用）
+
+报错：django.db.utils.OperationalError: disk I/O error（需等待文件解除占用）
+
+报错：django.db.utils.DatabaseError: database disk image is malformed（需要对db.sqlite3文件进行修复）
+
+不要将django-mdict文件夹以及词典所在文件夹设置为同步软件的同步文件夹。
+
+

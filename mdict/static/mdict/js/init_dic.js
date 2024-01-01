@@ -69,7 +69,7 @@ var func = function(){
 
     $("#display_list").on("click","li",function(){
         $("#alert-box").empty();
-        $("li").each(function(){
+        $("#display_list li").each(function(){
             $(this).removeAttr("style");
         });
         $(this).css("background-color","#BBBBBB");
