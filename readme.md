@@ -1,14 +1,12 @@
 ﻿## django-mdict
 
+[English Documentation](readme_en.md)
+
 ### 简介
 
 django-mdict是django实现的mdict词典查询工具（支持mdx、zim格式）。
 
-### 适用情景
-
-局域网内，将django-mdict部署在服务器上，其他电脑、平板、手机可只保留少量词典，当离开局域网时，查询本地词典，当进入局域网时，可通过浏览器对全部词典进行查词。
-
-django-mdict不是词典软件，是词典查询的脚本工具，主要目的是解决词典数量多，手机容量不足的问题，是对其他词典软件局域网在线查询功能的补充。优先使用正式软件，如goldendict、mdict、欧陆、dicttango等。
+django-mdict是对局域网在线查询功能的补充。优先使用正式软件，如goldendict、mdict、欧陆、dicttango等。
 
 ### 在windows上运行测试服务器
 
@@ -18,21 +16,16 @@ django-mdict不是词典软件，是词典查询的脚本工具，主要目的�
 
 在进行cython编译时需要C++编译器，跳过后无法进行cython编译，查询速度变慢。
 
-Visual Studio地址：
+[Visual Studio](https://visualstudio.microsoft.com/downloads/)
 
-[https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/)
-
-Microsoft C++ Build Tools地址：
-
-[https://visualstudio.microsoft.com/visual-cpp-build-tools/
-](https://visualstudio.microsoft.com/visual-cpp-build-tools/
+[Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/
 )
 
 3. （可跳过）安装python-lzo，python-lzo在windows下需要手动安装。
 
 不建议跳过，跳过后采用lzo编码的mdx词典无法读取。
 
-[https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo)
+[python-lzo](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo)
 
 python版本3.7就选cp37，python是32位选择win32，是64位选择win_amd64。
 
@@ -56,10 +49,9 @@ Windows下双击运行run_server.bat，第一次运行会进行初始化（安�
 
 最后要求输入django的用户名、邮箱和密码，邮箱不需要填写。
 
-5. django服务器默认端口8000
-<br />本地电脑访问http://127.0.0.1:18000/mdict/
-<br />其他设备访问http://本机ip:18000/mdict/
-<br />可能需要设置防火墙入站链接，开放18000端口。
+5. django服务器默认端口18000
+<br>本地电脑访问http://127.0.0.1:18000/mdict/
+<br>可能需要设置防火墙入站链接，开放18000端口。
 
 6. 完成初始化后每次运行run_server_no_check.bat启动即可。
    
@@ -87,8 +79,6 @@ dos2unix init_wsl.sh init_server.sh init_server_brew.sh init_server_yum.sh init_
 
 [功能实现](doc/doc_func.md)
 
-[常用操作](doc/doc_op.md)
-
 [说明文档](doc/doc_index.md)
 
 [运行](doc/doc_deploy.md)
@@ -98,3 +88,9 @@ dos2unix init_wsl.sh init_server.sh init_server_brew.sh init_server_yum.sh init_
 [样式](doc/doc_style.md)
 
 [可能的问题](doc/doc_question.md)
+
+### 相近项目
+
+[flask-mdict](https://github.com/liuyug/flask-mdict)
+
+[SilverDict](https://github.com/Crissium/SilverDict)

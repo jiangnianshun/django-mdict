@@ -10,13 +10,10 @@
   * [admin操作和内置词典](#admin操作和内置词典)
   * [功能实现](#功能实现)
   * [全文搜索](#全文搜索)
-  * [anki制卡](#anki制卡)
-  * [划词](#划词)
+  * [ANKI制卡](#ANKI制卡)
   * [设置](#设置)
   * [运行](#运行)
   * [更新](#更新)
-  * [可能的问题](#可能的问题)
-  * [分流](#分流)
 
 ### 设备测试
 
@@ -220,15 +217,9 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 
 [全文搜索](doc_es.md)
 
-### anki制卡
+### ANKI制卡
 
-[anki](doc_anki.md)
-
-### 划词脚本
-
-win10系统使用[Django Mdict Tool](https://github.com/jiangnianshun/django-mdict-tool)进行划词
-
-~~[划词](doc_huaci.md)~~
+[ANKI](doc_anki.md)
 
 ### 设置
 
@@ -241,15 +232,3 @@ win10系统使用[Django Mdict Tool](https://github.com/jiangnianshun/django-mdi
 ### 更新
 
 [更新](doc_update.md)
-
-### 可能的问题
-
-[可能的问题](doc_question.md)
-
-### 分流
-
-百度网盘：https://pan.baidu.com/s/1bwv5TXZ7SpyVVjpSVi3h4g 
-
-提取码：76xe
-
-GoogleDrive：https://drive.google.com/drive/folders/1Zbf-tix4Nkz8MDgSA9yK2b0EdihCo_Lv?usp=sharing

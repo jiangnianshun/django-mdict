@@ -23,7 +23,6 @@ django-mdict
 ├─base（共用的一些函数）
 ├─doc（markdown文档）
 ├─export（mdx导出路径）
-├─huaci（划词脚本）
 ├─mdict（词典模块）
 │  ├─mdict_utils
 │  ├─readlib（mdict和zim解析）
@@ -52,7 +51,6 @@ django-mdict
 ├─config.ini（配置文件）
 ├─db.sqlite3（数据库文件）
 ├─django-mdict.conf（apache配置文件）
-├─huaci.bat（运行划词脚本）
 ├─init_mdict_path.py（设置词典库和发音库路径）
 ├─init_server.bat（windows下的初始化脚本）
 ├─init_server.sh（linux下的初始化脚本）
@@ -62,7 +60,6 @@ django-mdict
 ├─readme.md
 ├─requirements1.txt（django-mdict需要的依赖）
 ├─requirements2.txt（django-mdict需要的依赖）
-├─requirements3.txt（划词脚本需要的依赖）
 ├─run_server.bat（windows下初始化django-mdict）
 ├─run_server.sh（调用run_server_apt.sh）
 ├─run_server_apt.sh（ubuntu下初始化django-mdict）

@@ -1,8 +1,8 @@
   * [在wsl上运行](#在wsl上)
   * [部署到wsl apache](#部署到wsl-apache)
   * [删除数据库中重复词典](#删除数据库中重复词典)
-  * [威联通部署docker](威联通部署docker)
-  * [生成docker镜像（windows）](生成docker镜像（windows）)
+  * [生成docker镜像（windows）](#生成docker镜像（windows）)
+  * [威联通部署docker](#威联通部署docker)
 
 ### 在wsl上运行
 
@@ -119,30 +119,6 @@ for dic in all_dics:
         temp_dics.update({dic.mdict_file: None})
 ```
 
-### 威联通部署docker
-
-1. 打开container station/创建，搜索django-mdict，点击安装。
-
-2. 容器设置：
-
-命令设置填写以下命令，8000可以替换为别的端口，进入点设置留空。
-
-```
-python3 manage.py runserver 0.0.0.0:18000 --noreload
-```
-
-高级设置/网络：网络模式选择host
-
-高级设置/共享文件夹：
-
-点击第一个新增：新增存储空间填写dmdict，挂载路径填写/code
-
-点击第二个新增：挂载本机共享文件夹选择词典所在的路径，挂载路径填写/code/media/mdict/doc
-
-点击创建
-
-3. 其他设备访问nas ip:端口
-
 ### 生成docker镜像（windows）
 
 1. 安装docker并运行
@@ -174,3 +150,28 @@ python3 manage.py createsuperuser
 ```
 docker compose build --progress=plain
 ```
+
+### 威联通部署docker
+
+1. 打开container station/创建，搜索已上传的镜像并安装。
+
+2. 容器设置：
+
+命令设置填写以下命令，18000可以替换为别的端口，进入点设置留空。
+
+```
+python3 manage.py runserver 0.0.0.0:18000 --noreload
+```
+
+高级设置/网络：网络模式选择host
+
+高级设置/共享文件夹：
+
+点击第一个新增：新增存储空间填写dmdict，挂载路径填写/code
+
+点击第二个新增：挂载本机共享文件夹选择词典所在的路径，挂载路径填写/code/media/mdict/doc
+
+点击创建
+
+3. 其他设备访问nas ip:端口
+
