@@ -59,7 +59,7 @@ chmod +x /bin/sleep
 
 尝试将该词条重新保存。
 
-10. windows下关闭djnago-mdict后，后台残留僵尸进程。
+10. windows下关闭django-mdict后，后台残留僵尸进程。
 
 在任务管理器手动结束python进程，或者注销或重启系统。
 

@@ -147,9 +147,9 @@ github chaizi：[https://github.com/kfcd/chaizi](https://github.com/kfcd/chaizi)
 
 开放词典网拆字字典：[http://kaifangcidian.com/han/chaizi](http://kaifangcidian.com/han/chaizi)
 
-django-mdict/mdict/mdict_utils/chaizi_reverse.py对chaizi.py进行修改，使其可以进行反查。比如输入山鳥，得到嶋和嶌。
+django-mdict/mdict/mdict_utils/chaizi_reverse.py对chaizi.py进行修改，使其可以进行反查。
 
-拆字反查仅支持常用字，查询功能集成了拆字反查，查询山鸟，会返回山鸟、嶋、嶌，查询王八，会返回王八、兲、玐。
+查询时输入山鳥，会返回山鸟、嶋、嶌。
 
 ### 部件检索和全宋体
 
@@ -185,9 +185,9 @@ mdx同名的js、css和字体文件会自动加载。
 
 查询历史存储在根目录下的history.dat文件中，第一列是时间，第二列是查询的词条。
 
-点击设置中下载查询历史按钮，会生成csv格式的文件。注意excel直接打开可能会乱码，需要先用notepad++或其他工具将编码格式改为utf-8 with BOM。
+点击设置中下载查询历史按钮，会生成csv格式（utf-8）的文件。
 
-在mdict/wordcloud/下查看查询历史生成的词云，可以在右上角设置中选择时间范围。
+在mdict/wordcloud/下查看查询历史生成的词云。
 
 删除保存的查询历史，直接删除根目录下所有history开头的dat文件。
 

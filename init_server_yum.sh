@@ -2,8 +2,10 @@
 cd `dirname  $0`
 echo "installing dependencies..."
 yum install -y python3 python3-devel python3-pip epel-release lzo-devel lzo-minilzo zlib-devel libjpeg-turbo-devel
-pip3 install -r requirements1.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip3 install -r requirements2.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+#pip3 install -r requirements1.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+#pip3 install -r requirements2.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip3 install -r requirements1.txt
+pip3 install -r requirements2.txt
 file="db.sqlite3"
 if [ ! -f $file ]
 then

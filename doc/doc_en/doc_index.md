@@ -11,8 +11,6 @@
   * [Full-text search](#Full-text search)
   * [ANKI](#ANKI)
   * [Settings](#Settings)
-  * [Running](#Running)
-  * [Update](#Update)
 
 ### Equipment testing
 
@@ -28,39 +26,37 @@ Test device 2: QNAP 464C (enable solid-state cache acceleration).
 
 When running the test dictionary database, the first query will take several hours, and subsequent queries will take between 30 seconds and 60 seconds, and the CPU will occupy 100% for each word search.
 
-Test equipment 3: Desktop computer (CPU3900X12 core frequency locked at 3.8GHz), solid state drive.
+Test equipment 3: Desktop computer (CPU3900X 12 core, frequency locked at 3.8GHz), solid state drive.
 
-When running the test dictionary, it takes about 3-4 seconds to look up words.
+When running the test dictionary, it takes about 3-4 seconds to search words.
 
 #### Network test
 
-Optical modem does not have a public IP, it has IPv6, and mobile phones use traffic to access it. It is impossible to connect using QNAP DDNS; using zerotier, the speed is about 30KB/s under IPv4, and word search is extremely slow; after the router turns on IPv6, the speed is about 2MB/s, which is the same as the word search speed under LAN.
+Modem does not have a public IP, it has IPv6, and phone uses mobile data to access network. It is impossible to connect using QNAP DDNS. By using zerotier, the speed is about 30KB/s under IPv4, and word search is extremely slow; after the router turns on IPv6, the speed is about 2MB/s, which is the same speed under LAN.
 
 
 ### PWA support
 
-When opening on the local browser, click the install button on the address bar of the main page, query page or full-text search page to install it as a PWA application. The default page opened is the query page. 1: If the django-mdict page is not set as the homepage, you need to manually enter the URL to open the page. After installing it as a PWA, you only need to click the icon to open it. 2: There is no address bar in the window after installation as PWA.
+When opening on the local browser, click the installing button on the address bar to install it as a PWA application. The query page is the default page. 
 
-On non-native browsers, PWA installation requires https support. For example, on the Android Chrome browser, you can only choose to add to the home screen under http. Compared with adding ordinary web pages to the home screen, there is no address bar.
+On non-local browsers, PWA installation requires https support. For example, on the Android Chrome browser, you can only choose to add to the home screen under http. Compared with adding ordinary web pages to the home screen, there is no address bar.
 
 ### Format support
 
-Only test the latest versions of chrome, firefox, and edge browsers.
-
-Dictionary: supports mdx, mdd and zim
+Dictionary: mdx, mdd and zim
 
 Audio:
-* mp3,spx,ogg supported
+* mp3,spx,ogg
 * wav chrome supports it, firefox does not support it
 
 image:
-* png,jpg,svg,webp,tiff supported
+* png,jpg,svg,webp,tiff
 * swf is not supported
 
 Font:
 * Chrome does not support fonts larger than 30MB
 
-The picture dictionary recommends using the full-page version or the cut-out version, because mobile browsers can zoom with two fingers, and the full-page version has less impact. The single-column version displays normally on mobile browsers, but the page is particularly long on computer browsers.
+The picture dictionary recommends using the full-page version or the single-column version, because mobile browsers can zoom with two fingers, and the full-page version has less impact. The single-column version displays normally on mobile browsers, but the page is particularly long on computer browsers.
 
 ### not support
 
@@ -72,7 +68,7 @@ The picture dictionary recommends using the full-page version or the cut-out ver
 
 4. Duplicate mdx file names are not supported, and only one of the mdx files with the same name will be loaded.
 
-5. Positive search does not support fuzzy search.
+5. Fuzzy search is not supported.
 
 6. Wildcard search and regular search are currently not supported.
 
@@ -86,11 +82,11 @@ The picture dictionary recommends using the full-page version or the cut-out ver
 
 2. Or manually modify the path of mdict_path.json. The format is as follows. mdict_path is the dictionary library path, and audio_path is the pronunciation library path.
 
-The first path containing mdx will be set as the dictionary library path, and the first path containing mdd will be set as the pronunciation library path.
+The first path containing mdx files will be set as the dictionary library path, and the first path containing mdd files will be set as the pronunciation library path.
 
 If mdict_path.json is empty, the dictionary library address is set to django-mdict/media/mdict/doc/, and the pronunciation library address is set to /django-mdict/media/mdict/audio/.
 
-The d drive under windows is /mnt/d/ under wsl. Be careful to enter the canonical path, using double quotes and using backslash or double slash as path separator.
+The d drive under windows is /mnt/d/ under wsl. Need double quotes and backslash or double slash as path separator.
 
 
 ```
@@ -124,7 +120,7 @@ There is no in-page query function. You can only use the browser's own ctrl+F to
 
 #### Merge terms with the same name
 
-Modify the merge_entry_max_length item in the configuration file django-mdict/config.ini.
+Modify the merge_entry_max_length in the configuration file django-mdict/config.ini.
 
 The default value is 1000. When the same dictionary has multiple query results for the same query, entries with a length (length of the string, including html tags) less than 1000 will be merged and displayed. If no merging is required at all, set to 0.
 
@@ -144,7 +140,7 @@ In order to reduce the size, the following content can be deleted.
 
 .git/ cannot operate git after deletion
 
-huaci/ cannot be used after deletion.
+deprecated/ can be deleted.
 
 Media/font/ cannot be displayed in full Song font after deletion.
 
@@ -172,32 +168,15 @@ The parameters are query:apple,page:1
 
 [http://IP address:18000/api/mdict2/mdict/?query=apple&amp;page=2&amp;format=json]()
 
-#### Switch homepage
-
-Modify the index_id value (1 or 2) in config.ini. The background image of home page 2 is located at /static/img/background.jpg.
-
 ### Dependencies
-
-The Tsinghua source is used by default. If you need to modify it, modify the -i parameter of the pip command in init_server.bat and init_server.sh.
 
 1. requirements1.txt: required dependencies
 
-The django version requires 3.0 or above or 4.0
+The django version is 4
 
-2. requirements2.txt: python-lzo needs to be installed manually under windows
+2. requirements2.txt: python-lzo needs to be installed manually on windows
 
-[https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo)
-
-For Python version 3.7, choose cp37. If Python is 32-bit, choose win32. If Python is 64-bit, choose win_amd64.
-
-Note that 32-bit and 64-bit refer to the number of Python bits, not the number of system bits. For example, if you have a 64-bit system but have installed 32-bit Python, you should install the 32-bit library.
-
-For example, download python_lzo-1.12-cp37-cp37m-win_amd64.whl and run the following command in the current directory to install it.
-
-
-```
-python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
-```
+[python-lzo](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo)
 
 ### Admin operations and built-in dictionaries
 
@@ -214,11 +193,3 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 ### Settings
 
 [Settings](doc_config.md)
-
-### Running
-
-[Running](doc_deploy.md)
-
-### Update
-
-[Update](doc_update.md)

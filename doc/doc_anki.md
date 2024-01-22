@@ -9,9 +9,6 @@ anki-connect：[https://github.com/FooSoft/anki-connect](https://github.com/FooS
 自动复制：自动将当前展开词条的词头无样式复制到卡片正面，将当前展开词条的内容带样式复制到卡片背面。
 复制时词条中有未展开的内容，复制后将无法展开。如果HTML结构较复杂，复制耗时会很长。
 
-手动复制：手动选择内容复制，粘贴时ctrl+v是带样式粘贴，ctrl+shift+v是纯文本粘贴，
-或者鼠标右键选择粘贴或粘贴为纯文本，再手机上通过长按调出鼠标右键。
-
 带样式复制会丢失部分样式。且仅能显示在线图片，不支持图片和音频的插入，anki不支持base64图片的显示。不支持ckeditor5的浏览器中无法使用（cefpython无法使用）。
 
 ![图片](img/img080901.png?raw=true)

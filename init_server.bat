@@ -1,7 +1,8 @@
 cd /d %~dp0
 echo "installing dependencies..."
 echo "python-lzo needs to be installed manually... "
-pip install -r requirements1.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+::pip install -r requirements1.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install -r requirements1.txt
 if not exist db.sqlite3 (
 echo "initializing db.sqlite3..."
 python manage.py makemigrations

@@ -2,8 +2,10 @@
 cd `dirname  $0`
 echo "installing dependencies..."
 brew install lzo
-pip3 install --user -r requirements1.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip3 install --user -r requirements2.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+#pip3 install --user -r requirements1.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+#pip3 install --user -r requirements2.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip3 install --user -r requirements1.txt
+pip3 install --user -r requirements2.txt
 file="db.sqlite3"
 if [ ! -f $file ]
 then

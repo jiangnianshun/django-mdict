@@ -10,7 +10,7 @@ Manually delete the browser's cache files (no need to clear cookies).
 
 It indicates that cython compilation is not performed.
 
-Run django-mdict/mdict/readlib/pyx/build.bat under windows, and django-mdict/mdict/readlib/pyx/build.sh under linux.
+Run django-mdict/mdict/readlib/pyx/build.bat on Windows, and django-mdict/mdict/readlib/pyx/build.sh on Linux.
 
 This will compile readmdict.py. The compiled pyd or so runtime library is under django-mdict/mdict/readlib/lib/. After compilation, the speed is increased by about 1/3 compared to without compilation.
 
@@ -18,7 +18,7 @@ This will compile readmdict.py. The compiled pyd or so runtime library is under 
 
 Permissions issue
 
-4.1 Try deleting the .cache cache folder.
+4.1 Try deleting the .cache folder.
 
 4.2 Try to increase the permissions of the django-mdict folder and all sub-files.
 
@@ -35,7 +35,7 @@ chmod -R 777 django-mdict
 sudo vim /etc/apache2/apache2.conf
 ```
 
-Add at the end of the file
+Add this line at the end of the file
 
 
 ```
@@ -63,7 +63,7 @@ Modify the permissions of db.sqlite3.
 
 Try saving the entry again.
 
-10. After closing djnago-mdict under Windows, zombie processes remain in the background.
+10. After closing django-mdict under Windows, zombie processes remain in the background.
 
 Manually end the python process in the task manager, or log out or restart the system.
 
@@ -79,7 +79,7 @@ Port 8000 is occupied
 
 
 ```
-python manage.py runserver 0.0.0.0:另一个端口号
+python manage.py runserver 0.0.0.0:another port
 ```
 
 Port 18766 is occupied, modify ws_server_port in config.ini.
@@ -102,7 +102,7 @@ Change the iPad keyboard type to floating keyboard, retract the floating window 
 
 17. urlopen error \[WinError 10061\] Unable to connect because the target computer actively refused it.
 
-Port 8766 of ws_server under windows is occupied and the startup fails. Restart the computer to release the occupation, or modify ws_server_port in config.ini.
+Port 8766 of ws_server on Windows is occupied and the startup fails. Restart the computer to release the occupation, or modify ws_server_port in config.ini.
 
 18. The new nltk version reports an error Resource omw-1.4 not found.
 

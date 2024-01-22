@@ -6,13 +6,13 @@
 
 ### Running on wsl
 
-It is recommended to deploy to wsl1 under windows. Wsl2 reads windows files slower than wsl1, causing the query speed to be about 1/20-1/10 slower. In addition, the problem of IP access must be solved.
+It is recommended to deploy to wsl1 on windows. Wsl2 reads Windows files slower than wsl1, causing the query speed to be about 1/20-1/10 slower. In addition, the problem of IP access must be solved.
 
 1. Install wsl, system ubuntu.
 
 [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 
-2. Switch to the root user. Django needs to be installed under the root user.
+2. Switch to the root user. Django needs to be installed with the root user.
 
 
 ```
@@ -27,7 +27,7 @@ sudo apt-get install dos2unix
 dos2unix init_wsl.sh init_server.sh init_server_brew.sh init_server_yum.sh init_server_apt.sh django-mdict.conf run_server.sh run_server_brew.sh run_server_yum.sh run_server_apt.sh mdict/readlib/pyx/build.sh
 ```
 
-4. Run run_server.sh, the default port is 8000, this script is suitable for ubuntu (centos needs to run run_server_yum.sh).
+4. Run run_server.sh, the default port is 18000, this script is suitable for ubuntu (centos needs to run run_server_yum.sh).
 
 
 ```
@@ -82,7 +82,7 @@ Finally, you are asked to enter your django username and password.
 
 6. Set up wsl auto-start script
 
-Run shell:startup under windows to create the script file ubuntu.vbs with the following content:
+Run shell:startup on Windows to create ubuntu.vbs with the following content:
 
 
 ```
@@ -96,15 +96,15 @@ Among them, ubuntu is the name of the distribution version. Use the command wsl 
 
 
 ```
-启动apache
+Start apache:
 sudo service apache2 start
-重启apache
+Restart apache:
 sudo service apache2 restart
-停止apache
+Stop apache:
 sudo service apache2 stop
 ```
 
-The location of the apache error log on ubuntu /var/log/apache2/error.log
+The location of the apache error log on ubuntu is /var/log/apache2/error.log
 
 ### Delete duplicate dictionaries records in database
 
@@ -133,7 +133,7 @@ for dic in all_dics:
 
 1. Install docker and run
 
-2. Delete the .git and huaci folders in the root directory
+2. Delete the .git and deprecated folders in the root directory
 
 3. Run the following command in wsl to convert the format (or manually convert the format with notepad++)
 

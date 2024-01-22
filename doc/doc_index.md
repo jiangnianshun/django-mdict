@@ -8,12 +8,9 @@
   * [常用操作](#常用操作)
   * [依赖](#依赖)
   * [admin操作和内置词典](#admin操作和内置词典)
-  * [功能实现](#功能实现)
   * [全文搜索](#全文搜索)
   * [ANKI制卡](#ANKI制卡)
   * [设置](#设置)
-  * [运行](#运行)
-  * [更新](#更新)
 
 ### 设备测试
 
@@ -40,15 +37,13 @@
 
 ### PWA支持
 
-在本机浏览器上打开时，点击主页面、查询页面或者全文搜索页面地址栏上的安装按钮，可以安装为PWA应用，默认打开页面是查询页面。
+在浏览器上打开时，点击地址栏上的安装按钮，可以安装为PWA应用，默认打开页面是查询页面。
 1：如果django-mdict页面没有设置为主页，需要手动输入url打开页面，安装为PWA后只需要点击图标打开。
 2：安装为PWA后窗口没有地址栏。
 
 在非本机浏览器上，PWA安装需要https支持。比如安卓chrome浏览器上，在http下只能选择添加到主屏幕，和普通网页添加到主屏幕相比，没有地址栏。
 
 ### 格式支持
-
-仅测试最新版chrome、firefox、edge浏览器。
 
 词典：支持mdx,mdd和zim
 
@@ -146,7 +141,7 @@ apache修改配置文件django-mdict.conf中的VirtualHost *:80。
 
 .git/ 删除后无法操作git
 
-huaci/ 删除后无法使用划词脚本
+deprecated/ 可以被删除
 
 media/font/ 删除后无法显示全宋体
 
@@ -174,32 +169,15 @@ mdict/readlib/pyx/mdict/ cython编译生成的中间文件
 
 [http://IP地址:18000/api/mdict2/mdict/?query=apple&page=2&format=json]()
 
-#### 切换主页
-
-在config.ini中修改index_id的值（1或2），主页2背景图位于/static/img/background.jpg。
-
 ### 依赖
-
-默认用的是清华源，如果需要修改，修改init_server.bat和init_server.sh中pip命令的-i参数。
 
 1. requirements1.txt：必需依赖
 
-django版本需要3.0以上或者4.0
+django版本是4
 
 2. requirements2.txt：python-lzo在windows下需要手动安装
 
-[https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo)
-
-python 版本3.7就选cp37，python是32位选择win32，是64位选择win_amd64。
-
-注意32位、64位指的是python的位数，不是系统的位数，比如你是64位系统，但安装
-了32位python，那么应该安装32位的库。
-
-比如下载了python_lzo-1.12-cp37-cp37m-win_amd64.whl，在当前目录运行以下命令安装
-
-```
-python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
-```
+[python-lzo](https://www.lfd.uci.edu/~gohlke/pythonlibs/#python-lzo)
 
 3. requirements3.txt：划词工具的依赖
 
@@ -208,10 +186,6 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 ### admin操作和内置词典
 
 [admin操作](doc_admin.md)
-
-### 功能实现
-
-[功能实现](doc_func.md)
 
 ### 全文搜索
 
@@ -224,11 +198,3 @@ python -m pip install python_lzo-1.12-cp37-cp37m-win_amd64.whl
 ### 设置
 
 [设置](doc_config.md)
-
-### 运行
-
-[运行](doc_deploy.md)
-
-### 更新
-
-[更新](doc_update.md)

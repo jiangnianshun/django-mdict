@@ -37,7 +37,7 @@ If you skip this step, the built-in standard tokenizer will be used.
 
 4. (Skipable) It is recommended that es allocate 4g or more memory during query and indexing, modify the parameters -Xms1g and -Xmx1g in config/jvm.options, change 1 to 4, and restart es to take effect.
 
-8.10.2 SSL needs to be turned off. The following settings in config/elasticsearch.yml are set to false, xpack.security.enabled, xpack.security.enrollment.enabled, xpack.security.http.ssl:xpack.security.transport.ssl.
+8.10.2 needs to turn off SSL. The following settings in config/elasticsearch.yml are set to false, xpack.security.enabled, xpack.security.enrollment.enabled, xpack.security.http.ssl:xpack.security.transport.ssl.
 
 5. Run elasticsearch/bin/elasticsearch.bat to start es.
 
@@ -53,11 +53,11 @@ If you skip this step, the built-in standard tokenizer will be used.
 
    [http://127.0.0.1:18000/mdict/es/](http://127.0.0.1:18000/mdict/es/)
 
-   When performing full-text query, eselasticsearch.bat needs to be running all the time, otherwise the query will have no results. If it needs to be turned on all the time, it needs to be set to start at boot.
+   When performing full-text query, eselasticsearch.bat needs to be running all the time, otherwise the query will have no results.
 
 ### Install xapian
 
-* Install using apt-get under ubuntu
+* Install with apt-get on ubuntu
 
 
 ```
@@ -87,13 +87,11 @@ There is a problem with the phrase query of zim, and the impact is not avoided. 
 
 * Dictionary grouping and starting and stopping a certain dictionary only modify the values in the database. You need to click the Start and Stop Index button to set the index of the corresponding dictionary to on or off. Note that starting and stopping a large number of indexes may be time-consuming. It's very long (the end of the circle indicates that the start and stop are completed, and the specific progress can be viewed in the ES window prompt).
 
-* Entries that appear frequently have high scores and will be ranked first. Therefore, a large number of encyclopedia mdx entries may appear in the front row, causing interference to the results. At this time, these dictionaries can be indexed by starting and stopping the index. No inquiry is made.
+* Entries that appear frequently have high scores and will be ranked first. Therefore, a large number of encyclopedia mdx entries may appear in the front pages, causing interference to the results. At this time, these dictionaries can be indexed by starting and stopping the index. No inquiry is made.
 
-* There are three columns of icons in front of the dictionary name in the dictionary list. The first column sets whether it is enabled, and then click the start and stop index button to apply the changes to the es index. The second column indicates whether the es index is enabled for the current dictionary. The green check mark indicates that it is enabled, and the red check mark indicates whether the es index is enabled. The cross indicates that it is closed, the third column is the current status of the index, the gray question mark indicates that it is unknown, the gray cloud indicates that es cannot be accessed, the green sun indicates that the index exists and is running, the orange moon indicates that the index exists but is closed, and the red cross indicates that the index does not exist.
+* There are three columns of icons in front of the dictionary name in the dictionary list. The first column sets whether it is enabled, and then click the start and stop index button to apply the changes to the es index. The second column indicates whether the es index is enabled for the current dictionary. The green check mark indicates that it is enabled, and the red check mark indicates that is disenabled. The cross indicates that it is closed, the third column is the current status of the index, the gray question mark indicates that it is unknown, the gray cloud indicates that es cannot be accessed, the green sun indicates that the index exists and is running, the orange moon indicates that the index exists but is closed, and the red cross indicates that the index does not exist.
 
 * You can use kibana to view specific information about elasticsearch.
-
-* Open a dictionary in the dictionary list from the main query interface and perform a sequential query on the dictionary. Open a dictionary in the dictionary list from the full-text search page and perform a full-text search on the dictionary.
 
 ### es index operation
 
@@ -202,7 +200,7 @@ discovery.type: single-node
 
 * When creating indexes for a large number of dictionaries, it gets stuck, CPU usage is 0%, and no error is reported.
 
-1. The reason is unknown. Try selecting a piece of text in the command line window and right-clicking to copy it. The operation may be restored.
+1. Try selecting a piece of text in the command line window and right-clicking to copy it. The operation may be restored.
 
 * show connectionError
 

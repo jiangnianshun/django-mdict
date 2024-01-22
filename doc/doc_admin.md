@@ -53,7 +53,7 @@
 导出内置词典：
 
 ```
-python export_builtin_dic.py
+python script/export_builtin_dic.py
 ```
 
 内置词典导出到django-mdict/export/，export.txt是导出的文本，data是导出的资源，导出后不支持mathjax，wrap脚本goldendict支持，mdict不支持。
