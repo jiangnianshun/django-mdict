@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import path, include
@@ -102,6 +102,15 @@ def swView(request):
         return HttpResponse('')
 
 
+def get_configurationjs(request):
+    try:
+        with open(settings.BASE_DIR + "/mdict/static/mdict/ckeditor5/configurationjs", 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except Exception as e:
+        print('urls.py get_configurationjs error:', e)
+    return JsonResponse(data)
+
+
 urlpatterns = i18n_patterns(
     path('', main, name='main'),
     path('getindexsites/', get_index_sites),
@@ -109,6 +118,7 @@ urlpatterns = i18n_patterns(
     path('api/', include(router.urls)),  # djangoresrframework生成的url
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('font/', redirect_font),
+    path('ck5/configurationjs', get_configurationjs),
     path('mdict/', include('mdict.urls')),
     re_path(r'^admin/', admin.site.urls),
     re_path(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
