@@ -5,13 +5,16 @@ from base.base_config import get_cpu_num, set_cpu_num
 from mdict.mdict_utils.data_utils import get_or_create_dic
 from mdict.mdict_utils.loop_decorator import loop_mdict_list, innerObject
 from mdict.mdict_utils.multi_base import multi_search_mdx
-
+from django.db import connection
 
 # def multiprocess_search_sug(n, sug_list, group):
 #     return multi_search_mdx(n, sug_list, group, is_mdx=False)
 
 
 def multiprocess_search_mdx(n, query_list, group, is_mdx=True):
+    connection.close()
+    # 测试，可能是mulriprocessing导致经常出现DatabaseError: database disk image is malformed的原因？？
+    # https://stackoverflow.com/questions/18261195/how-to-handle-python-multiprocessing-database-concurrency-specifically-with-dja
     return multi_search_mdx(n, query_list, group, is_mdx=is_mdx)
 
 
