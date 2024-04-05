@@ -127,4 +127,14 @@ pip install -U django-js-asset
 
 不要将django-mdict文件夹以及词典所在文件夹设置为同步软件的同步文件夹。
 
+22. django.db.utils.DatabaseError: database disk image is malformed
 
+a. [下载sqlite工具](https://www.sqlite.org/download.html)
+
+b. [修复db.sqlite3文件](https://blog.csdn.net/qq_41539778/article/details/136531120)
+
+c. 将导出文件重命名为db.sqlite3.
+
+23. django.db.utils.OperationalError: attempt to write a readonly database
+
+更改db.sqlite3文件的读写权限.

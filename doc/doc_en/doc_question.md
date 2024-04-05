@@ -133,4 +133,14 @@ Error: django.db.utils.DatabaseError: database disk image is malformed (the db.s
 
 Do not set the django-mdict folder and the folder where the dictionary is located as the synchronization folder of the synchronization software.
 
+22. django.db.utils.DatabaseError: database disk image is malformed
 
+a. [Download sqlite tool](https://www.sqlite.org/download.html)
+
+b. [Repair db.sqlite3 file](https://blog.csdn.net/qq_41539778/article/details/136531120)
+
+c. Rename exported file to db.sqlite3.
+
+23. django.db.utils.OperationalError: attempt to write a readonly database
+
+Change db.sqlite3 file to read and write permission.

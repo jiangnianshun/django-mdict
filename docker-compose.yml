@@ -8,4 +8,4 @@ services:
    - .:/code
    - /path/to/mdict/library:/library
   ports:
-   - "18000:8090"
+   - "18000:18000"
