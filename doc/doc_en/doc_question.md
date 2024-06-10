@@ -156,7 +156,10 @@ sqlite3 db.sqlite3
 .dump
 .exit
 ```
-b.3. Export db.sql to export.sqlite3.
+
+b.3. Change ROLLBACK; at the last line of db.sql to COMMIT;.
+
+b.4. Export db.sql to export.sqlite3.
 
 ```
 sqlite3
@@ -165,9 +168,17 @@ sqlite3
 .exit
 ```
 
-b.4. Rename export.sqlite3 and replace the corrupted db.sqlite3.
+b.5. Check integrity, successful repair should display "ok".
 
-b.5. If django-mdict is deployed in WSL, you also need to change the read and write permissions for db.sqlite3 in WSL.
+```
+sqlite3 export.sqlite3
+PRAGMA integrity_check;
+.exit
+```
+
+b.6. Rename export.sqlite3 and replace the corrupted db.sqlite3.
+
+b.7. If django-mdict is deployed in WSL, you also need to change the read and write permissions for db.sqlite3 in WSL.
 
 ```
 chmod 777 db.sqlite3

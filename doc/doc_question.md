@@ -150,7 +150,10 @@ sqlite3 db.sqlite3
 .dump
 .exit
 ```
-b.3. 将db.sql导出为export.sqlite3
+
+b.3. 将db.sql最后一行的ROLLBACK;改成COMMIT;。
+
+b.4. 将db.sql导出为export.sqlite3
 
 ```
 sqlite3
@@ -159,9 +162,17 @@ sqlite3
 .exit
 ```
 
-b.4. 将export.sqlite3重命名并替换损坏的db.sqlite3
+b.5. 检查完整性，修复成功应当显示ok。
 
-b.5. 如果django-mdict部署在wsl中，还需在wsl中更改db.sqlite3的读写权限
+```
+sqlite3 export.sqlite3
+PRAGMA integrity_check;
+.exit
+```
+
+b.6. 将export.sqlite3重命名并替换损坏的db.sqlite3
+
+b.7. 如果django-mdict部署在wsl中，还需在wsl中更改db.sqlite3的读写权限
 
 ```
 chmod 777 db.sqlite3
