@@ -129,11 +129,43 @@ pip install -U django-js-asset
 
 22. django.db.utils.DatabaseError: database disk image is malformed
 
+以windows为例：
+
 a. [下载sqlite工具](https://www.sqlite.org/download.html)
 
-b. [修复db.sqlite3文件](https://blog.csdn.net/qq_41539778/article/details/136531120)
+a.1 下载sqlite-dll-win-x64-3460000.zip，解压到某个路径
 
-c. 将导出文件重命名为db.sqlite3.
+a.2 将该路径加入到系统环境变量Path中
+
+b. 修复db.sqlite3文件
+
+b.1. 在cmd中cd到django-mdict根目录
+
+b.2. 将损坏的db.sqlite3的内容导出到db.sql
+
+```
+sqlite3 db.sqlite3
+.mode insert
+.output db.sql
+.dump
+.exit
+```
+b.3. 将db.sql导出为export.sqlite3
+
+```
+sqlite3
+.open export.sqlite3
+.read db.sql
+.exit
+```
+
+b.4. 将export.sqlite3重命名并替换损坏的db.sqlite3
+
+b.5. 如果django-mdict部署在wsl中，还需在wsl中更改db.sqlite3的读写权限
+
+```
+chmod 777 db.sqlite3
+```
 
 23. django.db.utils.OperationalError: attempt to write a readonly database
 

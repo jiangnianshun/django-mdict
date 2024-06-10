@@ -135,11 +135,43 @@ Do not set the django-mdict folder and the folder where the dictionary is locate
 
 22. django.db.utils.DatabaseError: database disk image is malformed
 
+For Windows:
+
 a. [Download sqlite tool](https://www.sqlite.org/download.html)
+
+a.1 Download sqlite-dll-win-x64-3460000.zip and extract it to a certain path.
+
+a.2 Add this path to the system environment variable Path.
 
 b. [Repair db.sqlite3 file](https://blog.csdn.net/qq_41539778/article/details/136531120)
 
-c. Rename exported file to db.sqlite3.
+b.1. Navigate to the root directory of django-mdict in the command prompt (cmd).
+
+b.2. Export the contents of the corrupted db.sqlite3 to db.sql.
+
+```
+sqlite3 db.sqlite3
+.mode insert
+.output db.sql
+.dump
+.exit
+```
+b.3. Export db.sql to export.sqlite3.
+
+```
+sqlite3
+.open export.sqlite3
+.read db.sql
+.exit
+```
+
+b.4. Rename export.sqlite3 and replace the corrupted db.sqlite3.
+
+b.5. If django-mdict is deployed in WSL, you also need to change the read and write permissions for db.sqlite3 in WSL.
+
+```
+chmod 777 db.sqlite3
+```
 
 23. django.db.utils.OperationalError: attempt to write a readonly database
 
