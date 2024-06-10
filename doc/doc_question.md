@@ -178,6 +178,8 @@ b.7. 如果django-mdict部署在wsl中，还需在wsl中更改db.sqlite3的读�
 chmod 777 db.sqlite3
 ```
 
+b.8. 删除django-mdict根目录下的.cache文件夹
+
 23. django.db.utils.OperationalError: attempt to write a readonly database
 
 更改db.sqlite3文件的读写权限.

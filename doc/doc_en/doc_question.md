@@ -184,6 +184,8 @@ b.7. If django-mdict is deployed in WSL, you also need to change the read and wr
 chmod 777 db.sqlite3
 ```
 
+b.8. Delete the .cache folder under the root directory of django-mdict.
+
 23. django.db.utils.OperationalError: attempt to write a readonly database
 
 Change db.sqlite3 file to read and write permission.
