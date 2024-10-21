@@ -73,16 +73,17 @@ function html_escape(text,all){
     if(text==null){
         return "";
     }else if(all){
-        return encodeURIComponent(text).replace(/[!'()*]/g, escape);
+        return encodeURIComponent(text).replace(/[!'()*\n]/g, escape);
     }else{
         //返回字符实体
-        return text.replace(/[<>'"&]/g, function(match, pos, originalText){
+        return text.replace(/[<>'"&\n]/g, function(match, pos, originalText){
         switch(match){
             case "'":return "&apos;";
             case "<":return "&lt;";
             case ">":return "&gt;";
             case "&":return "&amp;";
             case "\"":return "&quot;";
+            case "\n":return "";
         }
         });
     }

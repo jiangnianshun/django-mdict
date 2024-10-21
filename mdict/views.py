@@ -1963,7 +1963,9 @@ def mdict_dic(request, *args):
         if len(dics) > 0:
             dic_pk = dics[0].pk
     dic = MdictDic.objects.get(pk=dic_pk)
-    dic_name = dic.mdict_name
+    # dic_name = dic.mdict_name
+    dic_name = remove_html_tags(dic.mdict_name)
+    # dic_name中含有未转义字符导致前端页面解析错误
     query = request.GET.get('query', '')
     is_mb = is_mobile(request)
 

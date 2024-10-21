@@ -344,6 +344,7 @@ function get_header(container, dic_pk, dic_name, type){
 }
 
 function shelf_dic_btn(type1,type2){
+    //从书架词典简介页面点击Search按钮打开单个词典的搜索
     if(type1==1){
         var dic_pk=$("#modal-shelf-dic").attr('data-pk');
     }else{
