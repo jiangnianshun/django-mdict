@@ -135,6 +135,9 @@ Do not set the django-mdict folder and the folder where the dictionary is locate
 
 22. django.db.utils.DatabaseError: database disk image is malformed
 
+
+Possible reason: Apache started multiple instances, and a large number of new dictionaries being written to the database simultaneously caused the db.sqlite3 file to become corrupted.
+
 For Windows:
 
 a. [Download sqlite tool](https://www.sqlite.org/download.html)

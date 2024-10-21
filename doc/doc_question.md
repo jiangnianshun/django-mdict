@@ -129,6 +129,8 @@ pip install -U django-js-asset
 
 22. django.db.utils.DatabaseError: database disk image is malformed
 
+可能原因：apache启动了多个实例，有大量新词典同时写入数据库导致db.sqlite3文件损坏。
+
 以windows为例：
 
 a. [下载sqlite工具](https://www.sqlite.org/download.html)
